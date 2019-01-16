@@ -17,7 +17,8 @@ urlpatterns = [
 
     #Favoris
     url(r'^{}/favourite/update_favourite$'.format(settings.COURSE_ID_PATTERN), favourite_views.update_favourite),
+    url(r'^{}/favourite/get_favourite$'.format(settings.COURSE_ID_PATTERN), favourite_views.get_favourite),
 
-        # Home dashboard
+    # Home dashboard
     url(r'^dashboard/home/$', activity_dashboard_views.home_dashboard, name='home_dashboard')
 ]

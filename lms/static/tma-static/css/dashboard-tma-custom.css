@@ -452,6 +452,14 @@ a.enroll-btn:hover {
     width: 36px;
     height: 36px;
 }
+.fav-on {
+    background-image: url('/static/tma-static/images/epingle_on.svg');
+    background-size: contain;
+}
+.fav-off {
+    background-image: url('/static/tma-static/images/epingle_off.svg');
+    background-size: contain;
+}
 .pin-row {
     position: relative;
     top: -18px;
