@@ -1,9 +1,12 @@
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
-from tma_apps.models import TmaCourseEnrollment
 from courseware.courses import get_course_by_id
 from edxmako.shortcuts import render_to_response
 from django.utils.translation import ugettext as _
 import logging
+
+from django.apps import apps
+TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
+
 log = logging.getLogger()
 
 

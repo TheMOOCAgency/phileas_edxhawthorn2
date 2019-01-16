@@ -1,7 +1,9 @@
 from openedx.features.course_experience.utils import get_course_outline_block_tree
 from student.views.dashboard import get_course_enrollments
-from tma_apps.models import TmaCourseEnrollment
 from opaque_keys.edx.keys import CourseKey
+
+from django.apps import apps
+TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
 
 import logging
 log = logging.getLogger()

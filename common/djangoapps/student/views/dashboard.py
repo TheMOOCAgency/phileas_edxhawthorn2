@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Dashboard view and supporting methods
 """
@@ -57,6 +58,10 @@ from xmodule.modulestore.django import modulestore
 
 #TMA IMPORTS
 from courseware.courses import get_courses
+from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+from django.apps import apps
+TmaCourseOverview = apps.get_model('tma_apps','TmaCourseOverview')
+TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
 
 log = logging.getLogger("edx.student")
 
@@ -848,10 +853,30 @@ def student_dashboard(request):
         'resume_button_urls': resume_button_urls
     })
 
-    # TMA - Get all courses
-    all_courses = get_courses(user)
+    # TMA - Get all course overviews
+    course_overviews = list(CourseOverview.objects.filter(org="phileas"))
+
+    # TMA - Get TMA tables info
+    tma_course_overviews = list(TmaCourseOverview.objects.all())
+    tma_course_enrollments = list(TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user))
+
+    #TMA - Ongoing courses
+    ongoing_courses = TmaCourseEnrollment.get_ongoing_courses(user=user)
+
+    #TMA - Mandatory courses
+    mandatory_courses = 0
+    for enrollment in CourseEnrollment.objects.filter(user=user):
+        tma_overviews = TmaCourseOverview.objects.filter(course_overview_edx__id=enrollment.course_id)
+        for overview in tma_overviews:
+            if overview.is_mandatory:
+                mandatory += 1
+
     context.update({
-        'all_courses': all_courses
+        'course_overviews': course_overviews,
+        'ongoing_courses': ongoing_courses,
+        'mandatory_courses': mandatory_courses,
+        'tma_course_enrollments': tma_course_enrollments,
+        'tma_course_overviews': tma_course_overviews
     })
 
     response = render_to_response('dashboard.html', context)

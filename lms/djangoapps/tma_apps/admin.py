@@ -1,5 +1,7 @@
 from django.contrib import admin
-from tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
+from django.apps import apps
+TmaCourseOverview = apps.get_model('tma_apps','TmaCourseOverview')
+TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
 
 class TmaCourseEnrollmentAdmin(admin.ModelAdmin):
     list_display = ('course_id','user_edx','has_validated_course','completion_rate','is_favourite',)
