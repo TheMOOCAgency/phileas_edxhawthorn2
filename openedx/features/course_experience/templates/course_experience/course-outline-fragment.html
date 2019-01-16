@@ -33,16 +33,17 @@ course_sections = blocks.get('children')
             %>
                 <li class="outline-item section">
                     <button class="section-name accordion-trigger"
-                            aria-expanded="${ 'true' if section_is_auto_opened else 'false' }"
+                            aria-expanded="true"
                             aria-controls="${ section['id'] }_contents"
                             id="${ section['id'] }">
                         <span class="fa fa-chevron-right ${ 'fa-rotate-90' if section_is_auto_opened else '' }" aria-hidden="true"></span>
-                        <h3 class="section-title">${ section['display_name'] }</h3>
             % if section.get('complete'):
-                            <span class="complete-checkmark fa fa-check"></span>
+                        <h3 class="section-title tma_completed">${ section['display_name'] }</h3>
+            %else :
+                        <h3 class="section-title">${ section['display_name'] }</h3>
             % endif
                     </button>
-                    <ol class="outline-item accordion-panel ${ '' if section_is_auto_opened else 'is-hidden' }"
+                    <ol class="outline-item accordion-panel"
                         id="${ section['id'] }_contents"
                         aria-labelledby="${ section['id'] }">
             % for subsection in section.get('children', []):
@@ -51,7 +52,11 @@ course_sections = blocks.get('children')
                 completed_prereqs = gated_content[subsection['id']]['completed_prereqs'] if gated_subsection else False
                 subsection_is_auto_opened = subsection.get('resume_block') is True
                 %>
+                % if subsection.get('complete'):
+                      <li class="subsection accordion subsection-completed ${ 'current' if subsection['resume_block'] else '' }">
+                %else:
                       <li class="subsection accordion ${ 'current' if subsection['resume_block'] else '' }">
+                %endif
                 % if gated_subsection and not completed_prereqs:
                                 <a href="${ subsection['lms_web_url'] }">
                                     <button class="subsection-text prerequisite-button"
@@ -77,12 +82,12 @@ course_sections = blocks.get('children')
                                             aria-controls="${ subsection['id'] }_contents">
                                         <span class="fa fa-chevron-right ${ 'fa-rotate-90' if subsection_is_auto_opened else '' }"
                                               aria-hidden="true"></span>
-                                        <h4 class="subsection-title">
-                                            ${ subsection['display_name'] }
-                                        </h4>
                     % if subsection.get('complete'):
-                                        <span class="complete-checkmark fa fa-check"></span>
+                                        <h4 class="subsection-title tma_completed">${ subsection['display_name'] }</h4>
+                    % else :
+                                        <h4 class="subsection-title">${ subsection['display_name'] }</h4>
                     % endif
+
                 % endif
                                         <div class="details">
 
@@ -155,13 +160,14 @@ course_sections = blocks.get('children')
                                         <a class="outline-item focusable"
                                             href="${ vertical['lms_web_url'] }"
                                             id="${ vertical['id'] }">
-                                            <div class="vertical-details">
-                                              <div class="vertical-title">
-                                                ${ vertical['display_name'] }
-                                              </div>
-                                            </div>
                         % if vertical.get('complete'):
-                                                <span class="complete-checkmark fa fa-check"></span>
+                                          <div class="vertical-details">
+                                            <div class="vertical-title tma_completed">${ vertical['display_name'] }</div>
+                                          </div>
+                        %else :
+                                          <div class="vertical-details">
+                                            <div class="vertical-title">${ vertical['display_name'] }</div>
+                                          </div>
                         % endif
                                         </a>
                                     </li>

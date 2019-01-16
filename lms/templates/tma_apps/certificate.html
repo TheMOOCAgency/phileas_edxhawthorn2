@@ -1,0 +1,46 @@
+<%page expression_filter="h"/>
+<%inherit file="/main.html" />
+<%namespace name='static' file='/static_content.html'/>
+<%def name="online_help_token()"><% return "courseware" %></%def>
+<%!
+from django.utils.translation import ugettext as _
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from tma_apps.tma_methodes import is_tma_staff
+%>
+
+<%block name="pagetitle">${_("Certificate")}</%block>
+
+<style>
+  body{
+    text-align:center;
+  }
+  #main{
+    margin-top:150px;
+    width:854px;
+    height:480px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+  }
+  .primary_color_bg{
+    background-color: darkblue;
+  }
+</style>
+
+% if passed or is_tma_staff(request.user):
+<div id="main" class="primary_color_bg">
+  <div id="bandeau-top" class="transparency-color">
+
+  </div>
+  <div id="bandeau-middle" class="transparency-color">
+
+  </div>
+</div>
+
+%else :
+<div id="main">
+  <h1>${_('CERTIFICATE UNAVAILABLE')}</h1>
+  <p class="text-center">${_('You did not reach minimum grade to get your certificate')}</p>
+</div>
+
+%endif

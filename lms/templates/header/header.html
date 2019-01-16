@@ -7,6 +7,7 @@
 <%!
 from django.urls import reverse
 from django.utils.translation import ugettext as _
+import waffle
 
 from lms.djangoapps.ccx.overrides import get_current_ccx
 from openedx.core.djangolib.markup import HTML, Text
@@ -14,6 +15,7 @@ from openedx.core.djangolib.markup import HTML, Text
 # App that handles subdomain specific branding
 from branding import api as branding_api
 from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_enabled, released_languages
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
 %>
 
@@ -29,7 +31,34 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
     </%block>
 % endif
 
-<header class="global-header ${'slim' if course else ''}">
+<%
+  unsupported_browser_alert_versions = configuration_helpers.get_value('UNSUPPORTED_BROWSER_ALERT_VERSIONS', settings.FEATURES.get('UNSUPPORTED_BROWSER_ALERT_VERSIONS'))
+%>
+<!-- TMA GLOBAL STYLE -->
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
+<link rel="stylesheet" href="${static.url('tma-static/css/navigation-tma-custom.css')}">
+<!--<link rel="stylesheet" href="/media/dev/tma-static/css/navigation-tma-custom.css">-->
+<link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
+<!--<link rel="stylesheet" href="/media/dev/tma-static/css/global-tma-custom.css">-->
+
+% if waffle.switch_is_active('enable_unsupported_browser_alert'):
+  <script>
+    var $buoop = {
+        notify:${unsupported_browser_alert_versions | n, decode.utf8},
+        api:5,
+        reminder:0
+    };
+    function $buo_f() {
+        var e = document.createElement("script");
+        e.src = "//browser-update.org/update.min.js";
+        document.body.appendChild(e);
+    };
+    try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+    catch(e){window.attachEvent("onload", $buo_f)}
+  </script>
+% endif
+
+<header>
     % if use_cookie_banner:
         ${static.renderReact(
             component="CookiePolicyBanner",
@@ -37,20 +66,23 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
             props={}
         )}
     % endif
-    <div class="main-header">
+    <nav class="navbar navbar-expand-lg navbar-light">
         <%include file="navbar-logo-header.html" args="online_help_token=online_help_token"/>
-        <div class="hamburger-menu" role="button" aria-label=${_("Options Menu")} aria-expanded="false" aria-controls="mobile-menu" tabindex="0">
+        <!--<div class="hamburger-menu" role="button" aria-label=${_("Options Menu")} aria-expanded="false" aria-controls="mobile-menu" tabindex="0">
             <span class="line"></span>
             <span class="line"></span>
             <span class="line"></span>
             <span class="line"></span>
-        </div>
+        </div>-->
+        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
         % if user.is_authenticated:
             <%include file="navbar-authenticated.html" args="online_help_token=online_help_token"/>
         % else:
             <%include file="navbar-not-authenticated.html" args="online_help_token=online_help_token"/>
         % endif
-    </div>
+    </nav>
     <div class="mobile-menu hidden" aria-label=${_("More Options")} role="menu" id="mobile-menu"></div>
 </header>
 
@@ -67,29 +99,4 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
 
 % if settings.FEATURES.get('ENABLE_COOKIE_CONSENT', False):
   <%include file="../widgets/cookie-consent.html" />
-% endif
-
-% if header_language_selector_is_enabled():
-    <% languages = released_languages() %>
-    % if len(languages) > 1:
-        <form action="/i18n/setlang/" method="post" class="settings-language-form" id="language-settings-form">
-            <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="${csrf_token}">
-            % if user.is_authenticated:
-                <input title="preference api" type="hidden" class="url-endpoint" value="${reverse('preferences_api', kwargs={'username': user.username})}" data-user-is-authenticated="true">
-            % else:
-                <input title="session update url" type="hidden" class="url-endpoint" value="${reverse('session_language')}" data-user-is-authenticated="false">
-            % endif
-            <label><span class="sr">${_("Choose Language")}</span>
-            <select class="input select language-selector" id="settings-language-value" name="language">
-                % for language in languages:
-                    % if language[0] == LANGUAGE_CODE:
-                        <option value="${language[0]}" selected="selected">${language[1]}</option>
-                    % else:
-                        <option value="${language[0]}" >${language[1]}</option>
-                    % endif
-                % endfor
-            </select>
-            </label>
-        </form>
-    % endif
 % endif

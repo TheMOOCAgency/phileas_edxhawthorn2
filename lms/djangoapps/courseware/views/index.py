@@ -389,7 +389,7 @@ class CoursewareIndex(View):
 
         #TMA - Nav Completion
         outline_fragment = CourseOutlineFragmentView().render_to_fragment(request, course_id=str(self.course.id))
-        context.update({
+        courseware_context.update({
             'outline_fragment': outline_fragment
         })
 

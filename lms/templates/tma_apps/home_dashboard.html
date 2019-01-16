@@ -1,0 +1,231 @@
+<%page expression_filter="h"/>
+<%inherit file="../main.html" />
+<%namespace name='static' file='/static_content.html'/>
+<%!
+from django.utils.translation import ugettext as _
+from django.conf import settings
+from edxnotes.helpers import is_feature_enabled as is_edxnotes_enabled
+from openedx.core.djangolib.markup import HTML
+from openedx.core.djangolib.js_utils import js_escaped_string, dump_js_escaped_json
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from datetime import datetime, date
+import json
+
+temporary_count = [1, 2, 3, 4, 5]
+%>
+<!-- TMA enable BOOTSTRAP-->
+<link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
+<script type="text/javascript" src="${static.url('common/js/vendor/bootstrap.bundle.js')}"></script>
+
+<!-- TMA GLOBAL STYLE -->
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
+<link rel="stylesheet" href="${static.url('tma-static/css/home-tma-custom.css')}">
+<!--<link rel="stylesheet" href="/media/dev/tma-static/css/home-tma-custom.css">-->
+<link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
+<!--<link rel="stylesheet" href="/media/dev/tma-static/css/global-tma-custom.css">-->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col home-box">
+            <div class="row mt-5">
+                <div class="col">
+                    <h1 class="title-36-black mb-5">Your dashboard</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 text-right">
+                    <div class="profile-img"></div>
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="title-24"><span class="font-weight-bold">Hello</span> ${username}</h2>
+                    <p class="grey-text">You'll find on this page all your ongoing courses, mandatory or not, as well as your favorite and finished courses.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ONGOING COURSES -->
+    <div class="row bg-blue">
+        <div class="container-fluid  ongoing-box padding-70 pt-4">
+            <div class="row pt-4">
+                <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">Your ongoing courses</h1>
+            </div>
+            <div class="row">
+                %for i in temporary_count:
+                <div class="col-lg-3 col-md-6">
+                    <div class="training-card">
+                        <div class="row"> 
+                            <div class="col mandatory-tag">
+                                <p class="text-center">mandatory course!</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col progress">
+                                <div class="progress-bar" style="width:45%" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">45%</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col m-3">
+                                <p class="title-course">Power Point 2018</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col dates-box m-3">
+                                <p>Start date:<span> 30/12/2018</span></p>
+                            </div>
+                        </div>
+                        <div class="row pin-row mb-3">
+                            <div class="col-4">
+                                <p class="text-center"><img src="${static.url('tma-static/images/like.svg')}"/>10</p>
+                            </div>
+                            <div class="col-8">
+                                <p class="text-center"><img src="${static.url('tma-static/images/recommend.svg')}"/>Recommend</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center">
+                                <a href="#" class="continue-btn">Continue</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                % endfor
+            </div>
+        </div>
+    </div>
+    <div class="separator"></div>
+    <!-- MANDATORY COURSES -->
+    <div class="row">
+        <div class="container-fluid padding-70 mandatory-box">
+            <div class="row pt-4">
+                <h1 class="title-28"><img class="picto" src="${static.url('tma-static/images/warning.svg')}">Your mandatory courses</h1>
+            </div>
+            <div class="row">
+                % for i in temporary_count:
+                <div class="col-lg-3 col-md-6">
+                    <div class="training-card">
+                        <div class="row">
+                            <div class="col mandatory-tag">
+                                <p class="text-center">mandatory course!</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col progress">
+                                <div class="progress-bar" style="width:45%" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">45%</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col m-3">
+                                <p class="title-course">Power Point 2018</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col dates-box m-3">
+                                <p>Start date:<span> 30/12/2018</span></p>
+                            </div>
+                        </div>
+                        <div class="row pin-row">
+                            <div class="col-4">
+                                <p class="text-center"><img src="${static.url('tma-static/images/like.svg')}"/>10</p>
+                            </div>
+                            <div class="col-8">
+                                <p class="text-center"><img src="${static.url('tma-static/images/recommend.svg')}"/>Recommend</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center">
+                                <a href="#" class="continue-btn">Start</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                % endfor
+            </div>
+        </div>
+    </div>
+    <div class="separator"></div>
+    <!-- FAVORITE COURSES -->
+    <div class="row">
+        <div class="container-fluid padding-70 favorite-box">
+            <div class="row pt-4">
+                <h1 class="title-28"><img class="picto" src="${static.url('tma-static/images/etoile.svg')}">Your favorite courses</h1>
+            </div>
+            <div class="row">
+                % for i in temporary_count:
+                <div class="col-lg-3 col-md-6">
+                    <div class="training-card">
+                        <div class="row">
+                            <div class="col mandatory-tag">
+                                <p class="text-center">mandatory course!</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col progress">
+                                <div class="progress-bar" style="width:45%" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">45%</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col m-3">
+                                <p class="title-course">Power Point 2018</p>
+                            </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col dates-box m-3">
+                                    <p>Start date:<span> 30/12/2018</span></p>
+                                </div>
+                            </div>
+                        <div class="row pin-row">
+                            <div class="col-4">
+                                <p class="text-center"><img src="${static.url('tma-static/images/like.svg')}"/>10</p>
+                            </div>
+                            <div class="col-8">
+                                <p class="text-center"><img src="${static.url('tma-static/images/recommend.svg')}"/>Recommend</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center">
+                                <a href="#" class="continue-btn">Continue</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                % endfor
+            </div>
+        </div>
+    </div>
+    <div class="separator"></div>
+    <!-- FINISHED COURSES-->
+    <div class="row">
+        <div class="container-fluid padding-70 finished-box">
+            <div class="row pt-4">
+                <h1 class="title-28">Your finished courses</h1>
+            </div>
+            <div class="row legend">
+                <div class="col-lg-3">Course :</div>
+                <div class="col-lg-3">Date :</div>
+                <div class="col-lg-2">Score :</div>
+                <div class="col-lg-2">Certification :</div>
+                <div class="col-lg-2">Download certificate :</div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-lg-3 title-20"><p>Android 5.0</p></div>
+                <div class="col-lg-3 grey-text">
+                    <p>End date: <span>  30/12/2018</span></p>
+                </div>
+                <div class="col-lg-2">
+                    <p><span class="font-weight-bold">100</span>/100</p>
+                </div>
+                <div class="col-lg-2 pl-5"><p><img class="badge-cert" src="${static.url('tma-static/images/certificate.svg')}"></div>
+                <div class="col-lg-2"><a href="#">Télécharger</a></div>
+            </div>
+            <div class="row mb-5 mt-3">
+                <div class="col text-center more-btn">
+                    <a href="#"><img src="${static.url('tma-static/images/+.svg')}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    console.log('')
+</script>
