@@ -22,8 +22,6 @@ from lms.djangoapps.courseware.courses import (
   get_course
 )
 
-# Course overviews to get course info
-course_overviews = list(CourseOverview.objects.filter(org="phileas"))
 %>
 
 <%
@@ -176,7 +174,7 @@ course_overviews = list(CourseOverview.objects.filter(org="phileas"))
         </div>
         <div class="row">
           <div class="col-4 text-center">
-            <p>2<img src="${static.url('tma-static/images/warning.svg')}"></p>
+            <p>${mandatory_courses}<img src="${static.url('tma-static/images/warning.svg')}"></p>
             <p class="mt-2">mandatory course(s)</p>
           </div>
           <div class="col-4 text-center">
@@ -184,7 +182,7 @@ course_overviews = list(CourseOverview.objects.filter(org="phileas"))
             <p class="mt-2">favorite course(s)</p>
           </div>
           <div class="col-4 text-center">
-            <p>6<img src="${static.url('tma-static/images/drapeau.svg')}"></p>
+            <p>${ongoing_courses}<img src="${static.url('tma-static/images/drapeau.svg')}"></p>
             <p class="mt-2">ongoing course(s)</p>
           </div>
         </div>
@@ -429,5 +427,5 @@ course_overviews = list(CourseOverview.objects.filter(org="phileas"))
       $('.dropdown').toggleClass("is-down");
     });
   });
-
+ console.log('${course_enrollments[0].__dict__}')
 </script>

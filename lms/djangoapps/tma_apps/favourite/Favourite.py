@@ -1,6 +1,8 @@
 from student.models import CourseEnrollment
-from tma_apps.models import TmaCourseEnrollment
 from django.utils.translation import ugettext as _
+
+from django.apps import apps
+TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
 
 import logging
 log = logging.getLogger()
