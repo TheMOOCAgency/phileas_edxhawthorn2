@@ -8,49 +8,79 @@ from django.urls import reverse
 from openedx.core.djangolib.markup import HTML, Text
 %>
 
+<!-- TMA GLOBAL STYLE -->
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
+<link rel="stylesheet" href="${static.url('tma-static/css/index-tma-custom.css')}">
+<!--<link rel="stylesheet" href="/media/dev/tma-static/css/index-tma-custom.css">-->
+<link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
+<!--<link rel="stylesheet" href="/media/dev/tma-static/css/global-tma-custom.css">-->
+
 <main id="main" aria-label="Content" tabindex="-1">
-    <section class="home">
-      <header>
-        <div class="outer-wrapper">
-          <div class="title">
-            <div class="heading-group">
-              % if homepage_overlay_html:
-                ${homepage_overlay_html | n, decode.utf8}
-              % else:
-                <%include file="index_overlay.html" />
-              % endif
-            </div>
-            % if settings.FEATURES.get('ENABLE_COURSE_DISCOVERY'):
-              <div class="course-search">
-                <form method="get" action="/courses">
-                  <label><span class="sr">${_("Search for a course")}</span>
-                    <input class="search-input" name="search_query" type="text" placeholder="${_("Search for a course")}"></input>
-                  </label>
-                  <button class="search-button" type="submit">
-                    <span class="icon fa fa-search" aria-hidden="true"></span><span class="sr">${_("Search")}</span>
-                  </button>
-                </form>
-              </div>
-            % endif
-
-          </div>
-
-          <%include file="index_promo_video.html" />
-        </div>
-
-      </header>
-      <%include file="${courses_list}" />
-
-    </section>
-</main>
-
-% if show_homepage_promo_video:
-  <section id="video-modal" class="modal home-page-video-modal video-modal">
-    <div class="inner-wrapper">
-      <iframe title="YouTube Video" width="640" height="360" src="//www.youtube.com/embed/${homepage_promo_video_youtube_id}?showinfo=0" frameborder="0" allowfullscreen></iframe>
+  <div class="container-fluid bg-grey-light">
+    <!--PRESENTATION ROW-->
+    <div class="row bg-white">
+      <div class="col-lg-6 bg-blue-light header-box">
+        <p class="title-36">Develop your skills and explore new horizons</p>
+        <a href="/login" class="login-btn">Login</a>
+      </div>
+      <div class="col-lg-6 video-box">
+        <video data-video-id="5805748443001" data-account="3428187083001" data-player="VNKG7oRLQw" data-embed="default" data-application-id autoplay="true" height="360" loop muted>
+        </video>
+      </div>
     </div>
-  </section>
-% endif
+    <div class="row middle-box bg-grey-light">
+      <div class="col-lg-3 text-center">
+        <div class="w-100 pl-80">
+          <img class="picto" src="${static.url('tma-static/images/rythme.svg')}">
+          <h3 class="md-blue-title">Adapté à votre rythme</h3>
+          <p class="sm-grey-txt">Accédez depuis n'importe quel device à vos formations là où vous les avez interrompues</p>
+        </div>
+      </div>
+      <div class="col-lg-3 text-center">
+        <div class="w-100">
+          <img class="picto" src="${static.url('tma-static/images/contenu.svg')}">
+          <h3 class="md-blue-title">Des contenus variés</h3>
+          <p class="sm-grey-txt">Cherchez le module qui correspond à vos besoins et lancez-vous dès à présent !</p>
+        </div>
+      </div>
+      <div class="col-lg-3 text-center">
+        <div class="w-100">
+          <img class="picto" src="${static.url('tma-static/images/apprentissage.svg')}">
+          <h3 class="md-blue-title">Auto apprentissage</h3>
+          <p class="sm-grey-txt">Soyez autonome dans l'acquisition de vos nouvelles compétences</p>
+        </div>
+      </div>
+      <div class="col-lg-3 text-center">
+        <div class="w-100 pr-85">
+          <img class="picto" src="${static.url('tma-static/images/competences.svg')}">
+          <h3 class="md-blue-title">Orienté compétences</h3>
+          <p class="sm-grey-txt">Maintenez vos compétences à jour et développez de nouveaux savoirs</p>
+        </div>
+      </div>
+    </div>
+    <div class="row bg-white">
+      <div class="col bottom-box">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-4 text-right">
+              <img src="${static.url('tma-static/images/trophee.png')}">
+            </div>
+            <div class="col-lg-8">
+              <h3 class="md-blue-title">Innover et entreprendre ensemble</h3>
+              <p class="text-black font-italic">Lauréat de l’Innovation Cup 2015, Phileas est né de convictions communes
+                des équipes RH et IT autour du partage des connaissances et de la formation.</p>
+              <p class="text-black">Phileas, c’est « Project HR, IT, Learn And Share ». Développé avec énergie, cœur et
+                conviction, il démontre qu’il y a toujours une place pour les idées et les projets d’ouverture quand un
+                collectif est engagé.</p>
+              <p class="sm-blue-txt">Corinne Fleury, Guénola Morand, Florane Eono, Philippe Blayo, Jérémy Delom et
+                Thierry Moulès.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 
 <%block name="js_extra">
    <script type="text/javascript">
@@ -69,3 +99,6 @@ from openedx.core.djangolib.markup import HTML, Text
   $(window).load(function() {$('#signup_action').trigger("click");});
 </script>
 % endif
+
+<!--Video player Phileas-->
+<script src="//players.brightcove.net/3428187083001/VNKG7oRLQw_default/index.min.js"></script>

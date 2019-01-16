@@ -56,6 +56,9 @@ from ..masquerade import setup_masquerade
 from ..model_data import FieldDataCache
 from ..module_render import get_module_for_descriptor, toc_for_course
 
+#TMA imports
+from openedx.features.course_experience.views.course_outline import CourseOutlineFragmentView
+
 log = logging.getLogger("edx.courseware.views.index")
 
 TEMPLATE_IMPORTS = {'urllib': urllib}
@@ -383,6 +386,13 @@ class CoursewareIndex(View):
             'sequence_title': None,
             'disable_accordion': COURSE_OUTLINE_PAGE_FLAG.is_enabled(self.course.id),
         }
+
+        #TMA - Nav Completion
+        outline_fragment = CourseOutlineFragmentView().render_to_fragment(request, course_id=str(self.course.id))
+        courseware_context.update({
+            'outline_fragment': outline_fragment
+        })
+
         courseware_context.update(
             get_experiment_user_metadata_context(
                 self.course,

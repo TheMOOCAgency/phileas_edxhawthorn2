@@ -13,9 +13,14 @@ from edxnotes.helpers import is_feature_enabled as is_edxnotes_enabled
 from openedx.core.djangolib.js_utils import js_escaped_string
 from openedx.core.djangolib.markup import HTML
 from openedx.features.course_experience import course_home_page_title, COURSE_OUTLINE_PAGE_FLAG
+
 %>
 <%
-  include_special_exams = settings.FEATURES.get('ENABLE_SPECIAL_EXAMS', False) and (course.enable_proctored_exams or course.enable_timed_exams)
+   include_special_exams = (
+   request.user.is_authenticated and
+   settings.FEATURES.get('ENABLE_SPECIAL_EXAMS', False) and
+   (course.enable_proctored_exams or course.enable_timed_exams)
+   )
 %>
 <%def name="course_name()">
  <% return _("{course_number} Courseware").format(course_number=course.display_number_with_default) %>
@@ -59,6 +64,20 @@ from openedx.features.course_experience import course_home_page_title, COURSE_OU
 <script type="text/javascript" src="${static.url('js/src/tooltip_manager.js')}"></script>
 
 <link href="${static.url('css/vendor/jquery.autocomplete.css')}" rel="stylesheet" type="text/css">
+
+<!-- TMA GLOBAL STYLE -->
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
+<link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
+
+<!-- TMA COURSEWARE STYLE-->
+<link rel="stylesheet" href="${static.url('tma-static/css/courseware-tma-custom.css')}">
+<link rel="stylesheet" href="${static.url('tma-static/css/courseware-tma-progress-bar.css')}">
+<link rel="stylesheet" href="${static.url('tma-static/css/courseware-tma-sidebar-menu.css')}">
+
+
+
+
+
   ${HTML(fragment.head_html())}
 </%block>
 
@@ -104,6 +123,32 @@ from openedx.features.course_experience import course_home_page_title, COURSE_OU
 ${HTML(fragment.foot_html())}
 
 </%block>
+<!-- TMA Course Header -->
+<div id="tma_course_header">
+  <div class="row">
+    <div class="col-sm-8">
+      <h1>${course.display_name_with_default}</h1>
+    </div>
+    <div class="col-sm-4">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="tma-grade">
+            <img class="award" src="${static.url('tma-static/images/award.png')}" alt="award">
+            <span class="font-weight-bold"><span class="primary-color-text first-part-grade">56</span>/<span class="second-part-grade">80</span></span>
+          </div>
+          <div class="tma-progress-bar">
+            <div class="w3-light-grey">
+              <div class="w3-container w3-padding-small primary-color-bg text-white w3-center" style="width:50%">50%</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="message-banner" aria-live="polite"></div>
 
@@ -118,7 +163,26 @@ ${HTML(fragment.foot_html())}
     lang="${course.language}"
   % endif
   >
+
+
+
+<!-- TMA COMPLETION NAV -->
+  <div class="tma-coursenav-btn">
+    <span class="open-courseware-nav">Menu<i class="fa fa-plus"></i></span>
+  </div>
+
   <div class="course-wrapper" role="presentation">
+
+    % if disable_accordion :
+    <div id="tma-completion-nav" class="folded">
+      <div class=text-right>
+        <button class="close-courseware-nav"><i class="fa fa-times"></i></button>
+      </div>
+      <nav id="course_completion">
+        ${HTML(outline_fragment.body_html())}
+      </nav>
+    </div>
+    %endif
 
 % if disable_accordion is UNDEFINED or not disable_accordion:
     <div class="course-index">
@@ -147,19 +211,8 @@ ${HTML(fragment.foot_html())}
           % endif
 
       </div>
-
-      <div class="accordion">
-        <nav class="course-navigation" aria-label="${_('Course')}">
-          % if accordion.strip():
-            ${HTML(accordion)}
-          % else:
-            <div class="chapter">${_("No content has been added to this course")}</div>
-          % endif
-        </nav>
-      </div>
-
-    </div>
 % endif
+
     <section class="course-content" id="course-content">
         <header class="page-header has-secondary">
             <div class="page-header-main">
@@ -235,18 +288,7 @@ ${HTML(fragment.foot_html())}
   </div>
   ${HTML(course_sock_fragment.body_html())}
 </div>
-<div class="container-footer">
-  % if settings.FEATURES.get("LICENSING", False):
-    <div class="course-license">
-    % if getattr(course, "license", None):
-      <%include file="../license.html" args="license=course.license" />
-    % else:
-      ## Default course license: All Rights Reserved, if none is explicitly set.
-      <%include file="../license.html" args="license='all-rights-reserved'" />
-    % endif
-    </div>
-  % endif
-</div>
+
 % if course.show_calculator or is_edxnotes_enabled(course, request.user):
     <nav class="nav-utilities ${"has-utility-calculator" if course.show_calculator else ""}" aria-label="${_('Course Utilities')}">
       ## Utility: Notes
@@ -260,3 +302,9 @@ ${HTML(fragment.foot_html())}
       % endif
     </nav>
 % endif
+
+
+
+<!--TMA SCRIPT COURSEWARE -->
+<script src="${static.url('tma-static/js/courseware-tma-completion-nav.js')}" charset="utf-8"></script>
+<!-- <script src="/media/dev/tma-static/js/courseware-tma-completion-nav.js" charset="utf-8"></script> -->

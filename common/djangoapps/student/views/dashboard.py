@@ -55,6 +55,9 @@ from student.models import (
 from util.milestones_helpers import get_pre_requisite_courses_not_completed
 from xmodule.modulestore.django import modulestore
 
+#TMA IMPORTS
+from courseware.courses import get_courses
+
 log = logging.getLogger("edx.student")
 
 
@@ -843,6 +846,12 @@ def student_dashboard(request):
     resume_button_urls += ['' for entitlement in course_entitlements]
     context.update({
         'resume_button_urls': resume_button_urls
+    })
+
+    # TMA - Get all courses
+    all_courses = get_courses(user)
+    context.update({
+        'all_courses': all_courses
     })
 
     response = render_to_response('dashboard.html', context)

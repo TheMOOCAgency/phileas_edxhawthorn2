@@ -16,8 +16,14 @@ from openedx.core.djangoapps.content.course_overviews.models import CourseOvervi
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string
 from openedx.core.djangolib.markup import HTML, Text
-
 from student.models import CourseEnrollment
+from lms.djangoapps.courseware.courses import (
+  get_course_overview_with_access,
+  get_course
+)
+
+# Course overviews to get course info
+course_overviews = list(CourseOverview.objects.filter(org="phileas"))
 %>
 
 <%
@@ -86,6 +92,16 @@ from student.models import CourseEnrollment
   % endif
 </%block>
 
+<!-- TMA enable BOOTSTRAP-->
+<link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
+<script type="text/javascript" src="${static.url('common/js/vendor/bootstrap.bundle.js')}"></script>
+<!-- TMA GLOBAL STYLE -->
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
+<link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
+<!--<link rel="stylesheet" href="/media/dev/tma-static/css/global-tma-custom.css">-->
+<link rel="stylesheet" href="${static.url('tma-static/css/dashboard-tma-custom.css')}">
+<!--<link rel="stylesheet" href="/media/dev/tma-static/css/dashboard-tma-custom.css">-->
+
 <div class="dashboard-notifications" tabindex="-1">
 
     %if banner_account_activation_message:
@@ -120,230 +136,298 @@ from student.models import CourseEnrollment
 
 </div>
 
-<main id="main" aria-label="Content" tabindex="-1">
-    <div class="dashboard" id="dashboard-main">
-      <div class="main-container">
-        <div class="my-courses" id="my-courses">
-          % if display_dashboard_courses:
-          <%include file="learner_dashboard/_dashboard_navigation_courses.html"/>
-          % endif
-
-          % if len(course_entitlements + course_enrollments) > 0:
-            <ul class="listing-courses">
-            <%
-                share_settings = configuration_helpers.get_value(
-                    'SOCIAL_SHARING_SETTINGS',
-                    getattr(settings, 'SOCIAL_SHARING_SETTINGS', {})
-                )
-            %>
-            % for dashboard_index, enrollment in enumerate(course_entitlements + course_enrollments):
-              <%
-                # Check if the course run is an entitlement and if it has an associated session
-                entitlement = enrollment if isinstance(enrollment, CourseEntitlement) else None
-                entitlement_session = entitlement.enrollment_course_run if entitlement else None
-                entitlement_days_until_expiration = entitlement.get_days_until_expiration() if entitlement else None
-                entitlement_expiration = datetime.now(tz=pytz.UTC) + timedelta(days=entitlement_days_until_expiration) if (entitlement and entitlement_days_until_expiration < settings.ENTITLEMENT_EXPIRED_ALERT_PERIOD) else None
-                entitlement_expiration_date = strftime_localized(entitlement_expiration, 'SHORT_DATE') if entitlement and entitlement_expiration else None
-                entitlement_expired_at = strftime_localized(entitlement.expired_at_datetime, 'SHORT_DATE') if entitlement and entitlement.expired_at_datetime else None
-
-                is_fulfilled_entitlement = True if entitlement and entitlement_session else False
-                is_unfulfilled_entitlement = True if entitlement and not entitlement_session else False
-
-                entitlement_available_sessions = []
-                if entitlement:
-                  # Grab the available, enrollable sessions for a given entitlement and scrape them for relevant attributes
-                  entitlement_available_sessions = [{
-                    'session_id': course['key'],
-                    'enrollment_end': course['enrollment_end'],
-                    'pacing_type': course['pacing_type'],
-                    'advertised_start': CourseOverview.get_from_id(CourseKey.from_string(course['key'])).advertised_start,
-                    'start': CourseOverview.get_from_id(CourseKey.from_string(course['key'])).start,
-                    'end': CourseOverview.get_from_id(CourseKey.from_string(course['key'])).end,
-                    } for course in course_entitlement_available_sessions[str(entitlement.uuid)]]
-                  if is_fulfilled_entitlement:
-                    # If the user has a fulfilled entitlement, pass through the entitlements CourseEnrollment object
-                    enrollment = entitlement_session
-                  else:
-                    # If the user has an unfulfilled entitlement, pass through a bare CourseEnrollment object to populate card with metadata
-                    pseudo_session = unfulfilled_entitlement_pseudo_sessions[str(entitlement.uuid)]
-                    if not pseudo_session:
-                        continue
-                    enrollment = CourseEnrollment(user=user, course_id=pseudo_session['key'], mode=pseudo_session['type'])
-                  # We only show email settings for entitlement cards if the entitlement has an associated enrollment
-                  show_email_settings = is_fulfilled_entitlement and (entitlement_session.course_id in show_email_settings_for)
-                else:
-                  show_email_settings = (enrollment.course_id in show_email_settings_for)
-
-                session_id = enrollment.course_id
-                show_courseware_link = (session_id in show_courseware_links_for)
-                cert_status = cert_statuses.get(session_id)
-                can_refund_entitlement = entitlement and entitlement.is_entitlement_refundable()
-                can_unenroll = (not cert_status) or cert_status.get('can_unenroll') if not unfulfilled_entitlement else False
-                credit_status = credit_statuses.get(session_id)
-                course_mode_info = all_course_modes.get(session_id)
-                is_paid_course = True if entitlement else (session_id in enrolled_courses_either_paid)
-                is_course_blocked = (session_id in block_courses)
-                course_verification_status = verification_status_by_course.get(session_id, {})
-                course_requirements = courses_requirements_not_met.get(session_id)
-                related_programs = inverted_programs.get(unicode(entitlement.course_uuid if is_unfulfilled_entitlement else session_id))
-                show_consent_link = (session_id in consent_required_courses)
-                course_overview = enrollment.course_overview
-                resume_button_url = resume_button_urls[dashboard_index]
-              %>
-              <%include file='dashboard/_dashboard_course_listing.html' args='course_overview=course_overview, course_card_index=dashboard_index, enrollment=enrollment, is_unfulfilled_entitlement=is_unfulfilled_entitlement, is_fulfilled_entitlement=is_fulfilled_entitlement, entitlement=entitlement, entitlement_session=entitlement_session, entitlement_available_sessions=entitlement_available_sessions, entitlement_expiration_date=entitlement_expiration_date, entitlement_expired_at=entitlement_expired_at, show_courseware_link=show_courseware_link, cert_status=cert_status, can_refund_entitlement=can_refund_entitlement, can_unenroll=can_unenroll, credit_status=credit_status, show_email_settings=show_email_settings, course_mode_info=course_mode_info, is_paid_course=is_paid_course, is_course_blocked=is_course_blocked, verification_status=course_verification_status, course_requirements=course_requirements, dashboard_index=dashboard_index, share_settings=share_settings, user=user, related_programs=related_programs, display_course_modes_on_dashboard=display_course_modes_on_dashboard, show_consent_link=show_consent_link, enterprise_customer_name=enterprise_customer_name, resume_button_url=resume_button_url' />
-            % endfor
-
-            </ul>
-          % else:
-            <div class="empty-dashboard-message">
-              % if display_dashboard_courses:
-                <p>${_("You are not enrolled in any courses yet.")}</p>
-                % if empty_dashboard_message:
-                  <p class="custom-message">${empty_dashboard_message | n, decode.utf8}</p>
-                %endif
-                % if settings.FEATURES.get('COURSES_ARE_BROWSABLE'):
-                  <a class="btn btn-primary" href="${marketing_link('COURSES')}">
-                    ${_("Explore courses")}
-                  </a>
-                %endif
-              % else:
-              <p>${_("Activate your account!")}</p>
-              <p class="custom-message">${ activate_account_message | n, decode.utf8 }</p>
-              % endif
-          </div>
-          % endif
-
-          % if staff_access and len(errored_courses) > 0:
-            <div id="course-errors">
-              <h2>${_("Course-loading errors")}</h2>
-
-            % for course_dir, errors in errored_courses.items():
-               <h3>${course_dir}</h3>
-                   <ul>
-                 % for (msg, err) in errors:
-                     <li>${msg}
-                       <ul><li><pre>${err}</pre></li></ul>
-                     </li>
-                 % endfor
-                   </ul>
-            % endfor
+<div class="container-fluid bg-grey-light">
+  <!--PRESENTATION ROW-->
+  <div class="row bg-white">
+      <form method="get" action="/courses" class="gif-box">
+        <p class="title-36">Find your course <br>among 130 available</p>
+        <div class="search-field-wrapper">
+          <button type="submit" class="search-button btn" title="${_('Search')}">
+            <img src="${static.url('tma-static/images/loupe.svg')}" style="width:30px">
+          </button>
+          <input name="search_query" id="dashboard-search-input" type="text" class="search-input" placeholder="What do you want to learn?"/>
+          <!--<button type="button" class="cancel-button" title="${_('Clear search')}">
+            <span class="icon fa fa-remove" aria-hidden="true"></span>
+          </button>-->
+        </div>
+      </form>
+      <video autoplay="true" class="embed-responsive-item" height="420" loop muted>
+        <source src="${static.url('tma-static/video/hp_femme_comp.mp4')}" type="video/mp4">
+      </video>
+    <!--Black & White img-->
+    <div class="col-lg-3 text-center img-bw-1">
+      <a href="#" target="_blank">Language skills</a>
+    </div>
+    <div class="col-lg-3 text-center img-bw-2">
+        <a href="#">Regulatory (eCampus)</a>
+    </div>
+    <div class="col-lg-3 text-center img-bw-3">
+        <a href="#">US regulatory courses</a>
+    </div>
+    <!--User dark blue box-->
+    <div class="col-lg-3 bg-blue-dark user-box text-white">
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 mb-3">
+              <p class="text-blue-light">Last courses</p>
+              <p>${course_overviews}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
+              <hr>
             </div>
-          % endif
+        </div>
+        <div class="row">
+          <div class="col-4 text-center">
+            <p>2<img src="${static.url('tma-static/images/warning.svg')}"></p>
+            <p class="mt-2">mandatory course(s)</p>
+          </div>
+          <div class="col-4 text-center">
+            <p>10<img src="${static.url('tma-static/images/etoile.svg')}"></p>
+            <p class="mt-2">favorite course(s)</p>
+          </div>
+          <div class="col-4 text-center">
+            <p>6<img src="${static.url('tma-static/images/drapeau.svg')}"></p>
+            <p class="mt-2">ongoing course(s)</p>
+          </div>
         </div>
       </div>
-      <div class="side-container">
-        %if display_sidebar_account_activation_message:
-          <div class="sidebar-notification">
-            <%include file="${static.get_template_path('registration/account_activation_sidebar_notice.html')}" />
-          </div>
-        %endif
+    </div>
+  </div>
 
-        % if settings.FEATURES.get('ENABLE_DASHBOARD_SEARCH'):
-          <div id="dashboard-search-bar" class="search-bar dashboard-search-bar" role="search" aria-label="Dashboard">
-            <form class="search-form">
-              <label for="dashboard-search-input">${_('Search Your Courses')}</label>
-              <div class="search-field-wrapper">
-                <input id="dashboard-search-input" type="text" class="search-field"/>
-                <button type="submit" class="search-button" title="${_('Search')}">
-                  <span class="icon fa fa-search" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="cancel-button" title="${_('Clear search')}">
-                  <span class="icon fa fa-remove" aria-hidden="true"></span>
-                </button>
-              </div>
-            </form>
-          </div>
-          <div id="dashboard-search-results" class="search-results dashboard-search-results"></div>
-        % endif
-
-        % if display_sidebar_on_dashboard:
-          <div class="profile-sidebar" id="profile-sidebar" role="region" aria-label="Account Status Info">
-            <header class="profile">
-              <h2 class="account-status-title sr">${_("Account Status Info")}: </h2>
-            </header>
-            <div class="user-info">
-              <ul>
-
-                % if len(order_history_list):
-                <li class="order-history">
-                  <span class="title">${_("Order History")}</span>
-                  % for order_history_item in order_history_list:
-                    <span><a href="${order_history_item['receipt_url']}" target="_blank" class="edit-name">${order_history_item['order_date']}</a></span>
-                  % endfor
-                </li>
-                % endif
-
-                <%include file="${static.get_template_path('dashboard/_dashboard_status_verification.html')}" />
-
-              </ul>
-            </div>
-          </div>
-        % endif
+  <!--COURSES DISPLAY-->
+  <div class="container-fluid">
+    <!--Title and filter-->
+    <div class="row mt-3">
+      <div class="col-lg-9 mb-4">
+        <h1>Our Selection</h1>
+      </div>
+      <div class="col-lg-3">
+        <div class="dropdown-container">
+          <button>Filter<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
+          <ul class="bg-grey-light dropdown">
+            <li value="1"><a href="">The front page</a></li>
+            <li value="2"><a href="">Highest rated</a></li>
+            <li value="3"><a href="">Most subscribed</a></li>
+          </ul>
+        </div>
       </div>
     </div>
-</main>
-
-<div id="email-settings-modal" class="modal" aria-hidden="true">
-  <div class="inner-wrapper" role="dialog" aria-labelledby="email-settings-title">
-    <button class="close-modal">
-      <span class="icon fa fa-remove" aria-hidden="true"></span>
-      <span class="sr">
-        ## Translators: this is a control to allow users to exit out of this modal interface (a menu or piece of UI that takes the full focus of the screen)
-        ${_("Close")}
-      </span>
-    </button>
-
-    <header>
-      <h2 id="email-settings-title">
-        ${Text(_("Email Settings for {course_number}")).format(course_number=HTML('<span id="email_settings_course_number"></span>'))}
-        <span class="sr">,
-          ## Translators: this text gives status on if the modal interface (a menu or piece of UI that takes the full focus of the screen) is open or not
-          ${_("window open")}
-        </span>
-      </h2>
-      <hr/>
-    </header>
-
-    <form id="email_settings_form" method="post">
-      <input name="course_id" id="email_settings_course_id" type="hidden" />
-      <label><input type="checkbox" id="receive_emails" name="receive_emails" />${_("Receive course emails")} </label>
-      <div class="submit">
-        <input type="submit" id="submit" value="${_("Save Settings")}" />
+    <!--Course cards-->
+    <div class="row">
+      % for course in course_overviews:
+        <% course_object = get_course(course.id) %>
+        % if course_overviews.index(course) == 2:
+          <div class="col-lg-6">
+            <div class="static-card"></div>
+          </div>
+        % endif
+        % if course_overviews.index(course) == 4:
+          <div class="col-lg-6">
+          <div class="course-card-sm">
+            <div class="cover-image">
+                <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
+            </div>
+            <div class="row">
+              <div class="col-6 course-name">
+                <div class="container-fluid">
+                  <div class="container-fluid">
+                      <div class="row">
+                        <div class="col course-name">
+                          <div class="row pin-row">
+                            <div>
+                              <div class="category-tag">Bureautique</div>
+                            </div>
+                            <div>
+                              <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                            </div>
+                            <div>
+                              <img src="${static.url('tma-static/images/epingle_on.svg')}" class="pin">
+                            </div>
+                          </div>
+                          <div class="row">
+                            <p>${course.display_name}</p>
+                          </div>
+                          <div class="align-items-end h-100">
+                            <div class="row course-pictos">
+                              <div class="col-4 text-center pl-2 pr-2">
+                                <a href="#"><img src="${static.url('tma-static/images/Like.png')}"></a>
+                                <span>10</span>
+                              </div>
+                              <div class="col-4 text-center pl-2 pr-2">
+                                  <img src="${static.url('tma-static/images/Time.png')}">
+                                  <span>22h</span>
+                              </div>
+                              <div class="col-4 text-center pl-2 pr-2">
+                                  % if course_object.language == "fr":
+                                    <img src="${static.url('tma-static/images/lang_fr.svg')}">
+                                  % else:
+                                    <img src="${static.url('tma-static/images/lang_en.svg')}">
+                                  % endif
+                                  <span>${course_object.language}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <div class="col-6 course-resume">
+                <div class="container-fluid">
+                  <div class="row mb-3">
+                    <div class="col">
+                      <p class="text-card-lg">${course.short_description}</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col text-center">
+                        <a href="#" class="enroll-btn">I enroll</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        %else:
+          <div class="col-lg-3 col-md-6 flip-container">
+            <div class="flipper">
+                <!--flip front content-->
+                <div class="course-card-sm front">
+                  <div class="cover-image">
+                      <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
+                  </div>
+                  <!-- Pins & title block -->
+                  <div class="container-fluid">
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col course-name">
+                          <div class="row pin-row">
+                            <div>
+                              <div class="category-tag">Bureautique</div>
+                            </div>
+                            <div>
+                              <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                            </div>
+                            <div>
+                              <img src="${static.url('tma-static/images/epingle_on.svg')}" class="pin">
+                            </div>
+                          </div>
+                          <div class="row">
+                            <p>${course.display_name}</p>
+                          </div>
+                          <!-- Arrow block -->
+                          <div class="0">
+                            <div class="row course-pictos">
+                              <div class="col-4 text-center pl-2 pr-2">
+                                <a href="#"><img src="${static.url('tma-static/images/Like.png')}"></a>
+                                <span>10</span>
+                              </div>
+                              <div class="col-4 text-center pl-2 pr-2">
+                                  <img src="${static.url('tma-static/images/Time.png')}">
+                                  <span>22h</span>
+                              </div>
+                              <div class="col-4 text-center pl-2 pr-2">
+                                  % if course_object.language == "fr":
+                                    <img src="${static.url('tma-static/images/lang_fr.svg')}">
+                                  % else:
+                                    <img src="${static.url('tma-static/images/lang_en.svg')}">
+                                  % endif
+                                  <span>${course_object.language}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col text-center">
+                                <a href="#"><img src="${static.url('tma-static/images/flechebas.png')}"></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+                <!--flip back content-->
+                <div class="course-card-sm back">
+                  <div class="cover-image">
+                    <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
+                  </div>
+                  <div class="container-fluid">
+                      <div class="container-fluid">
+                    <div class="row">
+                        <div class="row pin-row">
+                          <div>
+                            <div class="category-tag">Bureautique</div>
+                          </div>
+                          <div>
+                            <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                          </div>
+                          <div>
+                            <img src="${static.url('tma-static/images/epingle_on.svg')}" class="pin">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <h3>${course.display_name}</h3>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <p>${course.short_description}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col text-center">
+                          <a href="#" class="enroll-btn">I enroll</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        %endif
+      %endfor
+    </div>
+    <!--CATEGORIES-->
+    <div class="container-fluid bg-grey-light">
+      <div class="row mb-5">
+          <div class="col text-center more-btn">
+            <a href="#"><img src="${static.url('tma-static/images/+.svg')}"></a>
+          </div>
       </div>
-    </form>
+      <div class="row mt-3">
+          <div class="col">
+            <h1>Categories</h1>
+          </div>
+      </div>
+      <div class="row categories">
+        <div class="col-lg-4 text-center cat-1"><a href="#">Software</a></div>
+        <div class="col-lg-4 text-center cat-2"><a href="#">Business basics</a></div>
+        <div class="col-lg-4 text-center cat-3">
+          <a href="#">Business applications</a>
+        </div>
+        <div class="col-lg-4 text-center cat-4">
+          <a href="#">Marketing and communication</a>
+        </div>
+        <div class="col-lg-4 text-center cat-5">
+          <a href="#">Compliance</a>
+        </div>
+        <div class="col-lg-4 text-center cat-6">
+          <a href="#">Management</a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<div id="unenroll-modal" class="modal unenroll-modal" aria-hidden="true">
-  <div class="inner-wrapper" role="dialog" aria-labelledby="unenrollment-modal-title" aria-live="polite">
-    <button class="close-modal">
-      <span class="icon fa fa-remove" aria-hidden="true"></span>
-      <span class="sr">
-        ## Translators: this is a control to allow users to exit out of this modal interface (a menu or piece of UI that takes the full focus of the screen)
-        ${_("Close")}
-      </span>
-    </button>
+<script>
+  // Flip cards effect
+  $(document).ready(function() {
+    $('.flip-container').hover(function(){
+      $(this).toggleClass("applyflip");
+    });
+  // Dropdown filter behavior
+    $('.dropdown-container > button').click(function(){
+      $('.dropdown').toggleClass("is-down");
+    });
+  });
 
-    <header class="unenroll-header">
-      <h2 id="unenrollment-modal-title">
-        <span id='track-info'></span>
-        <span id='refund-info'></span>
-        <span class="sr">,
-          ## Translators: this text gives status on if the modal interface (a menu or piece of UI that takes the full focus of the screen) is open or not
-          ${_("window open")}
-        </span>
-      </h2>
-      <hr/>
-    </header>
-    <div id="unenroll_error" class="modal-form-error"></div>
-    <form id="unenroll_form" method="post" data-remote="true" action="${reverse('change_enrollment')}">
-      <input name="course_id" id="unenroll_course_id" type="hidden" />
-      <input name="enrollment_action" type="hidden" value="unenroll" />
-      <div class="submit">
-        <input class="submit-button" name="submit" type="submit" value="${_("Unenroll")}" />
-      </div>
-    </form>
-  </div>
-</div>
-
-<%include file="dashboard/_dashboard_entitlement_unenrollment_modal.html"/>
+</script>

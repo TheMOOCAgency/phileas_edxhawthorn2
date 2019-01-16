@@ -22,6 +22,13 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
 
 <script type="text/javascript" src="${static.url('js/header/header.js')}"></script>
 
+<!-- TMA GLOBAL STYLE -->
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
+<link rel="stylesheet" href="${static.url('tma-static/css/navigation-tma-custom.css')}">
+<!--<link rel="stylesheet" href="/media/dev/tma-static/css/navigation-tma-custom.css">-->
+<link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
+<!--<link rel="stylesheet" href="/media/dev/tma-static/css/global-tma-custom.css">-->
+
 ## Provide a hook for themes to inject branding on top.
 <%block name="navigation_top" />
 
@@ -69,7 +76,15 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
                 % else:
                   <input title="session update url" type="hidden" class="url-endpoint" value="${reverse('session_language')}" data-user-is-authenticated="false">
                 % endif
-                <label><span class="sr">${_("Choose Language")}</span>
+                <!--BUTTON SWITCH-->
+                <a class="nav-link align-middle">
+                  <span>FR</span>
+                  <label class="switch">
+                      <input type="checkbox">
+                      <span class="slider round"></span>
+                  </label>
+                  <span>EN</span>
+                </a>
                   <select class="input select language-selector" id="settings-language-value" name="language">
                     % for language in languages:
                       % if language[0] == LANGUAGE_CODE:

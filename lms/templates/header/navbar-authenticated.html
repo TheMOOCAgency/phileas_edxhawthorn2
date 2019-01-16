@@ -8,6 +8,7 @@
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_enabled, released_languages
 %>
 
 <%
@@ -26,50 +27,68 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
     help_link = doc_link
 %>
 
-<div class="nav-links">
-  <div class="main">
-    % if show_dashboard_tabs:
-      <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
-        <a class="${'active ' if reverse('dashboard') == request.path else ''}tab-nav-link" href="${reverse('dashboard')}">
-          ${_("Courses")}
-        </a>
-      </div>
-      % if show_program_listing:
-        <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
-          <a class="${'active ' if reverse('program_listing_view') in request.path else ''}tab-nav-link" href="${reverse('program_listing_view')}">
-            ${_("Programs")}
-          </a>
-        </div>
+<div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="#">My activity</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Explore</a>
+      </li>
+      % if header_language_selector_is_enabled():
+      <% languages = released_languages() %>
+      % if len(languages) > 1:
+        <form action="/i18n/setlang/" method="post" class="settings-language-form" id="language-settings-form">
+            <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="${csrf_token}">
+            % if user.is_authenticated:
+                <input title="preference api" type="hidden" class="url-endpoint" value="${reverse('preferences_api', kwargs={'username': user.username})}" data-user-is-authenticated="true">
+            % else:
+                <input title="session update url" type="hidden" class="url-endpoint" value="${reverse('session_language')}" data-user-is-authenticated="false">
+            % endif
+            <!--BUTTON SWITCH-->
+            <a class="nav-link align-middle language">
+                <span id="fr">FR</span>
+                <label class="switch">
+                    <span class="slider round"></span>
+                </label>
+                <span id="en">EN</span>
+            </a>
+            <select class="input select language-selector" id="settings-language-value" name="language">
+                % for language in languages:
+                    % if language[0] == LANGUAGE_CODE:
+                        <option value="${language[0]}" selected="selected">${language[1]}</option>
+                    % else:
+                        <option value="${language[0]}" >${language[1]}</option>
+                    % endif
+                % endfor
+            </select>
+            </label>
+        </form>
       % endif
-      <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
-        <a class="${'active ' if '/u/' in request.path  else ''}tab-nav-link" href="${reverse('learner_profile', args=[self.real_user.username])}">
-          ${_("Profile")}
-        </a>
-      </div>
     % endif
-    % if show_explore_courses:
-      <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
-        <a class="tab-nav-link" href="${marketing_link('COURSES')}">${_('Discover New')}</a>
-      </div>
-    % endif
-    % if show_sysadmin_dashboard:
-      <div class="mobile-nav-item hidden-mobile nav-item nav-tab">
-        ## Translators: This is short for "System administration".
-        <a class="tab-nav-link" href="${reverse('sysadmin')}">${_("Sysadmin")}</a>
-      </div>
-    % endif
-  </div>
-  <div class="secondary">
-    % if should_display_shopping_cart_func() and not (course and static.is_request_in_themed_site()): # see shoppingcart.context_processor.user_has_cart_context_processor
-      <div class="mobile-nav-item hidden-mobile nav-item">
-        <a class="shopping-cart" href="${reverse('shoppingcart.views.show_cart')}">
-          <span class="icon fa fa-shopping-cart" aria-hidden="true"></span> ${_("Shopping Cart")}
-        </a>
-      </div>
-    % endif
-    <div class="mobile-nav-item hidden-mobile nav-item">
-      <a class="help-link" href="${help_link}" target="_blank">${_("Help")}</a>
-    </div>
-    <%include file="user_dropdown.html"/>
+    </ul>
+    <!--<form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>-->
   </div>
 </div>
+<script>
+    $(document).ready(function(){
+        if ($('#settings-language-value > option[value="en"]').attr('selected')) {
+            $('.switch').toggleClass('en')
+        }
+        // Language selector
+        $('#en').click(function(){
+            $('#settings-language-value > option[value="en"]').attr('selected','selected');
+            $('#settings-language-value > option[value="fr"]').removeAttr('selected').trigger("change");
+            $('.switch').toggleClass('en')
+        });
+        $('#fr').click(function(){
+            $('#settings-language-value > option[value="fr"]').attr('selected','selected');
+            $('#settings-language-value > option[value="en"]').removeAttr('selected').trigger("change");
+            $('.switch').toggleClass('fr')
+        });
+    });
+</script>
+</script>

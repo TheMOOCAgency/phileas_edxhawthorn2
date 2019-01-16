@@ -1,0 +1,186 @@
+/***** FIRST ROW *****/
+.course-img {
+    overflow: hidden;
+}
+
+.h-350 {
+    height: 350px;
+}
+
+.pl-75 {
+    padding-left: 75px;
+}
+.pr-75 {
+    padding-right: 75px;
+}
+
+.tag {
+    display: inline-block;
+    width: 150px;
+    height: 40px;
+    background-color: #F3D7FD;
+    color: #A600E0;
+    font-weight: bold;
+    border-radius: 50px;
+    text-align: center;
+    line-height: 37px;
+}
+
+@media (max-width: 992px) {
+    .course-img {
+        display: none;
+    }
+    .h-350 {
+        height: auto;
+        padding-bottom: 20px;
+    }
+}
+
+/***** SECOND ROW *****/
+.teacher-box {
+    position: relative;
+    width: 90%;
+    height: auto;
+    margin: auto;
+    top: -50px;
+    box-shadow: 1px 5px 12px 5px rgba(0,0,0,0.09);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 40px 15px 15px 0px
+}
+.teacher-box p {
+    margin: 0px;
+}
+.teacher-box div:not(.teacher-img) img {
+    margin-bottom: 10px;
+}
+.teacher-box .big-btn {
+    top: 43px;
+}
+
+.teacher-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    border: 5px solid #009EE0;
+    background-color: #E6EDFA;
+}
+
+.name-box p {
+    font-size: 20px;
+}
+.name-box > p:first-of-type {
+    color: #777777;
+    margin-bottom: 0px;
+}
+.name-box > p:last-of-type {
+    font-weight: bold;
+    color: black;
+    margin-top: 0px;
+}
+
+.border-left-grey {
+    border-left: solid 1px #CACACA;
+}
+
+a.big-btn {
+    position: relative;
+    margin: auto !important;
+    width: 200px;
+    padding: 14px;
+    margin: 0 1rem 1rem 1rem;
+    border-radius: 28px;
+    background-color: #0B1A4C;
+    color: white !important;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+}
+a.big-btn:hover {
+    background-color: white;
+    color: #0B1A4C !important;
+    border: 1px solid #0B1A4C;
+    text-decoration: none;
+}
+
+@media (max-width: 1120px) {
+    .teacher-box {
+        position: initial;
+        top: 0px;
+        width: 100%;
+        height: auto;
+    }
+    .name-box > p {
+        font-size: 16px;
+    }
+    .teacher-box div:not(.name-box) p {
+        font-size: 12px;
+    }
+}
+
+/***** THIRD ROW *****/
+.description-box {
+    width: 90%;
+    margin: auto;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.description-box > div > h3, .content-box > div > div > h3, .downloads-box > h3 {
+    font-size: 24px;
+    color: black;
+    font-size: 24px;
+    line-height: 29px;
+}
+.description-box > div > p {
+   line-height: 38px;
+}
+
+/***** FOURTH ROW *****/
+.content-box {
+    width: 90%;
+    margin: auto;
+    padding-top: 40px;
+    padding-bottom: 100px;
+}
+.content-box .big-btn {
+    bottom: 0;
+    position: absolute;
+    right: 0;
+}
+
+li:not(.nav-item) {
+    color: #0C1C49;
+    list-style-type: none;
+    padding: 10px;
+    border-bottom: 1px solid #7A818E;
+}
+
+img[src="/static/tma-static/images/flechebas.svg"] {
+    float: right;
+}
+
+.downloads-box {
+    padding: 40px;
+    box-shadow: 0 2px 12px 0 rgba(153,153,153,0.50);
+}
+.downloads-box > p {
+    color: #011443;
+    line-height: 38px;
+}
+
+.download-link {
+    color: #0B1A4C !important;
+    text-decoration: none;
+}
+.download-link:hover {
+    color: rgba(0,0,0,.5) !important;
+    text-decoration: none !important;
+}
+
+@media (max-width: 992px) {
+    .downloads-box {
+        width: 100%;
+        box-shadow: none;
+    }
+}
