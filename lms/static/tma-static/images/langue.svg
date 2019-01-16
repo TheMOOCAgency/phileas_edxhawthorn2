@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="233px" height="233px" viewBox="0 0 251 233" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>PICTOS / Langue</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="22" y="0" width="27" height="33"></rect>
+    </defs>
+    <g id="Tools-Kit" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="10_Pictos" transform="translate(-91.000000, -277.000000)">
+            <g id="PICTOS-/-Langue" transform="translate(100, 300) scale(5.0)">
+                <path d="M23.094238,29.8862967 C35.744741,29.8862967 46,23.8675942 46,16.4431484 C46,9.01870253 35.744741,3 23.094238,3 C10.4437349,3 0.188475904,9.01870253 0.188475904,16.4431484 C0.188475904,19.1889019 1.5911012,21.7423902 3.99877968,23.8702822 C4.88962516,24.6576062 -1.12512584,29.0724533 0.188475904,29.8862967 C1.50207764,30.7001401 8.58961814,26.8658566 9.42022465,27.2291445 C13.2365456,28.8983141 17.9687996,29.8862967 23.094238,29.8862967 Z" id="Langue" stroke="#009EE0" stroke-width="3" fill="#E6EDFA" fill-rule="nonzero"></path>
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <path d="M23.094238,29.8862967 C35.744741,29.8862967 46,23.8675942 46,16.4431484 C46,9.01870253 35.744741,3 23.094238,3 C10.4437349,3 0.188475904,9.01870253 0.188475904,16.4431484 C0.188475904,19.1889019 1.5911012,21.7423902 3.99877968,23.8702822 C4.88962516,24.6576062 -1.12512584,29.0724533 0.188475904,29.8862967 C1.50207764,30.7001401 8.58961814,26.8658566 9.42022465,27.2291445 C13.2365456,28.8983141 17.9687996,29.8862967 23.094238,29.8862967 Z" id="Langue" stroke="#0C1C49" stroke-width="3" fill="#E6EDFA" fill-rule="nonzero" mask="url(#mask-2)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="232px" height="232px" viewBox="0 0 232 232" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>PICTOS / Calendrier</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Tools-Kit" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="10_Pictos" transform="translate(-17.000000, -278.000000)">
+            <g id="PICTOS-/-Calendrier" transform="translate(30, 290) scale(6.0)" fill-rule="nonzero">
+                <rect id="Rectangle" fill="#E6EDFA" x="3" y="8" width="26" height="20"></rect>
+                <path d="M3.33333333,28.7073171 L28.6666667,28.7073171 L28.6666667,8.29268293 L3.33333333,8.29268293 L3.33333333,28.7073171 Z M-8.8817842e-16,29.3658537 L-8.8817842e-16,8.29268293 L0,5 L32,5 L32,8.29268293 L32,29.3658537 L32,32 L0,32 L0,29.3658537 Z" id="Combined-Shape" fill="#009EE0"></path>
+                <rect id="Rectangle-Copy-4" fill="#0C1C49" x="3" y="12" width="26" height="4"></rect>
+                <polygon id="Rectangle-Copy-5" fill="#7A818E" transform="translate(8.500000, 6.000000) rotate(90.000000) translate(-8.500000, -6.000000) " points="3 4 14 4 14 8 3 8"></polygon>
+                <polygon id="Rectangle-Copy-6" fill="#7A818E" transform="translate(24.500000, 6.000000) rotate(90.000000) translate(-24.500000, -6.000000) " points="19 4 30 4 30 8 19 8"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

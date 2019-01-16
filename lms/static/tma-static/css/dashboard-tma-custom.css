@@ -1,0 +1,543 @@
+/********* PREVENT EDX STYLES *********/
+input[type="text"],input[type="text"]:focus {
+    border: none;
+    border-bottom: 1px solid white;
+    text-shadow: none;
+    box-shadow: none;
+    padding: none;
+    background-color: transparent;
+    background: none;
+    caret-color: white;
+    color: white;
+    font-style: normal;
+    font: inherit;
+}
+
+input::placeholder {
+    color: white;
+    opacity: 0.5;
+    font-style: normal;
+}
+
+.search-input {
+    background-color: transparent;
+    border: 0px
+}
+
+a.nav-link, a.nav-link:visited {
+    color: rgba(0,0,0,.5);
+    font: inherit;
+    text-decoration: none;
+    transition: all 0.1s linear 0s;
+}
+a.nav-link:hover {
+    color: rgba(0,0,0,.7);
+    text-decoration: none;
+}
+
+.course-image {
+    width: 100%;
+}
+
+/********* STYLE **********/
+/* First row */
+.title-36 {
+    padding: 0 0 1.2rem 0;
+    line-height: normal;
+    font-size: 36px;
+    color: white;
+}
+/*
+.header-people {
+    display: none;
+    background-image: url('/static/tma-static/images/header-people.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.header-box {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+@media (min-width: 992px) {
+    .header-box {
+        min-height: 450px;
+    }
+    .header-people {
+        display: block;
+    }
+}
+@media (min-width: 768px) and (max-width: 992px) {
+    .header-box {
+        min-height: 350px;
+    }
+    .header-people {
+        display: none;
+    }
+}
+@media (max-width: 768px) {
+    .header-box {
+        min-height: 450px;
+    }
+    .header-people {
+        display: none;
+    }
+}
+*/
+
+.gif-box {
+    position: absolute;
+    z-index: 1;
+    padding-top: 145px;
+    padding-left: 85px;
+}
+
+/* Second row */
+.img-bw-1, .img-bw-2, .img-bw-3 {
+    min-height: 120px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.img-bw-1 a, .img-bw-2 a, .img-bw-3 a {
+    width: 100%;
+    font-size: 18px;
+    color: #0B1A4C !important;
+}
+.img-bw-1 a:hover, .img-bw-2 a:hover, .img-bw-3 a:hover {
+    color: white !important;
+    text-decoration: none;
+}
+
+.img-bw-1 {
+    background-image: url('/static/tma-static/images/elearning.jpg');
+}
+
+.img-bw-2 {
+    background-image: url('/static/tma-static/images/reglementaire.jpg');
+}
+
+.img-bw-3 {
+    background-image: url('/static/tma-static/images/gettogether.jpg');
+}
+
+.user-box {
+    height: 315px;
+    right: 0;
+    position: absolute;
+    top: 303px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+@media (min-width: 1440px) {
+    .user-box {
+        margin-right: calc((100% - 1440px) / 2);
+        width: calc((1440px) / 4);
+    }
+}
+
+@media (max-width: 992px) {
+    .user-box {
+        right: 0;
+        position: inherit;
+        top: 0;
+    }
+    video {
+        padding-bottom: 15px;
+    }
+}
+
+/* Dark blue box */
+.user-box > .container-fluid > .row:nth-of-type(2) > .col-4:nth-of-type(2) {
+    border-right: 1px solid #EBEBEB;
+    border-left: 1px solid #EBEBEB;
+}
+.user-box > .container-fluid > .row:nth-of-type(1) > .col-12:nth-of-type(1) > p:nth-of-type(2) {
+    font-size: 24px;
+    line-height: normal;
+}
+.user-box > .container-fluid > .row:nth-of-type(2) > .col-4 > p:first-of-type {
+    font-size: 30px;
+    line-height: normal;
+}
+.user-box > .container-fluid > .row:nth-of-type(2) .col-4 > p  {
+    font-size: 12px;
+    line-height: normal;
+}
+.user-box > .container-fluid > .row:nth-of-type(1) {
+    margin-bottom: 30px;
+}
+.user-box img {
+    position: absolute;
+    height: 20px;
+}
+.user-box hr {
+    margin-bottom: 0px;
+    color: #EBEBEB;
+}
+
+/* Course listing */
+@media (min-width: 992px) {
+    .container-fluid.bg-grey-light > .container-fluid{
+        padding-right: 75px;
+        padding-left: 75px;
+    }
+}
+
+/* Filter */
+.dropdown {
+    display: none;
+    padding: 0px;
+    margin-top: -2px;
+    /*position: absolute;*/
+    z-index: 2;
+    width: 100%;
+}
+
+.dropdown-container {
+    position: absolute;
+    width: 90%;
+}
+@media (max-width: 992px) {
+    .dropdown-container {
+        position: relative;
+        width: 100%;
+    }
+}
+
+.dropdown-container > button {
+    width: 100%;
+    padding: 20px 5px 20px 5px;
+    border: 2px solid #b9c6d4;
+    border-radius: 0px;
+    color: #0c1c49;
+    text-transform: none;
+    line-height: normal;
+    font-size: 14px;
+}
+.dropdown-container > button > img {
+    width: 20px;
+    margin-left: 10px;
+}
+.dropdown > li {
+    list-style-type: none;
+    text-decoration: none;
+    padding: 20px 5px 20px 5px;
+    border: 2px solid #b9c6d4;
+    text-align: center;
+}
+.dropdown > li > a {
+    color: #0c1c49 !important;
+    font-size: 14px;
+}
+.dropdown > li > a:hover, .dropdown-container > button:hover, .dropdown > li > a:focus {
+    color: #b9c6d4 !important;
+    text-decoration: none;
+}
+.dropdown > li:nth-of-type(2) {
+    border-top: none;
+    border-bottom: none;
+}
+.is-down {
+    display: block;
+}
+
+/*
+select.custom-select {
+    background-image: url('media/microsite/phileas/assets/img/flechebas.png')
+}
+select.custom-select::-ms-expand {
+    display: none;
+}
+select.custom-select > option, select.custom-select > option[selected]  {
+    text-align: center;
+    color: #0B1A4C !important;
+    font-size: 14px;
+    padding: 10px;
+}
+*/
+/********** COURSE CARDS **********/
+/********** Flipping **********/
+.flip-container {
+	perspective: 1000px;
+	-webkit-perspective: 1000px;
+	-moz-perspective: 1000px;
+	-o-perspective: 1000px;
+	-ms-perspective: 1000px;
+    height: 400px;
+    margin-bottom: 30px;
+}
+
+.flip-container .flipper {
+	transition: 0.5s ease-out;
+	-webkit-transition: 0.5s ease-out;
+	-moz-transition: 0.5s ease-out;
+	-o-transition: 0.5s ease-out;
+	-ms-transition: 0.5s ease-out;
+	transform-style: preserve-3d;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	-o-transform-style: preserve-3d;
+	-ms-transform-style: preserve-3d;
+	/*.flipper backface is visible so that static.flipper still appears 
+	backface-visibility: visible;
+	-webkit-backface-visibility: visible;
+	-moz-backface-visibility: visible;
+	-o-backface-visibility: visible;
+	-ms-backface-visibility: visible;*/
+	position:relative;
+	width: 100%;
+	height: 100%;
+	
+}
+.flip-container.applyflip .flipper {
+	transform: rotateY(180deg);
+	-webkit-transform: rotateY(180deg);
+	-moz-transform: rotateY(180deg);
+	-o-transform: rotateY(180deg);
+	-ms-transform: rotateY(180deg);
+}
+.flip-container .flipper .front, .flip-container .flipper .back {
+	/* Backface visibility works great for all but IE. As such, we mark the backface visible in IE and manage visibility ourselves */
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	-o-backface-visibility: hidden;
+	-ms-backface-visibility: visible;
+	position: absolute;
+	top: 0;
+	left: 0;
+    width: 100%;
+    margin-bottom: 30px;
+	height: 400px;
+}
+.flip-container .flipper .front, .flip-container.applyflip .flipper .front {
+	transform: rotateY(0deg);
+	-webkit-transform: rotateY(0deg);
+	-moz-transform: rotateY(0deg);
+	-o-transform: rotateY(0deg);
+	-ms-transform: rotateY(0deg);
+}
+.flip-container .flipper .back, .flip-container.applyflip .flipper .back {
+	transform: rotateY(-180deg);
+	-webkit-transform: rotateY(-180deg);
+	-moz-transform: rotateY(-180deg);
+	-o-transform: rotateY(-180deg);
+    -ms-transform: rotateY(-180deg);
+}
+.flip-container .flipper .front, .flip-container.applyflip .flipper .back {
+	/* IE Hack. Halfway through the.flip-container flip, set visibility. Keep other browsers visible throughout the.flip-container flip. */
+	animation: stayvisible 0.5s both;
+	-webkit-animation: stayvisible 0.5s both;
+	-moz-animation: stayvisible 0.5s both;
+	-o-animation: stayvisible 0.5s both;
+	-ms-animation: donothing 0.5s;
+	-ms-transition: visibility 0s linear 0.17s;
+	visibility: visible;
+}
+.flip-container.applyflip .flipper .front, .flip-container .flipper .back {
+	/* IE Hack. Halfway through the.flip-container flip, set visibility. Keep other browsers visible throughout the.flip-container flip. */
+	animation: stayvisible 0.5s both;
+	-webkit-animation: stayvisible 0.5s both;
+	-moz-animation: stayvisible 0.5s both;
+	-o-animation: stayvisible 0.5s both;
+	-ms-animation: donothing 0.5s;
+	-ms-transition: visibility 0s linear 0.17s;
+	visibility: hidden;
+}
+@keyframes stayvisible { from { visibility: visible; } to { visibility: visible; } }
+@-webkit-keyframes stayvisible { from { visibility: visible; } to { visibility: visible; } }
+@-moz-keyframes stayvisible { from { visibility: visible; } to { visibility: visible; } }
+@-o-keyframes stayvisible { from { visibility: visible; } to { visibility: visible; } }
+@-ms-keyframes donothing { 0% { } 100% { } }
+
+/********** End flipping **********/
+
+.back p, .text-card-lg {
+    overflow: hidden;
+    font-size: 12px;
+    color: #777777;
+}
+.text-card-lg {
+    height: 140px;
+    overflow: hidden;
+}
+.course-resume {
+    padding: 20px;
+}
+a.enroll-btn {
+    width: 150px;
+    padding: 8px;
+    margin: 0 1rem 1rem 1rem;
+    border-radius: 28px;
+    background-color: #0B1A4C;
+    color: white !important;
+    font-weight: bold;
+    display: inline-block;
+    vertical-align: middle;
+}
+a.enroll-btn:hover {
+    background-color: white;
+    color: #0B1A4C !important;
+    border: 1px solid #0B1A4C;
+    text-decoration: none;
+}
+@media (max-width: 485px) {
+    a.enroll-btn {
+        width: 100px;
+    }
+}
+/* Course cards */
+.course-card-sm {
+    margin-bottom: 30px;
+    height: 400px;
+    width: 100%;
+    background-color: white;
+    border: 1px solid rgba(0,0,0,0.09);
+    border-radius: 10px;
+    box-shadow: 1px 5px 12px 0px rgba(0,0,0,0.09);
+    overflow: hidden;
+}
+.static-card {
+    margin-bottom: 30px;
+    height: 400px;
+    width: 100%;
+    background-image: url('/static/tma-static/images/header-people.jpg');
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(0,0,0,0.09);
+    border-radius: 10px;
+    box-shadow: 1px 5px 12px 0px rgba(0,0,0,0.09);
+    overflow: hidden;
+}
+
+.cover-image {
+    height: 130px;
+    border-radius: 10px 10px 0px 0px;
+    overflow: hidden;
+}
+.cover-image > img {
+    width: 100%;
+}
+
+.course-name > .row > p {
+    min-height: 79px;
+    border-bottom: 1px solid rgba(0,0,0,0.09);
+    padding: 10px 10px 20px 10px;
+    font-size: 20px;
+    line-height: normal;
+    color: #0B1A4C;
+}
+.course-name > span {
+    top: -0.5rem;
+    position: relative;
+}
+
+.category-tag {
+    padding: 6px 10px 6px 10px;
+    background-color: #E6500F;
+    color: white;
+    border-radius: 18px;
+}
+.pin {
+    width: 36px;
+    height: 36px;
+}
+.pin-row {
+    position: relative;
+    top: -18px;
+}
+.back .pin-row {
+    left: 10px;
+}
+.pin-row > div {
+    margin-right: 5px;
+}
+.course-pictos {
+    margin-top: 1rem;
+}
+.course-pictos > .col-4 img {
+    height: 40px;
+}
+.course-pictos > .col-4 > span {
+    font-size: 14px;
+    color: #777777;
+}
+
+/* Categories */
+.filter-grey {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+.filter-green {
+    position: absolute;
+    background-color: rgba(50, 150, 150, 0.86)
+}
+.filter-blue {
+    position: absolute;
+    background-color: rgba(0, 157, 224, 0.6);
+}
+.filter-orange {
+    position: absolute;
+    background-color: rgba(230, 79, 15, 0.51)
+}
+
+.more-btn > a > img {
+    height: 50px;
+    width: 50px;
+}
+
+.categories {
+    margin-bottom: 10rem;
+}
+
+.categories > p {
+    border-left: 1px solid #777777;
+}
+
+.categories > .col-lg-4 {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    min-height: 190px;
+}
+.categories > .col-lg-4 > a {
+    width: 100%;
+    color: #0B1A4C !important;
+    font: inherit;
+    font-size: 24px;
+    text-decoration: none;
+    transition: all 0.1s linear 0s;
+}
+.categories > .col-lg-4 > a:hover {
+    color: white !important;
+}
+.cat-1 {
+    background-image: url('/static/tma-static/images/bureautique.png');
+}
+.cat-2 {
+    background-image: url('/static/tma-static/images/fondamentaux.png');
+}
+.cat-3 {
+    background-image: url('/static/tma-static/images/applications.png');
+}
+.cat-4 {
+    background-image: url('/static/tma-static/images/marketing.png');
+}
+.cat-5 {
+    background-image: url('/static/tma-static/images/compliance.png');
+}
+.cat-6 {
+    background-image: url('/static/tma-static/images/management.png');
+}

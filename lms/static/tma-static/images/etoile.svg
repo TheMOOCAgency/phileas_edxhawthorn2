@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="219px" height="219px" viewBox="0 0 219 220" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>PICTOS / Formation favorite</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M10.569907,5.67401539 L15.3860977,5.67401539 C16.9167887,5.67401539 17.1766166,6.44558619 15.9748105,7.39078343 L11.9662806,10.5434147 L13.4858869,16.4080881 C13.8694344,17.888327 13.2028202,18.310152 12.0192494,17.3680015 L7.74402564,13.9648214 L3.47855117,17.3608652 C2.28027136,18.3148999 1.62123431,17.882148 2.00297656,16.4080881 L3.5217707,10.5434147 L-0.487525386,7.39078343 C-1.69330968,6.44263862 -1.43480013,5.67401539 0.100770169,5.67401539 L4.91696089,5.67401539 L6.84952469,0.00647218551 C7.34354392,-1.44231588 8.14291189,-1.44650499 8.63815218,0.00647218551 L10.569907,5.67401539 Z" id="path-1"></path>
+    </defs>
+    <g id="Tools-Kit" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="10_Pictos" transform="translate(-37.000000, -18.000000)">
+            <g id="PICTOS-/-Formation-favorite" transform="translate(50, 30) scale(11.0)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="Mask" fill="#FFBB00" fill-rule="evenodd" xlink:href="#path-1"></use>
+                <rect id="Rectangle" fill="#FFD300" fill-rule="nonzero" mask="url(#mask-2)" x="-7.74074074" y="-3.07692308" width="15.4814815" height="23.0769231"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

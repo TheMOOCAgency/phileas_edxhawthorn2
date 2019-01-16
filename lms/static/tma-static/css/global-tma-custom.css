@@ -1,0 +1,59 @@
+/**** PREVENT EDX STYLES ****/
+a:not(.nav-link, .enroll-btn) {
+    color: #0B1A4C !important;
+    text-decoration: none;
+}
+
+a:not(.nav-link, .enroll-btn, .continue-btn):hover {
+    color: white !important;
+    text-decoration: none;
+}
+
+/***** SIDE COLS *****/
+html {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+.content-wrapper {
+    padding: 0px;
+    margin-top: 0px;
+}
+
+/***** COLORS *****/
+body, html {
+    background-color: #f5f5f5
+}
+
+.text-blue-dark {
+    color: #011443;
+}
+.text-blue-light {
+    color: #00A0E3;
+}
+.text-white {
+    color: white;
+}
+.bg-blue-light {
+    background-color: #00A0E3;
+}
+.bg-blue-dark {
+    background-color: #0B1A4C;
+}
+.bg-grey-light {
+    background-color: #F5F5F5;
+}
+
+.primary-color-text{
+  color:#00A1E9;
+}
+.primary-color-bg{
+  background-color:#00A1E9;
+}
+
+/***** FONTS *****/
+.title-36 {
+    padding: 0 0 1.2rem 0;
+    line-height: normal;
+    font-size: 36px;
+    color: white;
+}

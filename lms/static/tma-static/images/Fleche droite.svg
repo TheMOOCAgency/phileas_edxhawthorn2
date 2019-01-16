@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="207px" height="213px" viewBox="0 0 207 213" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>PICTOS / Fleche droite</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Tools-Kit" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="10_Pictos" transform="translate(-357.000000, -23.000000)">
+            <rect fill="#FFFFFF" x="0" y="0" width="842" height="595"></rect>
+            <g id="Group" transform="translate(456.000000, 122.000000)" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <g id="PICTOS-/-Fleche-droite" transform="translate(2.000000, 2.000000)">
+                    <polyline id="Stroke-1" transform="translate(2.500000, 5.500000) rotate(-90.000000) translate(-2.500000, -5.500000) " points="8 3 2.42400994 8 -3 3"></polyline>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,4 @@
+/* Séparer le contenu du footer car footer overlap */
+#main{
+  margin-bottom: 60px;
+}
