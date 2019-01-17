@@ -168,7 +168,9 @@ from lms.djangoapps.courseware.courses import (
         <div class="row">
             <div class="col-12 mb-3">
               <p class="text-blue-light">Last courses</p>
-              <p>${course_overviews}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
+              % if course_overviews:
+                <p>${course_overviews[-1].display_name}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
+              % endif
               <hr>
             </div>
         </div>
@@ -178,7 +180,7 @@ from lms.djangoapps.courseware.courses import (
             <p class="mt-2">mandatory course(s)</p>
           </div>
           <div class="col-4 text-center">
-            <p>10<img src="${static.url('tma-static/images/etoile.svg')}"></p>
+            <p>${favorite_courses}<img src="${static.url('tma-static/images/etoile.svg')}"></p>
             <p class="mt-2">favorite course(s)</p>
           </div>
           <div class="col-4 text-center">
@@ -209,14 +211,109 @@ from lms.djangoapps.courseware.courses import (
       </div>
     </div>
     <!--Course cards-->
+
+    <!-- First row : 2 first courses + static card-->
     <div class="row">
-      % for course in course_overviews:
-        <% course_object = get_course(course.id) %>
-        % if course_overviews.index(course) == 2:
-          <div class="col-lg-6">
-            <div class="static-card"></div>
-          </div>
+      % if course_overviews:
+        % for course in course_overviews[:2]:
+          <% course_object = get_course(course.id) %>
+          <div class="col-lg-3 col-md-6 flip-container">
+            <div class="flipper">
+                <!--flip front content-->
+                <div class="course-card-sm front">
+                  <div class="cover-image">
+                      <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
+                  </div>
+                  <!-- Pins & title block -->
+                  <div class="container-fluid">
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col course-name">
+                          <div class="row pin-row ${course.id}">
+                            <div>
+                              <div class="category-tag">Bureautique</div>
+                            </div>
+                            <div>
+                              <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                            </div>
+                            <a href="#" class="pin favorite fav-off"></a>
+                          </div>
+                          <div class="row">
+                            <p>${course.display_name}</p>
+                          </div>
+                          <!-- Arrow block -->
+                          <div class="0">
+                            <div class="row course-pictos">
+                              <div class="col-4 text-center pl-2 pr-2">
+                                <a href="#"><img src="${static.url('tma-static/images/Like.png')}"></a>
+                                <span>10</span>
+                              </div>
+                              <div class="col-4 text-center pl-2 pr-2">
+                                  <img src="${static.url('tma-static/images/Time.png')}">
+                                  <span>22h</span>
+                              </div>
+                              <div class="col-4 text-center pl-2 pr-2">
+                                  % if course_object.language == "fr":
+                                    <img src="${static.url('tma-static/images/lang_fr.svg')}">
+                                  % else:
+                                    <img src="${static.url('tma-static/images/lang_en.svg')}">
+                                  % endif
+                                  <span>${course_object.language}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col text-center">
+                                <a href="#"><img src="${static.url('tma-static/images/flechebas.png')}"></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+                <!--flip back content-->
+                <div class="course-card-sm back">
+                  <div class="cover-image">
+                    <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
+                  </div>
+                  <div class="container-fluid">
+                      <div class="container-fluid">
+                    <div class="row">
+                        <div class="row pin-row ${course.id}">
+                          <div class="category-tag">Bureautique</div>
+                          <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                          <a href="#" class="pin favorite fav-off"></a>
+                          <a href="#" class="pin like like-on"></a>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <h3>${course.display_name}</h3>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <p>${course.short_description}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col text-center">
+                          <a href="#" class="enroll-btn">I enroll</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          %endfor
         % endif
+        <div class="col-lg-6">
+            <a href="https://www.moncompteactivite.gouv.fr/cpa-public/mes-droits-formation/mon-cpf-compte-personnel-de-formation/decouvrir-le-cpf"><div class="static-card"></div></a>
+        </div>
+      </div>
+      <div class="row">
+      % for course in course_overviews[2:]:
+        <% course_object = get_course(course.id) %>
         % if course_overviews.index(course) == 4:
           <div class="col-lg-6">
           <div class="course-card-sm">
@@ -229,7 +326,7 @@ from lms.djangoapps.courseware.courses import (
                   <div class="container-fluid">
                       <div class="row">
                         <div class="col course-name">
-                          <div class="row pin-row" id="${course.id}">
+                          <div class="row pin-row ${course.id}">
                             <div>
                               <div class="category-tag">Bureautique</div>
                             </div>
@@ -296,7 +393,7 @@ from lms.djangoapps.courseware.courses import (
                     <div class="container-fluid">
                       <div class="row">
                         <div class="col course-name">
-                          <div class="row pin-row" id="${course.id}">
+                          <div class="row pin-row ${course.id}">
                             <div>
                               <div class="category-tag">Bureautique</div>
                             </div>
@@ -347,14 +444,11 @@ from lms.djangoapps.courseware.courses import (
                   <div class="container-fluid">
                       <div class="container-fluid">
                     <div class="row">
-                        <div class="row pin-row" id="${course.id}">
-                          <div>
-                            <div class="category-tag">Bureautique</div>
-                          </div>
-                          <div>
-                            <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
-                          </div>
+                        <div class="row pin-row ${course.id}">
+                          <div class="category-tag">Bureautique</div>
+                          <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
                           <a href="#" class="pin favorite fav-off"></a>
+                          <a href="#" class="pin like like-on"></a>
                         </div>
                       </div>
                       <div class="row">
@@ -410,7 +504,7 @@ from lms.djangoapps.courseware.courses import (
   </div>
 </div>
 
-<script>
+<script type="text/javascript">
   // Flip cards effect
   $(document).ready(function() {
     $('.flip-container').hover(function(){
@@ -422,9 +516,12 @@ from lms.djangoapps.courseware.courses import (
     });
 
     // Pin favorites
+    var favoriteCourseEnrollments = JSON.parse('${dump_js_escaped_json(favorite_course_enrollments) | n, decode.utf8}')
+    //console.log(favoriteCourseEnrollments)
+    
     $('.pin.favorite').click(function(){
       $(this).toggleClass('fav-off fav-on')
-      var courseId = $(this).parent().attr('id');
+      var courseId = $(this).parent().attr('class');
       var status;
       if ($(this).hasClass('fav-on')) {
         status = true;
@@ -443,11 +540,6 @@ from lms.djangoapps.courseware.courses import (
     });
   });
 
-//TODO : REMOVE THIS CONSOLE LOG AS IT MAKES LOADING FAIL IF NO ENROLLMENT
-<%
-try:
-  console.log('${enrollments[0].__dict__}')
-except:
-  pass
-%>
+  console.log('${favorite_course_enrollments}')
+
 </script>
