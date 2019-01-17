@@ -154,7 +154,7 @@ from lms.djangoapps.courseware.courses import (
       </video>
     <!--Black & White img-->
     <div class="col-lg-3 text-center img-bw-1">
-      <a href="#" target="_blank">Language skills</a>
+      <a href="${sspeaking_url}" target="_blank">Language skills</a>
     </div>
     <div class="col-lg-3 text-center img-bw-2">
         <a href="#">Regulatory (eCampus)</a>
@@ -229,16 +229,14 @@ from lms.djangoapps.courseware.courses import (
                   <div class="container-fluid">
                       <div class="row">
                         <div class="col course-name">
-                          <div class="row pin-row">
+                          <div class="row pin-row" id="${course.id}">
                             <div>
                               <div class="category-tag">Bureautique</div>
                             </div>
                             <div>
                               <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
                             </div>
-                            <div>
-                              <img src="${static.url('tma-static/images/epingle_on.svg')}" class="pin">
-                            </div>
+                            <a href="#" class="pin favorite fav-off"></a>
                           </div>
                           <div class="row">
                             <p>${course.display_name}</p>
@@ -298,16 +296,14 @@ from lms.djangoapps.courseware.courses import (
                     <div class="container-fluid">
                       <div class="row">
                         <div class="col course-name">
-                          <div class="row pin-row">
+                          <div class="row pin-row" id="${course.id}">
                             <div>
                               <div class="category-tag">Bureautique</div>
                             </div>
                             <div>
                               <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
                             </div>
-                            <div>
-                              <img src="${static.url('tma-static/images/epingle_on.svg')}" class="pin">
-                            </div>
+                            <a href="#" class="pin favorite fav-off"></a>
                           </div>
                           <div class="row">
                             <p>${course.display_name}</p>
@@ -351,16 +347,14 @@ from lms.djangoapps.courseware.courses import (
                   <div class="container-fluid">
                       <div class="container-fluid">
                     <div class="row">
-                        <div class="row pin-row">
+                        <div class="row pin-row" id="${course.id}">
                           <div>
                             <div class="category-tag">Bureautique</div>
                           </div>
                           <div>
                             <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
                           </div>
-                          <div>
-                            <img src="${static.url('tma-static/images/epingle_on.svg')}" class="pin">
-                          </div>
+                          <a href="#" class="pin favorite fav-off"></a>
                         </div>
                       </div>
                       <div class="row">
@@ -422,10 +416,38 @@ from lms.djangoapps.courseware.courses import (
     $('.flip-container').hover(function(){
       $(this).toggleClass("applyflip");
     });
-  // Dropdown filter behavior
+    // Dropdown filter behavior
     $('.dropdown-container > button').click(function(){
       $('.dropdown').toggleClass("is-down");
     });
+
+    // Pin favorites
+    $('.pin.favorite').click(function(){
+      $(this).toggleClass('fav-off fav-on')
+      var courseId = $(this).parent().attr('id');
+      var status;
+      if ($(this).hasClass('fav-on')) {
+        status = true;
+      } else {
+        status = false;
+      }
+      $.ajax({
+        type: 'POST',
+        url: '/tma_apps/'+ courseId +'/favourite/update_favourite',
+        dataType: 'json',
+        data: {status: status, course_id: courseId},
+        success: function(data){
+          console.log(data);
+        }
+      });
+    });
   });
- console.log('${course_enrollments[0].__dict__}')
+
+//TODO : REMOVE THIS CONSOLE LOG AS IT MAKES LOADING FAIL IF NO ENROLLMENT
+<%
+try:
+  console.log('${enrollments[0].__dict__}')
+except:
+  pass
+%>
 </script>

@@ -74,16 +74,30 @@ class TmaCourseEnrollment(models.Model):
             return 'error while registering course validation status'
 
     @classmethod
-    def update_favourite(cls, course_key, user):
-        enrollment = cls.get_courseenrollment(course_key, user)
-        try :
-            enrollment.is_favourite= not enrollment.is_favourite
-            enrollment.save()
-            response={}
-            response['is_favourite']=enrollment.is_favourite
-            return response
-        except:
-            return 'error while registering course favourite status'
+    def update_favourite(cls, course_key, user, status):
+        """
+        Updates is_favorite attribute in TmaCourseEnrollment with status argument (bool)
+        """
+
+        response = {}
+        if status is not None and isinstance(status, bool) :
+            if TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user, course_enrollment_edx__course_id=course_key).exists() :
+                tma_enrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__user=user, course_enrollment_edx__course_id=course_key)
+                tma_enrollment.is_favourite = status
+                tma_enrollment.save()
+            else :
+                new_enrollment = CourseEnrollment.enroll(user, course_key, 'audit')
+                new_enrollment.update_enrollment(is_active=False)
+                TmaCourseEnrollment.objects.get_or_create(course_enrollment_edx=new_enrollment)[0].is_favourite = status
+            response = {
+                'success': 'Status updated',
+                'status': status
+            }
+        else :
+            response = {
+                'error':_('Wrong parameters')
+            }
+        return response
 
     @classmethod
     def get_validated_courses(cls, user):

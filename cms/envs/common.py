@@ -1156,6 +1156,9 @@ INSTALLED_APPS = [
 
     # API Documentation
     'rest_framework_swagger',
+
+    #tma_apps
+    'lms.djangoapps.tma_apps',
 ]
 
 

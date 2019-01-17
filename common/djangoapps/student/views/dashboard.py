@@ -62,6 +62,7 @@ from openedx.core.djangoapps.content.course_overviews.models import CourseOvervi
 from django.apps import apps
 TmaCourseOverview = apps.get_model('tma_apps','TmaCourseOverview')
 TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
+from lms.djangoapps.tma_apps.sspeaking.sspeaking import get_sspeaking_href
 
 log = logging.getLogger("edx.student")
 
@@ -866,15 +867,30 @@ def student_dashboard(request):
     #TMA - Mandatory courses
     mandatory_courses = 0
     for enrollment in CourseEnrollment.objects.filter(user=user):
-        tma_overviews = TmaCourseOverview.objects.filter(course_overview_edx__id=enrollment.course_id)
-        for overview in tma_overviews:
+        for overview in TmaCourseOverview.objects.filter(course_overview_edx__id=enrollment.course_id):
             if overview.is_mandatory:
                 mandatory += 1
+
+    #7 Speaking
+    sspeaking_url = get_sspeaking_href(user)
+    context.update({
+        'sspeaking_url': sspeaking_url
+    })
+
+    # Favorite courses
+    """
+    favorite_courses = 0
+    for enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user):
+        if enrollment.is_favourite:
+            favorite_courses += 1
+    """
+    favorite_courses = list(TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user, is_favourite=True))
 
     context.update({
         'course_overviews': course_overviews,
         'ongoing_courses': ongoing_courses,
         'mandatory_courses': mandatory_courses,
+        'favorite_courses': favorite_courses,
         'tma_course_enrollments': tma_course_enrollments,
         'tma_course_overviews': tma_course_overviews
     })
