@@ -9,5 +9,5 @@ log = logging.getLogger()
 
 @login_required
 @require_GET
-def get_course_completion_rate(request,course_id):
-    return JsonResponse(Completion(request).get_course_completion_rate(course_id))
+def get_course_completion(request,course_id):
+    return JsonResponse(Completion(request).get_course_completion(course_id))
