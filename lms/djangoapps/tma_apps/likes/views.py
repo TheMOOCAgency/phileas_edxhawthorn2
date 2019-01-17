@@ -11,8 +11,8 @@ log = logging.getLogger()
 
 @login_required
 @require_POST
-def api_update_favourite(request, course_id):
+def api_update_liked(request, course_id):
     course_key = CourseKey.from_string(course_id)
-    new_status = TmaCourseEnrollment.update_social_attributes("is_favourite",self.course_key, self.user, status)
+    new_status = TmaCourseEnrollment.update_social_attributes('is_liked', self.course_key, self.user, status)
     response['status'] = new_status
     return JsonResponse(response)

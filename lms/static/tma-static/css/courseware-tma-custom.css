@@ -24,7 +24,7 @@ h1,h2,h3,h4,h5,h6,p, div.vertical-title{
   overflow-x: hidden;
 }
 #tma-completion-nav.folded{
-  left: -600px;
+  left: -1000px;
 }
 #tma-completion-nav button{
   background:none;
