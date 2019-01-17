@@ -861,36 +861,35 @@ def student_dashboard(request):
     tma_course_overviews = list(TmaCourseOverview.objects.all())
     tma_course_enrollments = list(TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user))
 
-    #TMA - Ongoing courses
+    # TMA - Ongoing courses
     ongoing_courses = TmaCourseEnrollment.get_ongoing_courses(user=user)
 
-    #TMA - Mandatory courses
+    # TMA - Mandatory courses
     mandatory_courses = 0
     for enrollment in CourseEnrollment.objects.filter(user=user):
         for overview in TmaCourseOverview.objects.filter(course_overview_edx__id=enrollment.course_id):
             if overview.is_mandatory:
                 mandatory += 1
 
-    #7 Speaking
+    # TMA - 7 Speaking
     sspeaking_url = get_sspeaking_href(user)
     context.update({
         'sspeaking_url': sspeaking_url
     })
 
-    # Favorite courses
-    """
-    favorite_courses = 0
-    for enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user):
-        if enrollment.is_favourite:
-            favorite_courses += 1
-    """
-    favorite_courses = list(TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user, is_favourite=True))
+    # TMA - Favorite courses
+    favorite_courses = len(list(TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user, is_favourite=True)))
+    favorite_course_enrollments = []
+    for enrollment in CourseEnrollment.objects.filter(user=user):
+        if TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).is_favourite:
+            favorite_course_enrollments.append(enrollment.course_id)
 
     context.update({
         'course_overviews': course_overviews,
         'ongoing_courses': ongoing_courses,
         'mandatory_courses': mandatory_courses,
         'favorite_courses': favorite_courses,
+        'favorite_course_enrollments': favorite_course_enrollments,
         'tma_course_enrollments': tma_course_enrollments,
         'tma_course_overviews': tma_course_overviews
     })

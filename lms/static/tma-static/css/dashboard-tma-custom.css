@@ -411,9 +411,10 @@ a.enroll-btn:hover {
     margin-bottom: 30px;
     height: 400px;
     width: 100%;
-    background-image: url('/static/tma-static/images/header-people.jpg');
+    background-image: url('/static/tma-static/images/tuile_static.png');
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     border: 1px solid rgba(0,0,0,0.09);
     border-radius: 10px;
     box-shadow: 1px 5px 12px 0px rgba(0,0,0,0.09);
@@ -460,6 +461,12 @@ a.enroll-btn:hover {
     background-image: url('/static/tma-static/images/epingle_off.svg');
     background-size: contain;
 }
+.like-on {
+    background-image: url('/static/tma-static/images/like.svg');
+    background-size: contain;
+}
+
+
 .pin-row {
     position: relative;
     top: -18px;
