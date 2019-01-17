@@ -24,6 +24,7 @@ from student.helpers import (
 )
 from util.course import get_link_for_about_page, get_encoded_course_sharing_utm_params
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
+from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from math import ceil
 
 %>
@@ -34,7 +35,12 @@ if enrollment not in mandatory_course_enrollments:
 endif
 %>
 
-                <% course_target = "/courses/"+str(enrollment.course_id)+"/courseware/" %>
+                <%
+                course_target = "/courses/"+str(enrollment.course_id)+"/courseware/" 
+                if "Vodeclic" == str(enrollment.course_id).split('+')[2]:
+                    course_target = get_vodeclic_href(user,str(enrollment.course_id).split('+')[1])
+                endif
+                %>
                 <div class="col-lg-3 col-md-6">
                     <div class="training-card">
                         <div class="row">

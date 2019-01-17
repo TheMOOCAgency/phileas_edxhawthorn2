@@ -8,7 +8,7 @@ import datetime
 
 
 
-def get_vodeclic_href(user):
+def get_vodeclic_href(user,vodeclic_id):
 
     # Ensure the user is authenticated
     if not user.is_authenticated():
@@ -26,7 +26,7 @@ def get_vodeclic_href(user):
             date_crypt = hashlib.sha256(date+api).hexdigest()
             url = 'https://lms.vodeclic.com/api/sso?'
 
-            data_fr = 'partenaire='+partenaire+'&encrypted_id='+user_crypt+'&id='+id_membre+'&prenom='+first_name+'&nom='+last_name+'&email='+email+'&d='+date_crypt+''
+            data_fr = 'partenaire='+partenaire+'&encrypted_id='+user_crypt+'&id='+id_membre+'&prenom='+first_name+'&nom='+last_name+'&email='+email+'&d='+date_crypt+'&vodeclic_id='+vodeclic_id+''
             href_sso = url+data_fr
 
             return href_sso

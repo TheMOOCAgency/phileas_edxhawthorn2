@@ -4,6 +4,7 @@
 <%namespace name='static' file='static_content.html'/>
 <%!
 import pytz
+import re
 from datetime import datetime, timedelta
 from django.urls import reverse
 from django.utils.translation import ugettext as _
@@ -21,6 +22,7 @@ from lms.djangoapps.courseware.courses import (
   get_course_overview_with_access,
   get_course
 )
+from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 %>
 
 <%
@@ -167,8 +169,10 @@ from lms.djangoapps.courseware.courses import (
         <div class="row">
             <div class="col-12 mb-3">
               <p class="text-blue-light">Last courses</p>
-              % if course_overviews:
-                <p>${course_overviews[-1].display_name}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
+              % if course_enrollments:
+                <p class="last-course-title" onclick="window.location.href = '/courses/${course_enrollments[-1].course_id}/courseware';">${course_enrollments[-1].course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
+              % else:
+                <p>${_("No enrollment yet")}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
               % endif
               <hr>
             </div>
@@ -305,7 +309,19 @@ from lms.djangoapps.courseware.courses import (
                     </div>
                     <div class="row">
                       <div class="col text-center">
-                          <a href="#" class="enroll-btn">I enroll</a>
+                          %if CourseEnrollment.is_enrolled(user, course.id):
+                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                                <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
+                            %else:
+                                <a href="${get_vodeclic_href(user,str(course.id).split('+')[1])}" target="_blank" class="enroll-btn">Continue</a>
+                            %endif
+                          %else:
+                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                                <a onclick="enroll_into_course_go_to_tma_dashboard(${course.id})" class="enroll-btn">I enroll</a>
+                            %else:
+                                <a href="${get_vodeclic_href(user,str(course.id).split('+')[1])}" target="_blank" class="enroll-btn">I enroll</a>
+                            %endif
+                          %endif
                       </div>
                     </div>
                   </div>
@@ -383,7 +399,19 @@ from lms.djangoapps.courseware.courses import (
                   </div>
                   <div class="row">
                     <div class="col text-center">
-                        <a href="#" class="enroll-btn">I enroll</a>
+                          %if CourseEnrollment.is_enrolled(user, course.id):
+                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                                <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
+                            %else:
+                                <a href="${get_vodeclic_href(user,str(course.id).split('+')[1])}" target="_blank" class="enroll-btn">Continue</a>
+                            %endif
+                          %else:
+                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                                <a onclick="enroll_into_course_go_to_tma_dashboard(${course.id})" class="enroll-btn">I enroll</a>
+                            %else:
+                                <a href="${get_vodeclic_href(user,str(course.id).split('+')[1])}" target="_blank" class="enroll-btn">I enroll</a>
+                            %endif
+                          %endif
                     </div>
                   </div>
                 </div>
@@ -481,7 +509,19 @@ from lms.djangoapps.courseware.courses import (
                     </div>
                     <div class="row">
                       <div class="col text-center">
-                          <a href="#" class="enroll-btn">I enroll</a>
+                          %if CourseEnrollment.is_enrolled(user, course.id):
+                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                                <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
+                            %else:
+                                <a href="${get_vodeclic_href(user,str(course.id).split('+')[1])}" target="_blank" class="enroll-btn">Continue</a>
+                            %endif
+                          %else:
+                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                                <a onclick="enroll_into_course_go_to_tma_dashboard(${course.id})" class="enroll-btn">I enroll</a>
+                            %else:
+                                <a href="${get_vodeclic_href(user,str(course.id).split('+')[1])}" target="_blank" class="enroll-btn">I enroll</a>
+                            %endif
+                          %endif
                       </div>
                     </div>
                   </div>

@@ -122,7 +122,7 @@ class TmaCourseEnrollment(models.Model):
     @classmethod
     def get_ongoing_courses(cls, user):
         ongoing_courses_nbr = 0
-        ongoing_courses_nbr = TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user, completion_rate__gt=0).count()
+        ongoing_courses_nbr = TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user, has_validated_course=False).count()
         return ongoing_courses_nbr
 
 
