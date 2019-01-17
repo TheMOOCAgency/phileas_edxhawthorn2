@@ -21,7 +21,6 @@ from lms.djangoapps.courseware.courses import (
   get_course_overview_with_access,
   get_course
 )
-
 %>
 
 <%
@@ -236,7 +235,11 @@ from lms.djangoapps.courseware.courses import (
                             <div>
                               <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
                             </div>
-                            <a href="#" class="pin favorite fav-off"></a>
+                              % if str(course.id) in favorite_course_enrollments:
+                                <span class="pin favorite fav-on"></span>
+                              % else:
+                                <span class="pin favorite fav-off"></span>
+                              % endif
                           </div>
                           <div class="row">
                             <p>${course.display_name}</p>
@@ -283,7 +286,11 @@ from lms.djangoapps.courseware.courses import (
                         <div class="row pin-row ${course.id}">
                           <div class="category-tag">Bureautique</div>
                           <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
-                          <a href="#" class="pin favorite fav-off"></a>
+                          % if str(course.id) in favorite_course_enrollments:
+                            <span class="pin favorite fav-on"></span>
+                          % else:
+                            <span class="pin favorite fav-off"></span>
+                          % endif
                           <a href="#" class="pin like like-on"></a>
                         </div>
                       </div>
@@ -333,7 +340,11 @@ from lms.djangoapps.courseware.courses import (
                             <div>
                               <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
                             </div>
-                            <a href="#" class="pin favorite fav-off"></a>
+                            % if str(course.id) in favorite_course_enrollments:
+                              <span class="pin favorite fav-on"></span>
+                            % else:
+                              <span class="pin favorite fav-off"></span>
+                            % endif
                           </div>
                           <div class="row">
                             <p>${course.display_name}</p>
@@ -400,7 +411,11 @@ from lms.djangoapps.courseware.courses import (
                             <div>
                               <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
                             </div>
-                            <a href="#" class="pin favorite fav-off"></a>
+                            % if str(course.id) in favorite_course_enrollments:
+                              <span class="pin favorite fav-on"></span>
+                            % else:
+                              <span class="pin favorite fav-off"></span>
+                            % endif
                           </div>
                           <div class="row">
                             <p>${course.display_name}</p>
@@ -447,7 +462,11 @@ from lms.djangoapps.courseware.courses import (
                         <div class="row pin-row ${course.id}">
                           <div class="category-tag">Bureautique</div>
                           <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
-                          <a href="#" class="pin favorite fav-off"></a>
+                          % if str(course.id) in favorite_course_enrollments:
+                            <span class="pin favorite fav-on"></span>
+                          % else:
+                            <span class="pin favorite fav-off"></span>
+                          % endif
                           <a href="#" class="pin like like-on"></a>
                         </div>
                       </div>
@@ -516,12 +535,10 @@ from lms.djangoapps.courseware.courses import (
     });
 
     // Pin favorites
-    var favoriteCourseEnrollments = JSON.parse('${dump_js_escaped_json(favorite_course_enrollments) | n, decode.utf8}')
-    //console.log(favoriteCourseEnrollments)
-    
     $('.pin.favorite').click(function(){
       $(this).toggleClass('fav-off fav-on')
-      var courseId = $(this).parent().attr('class');
+      var courseId = $(this).parent().attr('class').split(' ')[2];
+      console.log(courseId)
       var status;
       if ($(this).hasClass('fav-on')) {
         status = true;

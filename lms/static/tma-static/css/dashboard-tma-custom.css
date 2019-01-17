@@ -453,6 +453,9 @@ a.enroll-btn:hover {
     width: 36px;
     height: 36px;
 }
+.favorite {
+    cursor: pointer;
+}
 .fav-on {
     background-image: url('/static/tma-static/images/epingle_on.svg');
     background-size: contain;
