@@ -62,6 +62,7 @@ from openedx.core.djangoapps.content.course_overviews.models import CourseOvervi
 from django.apps import apps
 TmaCourseOverview = apps.get_model('tma_apps','TmaCourseOverview')
 TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
+from lms.djangoapps.tma_apps.sspeaking.sspeaking import get_sspeaking_href
 
 log = logging.getLogger("edx.student")
 
@@ -869,6 +870,12 @@ def student_dashboard(request):
         for overview in TmaCourseOverview.objects.filter(course_overview_edx__id=enrollment.course_id):
             if overview.is_mandatory:
                 mandatory += 1
+
+    #7 Speaking
+    sspeaking_url = get_sspeaking_href(user)
+    context.update({
+        'sspeaking_url': sspeaking_url
+    })
 
     # Favorite courses
     """
