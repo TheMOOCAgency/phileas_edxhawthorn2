@@ -1,0 +1,94 @@
+<%page args="enrollment,mandatory_course_enrollments" expression_filter="h"/>
+<%def name="online_help_token()"><% return "learnerdashboard" %></%def>
+<%namespace name='static' file='../static_content.html'/>
+
+<%!
+import urllib
+
+from django.utils.translation import ugettext as _
+from django.utils.translation import ungettext
+from django.urls import reverse
+from course_modes.models import CourseMode
+from course_modes.helpers import enrollment_mode_display
+from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string
+from openedx.core.djangolib.markup import HTML, Text
+from openedx.features.course_experience import course_home_url_name
+from student.helpers import (
+  VERIFY_STATUS_NEED_TO_VERIFY,
+  VERIFY_STATUS_SUBMITTED,
+  VERIFY_STATUS_RESUBMITTED,
+  VERIFY_STATUS_APPROVED,
+  VERIFY_STATUS_MISSED_DEADLINE,
+  VERIFY_STATUS_NEED_TO_REVERIFY,
+  DISABLE_UNENROLL_CERT_STATES,
+)
+from util.course import get_link_for_about_page, get_encoded_course_sharing_utm_params
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
+from math import ceil
+
+%>
+<%
+additional_mandatory_class=""
+if enrollment in mandatory_course_enrollments:
+  additional_mandatory_class="mandatory-course-enrolment"
+endif
+%>
+
+                <% course_target = "/courses/"+str(enrollment.course_id)+"/courseware/" %>
+                <div class="col-lg-3 col-md-6">
+                    <div class="training-card">
+                        <div class="row">
+                        %if enrollment in mandatory_course_enrollments:
+                            <div class="col mandatory-tag">
+                                <p class="text-center">mandatory course!</p>
+                            </div>
+                        %endif
+                        </div>
+                        <div class="row">
+                            <div class="col progress ${additional_mandatory_class}">
+                                <%
+                                 completion_rate=int(100*TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).completion_rate)
+                                 progress_bar_size = ceil(ceil(completion_rate)/10)*10
+                                %>
+                                %if completion_rate > 0: 
+                                <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
+                                %else:
+                                <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
+                                %endif
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col m-3">
+                                <p class="title-course">${enrollment.course_overview.display_name_with_default}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col dates-box m-3">
+                                <p>Start date: <span>${enrollment.course_overview.dashboard_start_display.strftime('%Y-%m-%d')}</span></p>
+                               %if enrollment.course_overview.end:
+                                <p>End date: <span>${enrollment.course_overview.end.strftime('%Y-%m-%d')}</span></p>
+                               %else:
+                                <p>End date: <span>${_("No end date")}</span></p>
+                               %endif
+
+                            </div>
+                        </div>
+                        <div class="row pin-row mb-3">
+                            <div class="col-4">
+                                <p class="text-center"><img src="${static.url('tma-static/images/like.svg')}"/>10</p>
+                            </div>
+
+                                <div class="col-8">
+                            <a href="mailto:?subject=${enrollment.course_overview.display_name_with_default} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !">
+                                    <p class="text-center"><img src="${static.url('tma-static/images/recommend.svg')}"/>Recommend</p>
+                            </a>
+                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center">
+                                <a href="${course_target}" class="continue-btn">Continue</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
