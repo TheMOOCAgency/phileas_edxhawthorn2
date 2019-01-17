@@ -13,17 +13,13 @@ from lms.djangoapps.courseware.courses import (
   get_course_overview_with_access,
 )
 
+from student.views.dashboard import _student_dashboard
+
 import logging
 log = logging.getLogger(__name__)
 
 
 @login_required
 def home_dashboard(request):
-    user = request.user
-    username = user.username
-
-    context = {
-        'username': username
-    }
-
+    context = _student_dashboard(request)
     return render_to_response('tma_apps/home_dashboard.html', context)
