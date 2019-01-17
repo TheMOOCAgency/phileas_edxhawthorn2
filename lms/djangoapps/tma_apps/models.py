@@ -22,7 +22,9 @@ class TmaCourseEnrollment(models.Model):
     has_started_course = models.BooleanField(default=False)
     has_validated_course = models.BooleanField(default=False)
     is_favourite = models.BooleanField(default=False)
+    is_liked = models.BooleanField(default=False)
     completion_rate = models.FloatField(default=0)
+    student_grade = models.FloatField(default=0)
 
     @classmethod
     def get_courseenrollment(cls, course_key, user):
@@ -31,6 +33,7 @@ class TmaCourseEnrollment(models.Model):
             course_enrollment_edx=course_enrollment,
         );
         return enrollment
+
 
     @classmethod
     def update_time_tracking(cls, course_key, user, course_time, section, sub_section):
@@ -73,24 +76,34 @@ class TmaCourseEnrollment(models.Model):
         except:
             return 'error while registering course validation status'
 
-    @classmethod
-    def update_favourite(cls, course_key, user, status):
-        """
-        Updates is_favorite attribute in TmaCourseEnrollment with status argument (bool)
-        """
 
+    @classmethod
+    def update_grade(cls,course_key, user,grade):
+        response={}
+        enrollment = cls.get_courseenrollment(course_key,user)
+        enrollment.student_grade=grade
+        response['status']='course grade update success'
+        response['user_grade']=grade
+        return response
+
+
+    @classmethod
+    def update_social_attributes(cls,attribute,course_key,user,status):
+        """
+        Update is_liked and is_favourite + create CourseEnrollmentEdx if doesn't exists
+        """
         response = {}
-        if status is not None and isinstance(status, bool) :
-            if TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user, course_enrollment_edx__course_id=course_key).exists() :
-                tma_enrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__user=user, course_enrollment_edx__course_id=course_key)
-                tma_enrollment.is_favourite = status
-                tma_enrollment.save()
-            else :
-                new_enrollment = CourseEnrollment.enroll(user, course_key, 'audit')
-                new_enrollment.update_enrollment(is_active=False)
-                TmaCourseEnrollment.objects.get_or_create(course_enrollment_edx=new_enrollment)[0].is_favourite = status
+        if status is not None and attribute is not None and isinstance(status, bool) :
+            if not CourseEnrollment.objects.filter(course_id=course_key, user=user).exists():
+                edx_enrollment = CourseEnrollment.enroll(user, course_key, 'audit')
+                edx_enrollment.update_enrollment(is_active=False)
+            enrollment = cls.get_courseenrollment(course_key,user)
+            if attribute=="is_favourite":
+                enrollment.is_favourite=status
+            elif attribute=="is_liked":
+                enrollment.is_liked=status
             response = {
-                'success': 'Status updated',
+                'success': attribute+'status updated ',
                 'status': status
             }
         else :
@@ -98,6 +111,7 @@ class TmaCourseEnrollment(models.Model):
                 'error':_('Wrong parameters')
             }
         return response
+
 
     @classmethod
     def get_validated_courses(cls, user):
