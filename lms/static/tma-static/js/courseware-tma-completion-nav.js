@@ -12,6 +12,7 @@ $('button.close-courseware-nav').on('click', function(){
 /*Prepare completion coursenav on pageload */
 $(document).ready(function(){
   mark_started_subsections();
+  get_course_completion()
 })
 
 /*Update completion coursenav between units*/
@@ -23,6 +24,7 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
       unit_id=settings.data.replace('usage_key=','');
       mark_unit_completed(decodeURIComponent(unit_id));
     }
+    get_course_completion()
   }
 });
 
@@ -42,4 +44,20 @@ function mark_started_subsections(){
 
 function mark_unit_completed(unit_id){
   $('#' + unit_id.replace(/([$%&()*+,./:;<=>?@\[\\\]^\{|}~])/g,'\\$1')).find('.vertical-title').addClass('tma_completed');
+}
+
+
+function get_course_completion(){
+  url ='/tma_apps/'+global_courseid+'/completion/get_course_completion'
+  $.ajax({
+    type:'get',
+    url:url,
+    success : function(response) {
+      completion_rate =Math.round(response.course_completion_rate*100)
+      $('#tma-completion-value').html(completion_rate+'%')
+      if (completion_rate!=0){
+        $('#tma-completion-progress').css('width',completion_rate+'%').addClass('primary-color-bg')
+      }
+    }
+  })
 }

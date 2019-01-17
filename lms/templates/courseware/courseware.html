@@ -134,11 +134,11 @@ ${HTML(fragment.foot_html())}
         <div class="col-md-6">
           <div class="tma-grade">
             <img class="award" src="${static.url('tma-static/images/award.png')}" alt="award">
-            <span class="font-weight-bold"><span class="primary-color-text first-part-grade">56</span>/<span class="second-part-grade">80</span></span>
+            <span class="font-weight-bold"><span id="tma-grade-value" class="primary-color-text first-part-grade"></span>/<span class="second-part-grade">100</span></span>
           </div>
           <div class="tma-progress-bar">
-            <div class="w3-light-grey">
-              <div class="w3-container w3-padding-small primary-color-bg text-white w3-center" style="width:50%">50%</div>
+            <div class="w3-light-grey" style="min-height: 15px;">
+              <div id="tma-completion-progress" class="w3-container w3-padding-small text-white w3-center" style="width:50%"><span id="tma-completion-value" class="font-weight-bold"></span></div>
             </div>
           </div>
         </div>
@@ -306,5 +306,8 @@ ${HTML(fragment.foot_html())}
 
 
 <!--TMA SCRIPT COURSEWARE -->
+<script>
+  let global_courseid = "${course.id | n, js_escaped_string}";
+</script>
 <script src="${static.url('tma-static/js/courseware-tma-completion-nav.js')}" charset="utf-8"></script>
-<!-- <script src="/media/dev/tma-static/js/courseware-tma-completion-nav.js" charset="utf-8"></script> -->
+<!--<script src="/media/dev/courseware-tma-completion-nav.js" charset="utf-8"></script>-->

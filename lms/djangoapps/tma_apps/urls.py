@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^{}/certificate/render$'.format(settings.COURSE_ID_PATTERN), certificates_views.render),
 
     #Completion
-    url(r'^{}/completion/get_course_completion_rate$'.format(settings.COURSE_ID_PATTERN), completion_views.get_course_completion_rate),
+    url(r'^{}/completion/get_course_completion$'.format(settings.COURSE_ID_PATTERN), completion_views.get_course_completion),
 
 
     #Favoris

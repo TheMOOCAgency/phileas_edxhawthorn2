@@ -30,7 +30,7 @@ class Completion():
         TmaCourseEnrollment.update_course_completion(course_key,self.request.user, completion_rate)
         return completion_rate
 
-    def get_course_completion_rate(self, course_id):
+    def get_course_completion(self, course_id):
         response={}
         response={
             'course_completion_rate':self.calculate_completion(course_id)
