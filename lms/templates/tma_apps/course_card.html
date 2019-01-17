@@ -28,9 +28,9 @@ from math import ceil
 
 %>
 <%
-additional_mandatory_class=""
-if enrollment in mandatory_course_enrollments:
-  additional_mandatory_class="mandatory-course-enrolment"
+additional_not_mandatory_class=""
+if enrollment not in mandatory_course_enrollments:
+  additional_not_mandatory_class="not-mandatory-course-enrolment"
 endif
 %>
 
@@ -45,7 +45,7 @@ endif
                         %endif
                         </div>
                         <div class="row">
-                            <div class="col progress ${additional_mandatory_class}">
+                            <div class="col progress ${additional_not_mandatory_class}">
                                 <%
                                  completion_rate=int(100*TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).completion_rate)
                                  progress_bar_size = ceil(ceil(completion_rate)/10)*10

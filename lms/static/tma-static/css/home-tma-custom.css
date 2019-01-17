@@ -110,7 +110,7 @@ html, body {
 .progress {
     height: 20px;
 }
-.progress.mandatory-course-enrolment {
+.progress.not-mandatory-course-enrolment {
     height: 35px;
     margin-bottom: 20px;
 }
