@@ -61,4 +61,4 @@ class certificate():
             "last_name":last_name,
         }
 
-        return render_to_response('tma_app/certificate.html',context)
+        return render_to_response('tma_apps/certificate.html',context)

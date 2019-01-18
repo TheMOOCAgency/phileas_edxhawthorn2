@@ -85,14 +85,18 @@ class TmaCourseEnrollment(models.Model):
     def update_grade(cls,course_key,user,grade,passed):
         response={}
         enrollment = cls.get_courseenrollment(course_key,user)
-        enrollment.student_grade=grade
-        if grade > enrollment.best_student_grade:
-            enrollment.best_student_grade = grade
-            enrollment.date_best_student_grade = datetime.datetime.now()
-        enrollment.has_validated_course = passed
-        enrollment.save()
-        response['status']='course grade update success'
-        response['user_grade']=grade
+        try :
+            response['new_best_grade']=False
+            enrollment.student_grade=grade
+            if grade > enrollment.best_student_grade:
+                enrollment.best_student_grade = grade
+                enrollment.date_best_student_grade = datetime.datetime.now()
+                response['new_best_grade']=True
+            enrollment.has_validated_course = passed
+            enrollment.save()
+            response['status']='success'
+        except:
+            response['status']='error'
         return response
 
 
@@ -166,14 +170,7 @@ class TmaCourseOverview(models.Model):
     is_vodeclic = models.BooleanField(default=False)
     favourite_total = models.IntegerField(default=0)
     liked_total = models.IntegerField(default=0)
-
-    @classmethod
-    def get_course_overview(cls, course_key):
-        course_overview = CourseOverview.objects.get(id=course_key)
-        tma_course_overview, created = TmaCourseOverview.objects.get_or_create(
-            course_overview_edx=course_overview,
-        );
-        return course_overview
+    is_course_graded = models.BooleanField(default=True)
 
     @classmethod
     def get_tma_course_overview_by_course_id(cls, course_key):

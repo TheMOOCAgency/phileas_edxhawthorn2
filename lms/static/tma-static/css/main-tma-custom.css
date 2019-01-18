@@ -2,3 +2,11 @@
 #main{
   margin-bottom: 60px;
 }
+
+/*Fonts*/
+*{
+  font-family: 'Montserrat', sans-serif!important;
+}
+*::before,*::after{
+  font-family: FontAwesome!important;
+}
