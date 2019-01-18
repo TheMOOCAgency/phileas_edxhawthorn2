@@ -36,7 +36,7 @@ is_liked = {}
 # Iterate on all course enrollments
 for enrollment in course_enrollments:
    tmacourseoverview = TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id)
-   liked_total[enrollment.course_id] = tmacourseoverview.liked_total   
+   liked_total[enrollment.course_id] = tmacourseoverview.liked_total
    is_liked[enrollment.course_id] = False
    tmacourseenrollment = None
    if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
@@ -172,7 +172,7 @@ for enrollment in course_enrollments:
                     <p><span class="font-weight-bold">${int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100)}</span>/100</p>
                 </div>
                 <div class="col-lg-2 pl-5"><p><img class="badge-cert" src="${static.url('tma-static/images/certificate.svg')}"></div>
-                <div class="col-lg-2"><a href="#">Télécharger</a></div>
+                <div class="col-lg-2"><a href="/tma_apps/${enrollment.course_id}/certificate/render">Télécharger</a></div>
             </div>
         %endfor
      %else:
@@ -219,4 +219,3 @@ for enrollment in course_enrollments:
     });
 
 </script>
-
