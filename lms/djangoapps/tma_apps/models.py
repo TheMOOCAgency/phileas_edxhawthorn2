@@ -145,9 +145,18 @@ class TmaCourseOverview(models.Model):
     is_vodeclic = models.BooleanField(default=False)
 
     @classmethod
-    def get_course_overview(cls, course_key, user):
-        course_overview = CourseOverview.objects.get(course_id=course_key)
+    def get_course_overview(cls, course_key):
+        course_overview = CourseOverview.objects.get(id=course_key)
         tma_course_overview, created = TmaCourseOverview.objects.get_or_create(
-            course_enrollment_edx=course_overview,
+            course_overview_edx=course_overview,
+        );
+        return course_overview
+
+    @classmethod
+    def get_tma_course_overview_by_course_id(cls, course_key):
+        course_overview = CourseOverview.objects.get(id=course_key)
+        tma_course_overview, created = TmaCourseOverview.objects.get_or_create(
+            course_overview_edx=course_overview,
         );
         return tma_course_overview
+

@@ -6,15 +6,13 @@ import requests
 import hashlib
 import datetime
 
-
-
-def get_vodeclic_href(user,vodeclic_id):
-
+def get_vodeclic_href(user,course_id):
     # Ensure the user is authenticated
     if not user.is_authenticated():
         return HttpResponseForbidden()
     else:
         if settings.FEATURES.get('TMA_VODECLIC_ENABLE'):
+            vodeclic_id = str(course_id).split('+')[1]
             date = datetime.datetime.now().strftime("%d%m%Y")
             api = 'uYUoVrzSEVityKwgNhHO'
             partenaire = 'LIkptrpdXajmLaJTRHYF'

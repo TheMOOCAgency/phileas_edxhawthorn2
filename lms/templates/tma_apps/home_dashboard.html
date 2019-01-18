@@ -89,9 +89,13 @@ for enrollment in course_enrollments:
                 <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">Your ongoing courses</h1>
             </div>
             <div class="row">
+             %if ongoing_course_enrollments:
                 %for enrollment in ongoing_course_enrollments:
                     <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments' />
                 % endfor
+             %else:
+                    <div style="margin:0 auto"><p>${_("You have no ongoing courses yet")}</p></div>
+             %endif
             </div>
         </div>
     </div>
@@ -103,9 +107,13 @@ for enrollment in course_enrollments:
                 <h1 class="title-28"><img class="picto" src="${static.url('tma-static/images/warning.svg')}">Your mandatory courses</h1>
             </div>
             <div class="row">
+             %if mandatory_course_enrollments:
                 %for enrollment in mandatory_course_enrollments:
                     <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments' />
                 % endfor
+             %else:
+                    <div style="margin:0 auto"><p>${_("You are not enrolled in mandatory courses yet")}</p></div>
+             %endif
             </div>
         </div>
     </div>
@@ -117,9 +125,13 @@ for enrollment in course_enrollments:
                 <h1 class="title-28"><img class="picto" src="${static.url('tma-static/images/etoile.svg')}">Your favorite courses</h1>
             </div>
             <div class="row">
+             %if favorite_course_enrollments:
                 %for enrollment in favorite_course_enrollments:
                     <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments' />
                 % endfor
+             %else:
+                    <div style="margin:0 auto"><p>${_("You have no favorite courses yet")}</p></div>
+             %endif
             </div>
         </div>
     </div>
@@ -138,6 +150,7 @@ for enrollment in course_enrollments:
                 <div class="col-lg-2">Download certificate :</div>
             </div>
             <hr>
+     %if done_course_enrollments:
         %for enrollment in done_course_enrollments:
             <div class="row">
                 <div class="col-lg-3 title-20"><p>${enrollment.course_overview.display_name_with_default}</p></div>
@@ -152,6 +165,10 @@ for enrollment in course_enrollments:
                 <div class="col-lg-2"><a href="#">Télécharger</a></div>
             </div>
         %endfor
+     %else:
+        <div style="text-align:center"><p>${_("You have no finished course yet")}</p></div>
+     %endif
+
             <hr>
             <div class="row mb-5 mt-3">
                 <div class="col text-center more-btn">

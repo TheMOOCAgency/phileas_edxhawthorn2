@@ -10,6 +10,7 @@ from edxmako.shortcuts import marketing_link
 from openedx.core.djangolib.markup import HTML
 from openedx.core.lib.courses import course_image_url
 from six import string_types
+from lms.djangoapps.tma_apps.models import TmaCourseOverview
 %>
 
 <%inherit file="../main.html" />
@@ -119,7 +120,11 @@ from six import string_types
   <div class="row primary-color-bg h-350 text-white">
     <div class="col-lg-6 pl-75">
       <p class="mt-4">Mandatory course!</p>
-      <h3 class="title-36">${course.display_name_with_default_escaped} <img src="${static.url('tma-static/images/cadenas.svg')}" width="36"/></h3>
+      <h3 class="title-36">${course.display_name_with_default_escaped} 
+      %if not user.profile.is_manager and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only:
+        <img src="${static.url('tma-static/images/cadenas.svg')}" width="36"/>
+      %endif
+      </h3>
       <p id="course-description"></p>
       <div class="row">
         <div class="col-lg-6">
@@ -166,19 +171,25 @@ from six import string_types
     <div class="col-lg-1 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/time.svg')}" width="36">
       <p>Durée</p>
-      <p id="course-duration" class="font-weight-bold"></p>
+      <p id="course-duration" class="font-weight-bold">${get_course_about_section(request, course, "effort")}</p>
     </div>
     <div class="col-lg-1 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/langue.svg')}" width="36">
       <p>Langue</p>
-      <p class="font-weight-bold">FR</p>
+      <p class="font-weight-bold">${course.language}</p>
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/award.png')}" width="36">
       <p>Score requis</p>
-      <p id="course-score" class="font-weight-bold"></p>
+      <p id="course-score" class="font-weight-bold">${int(course.grade_cutoffs.get("Pass")*100)}%</p>
     </div>
-    <a href="#" class="big-btn">I enroll</a>
+    %if user.is_authenticated and registered and show_courseware_link:
+      <a href="${course_target}" class="big-btn">${_("View Course")}</a>
+    %elif (invitation_only and not can_enroll) or (not user.profile.is_manager and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only) :
+      <a href="" class="big-btn">${_("Not Authorized")}</a>
+    %else:
+      <a href="#" class="big-btn register">${_("Join")}</a>
+    %endif
   </div>
   <!--THIRD ROW-->
   <div class="row description-box">
@@ -188,7 +199,7 @@ from six import string_types
     </div>
     <div class="col-lg-3">
       <div class="text-right">
-        <a href="#"><img class="mr-2" src="${static.url('tma-static/images/mail.svg')}" width="36"></a>
+        <a href="mailto:?subject=${course.display_name_with_default_escaped} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !"><img class="mr-2" src="${static.url('tma-static/images/mail.svg')}" width="36"></a>
         <a href="#"><img class="ml-2" src="${static.url('tma-static/images/epingle_on.svg')}" width="36"></a>
       </div>
     </div>
@@ -213,7 +224,13 @@ from six import string_types
       <div class="downloads-box">
         <h3 class="mb-5">Téléchargements</h3>
       </div>
-      <a href="#" class="big-btn">I enroll</a>
+    %if user.is_authenticated and registered and show_courseware_link:
+      <a href="${course_target}" class="big-btn">${_("View Course")}</a>
+    %elif (invitation_only and not can_enroll) or (not user.profile.is_manager and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only) :
+      <a href="" class="big-btn">${_("Not Authorized")}</a>
+    %else:
+      <a href="#" class="big-btn register">${_("Join")}</a>
+    %endif
     </div>
   </div>
 </div>
@@ -222,7 +239,7 @@ from six import string_types
   // Get content from JSON file
   $.ajax({
     type: 'GET',
-    url: '/static/tma-static/js/course-about-content.json',
+    url: '/media/course-about-content.json',
     dataType: 'json',
     async: false,
     success: function(data) {
@@ -235,8 +252,9 @@ from six import string_types
         $('#course-description').text(courseData.description);
         $('#teacher-name').text(courseData.teacherName);
         $('#teacher-email').text(courseData.teacherEmail);
-        $('#course-duration').text(courseData.duration);
-        $('#course-score').text(courseData.requiredScore);
+        //TODO: this is specified in course config already
+        //$('#course-duration').text(courseData.duration);
+        //$('#course-score').text(courseData.requiredScore);
 
         // Populate course map
         courseData.courseMap.forEach(function(element, i){
