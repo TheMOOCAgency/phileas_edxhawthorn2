@@ -12,7 +12,6 @@ from courseware.courses import get_course_by_id
 from django.utils.translation import ugettext as _
 
 
-
 @login_required
 @require_GET
 def get_user_grade(request, course_id):
