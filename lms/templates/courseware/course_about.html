@@ -132,7 +132,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         </div>
         <div class="col-lg-6">
           <span>
-              <img src="${static.url('tma-static/images/like.svg')}" width="36"> 10
+              <img id="like_picto" class="like_${str(is_liked).lower()}" style="cursor:pointer" src="${static.url('tma-static/images/like.svg')}" width="36"><span id="like_count">10</span>
           </span>
         </div>
       </div>
@@ -200,7 +200,16 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     <div class="col-lg-3">
       <div class="text-right">
         <a href="mailto:?subject=${course.display_name_with_default_escaped} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !"><img class="mr-2" src="${static.url('tma-static/images/mail.svg')}" width="36"></a>
-        <a href="#"><img class="ml-2" src="${static.url('tma-static/images/epingle_on.svg')}" width="36"></a>
+        <a href="#">
+        <!--TODO: Refactor this with dashboard-->
+        % if is_favourite:
+            <img class="ml-2 pin favorite" id="fav_on" src="${static.url('tma-static/images/epingle_on.svg')}" width="36">
+            <img class="ml-2 pin favorite" id="fav_off" style="display:none" src="${static.url('tma-static/images/epingle_off.svg')}" width="36">
+        % else:
+            <img class="ml-2 pin favorite" id="fav_on" style="display:none" src="${static.url('tma-static/images/epingle_on.svg')}" width="36">
+            <img class="ml-2 pin favorite" id="fav_off" src="${static.url('tma-static/images/epingle_off.svg')}" width="36">
+        % endif
+        </a>
       </div>
     </div>
   </div>
@@ -285,7 +294,51 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     e.preventDefault();
     $(this).next('.subsections').toggle();
   })
+
+
+    // Pin favorites
+    $('.pin.favorite').click(function(){
+      $("#fav_off").toggle();
+      $("#fav_on").toggle();
+      var courseId ="${course.id}";
+      var status = true;
+      if ($(this).attr('id') == "fav_on") {
+        status = false;
+      }
+      $.ajax({
+        type: 'POST',
+        url: '/tma_apps/'+ courseId +'/favourite/update_favourite',
+        dataType: 'json',
+        data: {status: status, course_id: courseId},
+        success: function(data){
+          console.log(data);
+        }
+      });
+    });
+
+    // Like
+    $('#like_picto').click(function(){
+      var courseId ="${course.id}";
+      var status = $(this).hasClass('like_false');
+      $(this).toggleClass('like_false like_true');
+      if($(this).hasClass('like_false')){
+        $("#like_count").html(parseInt($("#like_count").html())+1);
+      }else{
+        $("#like_count").html($("#like_count").html()-1);
+      }
+      $.ajax({
+        type: 'POST',
+        url: '/tma_apps/'+ courseId +'/like/update_like',
+        dataType: 'json',
+        data: {status: status, course_id: courseId},
+        success: function(data){
+          console.log(data);
+        }
+      });
+    });
+
 </script>
 <%static:require_module_async module_name="js/dateutil_factory" class_name="DateUtilFactory">
     DateUtilFactory.transform(iterationKey=".localized_datetime");
 </%static:require_module_async>
+
