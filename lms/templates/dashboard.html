@@ -260,7 +260,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                           <div class="0">
                             <div class="row course-pictos ${course.id}">
                               <div class="col-4 text-center pl-2 pr-2">
-                                <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">0</span></span>
+                                <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">${TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).liked_total}</span></span>
                                 
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
@@ -396,7 +396,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                           <div class="align-items-end h-100">
                             <div class="row course-pictos ${course.id}">
                               <div class="col-4 text-center ${course.id} pl-2 pr-2 ">
-                                  <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">0</span></span>
+                                  <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">${TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).liked_total}</span></span>
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
                                   <img src="${static.url('tma-static/images/Time.png')}">
@@ -490,7 +490,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                           <div class="0">
                             <div class="row course-pictos ${course.id}">
                               <div class="col-4 text-center pl-2 pr-2">
-                                <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">0</span></span>
+                                <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">${TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).liked_total}</span></span>
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
                                   <img src="${static.url('tma-static/images/Time.png')}">
@@ -618,8 +618,6 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   $(document).ready(function() {
     // Get favorite + like counters
     var counter = ${favorite_courses}
-    var likeCounter = 0;
-
     $('#fav-counter').html(counter+"<img src=\"${static.url('tma-static/images/etoile.svg')}\">");
 
     // Flip cards effect
@@ -671,6 +669,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       $('.'+ courseSelector + ' > .like').toggleClass('like-false like-true');
 
       var status;
+      var likeCounter = $('.'+ courseSelector + ' .like-count').text()
       if ($(this).hasClass('like-true')) {
         status = true;
         likeCounter++;
