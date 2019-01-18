@@ -888,7 +888,7 @@ def _student_dashboard(request):
     favorite_course_enrollments = []
     for enrollment in CourseEnrollment.objects.filter(user=user):
         if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
-            if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).is_favorite:
+            if TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).is_favourite:
                 favorite_course_enrollments.append(str(enrollment.course_id))
 
     context.update({

@@ -184,7 +184,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
             <p class="mt-2">mandatory course(s)</p>
           </div>
           <div class="col-4 text-center">
-            <p>${favorite_courses}<img src="${static.url('tma-static/images/etoile.svg')}"></p>
+            <p id="fav-counter">${favorite_courses}<img src="${static.url('tma-static/images/etoile.svg')}"></p>
             <p class="mt-2">favorite course(s)</p>
           </div>
           <div class="col-4 text-center">
@@ -592,8 +592,12 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 </div>
 
 <script type="text/javascript">
-  // Flip cards effect
   $(document).ready(function() {
+    // Get favorite counter
+    var counter = ${favorite_courses}
+    $('#fav-counter').html(counter+"<img src=\"${static.url('tma-static/images/etoile.svg')}\">");
+
+    // Flip cards effect
     $('.flip-container').hover(function(){
       $(this).toggleClass("applyflip");
     });
@@ -602,17 +606,26 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       $('.dropdown').toggleClass("is-down");
     });
 
-    // Pin favorites
+    // Click favorite pin
     $('.pin.favorite').click(function(){
-      $(this).toggleClass('fav-off fav-on')
       var courseId = $(this).parent().attr('class').split(' ')[2];
-      console.log(courseId)
+      // Escape special characters for jQuery selecting
+      var courseSelector = courseId.replace(':', '\\:').replace(/\+/gi,'\\+');
+      // Change pins color
+      $('.'+ courseSelector + ' > .favorite').toggleClass('fav-off fav-on');
+      // New status
       var status;
       if ($(this).hasClass('fav-on')) {
         status = true;
+        counter++
+        $('#fav-counter').html(counter+"<img src=\"${static.url('tma-static/images/etoile.svg')}\">");
       } else {
         status = false;
+        counter--
+        $('#fav-counter').html(counter+"<img src=\"${static.url('tma-static/images/etoile.svg')}\">");
       }
+
+      // Send new favorite status to update db
       $.ajax({
         type: 'POST',
         url: '/tma_apps/'+ courseId +'/favourite/update_favourite',
@@ -624,7 +637,4 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       });
     });
   });
-
-  console.log('${favorite_course_enrollments}')
-
 </script>
