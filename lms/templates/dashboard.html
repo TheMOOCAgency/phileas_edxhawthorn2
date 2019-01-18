@@ -258,10 +258,10 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                           </div>
                           <!-- Arrow block -->
                           <div class="0">
-                            <div class="row course-pictos">
+                            <div class="row course-pictos ${course.id}">
                               <div class="col-4 text-center pl-2 pr-2">
-                                <a href="#"><img src="${static.url('tma-static/images/Like.png')}"></a>
-                                <span>10</span>
+                                <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">0</span></span>
+                                
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
                                   <img src="${static.url('tma-static/images/Time.png')}">
@@ -312,7 +312,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                           % else:
                             <span class="pin favorite fav-off"></span>
                           % endif
-                          <a href="#" class="pin like like-on"></a>
+                          <span class="pin like like-false"></span>
                         </div>
                       </div>
                       <div class="row">
@@ -375,7 +375,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                   <div class="container-fluid">
                       <div class="row">
                         <div class="col course-name">
-                          <div class="row pin-row ${course.id}">
+                          <div class="row pin-row">
                             <div>
                               <div class="category-tag">Bureautique</div>
                             </div>
@@ -394,10 +394,9 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                             <p>${course.display_name}</p>
                           </div>
                           <div class="align-items-end h-100">
-                            <div class="row course-pictos">
-                              <div class="col-4 text-center pl-2 pr-2">
-                                <a href="#"><img src="${static.url('tma-static/images/Like.png')}"></a>
-                                <span>10</span>
+                            <div class="row course-pictos ${course.id}">
+                              <div class="col-4 text-center ${course.id} pl-2 pr-2 ">
+                                  <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">0</span></span>
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
                                   <img src="${static.url('tma-static/images/Time.png')}">
@@ -489,10 +488,9 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                           </div>
                           <!-- Arrow block -->
                           <div class="0">
-                            <div class="row course-pictos">
+                            <div class="row course-pictos ${course.id}">
                               <div class="col-4 text-center pl-2 pr-2">
-                                <a href="#"><img src="${static.url('tma-static/images/Like.png')}"></a>
-                                <span>10</span>
+                                <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">0</span></span>
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
                                   <img src="${static.url('tma-static/images/Time.png')}">
@@ -544,7 +542,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                           % else:
                             <span class="pin favorite fav-off"></span>
                           % endif
-                          <a href="#" class="pin like like-on"></a>
+                          <span class="pin like like-false"></span>
                         </div>
                       </div>
                       <div class="row">
@@ -618,8 +616,10 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 
 <script type="text/javascript">
   $(document).ready(function() {
-    // Get favorite counter
+    // Get favorite + like counters
     var counter = ${favorite_courses}
+    var likeCounter = 0;
+
     $('#fav-counter').html(counter+"<img src=\"${static.url('tma-static/images/etoile.svg')}\">");
 
     // Flip cards effect
@@ -654,6 +654,36 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       $.ajax({
         type: 'POST',
         url: '/tma_apps/'+ courseId +'/favourite/update_favourite',
+        dataType: 'json',
+        data: {status: status, course_id: courseId},
+        success: function(data){
+          console.log(data);
+        }
+      });
+    });
+
+    // Click like pin
+    $('span.like').click(function(){
+      var courseId = $(this).parent().attr('class').split(' ')[2];
+      // Escape special characters for jQuery selecting
+      var courseSelector = courseId.replace(':', '\\:').replace(/\+/gi,'\\+');
+      // Change pins class
+      $('.'+ courseSelector + ' > .like').toggleClass('like-false like-true');
+
+      var status;
+      if ($(this).hasClass('like-true')) {
+        status = true;
+        likeCounter++;
+        $('.'+ courseSelector + ' .like-count').text(likeCounter);
+      } else {
+        status = false;
+        likeCounter--;
+        $('.'+ courseSelector + ' .like-count').text(likeCounter);
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: '/tma_apps/'+ courseId +'/like/update_like',
         dataType: 'json',
         data: {status: status, course_id: courseId},
         success: function(data){
