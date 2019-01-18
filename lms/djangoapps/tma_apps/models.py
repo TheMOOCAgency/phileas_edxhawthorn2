@@ -155,6 +155,7 @@ class TmaCourseOverview(models.Model):
     is_vodeclic = models.BooleanField(default=False)
     favourite_total = models.IntegerField(default=0)
     liked_total = models.IntegerField(default=0)
+    is_not_graded = models.BooleanField(default=False)
 
     @classmethod
     def get_course_overview(cls, course_key):

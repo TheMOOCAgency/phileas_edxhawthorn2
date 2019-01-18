@@ -55,6 +55,7 @@ from ..entrance_exams import (
 from ..masquerade import setup_masquerade
 from ..model_data import FieldDataCache
 from ..module_render import get_module_for_descriptor, toc_for_course
+from lms.djangoapps.tma_apps.models import TmaCourseOverview
 
 #TMA imports
 from openedx.features.course_experience.views.course_outline import CourseOutlineFragmentView
