@@ -4,6 +4,7 @@ from .certificates import views as certificates_views
 from .grade_tracking import views as grade_views
 from .completion import views as completion_views
 from .favourite import views as favourite_views
+from .like import views as like_views
 from .activity_dashboard import views as activity_dashboard_views
 
 
@@ -20,7 +21,7 @@ urlpatterns = [
     url(r'^{}/favourite/update_favourite$'.format(settings.COURSE_ID_PATTERN), favourite_views.api_update_favourite),
 
     #Liked
-    url(r'^{}/liked/update_liked$'.format(settings.COURSE_ID_PATTERN), favourite_views.api_update_favourite),
+    url(r'^{}/like/update_like$'.format(settings.COURSE_ID_PATTERN), like_views.api_update_like),
 
     # Home dashboard
     url(r'^dashboard/home/$', activity_dashboard_views.home_dashboard, name='home_dashboard'),

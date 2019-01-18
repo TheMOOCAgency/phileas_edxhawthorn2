@@ -132,7 +132,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         </div>
         <div class="col-lg-6">
           <span>
-              <img src="${static.url('tma-static/images/like.svg')}" width="36"> 10
+              <img id="like_picto" class="like_${str(is_liked).lower()}" style="cursor:pointer" src="${static.url('tma-static/images/like.svg')}" width="36"><span id="like_count">10</span>
           </span>
         </div>
       </div>
@@ -301,11 +301,9 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       $("#fav_off").toggle();
       $("#fav_on").toggle();
       var courseId ="${course.id}";
-      var status;
-      if ($(this).id == "fav_on") {
+      var status = true;
+      if ($(this).attr('id') == "fav_on") {
         status = false;
-      } else {
-        status = true;
       }
       $.ajax({
         type: 'POST',
@@ -317,7 +315,30 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         }
       });
     });
+
+    // Like
+    $('#like_picto').click(function(){
+      var courseId ="${course.id}";
+      var status = $(this).hasClass('like_false');
+      $(this).toggleClass('like_false like_true');
+      if($(this).hasClass('like_false')){
+        $("#like_count").html(parseInt($("#like_count").html())+1);
+      }else{
+        $("#like_count").html($("#like_count").html()-1);
+      }
+      $.ajax({
+        type: 'POST',
+        url: '/tma_apps/'+ courseId +'/like/update_like',
+        dataType: 'json',
+        data: {status: status, course_id: courseId},
+        success: function(data){
+          console.log(data);
+        }
+      });
+    });
+
 </script>
 <%static:require_module_async module_name="js/dateutil_factory" class_name="DateUtilFactory">
     DateUtilFactory.transform(iterationKey=".localized_datetime");
 </%static:require_module_async>
+
