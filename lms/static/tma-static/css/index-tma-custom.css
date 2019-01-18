@@ -29,6 +29,7 @@ video {
     padding: 10px;
     border-radius: 28px;
     background-color: white;
+    color: #0B1A4C !important;
     border: 2px solid #0B1A4C;
     font-weight: bold;
     font-size: 14px;
@@ -39,6 +40,8 @@ video {
 .login-btn:hover {
     background-color: #0B1A4C;
     border: 2px solid white;
+    color: white !important;
+    text-decoration: none !important;
 }
 
 /***** Second row *****/
