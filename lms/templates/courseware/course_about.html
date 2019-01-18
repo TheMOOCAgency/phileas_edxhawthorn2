@@ -132,7 +132,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         </div>
         <div class="col-lg-6">
           <span>
-              <img id="like_picto" class="like_${str(is_liked).lower()}" style="cursor:pointer" src="${static.url('tma-static/images/like.svg')}" width="36"><span id="like_count">10</span>
+              <img id="like_picto" class="like_${str(is_liked).lower()}" style="cursor:pointer" src="${static.url('tma-static/images/like.svg')}" width="36"><span id="like_count">${liked_total}</span>
           </span>
         </div>
       </div>

@@ -1,4 +1,4 @@
-<%page args="enrollment,mandatory_course_enrollments" expression_filter="h"/>
+<%page args="enrollment,mandatory_course_enrollments,liked_total,is_liked" expression_filter="h"/>
 <%def name="online_help_token()"><% return "learnerdashboard" %></%def>
 <%namespace name='static' file='../static_content.html'/>
 
@@ -34,7 +34,6 @@ if enrollment not in mandatory_course_enrollments:
   additional_not_mandatory_class="not-mandatory-course-enrolment"
 endif
 %>
-
                 <%
                 course_target = "/courses/"+str(enrollment.course_id)+"/courseware/" 
                 if "Vodeclic" == str(enrollment.course_id).split('+')[2]:
@@ -82,7 +81,7 @@ endif
                         </div>
                         <div class="row pin-row mb-3">
                             <div class="col-4">
-                                <p class="text-center"><img src="${static.url('tma-static/images/like.svg')}"/>10</p>
+                                <p class="text-center"><img style="cursor:pointer" data-course-id="${enrollment.course_id}" class="like_picto like_picto_${enrollment.id} like_${str(is_liked).lower()}" src="${static.url('tma-static/images/like.svg')}"/><span class="like_count_${enrollment.id}">${liked_total}</span></p>
                             </div>
 
                                 <div class="col-8">

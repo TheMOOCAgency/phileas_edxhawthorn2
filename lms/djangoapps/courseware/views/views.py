@@ -108,7 +108,7 @@ from ..entrance_exams import user_can_skip_entrance_exam
 from ..module_render import get_module, get_module_by_usage_id, get_module_for_descriptor
 
 from student.models import CourseEnrollment
-from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
 
 log = logging.getLogger("edx.courseware")
 
@@ -857,7 +857,9 @@ def course_about(request, course_id):
             tma_enrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
             is_favourite = tma_enrollment.is_favourite
             is_liked = tma_enrollment.is_liked
-
+        tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course.id)
+        liked_total = tma_course_overview.liked_total
+        favourite_total = tma_course_overview.favourite_total
         context = {
             'course': course,
             'course_details': course_details,
@@ -890,6 +892,8 @@ def course_about(request, course_id):
             'sidebar_html_enabled': sidebar_html_enabled,
             'is_favourite': is_favourite,
             'is_liked': is_liked,
+            'favourite_total': favourite_total,
+            'liked_total': liked_total,
         }
 
         return render_to_response('courseware/course_about.html', context)

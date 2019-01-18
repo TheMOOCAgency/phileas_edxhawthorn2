@@ -109,8 +109,19 @@ class TmaCourseEnrollment(models.Model):
             enrollment = cls.get_courseenrollment(course_key,user)
             if attribute=="is_favourite":
                 enrollment.is_favourite=status
+                tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
+                if status:
+                    tma_course_overview.favourite_total += 1
+                else:
+                    tma_course_overview.favourite_total -= 1
             elif attribute=="is_liked":
                 enrollment.is_liked=status
+                tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
+                if status:
+                    tma_course_overview.liked_total += 1
+                else:
+                    tma_course_overview.liked_total -= 1
+            tma_course_overview.save()
             enrollment.save()
             response = {
                 'success': attribute+' status updated ',

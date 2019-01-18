@@ -30,13 +30,20 @@ favorite_course_enrollments = []
 mandatory_course_enrollments = []
 done_course_enrollments = []
 ongoing_course_enrollments = []
+liked_total = {}
+is_liked = {}
 
 # Iterate on all course enrollments
 for enrollment in course_enrollments:
+   tmacourseoverview = TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id)
+   liked_total[enrollment.course_id] = tmacourseoverview.liked_total   
+   is_liked[enrollment.course_id] = False
+   tmacourseenrollment = None
+   if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
+     tmacourseenrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
+     is_liked[enrollment.course_id] = tmacourseenrollment.is_liked
    if enrollment.course_id in show_courseware_links_for:
-    #If course is open
-        if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
-            tmacourseenrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
+            #If course is open
             if tmacourseenrollment.has_validated_course:
                 done_course_enrollments.append(enrollment)
             else:
@@ -91,7 +98,7 @@ for enrollment in course_enrollments:
             <div class="row">
              %if ongoing_course_enrollments:
                 %for enrollment in ongoing_course_enrollments:
-                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments' />
+                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id], is_liked=is_liked[enrollment.course_id]' />
                 % endfor
              %else:
                     <div style="margin:0 auto"><p>${_("You have no ongoing courses yet")}</p></div>
@@ -109,7 +116,7 @@ for enrollment in course_enrollments:
             <div class="row">
              %if mandatory_course_enrollments:
                 %for enrollment in mandatory_course_enrollments:
-                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments' />
+                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id],is_liked=is_liked[enrollment.course_id]' />
                 % endfor
              %else:
                     <div style="margin:0 auto"><p>${_("You are not enrolled in mandatory courses yet")}</p></div>
@@ -127,7 +134,7 @@ for enrollment in course_enrollments:
             <div class="row">
              %if favorite_course_enrollments:
                 %for enrollment in favorite_course_enrollments:
-                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments' />
+                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id],is_liked=is_liked[enrollment.course_id]' />
                 % endfor
              %else:
                     <div style="margin:0 auto"><p>${_("You have no favorite courses yet")}</p></div>
@@ -182,5 +189,34 @@ for enrollment in course_enrollments:
     </div>
 </div>
 <script>
-    console.log('')
+    // Like
+    $('.like_picto').click(function(){
+      var enrolment_id = 0;
+      var classList = $(this).attr('class').split(/\s+/);
+      $.each(classList, function(index, item) {
+          if (item.indexOf('like_picto_') > -1) {
+              enrolment_id = item.split('_')[2];
+          }
+      });
+      var courseId =$(this).attr('data-course-id');
+      var current_count = parseInt($(".like_count_"+enrolment_id).first().html());
+      var status = $(this).hasClass('like_false');
+      if($(this).hasClass('like_false')){
+        $(".like_count_"+enrolment_id).each(function(){$(this).html(current_count+1);});
+      }else{
+        $(".like_count_"+enrolment_id).each(function(){$(this).html(current_count-1);});
+      }
+      $(".like_count_"+enrolment_id).each(function(){$(this).toggleClass('like_false like_true');});
+      $.ajax({
+        type: 'POST',
+        url: '/tma_apps/'+ courseId +'/like/update_like',
+        dataType: 'json',
+        data: {status: status, course_id: courseId},
+        success: function(data){
+          console.log(data);
+        }
+      });
+    });
+
 </script>
+
