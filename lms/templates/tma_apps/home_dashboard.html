@@ -33,9 +33,8 @@ ongoing_course_enrollments = []
 liked_total = {}
 is_liked = {}
 
-# Iterate on all course enrollments
+# Iterate on all course enrollments for ongoing mandatory and done
 for enrollment in course_enrollments:
-
     tmacourseoverview = TmaCourseOverview.get_tma_course_overview_by_course_id(enrollment.course_overview.id)
     liked_total[enrollment.course_id] = tmacourseoverview.liked_total   
     is_liked[enrollment.course_id] = False
@@ -48,15 +47,20 @@ for enrollment in course_enrollments:
                 if tmacourseenrollment.has_validated_course:
                     done_course_enrollments.append(enrollment)
                 else:
+                    ongoing_course_enrollments.append(enrollment)
                     if tmacourseenrollment.is_favourite:
                         favorite_course_enrollments.append(enrollment)
                     if TmaCourseOverview.objects.filter(course_overview_edx_id=enrollment.course_overview.id).exists():
                         if TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id).is_mandatory:
                             mandatory_course_enrollments.append(enrollment)
-                            ongoing_course_enrollments.append(enrollment)
     else:
     #If course is not open
         done_course_enrollments.append(enrollment)
+
+#TODO : what happens if we put in favorite but we are not enrolled ?
+#for tmacourseenrollment in tma_course_enrollments:
+#   if tmacourseenrollment.is_favourite:
+#        favorite_course_enrollments.append(tmacourseenrollment.course_enrollment_edx)
 %>
 
 <!-- TMA enable BOOTSTRAP-->
