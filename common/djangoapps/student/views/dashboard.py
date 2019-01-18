@@ -543,6 +543,12 @@ def _get_urls_for_resume_buttons(user, enrollments):
 @ensure_csrf_cookie
 @add_maintenance_banner
 def student_dashboard(request):
+    context = _student_dashboard(request)
+    response = render_to_response('dashboard.html', context)
+    set_user_info_cookie(response, request)
+    return response
+
+def _student_dashboard(request):
     """
     Provides the LMS dashboard view
 
@@ -869,7 +875,7 @@ def student_dashboard(request):
     for enrollment in CourseEnrollment.objects.filter(user=user):
         for overview in TmaCourseOverview.objects.filter(course_overview_edx__id=enrollment.course_id):
             if overview.is_mandatory:
-                mandatory += 1
+                mandatory_courses += 1
 
     # TMA - 7 Speaking
     sspeaking_url = get_sspeaking_href(user)
@@ -895,6 +901,4 @@ def student_dashboard(request):
         'tma_course_overviews': tma_course_overviews
     })
 
-    response = render_to_response('dashboard.html', context)
-    set_user_info_cookie(response, request)
-    return response
+    return context

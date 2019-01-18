@@ -110,6 +110,10 @@ html, body {
 .progress {
     height: 20px;
 }
+.progress.not-mandatory-course-enrolment {
+    height: 35px;
+    margin-bottom: 20px;
+}
 .mandatory-tag {
     height: 35px;
     background-color:#F8005B;

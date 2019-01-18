@@ -7,16 +7,16 @@ from django.utils.translation import ugettext as _
 from django.apps import tma_apps
 TmaCourseEnrollment = tma_apps.get_model('TmaCourseEnrollment')
 
-class Favourite():
+class Liked():
     def __init__(course_key, user):
         self.course_key=course_key
         self.user = user
 
-    def get_favourite_status(self):
+    def get_liked_status(self):
         """
-        Gets value of is_favorite attribute from a given course
+        Gets value of is_liked attribute from a given course
         """
-        favourite_status=False
+        liked_status=False
         if TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=self.user, course_enrollment_edx__course_id=self.course_key).exists():
-            favourite_status = TmaCourseEnrollment.objects.get(course_enrollment_edx__user=self.user, course_enrollment_edx__course_id=self.course_key).is_favourite
-        return favourite_status
+            liked_status = TmaCourseEnrollment.objects.get(course_enrollment_edx__user=self.user, course_enrollment_edx__course_id=self.course_key).is_liked
+        return liked_status

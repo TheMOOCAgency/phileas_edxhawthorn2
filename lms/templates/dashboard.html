@@ -4,6 +4,7 @@
 <%namespace name='static' file='static_content.html'/>
 <%!
 import pytz
+import re
 from datetime import datetime, timedelta
 from django.urls import reverse
 from django.utils.translation import ugettext as _
@@ -21,6 +22,8 @@ from lms.djangoapps.courseware.courses import (
   get_course_overview_with_access,
   get_course
 )
+from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
+from lms.djangoapps.tma_apps.models import TmaCourseOverview
 %>
 
 <%
@@ -167,8 +170,10 @@ from lms.djangoapps.courseware.courses import (
         <div class="row">
             <div class="col-12 mb-3">
               <p class="text-blue-light">Last courses</p>
-              % if course_overviews:
-                <p>${course_overviews[-1].display_name}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
+              % if course_enrollments:
+                <p class="last-course-title" onclick="window.location.href = '/courses/${course_enrollments[-1].course_id}/courseware';">${course_enrollments[-1].course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
+              % else:
+                <p>${_("No enrollment yet")}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
               % endif
               <hr>
             </div>
@@ -232,9 +237,11 @@ from lms.djangoapps.courseware.courses import (
                             <div>
                               <div class="category-tag">Bureautique</div>
                             </div>
-                            <div>
-                              <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
-                            </div>
+                              % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
+                                <div>
+                                  <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                                </div>
+                              % endif
                               % if str(course.id) in favorite_course_enrollments:
                                 <span class="pin favorite fav-on"></span>
                               % else:
@@ -253,7 +260,7 @@ from lms.djangoapps.courseware.courses import (
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
                                   <img src="${static.url('tma-static/images/Time.png')}">
-                                  <span>22h</span>
+                                  <span>${course.effort}<span>
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
                                   % if course_object.language == "fr":
@@ -285,7 +292,11 @@ from lms.djangoapps.courseware.courses import (
                     <div class="row">
                         <div class="row pin-row ${course.id}">
                           <div class="category-tag">Bureautique</div>
-                          <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                          % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
+                            <div>
+                              <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                            </div>
+                          % endif
                           % if str(course.id) in favorite_course_enrollments:
                             <span class="pin favorite fav-on"></span>
                           % else:
@@ -305,7 +316,23 @@ from lms.djangoapps.courseware.courses import (
                     </div>
                     <div class="row">
                       <div class="col text-center">
-                          <a href="#" class="enroll-btn">I enroll</a>
+                          %if CourseEnrollment.is_enrolled(user, course.id):
+                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                                <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
+                            %else:
+                                <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">Continue</a>
+                            %endif
+                          %else:
+                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                              % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
+                                <a class="enroll-btn no-enroll">Not authorized</a>
+                              % else:
+                                <a href="${'/courses/'+str(course.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
+                              % endif:
+                            %else:
+                                <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">${_("Join")}</a>
+                            %endif
+                          %endif
                       </div>
                     </div>
                   </div>
@@ -337,9 +364,11 @@ from lms.djangoapps.courseware.courses import (
                             <div>
                               <div class="category-tag">Bureautique</div>
                             </div>
-                            <div>
-                              <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
-                            </div>
+                            % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
+                              <div>
+                                <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                              </div>
+                            % endif
                             % if str(course.id) in favorite_course_enrollments:
                               <span class="pin favorite fav-on"></span>
                             % else:
@@ -357,7 +386,7 @@ from lms.djangoapps.courseware.courses import (
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
                                   <img src="${static.url('tma-static/images/Time.png')}">
-                                  <span>22h</span>
+                                  <span>${course.effort}</span>
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
                                   % if course_object.language == "fr":
@@ -383,7 +412,23 @@ from lms.djangoapps.courseware.courses import (
                   </div>
                   <div class="row">
                     <div class="col text-center">
-                        <a href="#" class="enroll-btn">I enroll</a>
+                          %if CourseEnrollment.is_enrolled(user, course.id):
+                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                                <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
+                            %else:
+                                <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">Continue</a>
+                            %endif
+                          %else:
+                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                              % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
+                                <a class="enroll-btn no-enroll">Not authorized</a>
+                              % else:
+                                <a href="${'/courses/'+str(course.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
+                              % endif:
+                            %else:
+                                <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">${_("Join")}</a>
+                            %endif
+                          %endif
                     </div>
                   </div>
                 </div>
@@ -408,9 +453,11 @@ from lms.djangoapps.courseware.courses import (
                             <div>
                               <div class="category-tag">Bureautique</div>
                             </div>
-                            <div>
-                              <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
-                            </div>
+                            % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
+                              <div>
+                                <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                              </div>
+                            % endif
                             % if str(course.id) in favorite_course_enrollments:
                               <span class="pin favorite fav-on"></span>
                             % else:
@@ -429,7 +476,7 @@ from lms.djangoapps.courseware.courses import (
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
                                   <img src="${static.url('tma-static/images/Time.png')}">
-                                  <span>22h</span>
+                                  <span>${course.effort}</span>
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
                                   % if course_object.language == "fr":
@@ -461,7 +508,12 @@ from lms.djangoapps.courseware.courses import (
                     <div class="row">
                         <div class="row pin-row ${course.id}">
                           <div class="category-tag">Bureautique</div>
-                          <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                          % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
+                            <div>
+                              <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                            </div>
+                          % endif
+
                           % if str(course.id) in favorite_course_enrollments:
                             <span class="pin favorite fav-on"></span>
                           % else:
@@ -481,7 +533,23 @@ from lms.djangoapps.courseware.courses import (
                     </div>
                     <div class="row">
                       <div class="col text-center">
-                          <a href="#" class="enroll-btn">I enroll</a>
+                          %if CourseEnrollment.is_enrolled(user, course.id):
+                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                                <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
+                            %else:
+                                <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">Continue</a>
+                            %endif
+                          %else:
+                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                              % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
+                                <a class="enroll-btn no-enroll">Not authorized</a>
+                              % else:
+                                <a href="${'/courses/'+str(course.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
+                              % endif:
+                            %else:
+                                <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">${_("Join")}</a>
+                            %endif
+                          %endif
                       </div>
                     </div>
                   </div>
