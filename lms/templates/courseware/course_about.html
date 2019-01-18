@@ -183,13 +183,15 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       <p>Score requis</p>
       <p id="course-score" class="font-weight-bold">${int(course.grade_cutoffs.get("Pass")*100)}%</p>
     </div>
-    %if user.is_authenticated and registered and show_courseware_link:
-      <a href="${course_target}" class="big-btn">${_("View Course")}</a>
-    %elif (invitation_only and not can_enroll) or (not user.profile.is_manager and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only) :
-      <a href="" class="big-btn">${_("Not Authorized")}</a>
-    %else:
-      <a href="#" class="big-btn register">${_("Join")}</a>
-    %endif
+    <div class="col text-center">
+      %if user.is_authenticated and registered and show_courseware_link:
+        <a href="${course_target}" class="big-btn">${_("View Course")}</a>
+      %elif (invitation_only and not can_enroll) or (not user.profile.is_manager and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only) :
+        <a href="" class="big-btn">${_("Not Authorized")}</a>
+      %else:
+        <a href="#" class="big-btn register">${_("Join")}</a>
+      %endif
+    </div>
   </div>
   <!--THIRD ROW-->
   <div class="row description-box">
