@@ -107,6 +107,9 @@ from xmodule.x_module import STUDENT_VIEW
 from ..entrance_exams import user_can_skip_entrance_exam
 from ..module_render import get_module, get_module_by_usage_id, get_module_for_descriptor
 
+from student.models import CourseEnrollment
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
+
 log = logging.getLogger("edx.courseware")
 
 
@@ -847,6 +850,14 @@ def course_about(request, course_id):
         # Embed the course reviews tool
         reviews_fragment_view = CourseReviewsModuleFragmentView().render_to_fragment(request, course=course)
 
+        is_favourite = False
+        is_liked = False
+        enrollment=CourseEnrollment.get_enrollment(request.user,course.id)
+        if enrollment:
+            tma_enrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
+            is_favourite = tma_enrollment.is_favourite
+            is_liked = tma_enrollment.is_liked
+
         context = {
             'course': course,
             'course_details': course_details,
@@ -877,6 +888,8 @@ def course_about(request, course_id):
             'course_image_urls': overview.image_urls,
             'reviews_fragment_view': reviews_fragment_view,
             'sidebar_html_enabled': sidebar_html_enabled,
+            'is_favourite': is_favourite,
+            'is_liked': is_liked,
         }
 
         return render_to_response('courseware/course_about.html', context)
