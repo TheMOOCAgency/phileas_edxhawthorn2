@@ -207,3 +207,15 @@ body.view-in-course .wrapper-course-material{
 #tma-completion-nav::-webkit-scrollbar-thumb:hover {
   background: transparent;
 }
+
+/* Bottom navigation */
+nav.sequence-bottom{
+  max-width: 1080px;
+}
+nav.sequence-bottom .sequence-nav-button{
+  border: 2px solid #0C1C49!important;
+  border-radius: 28px!important;
+  color: #0C1C49;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}

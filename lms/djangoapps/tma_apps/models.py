@@ -162,7 +162,7 @@ class TmaCourseOverview(models.Model):
         tma_course_overview, created = TmaCourseOverview.objects.get_or_create(
             course_overview_edx=course_overview,
         );
-        return course_overview
+        return tma_course_overview
 
     @classmethod
     def get_tma_course_overview_by_course_id(cls, course_key):
