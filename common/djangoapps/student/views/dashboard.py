@@ -864,18 +864,24 @@ def _student_dashboard(request):
     course_overviews = list(CourseOverview.objects.filter(org="phileas"))
 
     # TMA - Get TMA tables info
-    tma_course_overviews = list(TmaCourseOverview.objects.all())
+    tma_course_overviews = list(TmaCourseOverview.objects.filter(course_overview_edx__org="phileas"))
     tma_course_enrollments = list(TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user))
 
     # TMA - Ongoing courses
     ongoing_courses = TmaCourseEnrollment.get_ongoing_courses(user=user)
 
     # TMA - Mandatory courses
-    mandatory_courses = 0
+    mandatory_courses = []
+    mandatory_course_enrollments = 0
     for enrollment in CourseEnrollment.objects.filter(user=user):
-        for overview in TmaCourseOverview.objects.filter(course_overview_edx__id=enrollment.course_id):
-            if overview.is_mandatory:
-                mandatory_courses += 1
+        if TmaCourseOverview.objects.filter(course_overview_edx__id=enrollment.course_id).exists():
+            if TmaCourseOverview.objects.get(course_overview_edx__id=enrollment.course_id).is_mandatory:
+                mandatory_course_enrollments += 1
+
+    if CourseOverview.objects.filter(org="phileas").exists():
+        for overview in CourseOverview.objects.filter(org="phileas"):
+            if TmaCourseOverview.get_tma_course_overview_by_course_id(overview.id).is_mandatory:
+                mandatory_courses.append(str(overview.id))
 
     # TMA - 7 Speaking
     sspeaking_url = get_sspeaking_href(user)
@@ -895,6 +901,7 @@ def _student_dashboard(request):
         'course_overviews': course_overviews,
         'ongoing_courses': ongoing_courses,
         'mandatory_courses': mandatory_courses,
+        'mandatory_course_enrollments': mandatory_course_enrollments,
         'favorite_courses': favorite_courses,
         'favorite_course_enrollments': favorite_course_enrollments,
         'tma_course_enrollments': tma_course_enrollments,

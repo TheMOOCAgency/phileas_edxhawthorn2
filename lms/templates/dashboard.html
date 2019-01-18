@@ -180,7 +180,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         </div>
         <div class="row">
           <div class="col-4 text-center">
-            <p>${mandatory_courses}<img src="${static.url('tma-static/images/warning.svg')}"></p>
+            <p>${mandatory_course_enrollments}<img src="${static.url('tma-static/images/warning.svg')}"></p>
             <p class="mt-2">mandatory course(s)</p>
           </div>
           <div class="col-4 text-center">
@@ -225,6 +225,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
             <div class="flipper">
                 <!--flip front content-->
                 <div class="course-card-sm front">
+                  % if str(course.id) in mandatory_courses:
+                    <div class="col mandatory-tag">
+                        <p class="text-center">mandatory course!</p>
+                    </div>
+                  % endif
                   <div class="cover-image">
                       <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
                   </div>
@@ -284,6 +289,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                   </div>
                 <!--flip back content-->
                 <div class="course-card-sm back">
+                  % if str(course.id) in mandatory_courses:
+                    <div class="col mandatory-tag">
+                        <p class="text-center">mandatory course!</p>
+                    </div>
+                  % endif
                   <div class="cover-image">
                     <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
                   </div>
@@ -351,6 +361,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         % if course_overviews.index(course) == 4:
           <div class="col-lg-6">
           <div class="course-card-sm">
+            % if str(course.id) in mandatory_courses:
+              <div class="col mandatory-tag">
+                  <p class="text-center">mandatory course!</p>
+              </div>
+            % endif
             <div class="cover-image">
                 <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
             </div>
@@ -441,6 +456,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
             <div class="flipper">
                 <!--flip front content-->
                 <div class="course-card-sm front">
+                  % if str(course.id) in mandatory_courses:
+                    <div class="col mandatory-tag">
+                        <p class="text-center">mandatory course!</p>
+                    </div>
+                  % endif
                   <div class="cover-image">
                       <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
                   </div>
@@ -500,6 +520,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                   </div>
                 <!--flip back content-->
                 <div class="course-card-sm back">
+                  % if str(course.id) in mandatory_courses:
+                    <div class="col mandatory-tag">
+                        <p class="text-center">mandatory course!</p>
+                    </div>
+                  % endif
                   <div class="cover-image">
                     <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
                   </div>
@@ -636,5 +661,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         }
       });
     });
+    console.log('${mandatory_course_enrollments}')
+    console.log('${favorite_course_enrollments}')
   });
 </script>
