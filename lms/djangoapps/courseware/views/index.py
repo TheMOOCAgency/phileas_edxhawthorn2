@@ -367,6 +367,9 @@ class CoursewareIndex(View):
         course_url_name = default_course_url_name(self.course.id)
         course_url = reverse(course_url_name, kwargs={'course_id': unicode(self.course.id)})
 
+        #TMA check if course is graded
+        is_course_graded = TmaCourseOverview.get_tma_course_overview_by_course_id(self.course_key).is_course_graded
+
         courseware_context = {
             'csrf': csrf(self.request)['csrf_token'],
             'course': self.course,
@@ -386,6 +389,7 @@ class CoursewareIndex(View):
             'section_title': None,
             'sequence_title': None,
             'disable_accordion': COURSE_OUTLINE_PAGE_FLAG.is_enabled(self.course.id),
+            'is_course_graded':is_course_graded
         }
 
         #TMA - Nav Completion

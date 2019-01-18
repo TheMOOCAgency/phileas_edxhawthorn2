@@ -219,3 +219,46 @@ nav.sequence-bottom .sequence-nav-button{
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
 }
+
+/*Modale Bravo Echec */
+#tma_course_end_popup{
+  width: 100%;
+  left: 0;
+  background-color: rgba(0,0,0,0.5);
+  position: fixed;
+}
+
+#tma_course_end_popup .modal-footer,#tma_course_end_popup .modal-header{
+  border: none;
+}
+
+#tma_course_end_popup.modal {
+  text-align: center;
+}
+@media screen and (min-width: 768px) {
+  #tma_course_end_popup.modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+#tma_course_end_popup .modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+.modal-footer button, .modal-footer button:hover, .modal-footer button:focus{
+  border-radius: 28px;
+  border:2px solid #0C1C49;
+  color: #0C1C49!important;
+  font-family: 'Montserrat', sans-serif!important;
+  font-weight: 400;
+}
+.modal-footer a{
+  margin: 0 auto;
+}
+
+#tma_course_end_popup .modal-content{
+  padding-bottom: 50px;
+}
