@@ -7,6 +7,7 @@ from django.db import models
 from django.dispatch import receiver
 from student.signals import UNENROLL_DONE
 import datetime
+import datetime
 import logging
 import json
 from django.utils.translation import ugettext as _
@@ -15,7 +16,8 @@ log = logging.getLogger()
 class TmaCourseEnrollment(models.Model):
     course_enrollment_edx = models.ForeignKey(
         CourseEnrollment,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        unique=True
         )
     course_time_tracking = models.IntegerField(default=0)
     detailed_time_tracking = models.TextField(blank=True)
@@ -25,6 +27,8 @@ class TmaCourseEnrollment(models.Model):
     is_liked = models.BooleanField(default=False)
     completion_rate = models.FloatField(default=0)
     student_grade = models.FloatField(default=0)
+    best_student_grade = models.FloatField(default=0)
+    date_best_student_grade = models.DateTimeField(blank=True,null=True)
 
     @classmethod
     def get_courseenrollment(cls, course_key, user):
@@ -78,10 +82,15 @@ class TmaCourseEnrollment(models.Model):
 
 
     @classmethod
-    def update_grade(cls,course_key, user,grade):
+    def update_grade(cls,course_key,user,grade,passed):
         response={}
         enrollment = cls.get_courseenrollment(course_key,user)
         enrollment.student_grade=grade
+        if grade > enrollment.best_student_grade:
+            enrollment.best_student_grade = grade
+            enrollment.date_best_student_grade = datetime.datetime.now()
+        enrollment.has_validated_course = passed
+        enrollment.save()
         response['status']='course grade update success'
         response['user_grade']=grade
         return response
@@ -140,10 +149,12 @@ def create_tmacourseenrollement(sender, instance, **kwargs):
 ############################## TMA COURSE OVERVIEW ################################################################
 
 class TmaCourseOverview(models.Model):
-    course_overview_edx = models.ForeignKey(CourseOverview)
+    course_overview_edx = models.ForeignKey(CourseOverview, unique=True)
     is_manager_only = models.BooleanField(default=False)
     is_mandatory = models.BooleanField(default=False)
     is_vodeclic = models.BooleanField(default=False)
+    favourite_total = models.IntegerField(default=0)
+    liked_total = models.IntegerField(default=0)
 
     @classmethod
     def get_course_overview(cls, course_key):
@@ -160,4 +171,3 @@ class TmaCourseOverview(models.Model):
             course_overview_edx=course_overview,
         );
         return tma_course_overview
-
