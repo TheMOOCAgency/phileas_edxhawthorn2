@@ -320,12 +320,12 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     $('#like_picto').click(function(){
       var courseId ="${course.id}";
       var status = $(this).hasClass('like_false');
-      $(this).toggleClass('like_false like_true');
       if($(this).hasClass('like_false')){
         $("#like_count").html(parseInt($("#like_count").html())+1);
       }else{
         $("#like_count").html($("#like_count").html()-1);
       }
+      $(this).toggleClass('like_false like_true');
       $.ajax({
         type: 'POST',
         url: '/tma_apps/'+ courseId +'/like/update_like',
