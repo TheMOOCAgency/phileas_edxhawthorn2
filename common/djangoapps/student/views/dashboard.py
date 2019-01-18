@@ -881,8 +881,9 @@ def student_dashboard(request):
     favorite_courses = len(list(TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user, is_favourite=True)))
     favorite_course_enrollments = []
     for enrollment in CourseEnrollment.objects.filter(user=user):
-        if TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).is_favourite:
-            favorite_course_enrollments.append(str(enrollment.course_id))
+        if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
+            if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).is_favorite:
+                favorite_course_enrollments.append(str(enrollment.course_id))
 
     context.update({
         'course_overviews': course_overviews,
