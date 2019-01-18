@@ -9,7 +9,7 @@ from student.signals import UNENROLL_DONE
 import datetime
 import logging
 import json
-
+from django.utils.translation import ugettext as _
 log = logging.getLogger()
 
 class TmaCourseEnrollment(models.Model):
@@ -102,8 +102,9 @@ class TmaCourseEnrollment(models.Model):
                 enrollment.is_favourite=status
             elif attribute=="is_liked":
                 enrollment.is_liked=status
+            enrollment.save()
             response = {
-                'success': attribute+'status updated ',
+                'success': attribute+' status updated ',
                 'status': status
             }
         else :

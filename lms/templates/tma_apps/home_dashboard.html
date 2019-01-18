@@ -35,18 +35,17 @@ ongoing_course_enrollments = []
 for enrollment in course_enrollments:
    if enrollment.course_id in show_courseware_links_for:
    #If course is open
-      if TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).is_favourite:
-         favorite_course_enrollments.append(enrollment)
-
-      if TmaCourseOverview.objects.filter(course_overview_edx_id=enrollment.course_overview.id).exists():
-         if TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id).is_mandatory:
-            mandatory_course_enrollments.append(enrollment)
-
-      if TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).has_validated_course:
+      tmacourseenrollment=TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
+      if tmacourseenrollment.has_validated_course:
          done_course_enrollments.append(enrollment)
-      else: 
-         ongoing_course_enrollments.append(enrollment)
+      else:
+         if tmacourseenrollment.is_favourite:
+           favorite_course_enrollments.append(enrollment)
 
+         if TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id).is_mandatory:
+           mandatory_course_enrollments.append(enrollment)
+
+         ongoing_course_enrollments.append(enrollment)
    else:
    #If course is not open
       done_course_enrollments.append(enrollment)
@@ -153,13 +152,16 @@ for enrollment in course_enrollments:
      %if done_course_enrollments:
         %for enrollment in done_course_enrollments:
             <div class="row">
-                <div class="col-lg-3 title-20"><p>${enrollment.course_overview.display_name_with_default}</p></div>
+            %if enrollment.course_id in show_courseware_links_for:
+                <div class="col-lg-3 title-20" style="cursor:pointer"><p onclick="window.location.href ='/courses/+${enrollment.course_id}+'/courseware'">${enrollment.course_overview.display_name_with_default}</p></div>
+            %else:
+                <div class="col-lg-3 title-20"><p >${enrollment.course_overview.display_name_with_default}</p></div>
+            %endif
                 <div class="col-lg-3 grey-text">
-                    <p>End date: <span>${enrollment.course_overview.dashboard_start_display}</span></p>
+                    <p><span>FIRST SUCCESS DATE</span></p>
                 </div>
                 <div class="col-lg-2">
-				<!--TODO: Change to put the grade-->
-                    <p><span class="font-weight-bold">${TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).completion_rate}</span>/100</p>
+                    <p><span class="font-weight-bold">${int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100)}</span>/100</p>
                 </div>
                 <div class="col-lg-2 pl-5"><p><img class="badge-cert" src="${static.url('tma-static/images/certificate.svg')}"></div>
                 <div class="col-lg-2"><a href="#">Télécharger</a></div>
