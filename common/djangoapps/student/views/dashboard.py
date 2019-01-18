@@ -908,4 +908,9 @@ def _student_dashboard(request):
         'tma_course_overviews': tma_course_overviews
     })
 
+    # TMA - Language
+    context.update({
+        'language': request.LANGUAGE_CODE
+    })
+
     return context

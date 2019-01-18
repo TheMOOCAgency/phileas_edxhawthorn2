@@ -161,9 +161,15 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     <div class="col-lg-3 text-center img-bw-2">
         <a href="#">Regulatory (eCampus)</a>
     </div>
+    % if language == 'fr':
+    <div class="col-lg-3 text-center img-bw-3">
+        <a href="https://www.e-exercises.com/speakingtime/07cdfd23373b17c6b337251c22b7ea57">Get together</a>
+    </div>
+    %else:
     <div class="col-lg-3 text-center img-bw-3">
         <a href="#">US regulatory courses</a>
     </div>
+    %endif
     <!--User dark blue box-->
     <div class="col-lg-3 bg-blue-dark user-box text-white">
       <div class="container-fluid">
@@ -649,6 +655,9 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       }
 
       // Send new favorite status to update db
+      if(status){
+      $.post("/change_enrollment", {"enrollment_action": "enroll","course_id":"${course.id}"}, function(){
+
       $.ajax({
         type: 'POST',
         url: '/tma_apps/'+ courseId +'/favourite/update_favourite',
@@ -658,6 +667,22 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
           console.log(data);
         }
       });
+
+
+      });
+      }else{
+
+      $.ajax({
+        type: 'POST',
+        url: '/tma_apps/'+ courseId +'/favourite/update_favourite',
+        dataType: 'json',
+        data: {status: status, course_id: courseId},
+        success: function(data){
+          console.log(data);
+        }
+      });
+
+      }
     });
 
     // Click like pin
@@ -679,18 +704,14 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         likeCounter--;
         $('.'+ courseSelector + ' .like-count').text(likeCounter);
       }
-
-      $.ajax({
-        type: 'POST',
-        url: '/tma_apps/'+ courseId +'/like/update_like',
-        dataType: 'json',
-        data: {status: status, course_id: courseId},
-        success: function(data){
-          console.log(data);
-        }
-      });
+          $.ajax({
+            type: 'POST',
+            url: '/tma_apps/'+ courseId +'/like/update_like',
+            dataType: 'json',
+            data: {status: status, course_id: courseId},
+            success: function(data){
+            }
+          });
     });
-    console.log('${mandatory_course_enrollments}')
-    console.log('${favorite_course_enrollments}')
   });
 </script>
