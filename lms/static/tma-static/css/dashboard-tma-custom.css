@@ -437,6 +437,7 @@ a.enroll-btn:hover {
 .mandatory-tag p {
     top: 30%;
     position: relative;
+    color: white;
 }
 
 .cover-image {
@@ -471,7 +472,7 @@ a.enroll-btn:hover {
     width: 36px;
     height: 36px;
 }
-.favorite {
+.favorite, .like {
     cursor: pointer;
 }
 .fav-on {
@@ -482,9 +483,9 @@ a.enroll-btn:hover {
     background-image: url('/static/tma-static/images/epingle_off.svg');
     background-size: contain;
 }
-.like-on {
+.like {
     background-image: url('/static/tma-static/images/like.svg');
-    background-size: contain;
+    background-size: cover;
 }
 
 
