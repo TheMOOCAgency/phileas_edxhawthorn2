@@ -34,18 +34,19 @@ ongoing_course_enrollments = []
 # Iterate on all course enrollments
 for enrollment in course_enrollments:
    if enrollment.course_id in show_courseware_links_for:
-   #If course is open
-      tmacourseenrollment=TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
-      if tmacourseenrollment.has_validated_course:
-         done_course_enrollments.append(enrollment)
-      else:
-         if tmacourseenrollment.is_favourite:
-           favorite_course_enrollments.append(enrollment)
+    #If course is open
+        if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
+            tmacourseenrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
+            if tmacourseenrollment.has_validated_course:
+                done_course_enrollments.append(enrollment)
+            else:
+                if tmacourseenrollment.is_favourite:
+                    favorite_course_enrollments.append(enrollment)
 
-         if TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id).is_mandatory:
-           mandatory_course_enrollments.append(enrollment)
-
-         ongoing_course_enrollments.append(enrollment)
+                if TmaCourseOverview.objects.filter(course_overview_edx_id=enrollment.course_overview.id).exists():
+                    if TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id).is_mandatory:
+                        mandatory_course_enrollments.append(enrollment)
+                        ongoing_course_enrollments.append(enrollment)
    else:
    #If course is not open
       done_course_enrollments.append(enrollment)
