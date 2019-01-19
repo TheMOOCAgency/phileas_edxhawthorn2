@@ -90,12 +90,12 @@ endif
                         </div>
                         <div class="row pin-row mb-3">
                             <div class="col-4">
-                                <p class="text-center"><img style="cursor:pointer" data-course-id="${enrollment.course_id}" class="like_picto like_picto_${enrollment.id} like_${str(is_liked).lower()}" src="${static.url('tma-static/images/like.svg')}"/><span class="like_count_${enrollment.id}">${liked_total}</span></p>
+                                <p class="text-center"><img style="cursor:pointer" data-course-id="${enrollment.course_id}" class="like_picto like_picto_${enrollment.id} like_${str(is_liked).lower()}" src="${static.url('tma-static/images/like.svg')}"/><span class="like_count_${enrollment.id}" data-min='0' data-max='${liked_total}' data-delay='1' data-increment='${int(liked_total/3)}'>${liked_total}</span></p>
                             </div>
 
                                 <div class="col-8">
                             <a href="mailto:?subject=${enrollment.course_overview.display_name_with_default} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !">
-                                    <p class="text-center"><img src="${static.url('tma-static/images/recommend.svg')}"/>Recommend</p>
+                                    <p class="text-center"><img src="${static.url('tma-static/images/recommend.svg')}"/>${_("Recommend")}</p>
                             </a>
                                 </div>
                         </div>

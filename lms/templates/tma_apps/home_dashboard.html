@@ -207,17 +207,17 @@ for enrollment in course_enrollments:
       var status = $(this).hasClass('like_false');
       if($(this).hasClass('like_false')){
         $(".like_count_"+enrolment_id).each(function(){$(this).html(current_count+1);});
+        $(".like_picto_"+enrolment_id).each(function(){$(this).toggleClass("like_false like_true");});
       }else{
         $(".like_count_"+enrolment_id).each(function(){$(this).html(current_count-1);});
+        $(".like_picto_"+enrolment_id).each(function(){$(this).toggleClass("like_true like_false");});
       }
-      $(".like_count_"+enrolment_id).each(function(){$(this).toggleClass('like_false like_true');});
       $.ajax({
         type: 'POST',
         url: '/tma_apps/'+ courseId +'/like/update_like',
         dataType: 'json',
         data: {status: status, course_id: courseId},
         success: function(data){
-          console.log(data);
         }
       });
     });

@@ -110,23 +110,23 @@ class TmaCourseEnrollment(models.Model):
             if not CourseEnrollment.objects.filter(course_id=course_key, user=user).exists():
                 edx_enrollment = CourseEnrollment.enroll(user, course_key, 'audit')
                 edx_enrollment.update_enrollment(is_active=False)
-            enrollment = cls.get_courseenrollment(course_key,user)
+            tma_enrollment = cls.get_courseenrollment(course_key,user)
             if attribute=="is_favourite":
-                enrollment.is_favourite=status
                 tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
-                if status:
+                if status and (tma_enrollment.is_favourite != status):
                     tma_course_overview.favourite_total += 1
-                else:
+                elif not status and (tma_enrollment.is_favourite != status):
                     tma_course_overview.favourite_total -= 1
+                tma_enrollment.is_favourite=status
             elif attribute=="is_liked":
-                enrollment.is_liked=status
                 tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
-                if status:
+                if status and (tma_enrollment.is_liked != status):
                     tma_course_overview.liked_total += 1
-                else:
+                elif not status and (tma_enrollment.is_liked != status):
                     tma_course_overview.liked_total -= 1
+                tma_enrollment.is_liked=status
             tma_course_overview.save()
-            enrollment.save()
+            tma_enrollment.save()
             response = {
                 'success': attribute+' status updated ',
                 'status': status

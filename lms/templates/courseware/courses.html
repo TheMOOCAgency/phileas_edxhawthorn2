@@ -9,7 +9,16 @@
 %>
 
 <%namespace name='static' file='../static_content.html'/>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.0.1/dist/sweetalert2.all.min.js"></script>
+<script>
+$( document ).ready(function() {
+  Swal.fire(
+    'Not yet implemented !',
+    'Thank you for your understanding',
+    'info'
+  )
+});
+</script>
 % if course_discovery_enabled:
 <%block name="header_extras">
   % for template_name in ["course_card", "filter_bar", "filter", "facet", "facet_option"]:

@@ -101,7 +101,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 <!--<link rel="stylesheet" href="/media/dev/tma-static/css/global-tma-custom.css">-->
 <link rel="stylesheet" href="${static.url('tma-static/css/dashboard-tma-custom.css')}">
 <!--<link rel="stylesheet" href="/media/dev/tma-static/css/dashboard-tma-custom.css">-->
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.0.1/dist/sweetalert2.all.min.js"></script>
 <div class="dashboard-notifications" tabindex="-1">
 
     %if banner_account_activation_message:
@@ -140,7 +140,10 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   <!--PRESENTATION ROW-->
   <div class="row bg-white">
       <form method="get" action="/courses" class="gif-box">
-        <p class="title-36">Find your course <br>among 130 available</p>
+        <p class="title-36">Find your course <br>among 
+          <span class="numscroller" data-min='1' data-max='130' data-delay='5' data-increment='10'>130</span>
+           available
+        </p>
         <div class="search-field-wrapper">
           <button type="submit" class="search-button btn" title="${_('Search')}">
             <img src="${static.url('tma-static/images/loupe.svg')}" style="width:30px">
@@ -155,18 +158,18 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         <source src="${static.url('tma-static/video/hp_femme_comp.mp4')}" type="video/mp4">
       </video>
     <!--Black & White img-->
-    <div class="col-lg-3 text-center img-bw-1">
+    <div class="zoomEffect col-lg-3 text-center img-bw-1">
       <a href="${sspeaking_url}" target="_blank">Language skills</a>
     </div>
-    <div class="col-lg-3 text-center img-bw-2">
+    <div class="zoomEffect col-lg-3 text-center img-bw-2">
         <a href="#">Regulatory (eCampus)</a>
     </div>
     % if language == 'fr':
-    <div class="col-lg-3 text-center img-bw-3">
+    <div class="zoomEffect col-lg-3 text-center img-bw-3">
         <a href="https://www.e-exercises.com/speakingtime/07cdfd23373b17c6b337251c22b7ea57">Get together</a>
     </div>
     %else:
-    <div class="col-lg-3 text-center img-bw-3">
+    <div class="zoomEffect col-lg-3 text-center img-bw-3">
         <a href="#">US regulatory courses</a>
     </div>
     %endif
@@ -186,15 +189,24 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         </div>
         <div class="row">
           <div class="col-4 text-center">
-            <p>${mandatory_course_enrollments}<img src="${static.url('tma-static/images/warning.svg')}"></p>
+            <p>
+               <span class="numscroller" data-min='1' data-max='${mandatory_course_enrollments}' data-delay='1' data-increment='${mandatory_course_enrollments/3}'>${mandatory_course_enrollments}</span>
+               <img src="${static.url('tma-static/images/warning.svg')}">
+            </p>
             <p class="mt-2">mandatory course(s)</p>
           </div>
           <div class="col-4 text-center">
-            <p id="fav-counter">${favorite_courses}<img src="${static.url('tma-static/images/etoile.svg')}"></p>
+            <p id="fav-counter">
+               <span class="numscroller" data-min='1' data-max='${favorite_courses}' data-delay='1' data-increment='${favorite_courses/3}'>${favorite_courses}</span>
+               <img src="${static.url('tma-static/images/etoile.svg')}"/>
+            </p>
             <p class="mt-2">favorite course(s)</p>
           </div>
           <div class="col-4 text-center">
-            <p>${ongoing_courses}<img src="${static.url('tma-static/images/drapeau.svg')}"></p>
+            <p>
+               <span class="numscroller" data-min='1' data-max='${ongoing_courses}' data-delay='1' data-increment='${ongoing_courses/3}'>${ongoing_courses}</span>
+               <img src="${static.url('tma-static/images/drapeau.svg')}"/>
+            </p>
             <p class="mt-2">ongoing course(s)</p>
           </div>
         </div>
@@ -211,7 +223,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       </div>
       <div class="col-lg-3">
         <div class="dropdown-container">
-          <button>Filter<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
+          <button onclick="Swal.fire('Not yet implemented !','Thank you for your understanding','info');">Filter<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
           <ul class="bg-grey-light dropdown">
             <li value="1"><a href="">The front page</a></li>
             <li value="2"><a href="">Highest rated</a></li>
@@ -601,25 +613,24 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
           </div>
       </div>
       <div class="row categories">
-        <div class="col-lg-4 text-center cat-1"><a href="#">Software</a></div>
-        <div class="col-lg-4 text-center cat-2"><a href="#">Business basics</a></div>
-        <div class="col-lg-4 text-center cat-3">
+        <div class="zoomEffect col-lg-4 text-center cat-1"><a href="#">Software</a></div>
+        <div class="zoomEffect col-lg-4 text-center cat-2"><a href="#">Business basics</a></div>
+        <div class="zoomEffect col-lg-4 text-center cat-3">
           <a href="#">Business applications</a>
         </div>
-        <div class="col-lg-4 text-center cat-4">
+        <div class="zoomEffect col-lg-4 text-center cat-4">
           <a href="#">Marketing and communication</a>
         </div>
-        <div class="col-lg-4 text-center cat-5">
+        <div class="zoomEffect col-lg-4 text-center cat-5">
           <a href="#">Compliance</a>
         </div>
-        <div class="col-lg-4 text-center cat-6">
+        <div class="zoomEffect col-lg-4 text-center cat-6">
           <a href="#">Management</a>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 <script type="text/javascript">
   $(document).ready(function() {
     // Get favorite + like counters
@@ -715,3 +726,4 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     });
   });
 </script>
+
