@@ -53,7 +53,7 @@ function get_course_completion(){
     type:'get',
     url:url,
     success : function(response) {
-      completion_rate =Math.round(response.course_completion_rate*100)
+      completion_rate =Math.round(response.completion_rate*100)
       $('#tma-completion-value').html(completion_rate+'%')
       if (completion_rate!=0){
         $('#tma-completion-progress').css('width',completion_rate+'%').addClass('primary-color-bg')

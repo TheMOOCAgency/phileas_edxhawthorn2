@@ -14,6 +14,14 @@ from openedx.core.djangolib.js_utils import js_escaped_string
 from openedx.core.djangolib.markup import HTML
 from openedx.features.course_experience import course_home_page_title, COURSE_OUTLINE_PAGE_FLAG
 
+
+from openedx.features.course_experience.utils import get_course_outline_block_tree
+from student.views.dashboard import get_course_enrollments
+from opaque_keys.edx.keys import CourseKey
+
+
+
+
 %>
 <%
    include_special_exams = (
@@ -33,6 +41,24 @@ from openedx.features.course_experience import course_home_page_title, COURSE_OU
   ${static.get_page_title_breadcrumbs(sequence_title, section_title, course_name())}
 </title>
 </%block>
+
+
+<%
+course_key = CourseKey.from_string(str(course.id))
+course_sections2 = get_course_outline_block_tree(request,str(course.id)).get('children')
+%>
+%for section2 in course_sections2 :
+%for subsection2 in section2.get('children') :
+%for unit2 in subsection2.get('children'):
+%if unit2.get('graded'):
+%for subunit in unit2.get('children') :
+  <p>${subunit}</p>
+%endfor
+%endif
+%endfor
+%endfor
+%endfor
+
 
 <%block name="header_extras">
 
