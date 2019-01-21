@@ -25,6 +25,7 @@ class TmaCourseEnrollment(models.Model):
     has_validated_course = models.BooleanField(default=False)
     is_favourite = models.BooleanField(default=False)
     is_liked = models.BooleanField(default=False)
+    has_displayed_message = models.BooleanField(default=False)
     completion_rate = models.FloatField(default=0)
     quiz_completion_rate = models.FloatField(default=0)
     student_grade = models.FloatField(default=0)
@@ -95,11 +96,10 @@ class TmaCourseEnrollment(models.Model):
                 enrollment.best_student_grade = grade
                 enrollment.date_best_student_grade = datetime.datetime.now()
                 response['new_best_grade']=True
-            if not enrollment.has_validated_course and passed :
-                response['success_moment']=True
             enrollment.has_validated_course = passed
             enrollment.save()
             response['status']='success'
+            response['has_displayed_message']=enrollment.has_displayed_message
         except:
             response['status']='error'
         return response

@@ -27,11 +27,24 @@ def get_user_grade(request, course_id):
         response['user_grade']=user_grade_info.percent
         response['passed']=user_grade_info.passed
         response.update(completion_info)
-        if update_status['success_moment'] :
+        if user_grade_info.passed and not response['has_displayed_message'] and completion_info['quiz_completion_rate']==1:
             response['popup_title']=_('Congratulations!!!!')
             response['popup_text']=_('You have finished your training.<br>To get your certificate click on the button.')
     else :
         response={
             status:'error'
         }
+    return JsonResponse(response)
+
+@login_required
+@require_POST
+def mark_displayed_message(request, course_id):
+    message_displayed_status = request.POST.get('message_displayed_status')
+    try :
+        enrollment = TmaCourseEnrollment.get_courseenrollment(CourseKey.from_string(course_id), request.user)
+        enrollment.has_displayed_message=message_displayed_status
+        enrollment.save()
+        response={'status':_('success registering status')}
+    except :
+        response={'status':_('error while registering status')}
     return JsonResponse(response)

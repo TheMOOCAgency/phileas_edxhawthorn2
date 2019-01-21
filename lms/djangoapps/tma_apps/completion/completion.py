@@ -17,8 +17,9 @@ class Completion():
         completed_blocks=0
         completion_rate=0
         quiz_completion=0
-        quiz_completed_blocks=0
-        quiz_total_blocks=0
+        quiz_total_components=0
+        quiz_completed_components=0
+        quiz_completion_rate=0
         course_key = CourseKey.from_string(course_id)
         course_sections = get_course_outline_block_tree(self.request,course_id).get('children')
         for section in course_sections :
@@ -29,11 +30,13 @@ class Completion():
                     if unit.get('complete'):
                         completed_blocks+=1
                     if unit.get('graded'):
-                        quiz_total_blocks+=1
-                        if unit.get('complete'):
-                            quiz_completed_blocks+=1
+                        for component in unit.get('children') :
+                            quiz_total_components+=1
+                            if component.get('complete'):
+                                quiz_completed_components+=1
 
-        quiz_completion_rate =float(quiz_completed_blocks)/quiz_total_blocks
+        if quiz_total_components!=0:
+            quiz_completion_rate =float(quiz_completed_components)/quiz_total_components
         completion_rate = float(completed_blocks)/total_blocks
         TmaCourseEnrollment.update_course_completion(course_key,self.request.user, completion_rate, quiz_completion_rate)
         response={

@@ -50,8 +50,11 @@ course_sections2 = get_course_outline_block_tree(request,str(course.id)).get('ch
 %for section2 in course_sections2 :
 %for subsection2 in section2.get('children') :
 %for unit2 in subsection2.get('children'):
-  <p>${unit2.get('display_name')} Graded : ${unit2.get('graded')} Completed : ${unit2.get('complete')}</p><br>
-  ${unit2.get('graded')}
+%if unit2.get('graded'):
+%for subunit in unit2.get('children') :
+  <p>${subunit}</p>
+%endfor
+%endif
 %endfor
 %endfor
 %endfor
