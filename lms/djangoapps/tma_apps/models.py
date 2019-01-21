@@ -26,6 +26,7 @@ class TmaCourseEnrollment(models.Model):
     is_favourite = models.BooleanField(default=False)
     is_liked = models.BooleanField(default=False)
     completion_rate = models.FloatField(default=0)
+    quiz_completion_rate = models.FloatField(default=0)
     student_grade = models.FloatField(default=0)
     best_student_grade = models.FloatField(default=0)
     date_best_student_grade = models.DateTimeField(blank=True,null=True)
@@ -71,10 +72,11 @@ class TmaCourseEnrollment(models.Model):
             return 'error while registering course validation status'
 
     @classmethod
-    def update_course_completion(cls, course_key, user, completion_rate):
+    def update_course_completion(cls, course_key, user, completion_rate, quiz_completion_rate):
         enrollment = cls.get_courseenrollment(course_key, user)
         try :
             enrollment.completion_rate=completion_rate
+            enrollment.quiz_completion_rate=quiz_completion_rate
             enrollment.save()
             return 'course validation status registration success'
         except:
@@ -87,11 +89,14 @@ class TmaCourseEnrollment(models.Model):
         enrollment = cls.get_courseenrollment(course_key,user)
         try :
             response['new_best_grade']=False
+            response['success_moment']=False
             enrollment.student_grade=grade
             if grade > enrollment.best_student_grade:
                 enrollment.best_student_grade = grade
                 enrollment.date_best_student_grade = datetime.datetime.now()
                 response['new_best_grade']=True
+            if not enrollment.has_validated_course and passed :
+                response['success_moment']=True
             enrollment.has_validated_course = passed
             enrollment.save()
             response['status']='success'
