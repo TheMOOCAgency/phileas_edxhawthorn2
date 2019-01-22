@@ -14,6 +14,14 @@ from openedx.core.djangolib.js_utils import js_escaped_string
 from openedx.core.djangolib.markup import HTML
 from openedx.features.course_experience import course_home_page_title, COURSE_OUTLINE_PAGE_FLAG
 
+
+from openedx.features.course_experience.utils import get_course_outline_block_tree
+from student.views.dashboard import get_course_enrollments
+from opaque_keys.edx.keys import CourseKey
+
+
+
+
 %>
 <%
    include_special_exams = (
@@ -33,6 +41,24 @@ from openedx.features.course_experience import course_home_page_title, COURSE_OU
   ${static.get_page_title_breadcrumbs(sequence_title, section_title, course_name())}
 </title>
 </%block>
+
+
+<%
+course_key = CourseKey.from_string(str(course.id))
+course_sections2 = get_course_outline_block_tree(request,str(course.id)).get('children')
+%>
+%for section2 in course_sections2 :
+%for subsection2 in section2.get('children') :
+%for unit2 in subsection2.get('children'):
+%if unit2.get('graded'):
+%for subunit in unit2.get('children') :
+  <p>${subunit}</p>
+%endfor
+%endif
+%endfor
+%endfor
+%endfor
+
 
 <%block name="header_extras">
 
@@ -132,10 +158,12 @@ ${HTML(fragment.foot_html())}
     <div class="col-sm-4">
       <div class="row">
         <div class="col-md-6">
+          %if is_course_graded :
           <div class="tma-grade">
             <img class="award" src="${static.url('tma-static/images/award.png')}" alt="award">
             <span class="font-weight-bold"><span id="tma-grade-value" class="primary-color-text first-part-grade"></span>/<span class="second-part-grade">100</span></span>
           </div>
+          %endif
           <div class="tma-progress-bar">
             <div class="w3-light-grey" style="min-height: 15px;">
               <div id="tma-completion-progress" class="w3-container w3-padding-small text-white w3-center" style="width:50%"><span id="tma-completion-value" class="font-weight-bold"></span></div>
@@ -303,11 +331,37 @@ ${HTML(fragment.foot_html())}
     </nav>
 % endif
 
-
+%if is_course_graded :
+<!-- TMA MODAL BRAVO ECHEC -->
+<div id="tma_course_end_popup"class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5 class="text-center font-weight-bold"></h5>
+        <p class="text-center"></p>
+      </div>
+      <div class="modal-footer">
+        <a href="">
+          <button id="tma_get_certificate" type="button" class="btn btn-secondary">
+            ${_('get my certificate')}
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+%endif
 
 <!--TMA SCRIPT COURSEWARE -->
 <script>
   let global_courseid = "${course.id | n, js_escaped_string}";
 </script>
 <script src="${static.url('tma-static/js/courseware-tma-completion-nav.js')}" charset="utf-8"></script>
+%if is_course_graded :
 <script src="${static.url('tma-static/js/courseware-tma-grade.js')}" charset="utf-8"></script>
+%endif

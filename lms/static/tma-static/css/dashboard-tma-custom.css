@@ -437,6 +437,7 @@ a.enroll-btn:hover {
 .mandatory-tag p {
     top: 30%;
     position: relative;
+    color: white;
 }
 
 .cover-image {
@@ -471,7 +472,7 @@ a.enroll-btn:hover {
     width: 36px;
     height: 36px;
 }
-.favorite {
+.favorite, .like {
     cursor: pointer;
 }
 .fav-on {
@@ -482,9 +483,9 @@ a.enroll-btn:hover {
     background-image: url('/static/tma-static/images/epingle_off.svg');
     background-size: contain;
 }
-.like-on {
+.like {
     background-image: url('/static/tma-static/images/like.svg');
-    background-size: contain;
+    background-size: cover;
 }
 
 
@@ -577,3 +578,22 @@ a.enroll-btn:hover {
 .cat-6 {
     background-image: url('/static/tma-static/images/management.png');
 }
+
+/*zooming effet*/
+div.zoomEffect {
+    -moz-transition: all 0.5s ease-in-out 0s;
+    -webkit-transition: all 0.5s ease-in-out 0s;
+    -o-transition: all 0.5s ease-in-out 0s;
+    -ms-transition: all 0.5s ease-in-out 0s;
+    transition: all 0.5s ease-in-out 0s;
+    opacity: 0.7;
+}
+div.zoomEffect:hover {
+    -moz-transform: scale(1.10);
+    -webkit-transform: rotate(5deg) scale(1.10);
+    -o-transform: scale(1.10);
+    -ms-transform: scale(1.10);
+    transform: scale(1.10);
+    opacity: 1;
+}
+

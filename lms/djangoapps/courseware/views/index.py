@@ -55,6 +55,7 @@ from ..entrance_exams import (
 from ..masquerade import setup_masquerade
 from ..model_data import FieldDataCache
 from ..module_render import get_module_for_descriptor, toc_for_course
+from lms.djangoapps.tma_apps.models import TmaCourseOverview
 
 #TMA imports
 from openedx.features.course_experience.views.course_outline import CourseOutlineFragmentView
@@ -366,6 +367,9 @@ class CoursewareIndex(View):
         course_url_name = default_course_url_name(self.course.id)
         course_url = reverse(course_url_name, kwargs={'course_id': unicode(self.course.id)})
 
+        #TMA check if course is graded
+        is_course_graded = TmaCourseOverview.get_tma_course_overview_by_course_id(self.course_key).is_course_graded
+
         courseware_context = {
             'csrf': csrf(self.request)['csrf_token'],
             'course': self.course,
@@ -385,6 +389,7 @@ class CoursewareIndex(View):
             'section_title': None,
             'sequence_title': None,
             'disable_accordion': COURSE_OUTLINE_PAGE_FLAG.is_enabled(self.course.id),
+            'is_course_graded':is_course_graded
         }
 
         #TMA - Nav Completion

@@ -4,8 +4,7 @@ log = logging.getLogger()
 
 from student.models import CourseEnrollment
 from django.utils.translation import ugettext as _
-from django.apps import tma_apps
-TmaCourseEnrollment = tma_apps.get_model('TmaCourseEnrollment')
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
 
 class Like():
     def __init__(course_key, user):

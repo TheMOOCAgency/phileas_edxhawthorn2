@@ -6,11 +6,16 @@
 from django.utils.translation import ugettext as _
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 from tma_apps.tma_methodes import is_tma_staff
+from django.utils.translation import ugettext as _
 %>
 
 <%block name="pagetitle">${_("Certificate")}</%block>
 
 <style>
+/*Erase footer*/
+.container-fluid.footer{
+  display: none;
+}
   body{
     text-align:center;
   }
@@ -21,19 +26,38 @@ from tma_apps.tma_methodes import is_tma_staff
     margin-left: auto;
     margin-right: auto;
     padding: 0;
+    padding: 20px;
+    border: 5px solid #0C1C49;
   }
-  .primary_color_bg{
-    background-color: darkblue;
+  .align-vertically{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  #bandeau-top,#bandeau-middle,#bandeau-bottom{
+    color: #0C1C49;
+    text-align: center;
+  }
+  .award{
+    max-height: 75px;
+    margin-top: 15px;
   }
 </style>
 
 % if passed or is_tma_staff(request.user):
-<div id="main" class="primary_color_bg">
+<div id="main" class="align-vertically">
   <div id="bandeau-top" class="transparency-color">
-
+    <h3>${_('Course Certificate')}</h3>
   </div>
   <div id="bandeau-middle" class="transparency-color">
-
+    <h3 class="font-weight-bold">${first_name} ${last_name}</h3>
+    <h4>${_('successfully completed the course')}</h4>
+    <h3 class="font-weight-bold">${course_name}</h3>
+    <div><img class="award" src="${static.url('tma-static/images/award.png')}" alt="award"></div>
+  </div>
+  <div id="bandeau-bottom" class="transparency-color">
+    <h5>${_('PHILEAS')}</h5>
   </div>
 </div>
 

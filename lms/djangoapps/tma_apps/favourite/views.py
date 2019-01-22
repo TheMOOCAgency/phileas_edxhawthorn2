@@ -2,8 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse
 from opaque_keys.edx.keys import CourseKey
-from django.apps import apps
-TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
 import logging
 
 log = logging.getLogger()

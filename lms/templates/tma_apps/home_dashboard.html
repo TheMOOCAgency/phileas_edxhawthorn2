@@ -33,30 +33,34 @@ ongoing_course_enrollments = []
 liked_total = {}
 is_liked = {}
 
-# Iterate on all course enrollments
+# Iterate on all course enrollments for ongoing mandatory and done
 for enrollment in course_enrollments:
-   tmacourseoverview = TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id)
-   liked_total[enrollment.course_id] = tmacourseoverview.liked_total   
-   is_liked[enrollment.course_id] = False
-   tmacourseenrollment = None
-   if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
-     tmacourseenrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
-     is_liked[enrollment.course_id] = tmacourseenrollment.is_liked
-   if enrollment.course_id in show_courseware_links_for:
-            #If course is open
-            if tmacourseenrollment.has_validated_course:
-                done_course_enrollments.append(enrollment)
-            else:
-                if tmacourseenrollment.is_favourite:
-                    favorite_course_enrollments.append(enrollment)
+    tmacourseoverview = TmaCourseOverview.get_tma_course_overview_by_course_id(enrollment.course_overview.id)
+    liked_total[enrollment.course_id] = tmacourseoverview.liked_total   
+    is_liked[enrollment.course_id] = False
+    tmacourseenrollment = None
+    if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
+        tmacourseenrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
+        is_liked[enrollment.course_id] = tmacourseenrollment.is_liked
+    if enrollment.course_id in show_courseware_links_for:
+                #If course is open
+                if tmacourseenrollment.has_validated_course:
+                    done_course_enrollments.append(enrollment)
+                else:
+                    ongoing_course_enrollments.append(enrollment)
+                    if tmacourseenrollment.is_favourite:
+                        favorite_course_enrollments.append(enrollment)
+                    if TmaCourseOverview.objects.filter(course_overview_edx_id=enrollment.course_overview.id).exists():
+                        if TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id).is_mandatory:
+                            mandatory_course_enrollments.append(enrollment)
+    else:
+    #If course is not open
+        done_course_enrollments.append(enrollment)
 
-                if TmaCourseOverview.objects.filter(course_overview_edx_id=enrollment.course_overview.id).exists():
-                    if TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id).is_mandatory:
-                        mandatory_course_enrollments.append(enrollment)
-                        ongoing_course_enrollments.append(enrollment)
-   else:
-   #If course is not open
-      done_course_enrollments.append(enrollment)
+#TODO : what happens if we put in favorite but we are not enrolled ?
+#for tmacourseenrollment in tma_course_enrollments:
+#   if tmacourseenrollment.is_favourite:
+#        favorite_course_enrollments.append(tmacourseenrollment.course_enrollment_edx)
 %>
 
 <!-- TMA enable BOOTSTRAP-->
@@ -172,7 +176,7 @@ for enrollment in course_enrollments:
                     <p><span class="font-weight-bold">${int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100)}</span>/100</p>
                 </div>
                 <div class="col-lg-2 pl-5"><p><img class="badge-cert" src="${static.url('tma-static/images/certificate.svg')}"></div>
-                <div class="col-lg-2"><a href="#">Télécharger</a></div>
+                <div class="col-lg-2"><a href="/tma_apps/${enrollment.course_id}/certificate/render">Télécharger</a></div>
             </div>
         %endfor
      %else:
@@ -203,17 +207,17 @@ for enrollment in course_enrollments:
       var status = $(this).hasClass('like_false');
       if($(this).hasClass('like_false')){
         $(".like_count_"+enrolment_id).each(function(){$(this).html(current_count+1);});
+        $(".like_picto_"+enrolment_id).each(function(){$(this).toggleClass("like_false like_true");});
       }else{
         $(".like_count_"+enrolment_id).each(function(){$(this).html(current_count-1);});
+        $(".like_picto_"+enrolment_id).each(function(){$(this).toggleClass("like_true like_false");});
       }
-      $(".like_count_"+enrolment_id).each(function(){$(this).toggleClass('like_false like_true');});
       $.ajax({
         type: 'POST',
         url: '/tma_apps/'+ courseId +'/like/update_like',
         dataType: 'json',
         data: {status: status, course_id: courseId},
         success: function(data){
-          console.log(data);
         }
       });
     });
@@ -249,4 +253,3 @@ for enrollment in course_enrollments:
         });
     });
 </script>
-

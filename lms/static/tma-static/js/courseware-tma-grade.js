@@ -17,8 +17,10 @@ function get_user_grade(){
     type:'get',
     url:url,
     success : function(response) {
-      user_grade=Math.round(response['user_grade']*100)
-      $('#tma-grade-value').html(user_grade)
+      if(response['status']=='success'){
+        user_grade=Math.round(response['user_grade']*100)
+        $('#tma-grade-value').html(user_grade)
+      }
     }
   })
 }

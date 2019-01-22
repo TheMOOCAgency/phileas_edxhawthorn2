@@ -16,7 +16,6 @@ urlpatterns = [
     #Completion
     url(r'^{}/completion/get_course_completion$'.format(settings.COURSE_ID_PATTERN), completion_views.get_course_completion),
 
-
     #Favoris
     url(r'^{}/favourite/update_favourite$'.format(settings.COURSE_ID_PATTERN), favourite_views.api_update_favourite),
 
@@ -28,4 +27,5 @@ urlpatterns = [
 
     #Student Grade Tracking
     url(r'^{}/grade_tracking/get_user_grade$'.format(settings.COURSE_ID_PATTERN), grade_views.get_user_grade),
+    url(r'^{}/grade_tracking/message_displayed$'.format(settings.COURSE_ID_PATTERN), grade_views.mark_displayed_message),
 ]

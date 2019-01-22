@@ -25,7 +25,9 @@ class TmaCourseEnrollment(models.Model):
     has_validated_course = models.BooleanField(default=False)
     is_favourite = models.BooleanField(default=False)
     is_liked = models.BooleanField(default=False)
+    has_displayed_message = models.BooleanField(default=False)
     completion_rate = models.FloatField(default=0)
+    quiz_completion_rate = models.FloatField(default=0)
     student_grade = models.FloatField(default=0)
     best_student_grade = models.FloatField(default=0)
     date_best_student_grade = models.DateTimeField(blank=True,null=True)
@@ -71,10 +73,11 @@ class TmaCourseEnrollment(models.Model):
             return 'error while registering course validation status'
 
     @classmethod
-    def update_course_completion(cls, course_key, user, completion_rate):
+    def update_course_completion(cls, course_key, user, completion_rate, quiz_completion_rate):
         enrollment = cls.get_courseenrollment(course_key, user)
         try :
             enrollment.completion_rate=completion_rate
+            enrollment.quiz_completion_rate=quiz_completion_rate
             enrollment.save()
             return 'course validation status registration success'
         except:
@@ -85,14 +88,20 @@ class TmaCourseEnrollment(models.Model):
     def update_grade(cls,course_key,user,grade,passed):
         response={}
         enrollment = cls.get_courseenrollment(course_key,user)
-        enrollment.student_grade=grade
-        if grade > enrollment.best_student_grade:
-            enrollment.best_student_grade = grade
-            enrollment.date_best_student_grade = datetime.datetime.now()
-        enrollment.has_validated_course = passed
-        enrollment.save()
-        response['status']='course grade update success'
-        response['user_grade']=grade
+        try :
+            response['new_best_grade']=False
+            response['success_moment']=False
+            enrollment.student_grade=grade
+            if grade > enrollment.best_student_grade:
+                enrollment.best_student_grade = grade
+                enrollment.date_best_student_grade = datetime.datetime.now()
+                response['new_best_grade']=True
+            enrollment.has_validated_course = passed
+            enrollment.save()
+            response['status']='success'
+            response['has_displayed_message']=enrollment.has_displayed_message
+        except:
+            response['status']='error'
         return response
 
 
@@ -106,23 +115,23 @@ class TmaCourseEnrollment(models.Model):
             if not CourseEnrollment.objects.filter(course_id=course_key, user=user).exists():
                 edx_enrollment = CourseEnrollment.enroll(user, course_key, 'audit')
                 edx_enrollment.update_enrollment(is_active=False)
-            enrollment = cls.get_courseenrollment(course_key,user)
+            tma_enrollment = cls.get_courseenrollment(course_key,user)
             if attribute=="is_favourite":
-                enrollment.is_favourite=status
                 tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
-                if status:
+                if status and (tma_enrollment.is_favourite != status):
                     tma_course_overview.favourite_total += 1
-                else:
+                elif not status and (tma_enrollment.is_favourite != status):
                     tma_course_overview.favourite_total -= 1
+                tma_enrollment.is_favourite=status
             elif attribute=="is_liked":
-                enrollment.is_liked=status
                 tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
-                if status:
+                if status and (tma_enrollment.is_liked != status):
                     tma_course_overview.liked_total += 1
-                else:
+                elif not status and (tma_enrollment.is_liked != status):
                     tma_course_overview.liked_total -= 1
+                tma_enrollment.is_liked=status
             tma_course_overview.save()
-            enrollment.save()
+            tma_enrollment.save()
             response = {
                 'success': attribute+' status updated ',
                 'status': status
@@ -166,14 +175,7 @@ class TmaCourseOverview(models.Model):
     is_vodeclic = models.BooleanField(default=False)
     favourite_total = models.IntegerField(default=0)
     liked_total = models.IntegerField(default=0)
-
-    @classmethod
-    def get_course_overview(cls, course_key):
-        course_overview = CourseOverview.objects.get(id=course_key)
-        tma_course_overview, created = TmaCourseOverview.objects.get_or_create(
-            course_overview_edx=course_overview,
-        );
-        return course_overview
+    is_course_graded = models.BooleanField(default=True)
 
     @classmethod
     def get_tma_course_overview_by_course_id(cls, course_key):

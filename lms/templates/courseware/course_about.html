@@ -189,7 +189,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       %elif (invitation_only and not can_enroll) or (not user.profile.is_manager and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only) :
         <a href="" class="big-btn">${_("Not Authorized")}</a>
       %else:
-        <a href="#" class="big-btn register">${_("Join")}</a>
+      <a onclick='$.post("/change_enrollment", {"enrollment_action": "enroll","course_id":"${course.id}"}, function(){window.location.href="/courses/${course.id}/courseware"});' "class="big-btn register">${_("Join")}</a>
       %endif
     </div>
   </div>
