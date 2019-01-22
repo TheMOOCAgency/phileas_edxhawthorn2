@@ -95,7 +95,7 @@ for enrollment in course_enrollments:
     </div>
     <!-- ONGOING COURSES -->
     <div class="row bg-blue">
-        <div class="container-fluid  ongoing-box padding-70 pt-4">
+        <div class="container-fluid ongoing-box padding-70 pt-4 pb-4">
             <div class="row pt-4">
                 <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">Your ongoing courses</h1>
             </div>
@@ -110,7 +110,7 @@ for enrollment in course_enrollments:
             </div>
         </div>
     </div>
-    <div class="separator"></div>
+    <!--<div class="separator"></div>-->
     <!-- MANDATORY COURSES -->
     <div class="row">
         <div class="container-fluid padding-70 mandatory-box">
@@ -128,10 +128,10 @@ for enrollment in course_enrollments:
             </div>
         </div>
     </div>
-    <div class="separator"></div>
+    <!--<div class="separator"></div>-->
     <!-- FAVORITE COURSES -->
     <div class="row">
-        <div class="container-fluid padding-70 favorite-box">
+        <div class="container-fluid padding-70 pb-4 favorite-box">
             <div class="row pt-4">
                 <h1 class="title-28"><img class="picto" src="${static.url('tma-static/images/etoile.svg')}">Your favorite courses</h1>
             </div>
@@ -149,7 +149,7 @@ for enrollment in course_enrollments:
     <div class="separator"></div>
     <!-- FINISHED COURSES-->
     <div class="row">
-        <div class="container-fluid padding-70 finished-box">
+        <div class="container-fluid padding-70 pt-4 finished-box">
             <div class="row pt-4">
                 <h1 class="title-28">Your finished courses</h1>
             </div>
@@ -222,4 +222,34 @@ for enrollment in course_enrollments:
       });
     });
 
+    function popupOpenClose(popup) {
+        /* Add div inside popup for layout if one doesn't exist */
+        if ($(".wrapper").length == 0){
+            $(popup).wrapInner("<div class='wrapper'></div>");
+        }
+        /* Open popup */
+        $(popup).show();
+        /* Close popup if user clicks on background */
+        $(popup).click(function(e) {
+            if ( e.target == this ) {
+                if ($(popup).is(':visible')) {
+                    $(popup).hide();
+                }
+            }
+        });
+
+        /* Close popup and remove errors if user clicks on cancel or close buttons */
+        $(popup).find("button[name=close]").on("click", function() {
+            if ($(".formElementError").is(':visible')) {
+                $(".formElementError").remove();
+            }
+            $(popup).hide();
+        });
+    }
+
+    $(document).ready(function () {
+        $("[data-js=open]").on("click", function() {
+            popupOpenClose($(".popup"));
+        });
+    });
 </script>
