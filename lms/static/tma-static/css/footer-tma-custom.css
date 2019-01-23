@@ -63,3 +63,10 @@
 .stat-box {
     border-right: solid 1px #7777778f;
 }
+.stat-box > p:last-of-type {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.stat-box > p:first-of-type {
+    margin-bottom: 0px;
+}
