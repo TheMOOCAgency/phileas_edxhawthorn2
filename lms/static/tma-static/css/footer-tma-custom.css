@@ -7,6 +7,7 @@
 @media (max-width: 992px) {
     .footer-stats {
         position: inherit !important;
+        top: 0px;
         border-top: 1px solid rgba(0,0,0,0.09);
     }
     .stat-box {
@@ -69,4 +70,11 @@
 }
 .stat-box > p:first-of-type {
     margin-bottom: 0px;
+}
+
+.footer-links {
+    position: relative;
+    top: -40px;
+    margin-top: 30px;
+    height: 30px;
 }
