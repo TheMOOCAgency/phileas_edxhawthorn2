@@ -65,7 +65,7 @@ button, button:hover, button:hover:not(:disabled), button:active:not(:disabled),
 .navbar .brand-logo-size {
     height: 100%;
     padding-left: 75px;
-    margin-top: -25px;
+    margin-top: -13px;
 }
 
 /* SWITCH */
