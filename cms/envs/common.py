@@ -1159,6 +1159,9 @@ INSTALLED_APPS = [
 
     #tma_apps
     'lms.djangoapps.tma_apps',
+
+    #cms tma APPS
+    'cms.djangoapps.tma_cms_apps'
 ]
 
 
