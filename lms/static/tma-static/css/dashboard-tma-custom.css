@@ -404,6 +404,12 @@ select.custom-select > option, select.custom-select > option[selected]  {
 .course-resume {
     padding: 20px;
 }
+
+.course-btn {
+  display: block;
+  position: fixed;
+}
+
 a.enroll-btn {
     width: 150px;
     padding: 8px;
@@ -458,11 +464,11 @@ a.enroll-btn:hover {
     height: 35px;
     background-color:#F8005B;
     color: white;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: bold;
 }
 .mandatory-tag p {
-    top: 30%;
+    top: 20%;
     position: relative;
     color: white;
 }
@@ -476,24 +482,36 @@ a.enroll-btn:hover {
     width: 100%;
 }
 
-.course-name > .row > p {
+.course-name > .course-title > p  {
     min-height: 79px;
-    border-bottom: 1px solid rgba(0,0,0,0.09);
-    padding: 10px 10px 20px 10px;
+    padding: 10px 0px 20px 0px;
     font-size: 20px;
     line-height: normal;
     color: #0B1A4C;
 }
+
+.course-title > h3 {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: #0B1A4C;
+}
+
 .course-name > span {
     top: -0.5rem;
     position: relative;
 }
-
+.course-name .align-items-end, .pictos-box {
+  border-top: 1px solid rgba(0,0,0,0.09);
+  margin-bottom: 20px;
+}
 .category-tag {
     padding: 6px 10px 6px 10px;
     background-color: #E6500F;
     color: white;
     border-radius: 18px;
+    margin-right: 10px;
 }
 .pin {
     width: 36px;
@@ -511,8 +529,11 @@ a.enroll-btn:hover {
     background-size: contain;
 }
 .like {
-    background-image: url('/static/tma-static/images/like.svg');
+    /*background-image: url('/static/tma-static/images/like.svg');*/
     background-size: cover;
+}
+.like-count {
+  display: block;
 }
 
 
@@ -533,6 +554,7 @@ a.enroll-btn:hover {
     height: 40px;
 }
 .course-pictos > .col-4 > span {
+  display: block;
     font-size: 14px;
     color: #777777;
 }
