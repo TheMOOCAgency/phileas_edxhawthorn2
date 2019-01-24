@@ -180,11 +180,14 @@ input::placeholder {
 }
 .user-box img {
     position: absolute;
-    height: 20px;
+    margin-top: 3px !important;
+    height: 25px;
 }
-.user-box hr {
-    margin-bottom: 0px;
-    color: #EBEBEB;
+.user-box .separator {
+  height: 1px;
+  width: auto;
+  margin-bottom: 0px;
+  background-color: #EBEBEB;
 }
 .user-box p.last-course-title{
     cursor:pointer;
