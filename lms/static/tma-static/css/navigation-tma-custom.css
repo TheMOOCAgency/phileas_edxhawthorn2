@@ -21,22 +21,25 @@ button, button:hover, button:hover:not(:disabled), button:active:not(:disabled),
 }
 
 .nav-link {
+    font-size: 14px !important;
     display: flex !important;
     align-items: center;
     flex-wrap: wrap;
 }
 
+.navbar-light .navbar-nav a.nav-link, .navbar-light .navbar-nav a.nav-link:visited, .navbar-light .navbar-nav a.nav-link:focus {
+    color: black;
+    text-decoration: none;
+    transition: all 0.1s linear 0s;
+}
+.navbar-light .navbar-nav .nav-link:hover:not(.language) {
+    color: #003063 !important;
+    text-decoration: none;
+}
+
 #fr:hover, #en:hover {
     cursor: pointer;
     color: rgba(0,0,0,.5) !important;
-}
-
-.navbar-light .navbar-nav .nav-link {
-    color: black !important;
-}
-.navbar-light .navbar-nav .nav-link:hover:not(.language) {
-    color: rgba(0,0,0,.5) !important;
-    text-decoration: none;
 }
 
 @media (min-width: 992px) {
