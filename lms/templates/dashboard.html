@@ -159,18 +159,18 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       </video>
     <!--Black & White img-->
     <div class="zoomEffect col-lg-3 text-center img-bw-1">
-      <a href="${sspeaking_url}" target="_blank">Language skills</a>
+      <a href="${sspeaking_url}" target="_blank">Language <br>skills</a>
     </div>
     <div class="zoomEffect col-lg-3 text-center img-bw-2">
-        <a href="#">Regulatory (eCampus)</a>
+        <a href="#">Regulatory<br> (eCampus)</a>
     </div>
     % if language == 'fr':
     <div class="zoomEffect col-lg-3 text-center img-bw-3">
-        <a href="https://www.e-exercises.com/speakingtime/07cdfd23373b17c6b337251c22b7ea57">Get together</a>
+        <a href="https://www.e-exercises.com/speakingtime/07cdfd23373b17c6b337251c22b7ea57">Get <br> together</a>
     </div>
     %else:
     <div class="zoomEffect col-lg-3 text-center img-bw-3">
-        <a href="#">US regulatory courses</a>
+        <a href="#">US <br>regulatory courses</a>
     </div>
     %endif
     <!--User dark blue box-->
@@ -178,13 +178,13 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       <div class="container-fluid">
         <div class="row">
             <div class="col-12 mb-3">
-              <p class="text-blue-light">Last courses</p>
+              <p class="text-blue-light">${_("Last course")}</p>
               % if course_enrollments:
                 <p class="last-course-title" onclick="window.location.href = '/courses/${course_enrollments[-1].course_id}/courseware';">${course_enrollments[-1].course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
               % else:
                 <p>${_("No enrollment yet")}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
               % endif
-              <hr>
+              <div class="separator"></div>
             </div>
         </div>
       <a id="tma_counter_link" href="/tma_apps/dashboard/home/">
@@ -219,16 +219,16 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   <!--COURSES DISPLAY-->
   <div class="container-fluid">
     <!--Title and filter-->
-    <div class="row mt-3">
-      <div class="col-lg-9 mb-4">
+    <div class="row mt-3 mb-3">
+      <div class="col-lg-10 title-col">
         <h1>Our Selection</h1>
       </div>
-      <div class="col-lg-3">
+      <div class="col-lg-2">
         <div class="dropdown-container">
           <button onclick="Swal.fire('Not yet implemented !','Thank you for your understanding','info');">Filter<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
-          <ul class="bg-grey-light dropdown">
-            <li value="1"><a href="">The front page</a></li>
-            <li value="2"><a href="">Highest rated</a></li>
+          <ul class="dropdown">
+            <li value="1"><a href="">The front page</a><div class="separator"></div></li>
+            <li value="2"><a href="">Highest rated</a><div class="separator"></div></li>
             <li value="3"><a href="">Most subscribed</a></li>
           </ul>
         </div>
@@ -247,7 +247,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                 <div class="course-card-sm front">
                   % if str(course.id) in mandatory_courses:
                     <div class="col mandatory-tag">
-                        <p class="text-center">mandatory course!</p>
+                        <p class="text-center">Mandatory Course!</p>
                     </div>
                   % endif
                   <div class="cover-image">
@@ -264,7 +264,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                             </div>
                               % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
                                 <div>
-                                  <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                                  <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-placement="top" title="Manager Only" class="pin">
                                 </div>
                               % endif
                               % if str(course.id) in favorite_course_enrollments:
@@ -273,11 +273,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                                 <span class="pin favorite fav-off"></span>
                               % endif
                           </div>
-                          <div class="row">
+                          <div class="row course-title">
                             <p>${course.display_name}</p>
                           </div>
                           <!-- Arrow block -->
-                          <div class="0">
+                          <div class="pictos-box">
                             <div class="row course-pictos ${course.id}">
                               <div class="col-4 text-center pl-2 pr-2">
                                 <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">${TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).liked_total}</span></span>
@@ -293,7 +293,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                                   % else:
                                     <img src="${static.url('tma-static/images/lang_en.svg')}">
                                   % endif
-                                  <span>${course_object.language}</span>
+                                  <span class="text-uppercase">${course_object.language}</span>
                               </div>
                             </div>
                           </div>
@@ -311,7 +311,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                 <div class="course-card-sm back">
                   % if str(course.id) in mandatory_courses:
                     <div class="col mandatory-tag">
-                        <p class="text-center">mandatory course!</p>
+                        <p class="text-center">Mandatory Course!</p>
                     </div>
                   % endif
                   <div class="cover-image">
@@ -335,7 +335,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                           <span class="pin like like-false"></span>
                         </div>
                       </div>
-                      <div class="row">
+                      <div class="row course-title">
                         <h3>${course.display_name}</h3>
                       </div>
                     </div>
@@ -349,7 +349,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col text-center">
+                      <div class="col text-center course-btn">
                           %if CourseEnrollment.is_enrolled(user, course.id):
                             %if not "Vodeclic" in str(course.id).split('+')[2]:
                                 <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
@@ -376,7 +376,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
           %endfor
         % endif
         <div class="col-lg-6">
-            <a href="https://www.moncompteactivite.gouv.fr/cpa-public/mes-droits-formation/mon-cpf-compte-personnel-de-formation/decouvrir-le-cpf"><div class="static-card"></div></a>
+            <a href="https://www.moncompteactivite.gouv.fr/cpa-public/mes-droits-formation/mon-cpf-compte-personnel-de-formation/decouvrir-le-cpf" target="_blank"><div class="static-card"></div></a>
         </div>
       </div>
       <div class="row">
@@ -387,7 +387,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
           <div class="course-card-sm">
             % if str(course.id) in mandatory_courses:
               <div class="col mandatory-tag">
-                  <p class="text-center">mandatory course!</p>
+                  <p class="text-center">Mandatory Course!</p>
               </div>
             % endif
             <div class="cover-image">
@@ -414,10 +414,10 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                               <span class="pin favorite fav-off"></span>
                             % endif
                           </div>
-                          <div class="row">
+                          <div class="row course-title">
                             <p>${course.display_name}</p>
                           </div>
-                          <div class="align-items-end h-100">
+                          <div class="align-items-end">
                             <div class="row course-pictos ${course.id}">
                               <div class="col-4 text-center ${course.id} pl-2 pr-2 ">
                                   <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">${TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).liked_total}</span></span>
@@ -432,7 +432,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                                   % else:
                                     <img src="${static.url('tma-static/images/lang_en.svg')}">
                                   % endif
-                                  <span>${course_object.language}</span>
+                                  <span class="text-uppercase">${course_object.language}</span>
                               </div>
                             </div>
                           </div>
@@ -453,7 +453,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col text-center">
+                    <div class="col text-center course-btn">
                           %if CourseEnrollment.is_enrolled(user, course.id):
                             %if not "Vodeclic" in str(course.id).split('+')[2]:
                                 <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
@@ -485,7 +485,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                 <div class="course-card-sm front">
                   % if str(course.id) in mandatory_courses:
                     <div class="col mandatory-tag">
-                        <p class="text-center">mandatory course!</p>
+                        <p class="text-center">Mandatory Course!</p>
                     </div>
                   % endif
                   <div class="cover-image">
@@ -511,11 +511,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                               <span class="pin favorite fav-off"></span>
                             % endif
                           </div>
-                          <div class="row">
+                          <div class="row course-title">
                             <p>${course.display_name}</p>
                           </div>
                           <!-- Arrow block -->
-                          <div class="0">
+                          <div class="pictos-box">
                             <div class="row course-pictos ${course.id}">
                               <div class="col-4 text-center pl-2 pr-2">
                                 <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">${TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).liked_total}</span></span>
@@ -530,7 +530,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                                   % else:
                                     <img src="${static.url('tma-static/images/lang_en.svg')}">
                                   % endif
-                                  <span>${course_object.language}</span>
+                                  <span class="text-uppercase">${course_object.language}</span>
                               </div>
                             </div>
                           </div>
@@ -548,7 +548,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                 <div class="course-card-sm back">
                   % if str(course.id) in mandatory_courses:
                     <div class="col mandatory-tag">
-                        <p class="text-center">mandatory course!</p>
+                        <p class="text-center">Mandatory Course!</p>
                     </div>
                   % endif
                   <div class="cover-image">
@@ -561,7 +561,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                           <div class="category-tag">Bureautique</div>
                           % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
                             <div>
-                              <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                              <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-placement="top" title="Manager Only" class="pin">
                             </div>
                           % endif
 
@@ -573,7 +573,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                           <span class="pin like like-false"></span>
                         </div>
                       </div>
-                      <div class="row">
+                      <div class="row course-title">
                         <h3>${course.display_name}</h3>
                       </div>
                     </div>
@@ -587,7 +587,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col text-center">
+                      <div class="col text-center course-btn">
                           %if CourseEnrollment.is_enrolled(user, course.id):
                             %if not "Vodeclic" in str(course.id).split('+')[2]:
                                 <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
@@ -618,7 +618,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     <div class="container-fluid bg-grey-light">
       <div class="row mb-5">
           <div class="col text-center more-btn">
-            <a href="#"><img src="${static.url('tma-static/images/+.svg')}"></a>
+            <a href="/courses"><img src="${static.url('tma-static/images/+.svg')}"></a>
           </div>
       </div>
       <div class="row mt-3">

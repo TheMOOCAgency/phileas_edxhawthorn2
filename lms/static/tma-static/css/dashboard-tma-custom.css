@@ -1,5 +1,10 @@
 /********* PREVENT EDX STYLES *********/
 input[type="text"],input[type="text"]:focus {
+    height: 50px;
+    width: 365px;
+    position: relative;
+    left: -45px;
+    text-align: center;
     border: none;
     border-bottom: 1px solid white;
     text-shadow: none;
@@ -19,20 +24,13 @@ input::placeholder {
     font-style: normal;
 }
 
+.search-button {
+    padding-left: 0;
+}
+
 .search-input {
     background-color: transparent;
     border: 0px
-}
-
-a.nav-link, a.nav-link:visited {
-    color: rgba(0,0,0,.5);
-    font: inherit;
-    text-decoration: none;
-    transition: all 0.1s linear 0s;
-}
-a.nav-link:hover {
-    color: rgba(0,0,0,.7);
-    text-decoration: none;
 }
 
 .course-image {
@@ -112,7 +110,7 @@ a.nav-link:hover {
     color: #0B1A4C !important;
 }
 .img-bw-1 a:hover, .img-bw-2 a:hover, .img-bw-3 a:hover {
-    color: white !important;
+    color: #0B1A4C !important;
     text-decoration: none;
 }
 
@@ -132,7 +130,7 @@ a.nav-link:hover {
     height: 315px;
     right: 0;
     position: absolute;
-    top: 303px;
+    top: 312px;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -153,6 +151,10 @@ a.nav-link:hover {
     }
     video {
         padding-bottom: 15px;
+    }
+    .search-input {
+        width: auto !important;
+        position: initial !important;
     }
 }
 
@@ -178,11 +180,14 @@ a.nav-link:hover {
 }
 .user-box img {
     position: absolute;
-    height: 20px;
+    margin-top: 3px !important;
+    height: 25px;
 }
-.user-box hr {
-    margin-bottom: 0px;
-    color: #EBEBEB;
+.user-box .separator {
+  height: 1px;
+  width: auto;
+  margin-bottom: 0px;
+  background-color: #EBEBEB;
 }
 .user-box p.last-course-title{
     cursor:pointer;
@@ -196,29 +201,44 @@ a.nav-link:hover {
     }
 }
 
+.title-col {
+  height: 65px;
+  display: flex;
+  align-items: center;
+}
+.title-col > h1 {
+  width: 100%;
+  margin-left: 215px;
+}
+
 /* Filter */
 .dropdown {
     display: none;
     padding: 0px;
     margin-top: -2px;
+    border: 2px solid #b9c6d4;
+    background-color: white;
     /*position: absolute;*/
     z-index: 2;
-    width: 100%;
+    width: 150px;
 }
 
 .dropdown-container {
-    position: absolute;
-    width: 90%;
+  position: absolute;
 }
 @media (max-width: 992px) {
-    .dropdown-container {
-        position: relative;
-        width: 100%;
-    }
+  .dropdown-container {
+    position: relative;
+    width: 100%;
+  }
+  .title-col > h1 {
+    margin-left: 0px;
+  }
 }
 
 .dropdown-container > button {
-    width: 100%;
+    width: 150px;
+    margin: auto;
     padding: 20px 5px 20px 5px;
     border: 2px solid #b9c6d4;
     border-radius: 0px;
@@ -235,7 +255,6 @@ a.nav-link:hover {
     list-style-type: none;
     text-decoration: none;
     padding: 20px 5px 20px 5px;
-    border: 2px solid #b9c6d4;
     text-align: center;
 }
 .dropdown > li > a {
@@ -254,6 +273,14 @@ a.nav-link:hover {
     display: block;
 }
 
+.dropdown .separator {
+  width: 90px;
+  height: 2px;
+  top: 10px;
+  background-color: #b9c6d4;
+  position: relative;
+  display: inline-block;
+}
 /*
 select.custom-select {
     background-image: url('media/microsite/phileas/assets/img/flechebas.png')
@@ -377,21 +404,22 @@ select.custom-select > option, select.custom-select > option[selected]  {
 .course-resume {
     padding: 20px;
 }
+
 a.enroll-btn {
     width: 150px;
     padding: 8px;
     margin: 0 1rem 1rem 1rem;
     border-radius: 28px;
-    background-color: #0B1A4C;
-    color: white !important;
+    background-color: white;
+    color: #0B1A4C !important;
+    border: 1px solid #0B1A4C;
     font-weight: bold;
     display: inline-block;
     vertical-align: middle;
 }
 a.enroll-btn:hover {
-    background-color: white;
-    color: #0B1A4C !important;
-    border: 1px solid #0B1A4C;
+    background-color: #0B1A4C;
+    color: white !important;
     text-decoration: none;
     cursor:pointer;
 }
@@ -431,11 +459,11 @@ a.enroll-btn:hover {
     height: 35px;
     background-color:#F8005B;
     color: white;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: bold;
 }
 .mandatory-tag p {
-    top: 30%;
+    top: 20%;
     position: relative;
     color: white;
 }
@@ -449,14 +477,22 @@ a.enroll-btn:hover {
     width: 100%;
 }
 
-.course-name > .row > p {
+.course-name > .course-title > p  {
     min-height: 79px;
-    border-bottom: 1px solid rgba(0,0,0,0.09);
-    padding: 10px 10px 20px 10px;
+    padding: 10px 0px 20px 0px;
     font-size: 20px;
     line-height: normal;
     color: #0B1A4C;
 }
+
+.course-title > h3 {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: #0B1A4C;
+}
+
 .course-name > span {
     top: -0.5rem;
     position: relative;
@@ -481,11 +517,17 @@ a.enroll-btn:hover {
   color: white!important;
 }
 
+.course-name .align-items-end, .pictos-box {
+  border-top: 1px solid rgba(0,0,0,0.09);
+  margin-bottom: 20px;
+}
+
 .category-tag {
     padding: 6px 10px 6px 10px;
     background-color: #E6500F;
     color: white;
     border-radius: 18px;
+    margin-right: 10px;
 }
 .pin {
     width: 36px;
@@ -506,6 +548,17 @@ a.enroll-btn:hover {
     background-image: url('/static/tma-static/images/like.svg');
     background-size: cover;
 }
+.course-pictos > div > .like {
+    height: 40px;
+    width: 40px;
+}
+.pin-row > .like {
+    background-color: #d4d3d3;
+    border-radius: 50px;
+}
+.like-count {
+  display: block;
+}
 
 
 .pin-row {
@@ -525,6 +578,7 @@ a.enroll-btn:hover {
     height: 40px;
 }
 .course-pictos > .col-4 > span {
+  display: block;
     font-size: 14px;
     color: #777777;
 }
@@ -570,14 +624,14 @@ a.enroll-btn:hover {
 }
 .categories > .col-lg-4 > a {
     width: 100%;
-    color: #0B1A4C !important;
+    color: #003063 !important;
     font: inherit;
     font-size: 24px;
     text-decoration: none;
     transition: all 0.1s linear 0s;
 }
 .categories > .col-lg-4 > a:hover {
-    color: white !important;
+    color: #003063 !important;
 }
 .cat-1 {
     background-image: url('/static/tma-static/images/bureautique.png');
@@ -605,7 +659,7 @@ div.zoomEffect {
     -o-transition: all 0.5s ease-in-out 0s;
     -ms-transition: all 0.5s ease-in-out 0s;
     transition: all 0.5s ease-in-out 0s;
-    opacity: 0.7;
+    opacity: 1;
 }
 div.zoomEffect:hover {
     -moz-transform: scale(1.10);
@@ -614,4 +668,5 @@ div.zoomEffect:hover {
     -ms-transform: scale(1.10);
     transform: scale(1.10);
     opacity: 1;
+    z-index: 999;
 }
