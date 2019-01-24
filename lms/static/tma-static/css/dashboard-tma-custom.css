@@ -291,7 +291,7 @@ select.custom-select > option, select.custom-select > option[selected]  {
 	-moz-transform-style: preserve-3d;
 	-o-transform-style: preserve-3d;
 	-ms-transform-style: preserve-3d;
-	/*.flipper backface is visible so that static.flipper still appears 
+	/*.flipper backface is visible so that static.flipper still appears
 	backface-visibility: visible;
 	-webkit-backface-visibility: visible;
 	-moz-backface-visibility: visible;
@@ -300,7 +300,7 @@ select.custom-select > option, select.custom-select > option[selected]  {
 	position:relative;
 	width: 100%;
 	height: 100%;
-	
+
 }
 .flip-container.applyflip .flipper {
 	transform: rotateY(180deg);
@@ -462,6 +462,25 @@ a.enroll-btn:hover {
     position: relative;
 }
 
+.tma_course_counters{
+  font-size: 30px;
+  line-height: normal;
+  color: white;
+}
+
+.tma_course_counters_label{
+  font-size: 12px;
+  line-height: normal;
+  color:white;
+}
+.white-right-border{
+  border-right: 1px solid white;
+}
+#tma_counter_link{
+  text-decoration: none!important;
+  color: white!important;
+}
+
 .category-tag {
     padding: 6px 10px 6px 10px;
     background-color: #E6500F;
@@ -596,4 +615,3 @@ div.zoomEffect:hover {
     transform: scale(1.10);
     opacity: 1;
 }
-

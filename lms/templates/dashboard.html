@@ -140,7 +140,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   <!--PRESENTATION ROW-->
   <div class="row bg-white">
       <form method="get" action="/courses" class="gif-box">
-        <p class="title-36">Find your course <br>among 
+        <p class="title-36">Find your course <br>among
           <span class="numscroller" data-min='1' data-max='130' data-delay='5' data-increment='10'>130</span>
            available
         </p>
@@ -187,29 +187,31 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
               <hr>
             </div>
         </div>
+      <a id="tma_counter_link" href="/tma_apps/dashboard/home/">
         <div class="row">
-          <div class="col-4 text-center">
+          <div class="col-4 text-center white-right-border">
             <p>
-               <span class="numscroller" data-min='1' data-max='${mandatory_course_enrollments}' data-delay='1' data-increment='${mandatory_course_enrollments/3}'>${mandatory_course_enrollments}</span>
+               <span class="numscroller tma_course_counters" data-min='1' data-max='${mandatory_course_enrollments}' data-delay='1' data-increment='${mandatory_course_enrollments/3}'>${mandatory_course_enrollments}</span>
                <img src="${static.url('tma-static/images/warning.svg')}">
             </p>
-            <p class="mt-2">mandatory course(s)</p>
+            <p class="mt-2 tma_course_counters_label">mandatory course(s)</p>
           </div>
-          <div class="col-4 text-center">
-            <p id="fav-counter">
-               <span class="numscroller" data-min='1' data-max='${favorite_courses}' data-delay='1' data-increment='${favorite_courses/3}'>${favorite_courses}</span>
+          <div class="col-4 text-center white-right-border">
+            <p id="fav-counter" class="tma_course_counters">
+               <span class="numscroller tma_course_counters" data-min='1' data-max='${favorite_courses}' data-delay='1' data-increment='${favorite_courses/3}'>${favorite_courses}</span>
                <img src="${static.url('tma-static/images/etoile.svg')}"/>
             </p>
-            <p class="mt-2">favorite course(s)</p>
+            <p class="mt-2 tma_course_counters_label">favorite course(s)</p>
           </div>
           <div class="col-4 text-center">
             <p>
-               <span class="numscroller" data-min='1' data-max='${ongoing_courses}' data-delay='1' data-increment='${ongoing_courses/3}'>${ongoing_courses}</span>
-               <img src="${static.url('tma-static/images/drapeau.svg')}"/>
+              <span class="tma_course_counters" class="numscroller" data-min='1' data-max='${ongoing_courses}' data-delay='1' data-increment='${ongoing_courses/3}'>${ongoing_courses}</span>
+              <img src="${static.url('tma-static/images/drapeau.svg')}"/>
             </p>
-            <p class="mt-2">ongoing course(s)</p>
+            <p class="mt-2 tma_course_counters_label">ongoing course(s)</p>
           </div>
         </div>
+      </a>
       </div>
     </div>
   </div>
@@ -279,7 +281,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                             <div class="row course-pictos ${course.id}">
                               <div class="col-4 text-center pl-2 pr-2">
                                 <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">${TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).liked_total}</span></span>
-                                
+
                               </div>
                               <div class="col-4 text-center pl-2 pr-2">
                                   <img src="${static.url('tma-static/images/Time.png')}">
@@ -339,26 +341,30 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                     </div>
                     <div class="row">
                       <div class="col">
-                        <p>${course.short_description}</p>
+                        %if course.short_description :
+                        <p>${course.short_description[:220]}...</p>
+                        %else :
+                        <p></p>
+                        %endif
                       </div>
                     </div>
                     <div class="row">
                       <div class="col text-center">
                           %if CourseEnrollment.is_enrolled(user, course.id):
-                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                            %if not "Vodeclic" in str(course.id).split('+')[2]:
                                 <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
                             %else:
                                 <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">Continue</a>
                             %endif
                           %else:
-                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                            %if not "Vodeclic" in str(course.id).split('+')[2]:
                               % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
                                 <a class="enroll-btn no-enroll">Not authorized</a>
                               % else:
                                 <a href="${'/courses/'+str(course.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
                               % endif:
                             %else:
-                                <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">${_("Join")}</a>
+                              <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="${course.id}">${_("Join")}</a>
                             %endif
                           %endif
                       </div>
@@ -439,26 +445,30 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                 <div class="container-fluid">
                   <div class="row mb-3">
                     <div class="col">
-                      <p class="text-card-lg">${course.short_description}</p>
+                      %if course.short_description :
+                        <p class="text-card-lg">${course.short_description[:220]}...</p>
+                      %else :
+                        <p class="text-card-lg"></p>
+                      %endif
                     </div>
                   </div>
                   <div class="row">
                     <div class="col text-center">
                           %if CourseEnrollment.is_enrolled(user, course.id):
-                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                            %if not "Vodeclic" in str(course.id).split('+')[2]:
                                 <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
                             %else:
                                 <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">Continue</a>
                             %endif
                           %else:
-                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                            %if not "Vodeclic" in str(course.id).split('+')[2]:
                               % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
                                 <a class="enroll-btn no-enroll">Not authorized</a>
                               % else:
                                 <a href="${'/courses/'+str(course.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
                               % endif:
                             %else:
-                                <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">${_("Join")}</a>
+                                <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="${course.id}">${_("Join")}</a>
                             %endif
                           %endif
                     </div>
@@ -569,26 +579,30 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                     </div>
                     <div class="row">
                       <div class="col">
-                        <p>${course.short_description}</p>
+                        %if course.short_description :
+                        <p>${course.short_description[:220]}...</p>
+                        %else :
+                        <p></p>
+                        %endif
                       </div>
                     </div>
                     <div class="row">
                       <div class="col text-center">
                           %if CourseEnrollment.is_enrolled(user, course.id):
-                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                            %if not "Vodeclic" in str(course.id).split('+')[2]:
                                 <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
                             %else:
                                 <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">Continue</a>
                             %endif
                           %else:
-                            %if not "Vodeclic" == str(course.id).split('+')[2]:
+                            %if not "Vodeclic" in str(course.id).split('+')[2]:
                               % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
                                 <a class="enroll-btn no-enroll">Not authorized</a>
                               % else:
                                 <a href="${'/courses/'+str(course.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
                               % endif:
                             %else:
-                                <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">${_("Join")}</a>
+                                <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="${course.id}">${_("Join")}</a>
                             %endif
                           %endif
                       </div>
@@ -631,99 +645,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     </div>
   </div>
 </div>
-<script type="text/javascript">
-  $(document).ready(function() {
-    // Get favorite + like counters
-    var counter = ${favorite_courses}
-    $('#fav-counter').html(counter+"<img src=\"${static.url('tma-static/images/etoile.svg')}\">");
-
-    // Flip cards effect
-    $('.flip-container').hover(function(){
-      $(this).toggleClass("applyflip");
-    });
-    // Dropdown filter behavior
-    $('.dropdown-container > button').click(function(){
-      $('.dropdown').toggleClass("is-down");
-    });
-
-    // Click favorite pin
-    $('.pin.favorite').click(function(){
-      var courseId = $(this).parent().attr('class').split(' ')[2];
-      // Escape special characters for jQuery selecting
-      var courseSelector = courseId.replace(':', '\\:').replace(/\+/gi,'\\+');
-      // Change pins color
-      $('.'+ courseSelector + ' > .favorite').toggleClass('fav-off fav-on');
-      // New status
-      var status;
-      if ($(this).hasClass('fav-on')) {
-        status = true;
-        counter++
-        $('#fav-counter').html(counter+"<img src=\"${static.url('tma-static/images/etoile.svg')}\">");
-      } else {
-        status = false;
-        counter--
-        $('#fav-counter').html(counter+"<img src=\"${static.url('tma-static/images/etoile.svg')}\">");
-      }
-
-      // Send new favorite status to update db
-      if(status){
-      $.post("/change_enrollment", {"enrollment_action": "enroll","course_id":"${course.id}"}, function(){
-
-      $.ajax({
-        type: 'POST',
-        url: '/tma_apps/'+ courseId +'/favourite/update_favourite',
-        dataType: 'json',
-        data: {status: status, course_id: courseId},
-        success: function(data){
-          console.log(data);
-        }
-      });
 
 
-      });
-      }else{
-
-      $.ajax({
-        type: 'POST',
-        url: '/tma_apps/'+ courseId +'/favourite/update_favourite',
-        dataType: 'json',
-        data: {status: status, course_id: courseId},
-        success: function(data){
-          console.log(data);
-        }
-      });
-
-      }
-    });
-
-    // Click like pin
-    $('span.like').click(function(){
-      var courseId = $(this).parent().attr('class').split(' ')[2];
-      // Escape special characters for jQuery selecting
-      var courseSelector = courseId.replace(':', '\\:').replace(/\+/gi,'\\+');
-      // Change pins class
-      $('.'+ courseSelector + ' > .like').toggleClass('like-false like-true');
-
-      var status;
-      var likeCounter = $('.'+ courseSelector + ' .like-count').text()
-      if ($(this).hasClass('like-true')) {
-        status = true;
-        likeCounter++;
-        $('.'+ courseSelector + ' .like-count').text(likeCounter);
-      } else {
-        status = false;
-        likeCounter--;
-        $('.'+ courseSelector + ' .like-count').text(likeCounter);
-      }
-          $.ajax({
-            type: 'POST',
-            url: '/tma_apps/'+ courseId +'/like/update_like',
-            dataType: 'json',
-            data: {status: status, course_id: courseId},
-            success: function(data){
-            }
-          });
-    });
-  });
+<!-- TMA DASHBORD SCRIPT-->
+<script>
+  let etoile_src="${static.url('tma-static/images/etoile.svg')}"
+  let counter = ${favorite_courses}
 </script>
-
+<script src="${static.url('tma-static/js/dashboard-tma-actions.js')}" charset="utf-8"></script>

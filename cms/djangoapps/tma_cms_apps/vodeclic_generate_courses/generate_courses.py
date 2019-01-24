@@ -80,11 +80,13 @@ class VodeclicGenerator():
                 vodeclic_user=self._get_course_creator()
                 vodeclic_id=vodeclic_course_params.get('id')
                 vodeclic_picture = vodeclic_course_params.get('large_image_png_url')
+                log.info('importing course {}'.format(vodeclic_course_params.get('title')))
 
                 #Build fields list
                 fields= {
                 "display_name": vodeclic_course_params.get('title'),
                 "start": self.date_today,
+                "enrollment_start":self.date_today,
                 }
 
                 #Create course
@@ -122,3 +124,5 @@ class VodeclicGenerator():
 
                 #Get or create TmaCourseOverview
                 TmaCourseOverview.add_vodelic_course(SlashSeparatedCourseKey.from_deprecated_string(str(vodeclic_course.id)))
+
+                log.info('{} imported'.format(vodeclic_course_params.get('title')))
