@@ -110,7 +110,7 @@ input::placeholder {
     color: #0B1A4C !important;
 }
 .img-bw-1 a:hover, .img-bw-2 a:hover, .img-bw-3 a:hover {
-    color: white !important;
+    color: #0B1A4C !important;
     text-decoration: none;
 }
 
@@ -588,7 +588,7 @@ div.zoomEffect {
     -o-transition: all 0.5s ease-in-out 0s;
     -ms-transition: all 0.5s ease-in-out 0s;
     transition: all 0.5s ease-in-out 0s;
-    opacity: 0.7;
+    opacity: 1;
 }
 div.zoomEffect:hover {
     -moz-transform: scale(1.10);
@@ -597,5 +597,6 @@ div.zoomEffect:hover {
     -ms-transform: scale(1.10);
     transform: scale(1.10);
     opacity: 1;
+    z-index: 999;
 }
 
