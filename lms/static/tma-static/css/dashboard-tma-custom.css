@@ -1,5 +1,10 @@
 /********* PREVENT EDX STYLES *********/
 input[type="text"],input[type="text"]:focus {
+    height: 50px;
+    width: 365px;
+    position: relative;
+    left: -45px;
+    text-align: center;
     border: none;
     border-bottom: 1px solid white;
     text-shadow: none;
@@ -17,6 +22,10 @@ input::placeholder {
     color: white;
     opacity: 0.5;
     font-style: normal;
+}
+
+.search-button {
+    padding-left: 0;
 }
 
 .search-input {
@@ -142,6 +151,10 @@ input::placeholder {
     }
     video {
         padding-bottom: 15px;
+    }
+    .search-input {
+        width: auto !important;
+        position: initial !important;
     }
 }
 
