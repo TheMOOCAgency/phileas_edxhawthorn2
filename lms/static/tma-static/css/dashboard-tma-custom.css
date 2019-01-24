@@ -24,17 +24,6 @@ input::placeholder {
     border: 0px
 }
 
-a.nav-link, a.nav-link:visited {
-    color: rgba(0,0,0,.5);
-    font: inherit;
-    text-decoration: none;
-    transition: all 0.1s linear 0s;
-}
-a.nav-link:hover {
-    color: rgba(0,0,0,.7);
-    text-decoration: none;
-}
-
 .course-image {
     width: 100%;
 }
@@ -132,7 +121,7 @@ a.nav-link:hover {
     height: 315px;
     right: 0;
     position: absolute;
-    top: 303px;
+    top: 312px;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
