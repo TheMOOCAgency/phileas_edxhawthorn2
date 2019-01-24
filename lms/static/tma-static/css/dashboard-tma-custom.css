@@ -405,26 +405,21 @@ select.custom-select > option, select.custom-select > option[selected]  {
     padding: 20px;
 }
 
-.course-btn {
-  display: block;
-  position: fixed;
-}
-
 a.enroll-btn {
     width: 150px;
     padding: 8px;
     margin: 0 1rem 1rem 1rem;
     border-radius: 28px;
-    background-color: #0B1A4C;
-    color: white !important;
+    background-color: white;
+    color: #0B1A4C !important;
+    border: 1px solid #0B1A4C;
     font-weight: bold;
     display: inline-block;
     vertical-align: middle;
 }
 a.enroll-btn:hover {
-    background-color: white;
-    color: #0B1A4C !important;
-    border: 1px solid #0B1A4C;
+    background-color: #0B1A4C;
+    color: white !important;
     text-decoration: none;
     cursor:pointer;
 }
@@ -529,8 +524,16 @@ a.enroll-btn:hover {
     background-size: contain;
 }
 .like {
-    /*background-image: url('/static/tma-static/images/like.svg');*/
+    background-image: url('/static/tma-static/images/like.svg');
     background-size: cover;
+}
+.course-pictos > div > .like {
+    height: 40px;
+    width: 40px;
+}
+.pin-row > .like {
+    background-color: #d4d3d3;
+    border-radius: 50px;
 }
 .like-count {
   display: block;
@@ -600,14 +603,14 @@ a.enroll-btn:hover {
 }
 .categories > .col-lg-4 > a {
     width: 100%;
-    color: #0B1A4C !important;
+    color: #003063 !important;
     font: inherit;
     font-size: 24px;
     text-decoration: none;
     transition: all 0.1s linear 0s;
 }
 .categories > .col-lg-4 > a:hover {
-    color: white !important;
+    color: #003063 !important;
 }
 .cat-1 {
     background-image: url('/static/tma-static/images/bureautique.png');
