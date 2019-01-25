@@ -391,6 +391,9 @@ select.custom-select > option, select.custom-select > option[selected]  {
 @-ms-keyframes donothing { 0% { } 100% { } }
 
 /********** End flipping **********/
+.back {
+    position: relative !important;
+}
 
 .back p, .text-card-lg {
     overflow: hidden;
@@ -560,6 +563,18 @@ a.enroll-btn:hover {
   display: block;
     font-size: 14px;
     color: #777777;
+}
+
+.course-btn {
+    display: flex;
+}
+.course-btn > .enroll-btn {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 /* Categories */
