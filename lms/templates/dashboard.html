@@ -191,7 +191,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         <div class="row">
           <div class="col-4 text-center white-right-border">
             <p>
-               <span class="numscroller tma_course_counters" data-min='1' data-max='${mandatory_course_enrollments}' data-delay='1' data-increment='${mandatory_course_enrollments/3}'>${mandatory_course_enrollments}</span>
+              % if mandatory_course_enrollments <= 2:
+               <span class="numscroller" data-min='1' data-max='${mandatory_course_enrollments}' data-delay='1' data-increment='${mandatory_course_enrollments}'>${mandatory_course_enrollments}</span>
+              % else:
+                <span class="numscroller" data-min='1' data-max='${mandatory_course_enrollments}' data-delay='1' data-increment='${mandatory_course_enrollments}'>${mandatory_course_enrollments}</span>
+              %endif
                <img src="${static.url('tma-static/images/warning.svg')}">
             </p>
             <p class="mt-2 tma_course_counters_label">mandatory course(s)</p>
@@ -348,6 +352,15 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                         %endif
                       </div>
                     </div>
+<<<<<<< HEAD
+                  </div>
+                    <div class="text-center course-btn">
+                        %if CourseEnrollment.is_enrolled(user, course.id):
+                          %if not "Vodeclic" == str(course.id).split('+')[2]:
+                              <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
+                          %else:
+                              <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">Continue</a>
+=======
                     <div class="row">
                       <div class="col text-center course-btn">
                           %if CourseEnrollment.is_enrolled(user, course.id):
@@ -366,10 +379,20 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                             %else:
                               <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="${course.id}">${_("Join")}</a>
                             %endif
+>>>>>>> 238d62bb07c57679b46415e91610ee7fce778fb2
                           %endif
-                      </div>
+                        %else:
+                          %if not "Vodeclic" == str(course.id).split('+')[2]:
+                            % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
+                              <a class="enroll-btn no-enroll">Not authorized</a>
+                            % else:
+                              <a href="${'/courses/'+str(course.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
+                            % endif:
+                          %else:
+                              <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">${_("Join")}</a>
+                          %endif
+                        %endif
                     </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -380,7 +403,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         </div>
       </div>
       <div class="row">
-      % for course in course_overviews[2:]:
+      % for course in course_overviews[2:8]:
         <% course_object = get_course(course.id) %>
         % if course_overviews.index(course) == 4:
           <div class="col-lg-6">
@@ -452,6 +475,8 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                       %endif
                     </div>
                   </div>
+<<<<<<< HEAD
+=======
                   <div class="row">
                     <div class="col text-center course-btn">
                           %if CourseEnrollment.is_enrolled(user, course.id):
@@ -473,7 +498,27 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                           %endif
                     </div>
                   </div>
+>>>>>>> 238d62bb07c57679b46415e91610ee7fce778fb2
                 </div>
+                <div class="text-center course-btn">
+                  %if CourseEnrollment.is_enrolled(user, course.id):
+                    %if not "Vodeclic" == str(course.id).split('+')[2]:
+                        <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
+                    %else:
+                        <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">Continue</a>
+                    %endif
+                  %else:
+                    %if not "Vodeclic" == str(course.id).split('+')[2]:
+                      % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
+                        <a class="enroll-btn no-enroll">Not authorized</a>
+                      % else:
+                        <a href="${'/courses/'+str(course.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
+                      % endif:
+                    %else:
+                        <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">${_("Join")}</a>
+                    %endif
+                  %endif
+              </div>
               </div>
             </div>
           </div>
@@ -586,6 +631,8 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                         %endif
                       </div>
                     </div>
+<<<<<<< HEAD
+=======
                     <div class="row">
                       <div class="col text-center course-btn">
                           %if CourseEnrollment.is_enrolled(user, course.id):
@@ -607,7 +654,27 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                           %endif
                       </div>
                     </div>
+>>>>>>> 238d62bb07c57679b46415e91610ee7fce778fb2
                   </div>
+                    <div class="text-center course-btn">
+                      %if CourseEnrollment.is_enrolled(user, course.id):
+                        %if not "Vodeclic" == str(course.id).split('+')[2]:
+                            <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
+                        %else:
+                            <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">Continue</a>
+                        %endif
+                      %else:
+                        %if not "Vodeclic" == str(course.id).split('+')[2]:
+                          % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
+                            <a class="enroll-btn no-enroll">Not authorized</a>
+                          % else:
+                            <a href="${'/courses/'+str(course.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
+                          % endif:
+                        %else:
+                            <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">${_("Join")}</a>
+                        %endif
+                      %endif
+                    </div>
                 </div>
               </div>
             </div>
