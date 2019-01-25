@@ -118,8 +118,8 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 <div class="container-fluid">
   <!--FIRST ROW-->
   <div class="row primary-color-bg h-350 text-white">
-    <div class="col-lg-6 pl-75">
-      <p class="mt-4">Mandatory course!</p>
+    <div class="col-lg-6 pl-85">
+      <p class="mt-4">${_("Mandatory Course!")}</p>
       <h3 class="title-36">${course.display_name_with_default_escaped} 
       %if not user.profile.is_manager and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only:
         <img src="${static.url('tma-static/images/cadenas.svg')}" width="36"/>
@@ -128,10 +128,8 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       <p id="course-description"></p>
       <div class="row">
         <div class="col-lg-6">
-          <span class="tag">Informatique</span>
-        </div>
-        <div class="col-lg-6">
-          <span>
+          <span class="tag"><a href="#">Informatique</a></span>
+          <span class="pl-4">
               <img id="like_picto" class="like_${str(is_liked).lower()}" style="cursor:pointer" src="${static.url('tma-static/images/like.svg')}" width="36"><span id="like_count">${liked_total}</span>
           </span>
         </div>
@@ -140,7 +138,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     <div class="col-lg-6 course-img"><img src="${course_image_urls['large']}" alt="" /></div>
   </div>
   <!--SECOND ROW-->
-  <div class="row bg-white pt-5 pl-3 teacher-box">
+  <div class="row bg-white pl-3 teacher-box">
     <div class="col-lg-1 col-3">
       <div class="teacher-img"></div>
     </div>
@@ -168,15 +166,15 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         <p class="font-weight-bold">${course_end_date.strftime('%d/%m/%Y')}</p>
       </div>
     % endif
-    <div class="col-lg-1 col-2 text-center border-left-grey">
+    <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/time.svg')}" width="36">
       <p>Durée</p>
       <p id="course-duration" class="font-weight-bold">${get_course_about_section(request, course, "effort")}</p>
     </div>
-    <div class="col-lg-1 col-2 text-center border-left-grey">
+    <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/langue.svg')}" width="36">
       <p>Langue</p>
-      <p class="font-weight-bold">${course.language}</p>
+      <p class="text-uppercase font-weight-bold">${course.language}</p>
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/award.png')}" width="36">
@@ -189,7 +187,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       %elif (invitation_only and not can_enroll) or (not user.profile.is_manager and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only) :
         <a href="" class="big-btn">${_("Not Authorized")}</a>
       %else:
-      <a onclick='$.post("/change_enrollment", {"enrollment_action": "enroll","course_id":"${course.id}"}, function(){window.location.href="/courses/${course.id}/courseware"});' "class="big-btn register">${_("Join")}</a>
+      <a onclick='$.post("/change_enrollment", {"enrollment_action": "enroll","course_id":"${course.id}"}, function(){window.location.href="/courses/${course.id}/courseware"});' class="big-btn register">${_("Join")}</a>
       %endif
     </div>
   </div>
@@ -250,7 +248,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   // Get content from JSON file
   $.ajax({
     type: 'GET',
-    url: '/media/course-about-content.json',
+    url: '/static/tma-static/js/course-about-content.json',
     dataType: 'json',
     async: false,
     success: function(data) {
@@ -267,6 +265,8 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         //$('#course-duration').text(courseData.duration);
         //$('#course-score').text(courseData.requiredScore);
 
+        // Goals
+        $('#course-goals').text(courseData.goals)
         // Populate course map
         courseData.courseMap.forEach(function(element, i){
           $('#course-map').append('<li><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.section+ '<a href="arrow"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a><div class="subsections sub-'+i+'"></div></li>');
