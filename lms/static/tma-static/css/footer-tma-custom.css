@@ -64,12 +64,22 @@
 .stat-box {
     border-right: solid 1px #7777778f;
 }
-.stat-box > p:last-of-type {
+.stat-box > div > span:last-of-type {
     margin-top: 0px;
     margin-bottom: 0px;
 }
-.stat-box > p:first-of-type {
+.stat-box > div > span:first-of-type {
     margin-bottom: 0px;
+    font-size: 36px;
+    color: #00A0E3;
+    font-weight: bold;
+}
+.stat-box > div {
+    display: inline-block;
+    text-align: left;
+}
+.stat-box > div > span:last-child {
+    display: flex;
 }
 
 .footer-links {
