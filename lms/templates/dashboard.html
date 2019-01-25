@@ -190,7 +190,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         <div class="row">
           <div class="col-4 text-center">
             <p>
-               <span class="numscroller" data-min='1' data-max='${mandatory_course_enrollments}' data-delay='1' data-increment='${mandatory_course_enrollments/3}'>${mandatory_course_enrollments}</span>
+              % if mandatory_course_enrollments <= 2:
+               <span class="numscroller" data-min='1' data-max='${mandatory_course_enrollments}' data-delay='1' data-increment='${mandatory_course_enrollments}'>${mandatory_course_enrollments}</span>
+              % else:
+                <span class="numscroller" data-min='1' data-max='${mandatory_course_enrollments}' data-delay='1' data-increment='${mandatory_course_enrollments}'>${mandatory_course_enrollments}</span>
+              %endif
                <img src="${static.url('tma-static/images/warning.svg')}">
             </p>
             <p class="mt-2">mandatory course(s)</p>
@@ -374,7 +378,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         </div>
       </div>
       <div class="row">
-      % for course in course_overviews[2:]:
+      % for course in course_overviews[2:8]:
         <% course_object = get_course(course.id) %>
         % if course_overviews.index(course) == 4:
           <div class="col-lg-6">
