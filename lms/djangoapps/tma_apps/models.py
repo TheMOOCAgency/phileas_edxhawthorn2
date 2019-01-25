@@ -144,17 +144,20 @@ class TmaCourseEnrollment(models.Model):
 
 
     @classmethod
-    def get_validated_courses(cls, user):
+    def get_validated_courses(cls, user, org):
         validated_courses_nbr = 0
-        validated_courses_nbr = TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user, has_validated_course=True).count()
+        validated_courses_nbr = TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user,course_enrollment_edx__course__org=org, has_validated_course=True).count()
         return validated_courses_nbr
 
     @classmethod
-    def get_ongoing_courses(cls, user):
-        ongoing_courses_nbr = 0
-        ongoing_courses_nbr = TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user, has_validated_course=False).count()
-        return ongoing_courses_nbr
+    def count_ongoing_courses(cls, user, org):
+        ongoing_courses = TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user,course_enrollment_edx__course__org=org, has_validated_course=False).count()
+        return ongoing_courses
 
+    @classmethod
+    def count_favorite_courses(cls, user, org):
+        favorite_courses = TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user,course_enrollment_edx__course__org=org, is_favourite=True).count()
+        return favorite_courses
 
 #AUTO CREATE TmaCourseEnrollment when CourseEnrollment is created
 @receiver(models.signals.post_save, sender=CourseEnrollment)
@@ -190,3 +193,8 @@ class TmaCourseOverview(models.Model):
         tma_course_overview.is_vodeclic=True
         tma_course_overview.save()
         return tma_course_overview
+
+    @classmethod
+    def count_mandatory_courses(cls, org):
+        mandatory_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=org, is_mandatory=True).count()
+        return mandatory_courses
