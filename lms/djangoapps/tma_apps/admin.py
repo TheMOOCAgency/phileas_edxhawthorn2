@@ -4,8 +4,8 @@ TmaCourseOverview = apps.get_model('tma_apps','TmaCourseOverview')
 TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
 
 class TmaCourseEnrollmentAdmin(admin.ModelAdmin):
-    list_display = ('course_id','user_edx','has_validated_course','completion_rate','is_favourite','is_liked','student_grade','best_student_grade','date_best_student_grade','has_displayed_message','enrollment_active')
-    fields=('course_enrollment_edx','has_validated_course','completion_rate','is_favourite','is_liked','student_grade','best_student_grade','date_best_student_grade','has_displayed_message','enrollment_active')
+    list_display = ('course_id','user_edx','has_validated_course','completion_rate','is_favourite','is_liked','student_grade','best_student_grade','date_best_student_grade','has_displayed_message')
+    fields=('course_enrollment_edx','has_validated_course','completion_rate','is_favourite','is_liked','student_grade','best_student_grade','date_best_student_grade','has_displayed_message')
     def user_edx(self, obj):
         return obj.course_enrollment_edx.user
     user_edx.admin_order_field = 'course_enrollment_edx'
@@ -14,12 +14,8 @@ class TmaCourseEnrollmentAdmin(admin.ModelAdmin):
         return obj.course_enrollment_edx.course_id
     course_id.admin_order_field = 'course_enrollment_edx'
     course_id.short_description = 'Course ID'
-    def enrollment_active(self, obj):
-        return obj.course_enrollment_edx.is_active
-    course_id.admin_order_field = 'course_enrollment_edx'
-    course_id.short_description = 'Enrollment Active'
 
-    readonly_fields =('course_enrollment_edx','enrollment_active')
+    readonly_fields =('course_enrollment_edx',)
 
 
 class TmaCourseOverviewAdmin(admin.ModelAdmin):

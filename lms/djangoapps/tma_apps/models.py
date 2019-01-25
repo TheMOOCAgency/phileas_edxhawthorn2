@@ -184,9 +184,3 @@ class TmaCourseOverview(models.Model):
             course_overview_edx=course_overview,
         );
         return tma_course_overview
-    @classmethod
-    def add_vodelic_course(cls, course_key):
-        tma_course_overview=cls.get_tma_course_overview_by_course_id(course_key)
-        tma_course_overview.is_vodeclic=True
-        tma_course_overview.save()
-        return tma_course_overview

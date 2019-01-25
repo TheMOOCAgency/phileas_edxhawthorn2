@@ -36,7 +36,7 @@ is_liked = {}
 # Iterate on all course enrollments for ongoing mandatory and done
 for enrollment in course_enrollments:
     tmacourseoverview = TmaCourseOverview.get_tma_course_overview_by_course_id(enrollment.course_overview.id)
-    liked_total[enrollment.course_id] = tmacourseoverview.liked_total
+    liked_total[enrollment.course_id] = tmacourseoverview.liked_total   
     is_liked[enrollment.course_id] = False
     tmacourseenrollment = None
     if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
@@ -48,6 +48,8 @@ for enrollment in course_enrollments:
                     done_course_enrollments.append(enrollment)
                 else:
                     ongoing_course_enrollments.append(enrollment)
+                    if tmacourseenrollment.is_favourite:
+                        favorite_course_enrollments.append(enrollment)
                     if TmaCourseOverview.objects.filter(course_overview_edx_id=enrollment.course_overview.id).exists():
                         if TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id).is_mandatory:
                             mandatory_course_enrollments.append(enrollment)
@@ -55,16 +57,10 @@ for enrollment in course_enrollments:
     #If course is not open
         done_course_enrollments.append(enrollment)
 
-
-#Favorites / Likes have a different logic - no need for enrollment to be active
-for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=request.user) :
-  edx_associated_enrollment = user_enrollment.course_enrollment_edx
-  if user_enrollment.is_favourite:
-    favorite_course_enrollments.append(edx_associated_enrollment)
-  is_liked[edx_associated_enrollment.course_id] = user_enrollment.is_liked
-  liked_total[edx_associated_enrollment.course_id]= TmaCourseOverview.get_tma_course_overview_by_course_id(enrollment.course_overview.id).liked_total
-
-
+#TODO : what happens if we put in favorite but we are not enrolled ?
+#for tmacourseenrollment in tma_course_enrollments:
+#   if tmacourseenrollment.is_favourite:
+#        favorite_course_enrollments.append(tmacourseenrollment.course_enrollment_edx)
 %>
 
 <!-- TMA enable BOOTSTRAP-->
@@ -180,7 +176,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                     <p><span class="font-weight-bold">${int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100)}</span>/100</p>
                 </div>
                 <div class="col-lg-2 pl-5"><p><img class="badge-cert" src="${static.url('tma-static/images/certificate.svg')}"></div>
-                <div class="col-lg-2"><a href="/tma_apps/${enrollment._course_id}/certificate/render">Télécharger</a></div>
+                <div class="col-lg-2"><a href="/tma_apps/${enrollment.course_id}/certificate/render">Télécharger</a></div>
             </div>
         %endfor
      %else:
@@ -196,9 +192,64 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
         </div>
     </div>
 </div>
-<!-- TMA Home Dashboard Script -->
 <script>
-  let user_email="${request.user.email}"
-  let courseId="${enrollment.course_id}"
+    // Like
+    $('.like_picto').click(function(){
+      var enrolment_id = 0;
+      var classList = $(this).attr('class').split(/\s+/);
+      $.each(classList, function(index, item) {
+          if (item.indexOf('like_picto_') > -1) {
+              enrolment_id = item.split('_')[2];
+          }
+      });
+      var courseId =$(this).attr('data-course-id');
+      var current_count = parseInt($(".like_count_"+enrolment_id).first().html());
+      var status = $(this).hasClass('like_false');
+      if($(this).hasClass('like_false')){
+        $(".like_count_"+enrolment_id).each(function(){$(this).html(current_count+1);});
+        $(".like_picto_"+enrolment_id).each(function(){$(this).toggleClass("like_false like_true");});
+      }else{
+        $(".like_count_"+enrolment_id).each(function(){$(this).html(current_count-1);});
+        $(".like_picto_"+enrolment_id).each(function(){$(this).toggleClass("like_true like_false");});
+      }
+      $.ajax({
+        type: 'POST',
+        url: '/tma_apps/'+ courseId +'/like/update_like',
+        dataType: 'json',
+        data: {status: status, course_id: courseId},
+        success: function(data){
+        }
+      });
+    });
+
+    function popupOpenClose(popup) {
+        /* Add div inside popup for layout if one doesn't exist */
+        if ($(".wrapper").length == 0){
+            $(popup).wrapInner("<div class='wrapper'></div>");
+        }
+        /* Open popup */
+        $(popup).show();
+        /* Close popup if user clicks on background */
+        $(popup).click(function(e) {
+            if ( e.target == this ) {
+                if ($(popup).is(':visible')) {
+                    $(popup).hide();
+                }
+            }
+        });
+
+        /* Close popup and remove errors if user clicks on cancel or close buttons */
+        $(popup).find("button[name=close]").on("click", function() {
+            if ($(".formElementError").is(':visible')) {
+                $(".formElementError").remove();
+            }
+            $(popup).hide();
+        });
+    }
+
+    $(document).ready(function () {
+        $("[data-js=open]").on("click", function() {
+            popupOpenClose($(".popup"));
+        });
+    });
 </script>
-<script src="${static.url('tma-static/js/home-dashboard-actions.js')}" charset="utf-8"></script>

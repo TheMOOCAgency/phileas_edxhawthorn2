@@ -1,29 +1,33 @@
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from student.models import UserTestGroup, CourseEnrollment, UserProfile
+import json
+import requests
 import hashlib
 import datetime
 
-import logging
-log = logging.getLogger()
-
-
-
-def get_vodeclic_href(user, course_id):
-    api_key='uYUoVrzSEVityKwgNhHO'
-    partenaire='LIkptrpdXajmLaJTRHYF'
-    encrypted_partenaire =hashlib.sha256(partenaire+api_key).hexdigest()
-    url_base='https://lms.vodeclic.com/api'
-    date=datetime.datetime.now().strftime("%d%m%Y")
-    if user.is_authenticated():
-        vodeclic_id_arg = 'vodeclic_id='+str(course_id).split('+')[1]
-        partenaire_arg='&partenaire='+partenaire
-        encrypted_user_arg='&encrypted_id='+hashlib.sha256(str(user.id)+api_key).hexdigest()
-        user_id_arg='&id='+str(user.id)
-        prenom_arg='&prenom='+user.first_name
-        nom_arg='&nom='+user.last_name
-        email_arg='&email='+user.email
-        date_arg='&d='+hashlib.sha256(date+api_key).hexdigest()
-        return url_base+'/sso?'+vodeclic_id_arg+partenaire_arg+encrypted_user_arg+user_id_arg+prenom_arg+nom_arg+email_arg+date_arg
-    else :
+def get_vodeclic_href(user,course_id):
+    # Ensure the user is authenticated
+    if not user.is_authenticated():
         return HttpResponseForbidden()
+    else:
+        if settings.FEATURES.get('TMA_VODECLIC_ENABLE'):
+            vodeclic_id = str(course_id).split('+')[1]
+            date = datetime.datetime.now().strftime("%d%m%Y")
+            api = 'uYUoVrzSEVityKwgNhHO'
+            partenaire = 'LIkptrpdXajmLaJTRHYF'
+            email = user.email
+            first_name = user.first_name
+            last_name = user.last_name
+            id_membre = str(user.id)
+            user_crypt = hashlib.sha256(id_membre+api).hexdigest()
+            date_crypt = hashlib.sha256(date+api).hexdigest()
+            url = 'https://lms.vodeclic.com/api/sso?'
+
+            data_fr = 'partenaire='+partenaire+'&encrypted_id='+user_crypt+'&id='+id_membre+'&prenom='+first_name+'&nom='+last_name+'&email='+email+'&d='+date_crypt+'&vodeclic_id='+vodeclic_id+''
+            href_sso = url+data_fr
+
+            return href_sso
+
+        else:
+            return "TMA_VODECLIC_DISABLED"

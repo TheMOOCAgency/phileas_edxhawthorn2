@@ -27,8 +27,6 @@ from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
 from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from math import ceil
 
-
-
 %>
 <%
 additional_not_mandatory_class=""
@@ -37,8 +35,11 @@ if enrollment not in mandatory_course_enrollments:
 endif
 %>
                 <%
-                is_vodeclic = "Vodeclic" in str(enrollment.course_id).split('+')[2]
-                course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
+                is_vodeclic = False
+                course_target = "/courses/"+str(enrollment.course_id)+"/courseware/" 
+                if "Vodeclic" == str(enrollment.course_id).split('+')[2]:
+                    is_vodeclic = True
+                    course_target = get_vodeclic_href(user,enrollment.course_id)
                 endif
                 %>
                 <div class="col-lg-3 col-md-6">
@@ -57,25 +58,20 @@ endif
                                     completion_rate=int(100*TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).completion_rate)
                                     progress_bar_size = ceil(ceil(completion_rate)/10)*10
                                 %>
-                                %if completion_rate > 0 and not is_vodeclic:
+                                %if completion_rate > 0 and not is_vodeclic: 
                                 <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
                                 %elif is_vodeclic:
-                                <div class="progress-bar"></div>
+                                <div class="progress-bar" style="width:0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 %else:
                                 <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
                                 %endif
                             </div>
                         </div>
-                        %if not enrollment in mandatory_course_enrollments:
                         <img src="${static.url('tma-static/images/Fermer.svg')}" class="unenroll" alt='${_("Unenroll")}' data-js="open">
                         <div class="popup">
                             <p>${_("Do you really want to unenroll?")}</p>
-                            <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
-                              ${_("Unenroll")}
-                            </a>
-
+                            <a href="" class="continue-btn">${_("Unenroll")}</a>
                         </div>
-                        %endif
                       </div>
             <div class="row">
                 <div class="col m-3">
@@ -110,19 +106,7 @@ endif
             </div>
             <div class="row">
                 <div class="col text-center">
-                  %if is_vodeclic :
-                    %if enrollment.is_active:
-                    <a href="${get_vodeclic_href(request.user,enrollment._course_id)}" target="_blank" class="continue-btn">${_("Continue")}</a>
-                    %else :
-                      <a href="${get_vodeclic_href(request.user,enrollment._course_id)}" target="_blank" class="continue-btn vodeclick_register" data-vodeclic-id="${enrollment._course_id}" >${_("Join")}</a>
-                    %endif
-                  %else :
-                    %if enrollment.is_active :
                     <a href="${course_target}" class="continue-btn">${_("Continue")}</a>
-                    %else :
-                    <a href="${'/courses/'+str(enrollment._course_id)+'/about'}" class="enroll-btn">${_("Join")}</a>
-                    %endif
-                  %endif
                 </div>
             </div>
         </div>
