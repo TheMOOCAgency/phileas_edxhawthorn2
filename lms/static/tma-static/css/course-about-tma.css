@@ -1,4 +1,10 @@
 /***** FIRST ROW *****/
+a, a:hover {
+    text-decoration: none !important;
+    color: inherit !important;
+    transition: none !important;
+}
+
 .course-img {
     overflow: hidden;
 }
@@ -12,6 +18,9 @@
 }
 .pr-75 {
     padding-right: 75px;
+}
+.pl-85 {
+    padding-left: 85px;
 }
 
 .tag {
@@ -36,6 +45,12 @@
     }
 }
 
+@media (min-width: 992px) {
+    .teacher-box > .col-lg-2 {
+        max-width: 12.66667% !important;
+    }
+}
+
 /***** SECOND ROW *****/
 .teacher-box {
     position: relative;
@@ -47,7 +62,7 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    padding: 40px 15px 15px 0px
+    padding: 30px 15px 0px 0px;
 }
 .teacher-box p {
     margin: 0px;
@@ -56,7 +71,7 @@
     margin-bottom: 10px;
 }
 .teacher-box .big-btn {
-    top: 43px;
+    top: 25px;
 }
 
 .teacher-img {
@@ -134,6 +149,10 @@ a.big-btn:hover {
 }
 .description-box > div > p {
    line-height: 38px;
+}
+
+.text-right > a:last-child {
+    border-left: 1px solid #CACACA;
 }
 
 /***** FOURTH ROW *****/
