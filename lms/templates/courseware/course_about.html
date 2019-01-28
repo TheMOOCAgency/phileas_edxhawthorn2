@@ -200,16 +200,14 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     <div class="col-lg-3">
       <div class="text-right">
         <a href="mailto:?subject=${course.display_name_with_default_escaped} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !"><img class="mr-2" src="${static.url('tma-static/images/mail.svg')}" width="36"></a>
-        <a href="#">
         <!--TODO: Refactor this with dashboard-->
         % if is_favourite:
-            <img class="ml-2 pin favorite" id="fav_on" src="${static.url('tma-static/images/epingle_on.svg')}" width="36">
-            <img class="ml-2 pin favorite" id="fav_off" style="display:none" src="${static.url('tma-static/images/epingle_off.svg')}" width="36">
+            <img class="pl-2 pin favorite" id="fav_on" src="${static.url('tma-static/images/epingle_on.svg')}" height="36">
+            <img class="pl-2 pin favorite" id="fav_off" style="display:none" src="${static.url('tma-static/images/epingle_off.svg')}" height="36">
         % else:
-            <img class="ml-2 pin favorite" id="fav_on" style="display:none" src="${static.url('tma-static/images/epingle_on.svg')}" width="36">
-            <img class="ml-2 pin favorite" id="fav_off" src="${static.url('tma-static/images/epingle_off.svg')}" width="36">
+            <img class="pl-2 pin favorite" id="fav_on" style="display:none" src="${static.url('tma-static/images/epingle_on.svg')}" height="36">
+            <img class="pl-2 pin favorite" id="fav_off" src="${static.url('tma-static/images/epingle_off.svg')}" height="36">
         % endif
-        </a>
       </div>
     </div>
   </div>
@@ -217,7 +215,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 <div class="container-fluid bg-white">
   <div class="row content-box">
     <!--COURSE MAP-->
-    <div class="col-lg-6">
+    <div class="col-lg-7">
       <div class="container-fluid pl-0">
         <h3>Plans du cours</h3>
         <div class="row">
@@ -229,17 +227,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       </div>
     </div>
     <!--DOWNLOADS-->
-    <div class="col-lg-6">
+    <div class="col-lg-5 pr-0">
       <div class="downloads-box">
         <h3 class="mb-5">Téléchargements</h3>
       </div>
-    %if user.is_authenticated and registered and show_courseware_link:
-      <a href="${course_target}" class="big-btn">${_("View Course")}</a>
-    %elif (invitation_only and not can_enroll) or (not user.profile.is_manager and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only) :
-      <a href="" class="big-btn">${_("Not Authorized")}</a>
-    %else:
-      <a href="#" class="big-btn register">${_("Join")}</a>
-    %endif
+      <a href="/courses/" class="big-btn">${_("Back to courses")}</a>
     </div>
   </div>
 </div>
@@ -269,7 +261,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         $('#course-goals').text(courseData.goals)
         // Populate course map
         courseData.courseMap.forEach(function(element, i){
-          $('#course-map').append('<li><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.section+ '<a href="arrow"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a><div class="subsections sub-'+i+'"></div></li>');
+          $('#course-map').append('<li><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.section+ '<a href="arrow"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a><ul class="subsections sub-'+i+'"></ul></li>');
           if (element.subsections) {
             element.subsections.forEach(function(subsection){
               $('.sub-'+i).append('<li>'+ subsection +'</li>')
@@ -294,6 +286,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   $('.subsections').hide();
   $('a[href="arrow"]').click(function(e){
     e.preventDefault();
+    $(this).children().toggleClass('rotate180');
     $(this).next('.subsections').toggle();
   })
 
