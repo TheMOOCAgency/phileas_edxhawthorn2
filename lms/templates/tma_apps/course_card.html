@@ -111,15 +111,14 @@ endif
                       </span>
                     </p>
                 </div>
-
-                    <div class="col-8">
-                <a href="mailto:?subject=${enrollment.course_overview.display_name_with_default} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !">
-                        <p class="text-center"><img src="${static.url('tma-static/images/recommend.svg')}"/>${_("Recommend")}</p>
-                </a>
-                    </div>
+                <div class="col-8">
+                  <a href="mailto:?subject=${enrollment.course_overview.display_name_with_default} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !">
+                  <p class="text-center"><img src="${static.url('tma-static/images/recommend.svg')}"/>${_("Recommend")}</p>
+                  </a>
+                </div>
             </div>
             <div class="row">
-                <div class="col text-center">
+                <div class="text-center">
                   %if is_vodeclic :
                     %if enrollment.is_active:
                     <a href="${get_vodeclic_href(request.user,enrollment._course_id)}" target="_blank" class="continue-btn">${_("Continue")}</a>
