@@ -972,15 +972,16 @@ def get_tma_course_info(user, course_id, block_courses):
     if course_id in block_courses :
         course['is_blocked'] = True
 
-    #course obj info
-    course_key= CourseKey.from_string(str(course_id))
-    course_obj = get_course_by_id(course_key)
-    course['language']=course_obj.language
-    course['display_name_with_default']=course_obj.display_name_with_default
-
     #Edx CourseOverview Info
     EdxCourseOverview = CourseOverview.objects.get(id=course_id)
     course.update(EdxCourseOverview.__dict__)
+
+    #course obj info
+    course_key= CourseKey.from_string(str(course_id))
+    course_obj = get_course_by_id(course['id'])
+    course['language']=course_obj.language
+    course['display_name_with_default']=course_obj.display_name_with_default
+
     #TmaCourseOverview Info
     TmaOverviewInfo = TmaCourseOverview.get_tma_course_overview_by_course_id(course_id)
     course['is_mandatory'] = TmaOverviewInfo.is_mandatory

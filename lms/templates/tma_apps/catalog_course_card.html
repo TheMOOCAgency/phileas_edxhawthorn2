@@ -15,7 +15,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
       <!--flip front content-->
       <div class="course-card-sm front">
         % if course['is_mandatory']:
-          <div class="col mandatory-tag">
+          <div class="mandatory-tag">
               <p class="text-center">Mandatory Course!</p>
           </div>
         % endif
@@ -26,7 +26,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
         <div class="container-fluid">
           <div class="container-fluid">
             <div class="row">
-              <div class="col course-name">
+              <div class="course-name">
                 <div data-course-id="${str(course['id'])}" class="row pin-row ${str(course['id']).replace(':','').replace('+','')}">
                   <div>
                     <div class="category-tag">Bureautique</div>
@@ -118,16 +118,16 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
             </div>
           </div>
           <div class="row">
-            <div class="col">
+            <div class="">
               %if course['short_description'] :
-              <p>${course['short_description'][:220]}...</p>
+              <p style='padding:15px;'>${course['short_description'][:220]}...</p>
               %else :
               <p></p>
               %endif
             </div>
           </div>
           <div class="row">
-            <div class="col text-center course-btn">
+            <div class="text-center course-btn">
               %if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
                 <a class="enroll-btn no-enroll">Not authorized</a>
               %elif course['is_vodeclic'] :
