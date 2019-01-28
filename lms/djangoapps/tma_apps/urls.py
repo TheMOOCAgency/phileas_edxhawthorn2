@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'^{}/completion/get_course_completion$'.format(settings.COURSE_ID_PATTERN), completion_views.get_course_completion),
 
     #Favoris
-    url(r'^{}/favourite/update_favourite$'.format(settings.COURSE_ID_PATTERN), favourite_views.api_update_favourite),
+    url(r'^{}/favorite/update_favorite$'.format(settings.COURSE_ID_PATTERN), favourite_views.api_update_favourite),
 
     #Liked
     url(r'^{}/like/update_like$'.format(settings.COURSE_ID_PATTERN), like_views.api_update_like),

@@ -1,0 +1,28 @@
+.pin {
+    width: 36px;
+    height: 36px;
+}
+.favorite, .like {
+    cursor: pointer;
+    display: inline-block;
+}
+.favorite-on {
+    background-image: url('/static/tma-static/images/epingle_on.svg');
+    background-size: contain;
+}
+.favorite-off {
+    background-image: url('/static/tma-static/images/epingle_off.svg');
+    background-size: contain;
+}
+.like-on {
+    background-image: url('/static/tma-static/images/like.svg');
+    background-size: cover;
+}
+.like-off {
+    background-image: url('/static/tma-static/images/like-off.svg');
+    background-size: cover;
+}
+.course-pictos > div > .like {
+    height: 40px;
+    width: 40px;
+}

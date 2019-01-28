@@ -59,10 +59,9 @@ from xmodule.modulestore.django import modulestore
 #TMA IMPORTS
 from courseware.courses import get_courses
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
-from django.apps import apps
-TmaCourseOverview = apps.get_model('tma_apps','TmaCourseOverview')
-TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
+from lms.djangoapps.tma_apps.models import TmaCourseOverview, TmaCourseEnrollment
 from lms.djangoapps.tma_apps.sspeaking.sspeaking import get_sspeaking_href
+from lms.djangoapps.courseware.courses import get_course_by_id
 
 log = logging.getLogger("edx.student")
 
@@ -860,6 +859,56 @@ def _student_dashboard(request):
         'resume_button_urls': resume_button_urls
     })
 
+
+
+
+
+    #TMA - Get List of courses to display
+    current_organisation = configuration_helpers.get_value('course_org_filter','phileas')
+    frontpage_courses = configuration_helpers.get_value('frontpage_courses','')
+    if frontpage_courses:
+        courses_to_display = CourseOverview.objects.filter(org=current_organisation, id__in=frontpage_courses)
+    else :
+        courses_to_display = CourseOverview.objects.filter(org=current_organisation)[:9]
+
+    #Get Counters figures
+    mandatory_courses_count=TmaCourseOverview.count_mandatory_courses(current_organisation)
+    favorite_courses_count=TmaCourseEnrollment.count_favorite_courses(user, current_organisation)
+    ongoing_courses_count=TmaCourseEnrollment.count_ongoing_courses(user, current_organisation)
+
+    #Complete with tmaoverview and tmaenrollment info
+    final_course_list = []
+    for course in courses_to_display :
+        course_info=get_tma_course_info(user, course.id, block_courses)
+        final_course_list.append(course_info)
+
+    #Get user course enrollments
+    enrollment_course_list=[]
+    for enrollment in course_enrollments:
+        course_info=get_tma_course_info(user, enrollment.course_overview.id, block_courses)
+        enrollment_course_list.append(course_info)
+
+
+    context.update({
+        'final_course_list':final_course_list,
+        'language': request.LANGUAGE_CODE,
+        'sspeaking_url': get_sspeaking_href(user),
+        'mandatory_courses_count':mandatory_courses_count,
+        'favorite_courses_count':favorite_courses_count,
+        'ongoing_courses_count':ongoing_courses_count,
+        'enrollment_course_list':enrollment_course_list
+    })
+
+
+
+
+
+
+
+
+
+
+    """
     # TMA - Get all course overviews
     course_overviews = list(CourseOverview.objects.filter(org="phileas"))
 
@@ -868,7 +917,7 @@ def _student_dashboard(request):
     tma_course_enrollments = list(TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user))
 
     # TMA - Ongoing courses
-    ongoing_courses = TmaCourseEnrollment.get_ongoing_courses(user=user)
+    ongoing_courses = TmaCourseEnrollment.count_ongoing_courses(user=user,org=current_organisation)
 
     # TMA - Mandatory courses
     mandatory_courses = []
@@ -905,12 +954,50 @@ def _student_dashboard(request):
         'favorite_courses': favorite_courses,
         'favorite_course_enrollments': favorite_course_enrollments,
         'tma_course_enrollments': tma_course_enrollments,
-        'tma_course_overviews': tma_course_overviews
+        'tma_course_overviews': tma_course_overviews,
+        'final_course_list':final_course_list
     })
-
-    # TMA - Language
-    context.update({
-        'language': request.LANGUAGE_CODE
-    })
+    """
 
     return context
+
+def get_tma_course_info(user, course_id, block_courses):
+    course={}
+    course['is_favorite']=False
+    course['is_liked'] = False
+    course['is_enrolled'] = False
+    course['is_blocked'] = False
+    course['has_validated_course']=False
+
+    if course_id in block_courses :
+        course['is_blocked'] = True
+
+    #course obj info
+    course_key= CourseKey.from_string(str(course_id))
+    course_obj = get_course_by_id(course_key)
+    course['language']=course_obj.language
+    course['display_name_with_default']=course_obj.display_name_with_default
+
+    #Edx CourseOverview Info
+    EdxCourseOverview = CourseOverview.objects.get(id=course_id)
+    course.update(EdxCourseOverview.__dict__)
+    #TmaCourseOverview Info
+    TmaOverviewInfo = TmaCourseOverview.get_tma_course_overview_by_course_id(course_id)
+    course['is_mandatory'] = TmaOverviewInfo.is_mandatory
+    course['is_manager_only'] = TmaOverviewInfo.is_manager_only
+    course['is_vodeclic'] = TmaOverviewInfo.is_vodeclic
+    course['liked_total'] = TmaOverviewInfo.liked_total
+
+    #TmaCourseEnrollment Info
+    if TmaCourseEnrollment.objects.filter(course_enrollment_edx__course_id=course_key).exists():
+        TmaEnrollmentInfo = TmaCourseEnrollment.objects.get(course_enrollment_edx__course_id=course_key, course_enrollment_edx__user=user)
+        course['is_favorite'] = TmaEnrollmentInfo.is_favourite
+        course['is_liked'] = TmaEnrollmentInfo.is_liked
+        course['has_validated_course'] = TmaEnrollmentInfo.has_validated_course
+
+    #Edx Enrollment Info
+    if CourseEnrollment.objects.filter(user=user, course_id=course_id, is_active=True).exists():
+        course['is_enrolled'] = True
+
+
+    return course

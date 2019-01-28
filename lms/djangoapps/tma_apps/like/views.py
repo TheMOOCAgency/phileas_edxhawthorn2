@@ -16,5 +16,5 @@ def api_update_like(request, course_id):
     course_key = CourseKey.from_string(course_id)
     status = request.POST['status'].lower() in ("yes", "true", "t", "1")
     new_status = TmaCourseEnrollment.update_social_attributes("is_liked",course_key, request.user, status)
-    response['status'] = new_status
-    return JsonResponse(response)
+    new_status['course_id']=course_id.replace(':','').replace('+','')
+    return JsonResponse(new_status)

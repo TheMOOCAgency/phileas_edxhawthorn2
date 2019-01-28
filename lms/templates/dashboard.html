@@ -98,11 +98,13 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 <!-- TMA GLOBAL STYLE -->
 <link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
 <link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
-<!--<link rel="stylesheet" href="/media/dev/tma-static/css/global-tma-custom.css">-->
 <link rel="stylesheet" href="${static.url('tma-static/css/dashboard-tma-custom.css')}">
-<!--<link rel="stylesheet" href="/media/dev/tma-static/css/dashboard-tma-custom.css">-->
+<link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.0.1/dist/sweetalert2.all.min.js"></script>
 <div class="dashboard-notifications" tabindex="-1">
+
+
 
     %if banner_account_activation_message:
         <div class="dashboard-banner">
@@ -202,14 +204,15 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
           </div>
           <div class="col-4 text-center white-right-border">
             <p id="fav-counter" class="tma_course_counters">
-               <span class="numscroller tma_course_counters" data-min='1' data-max='${favorite_courses}' data-delay='1' data-increment='${favorite_courses/3}'>${favorite_courses}</span>
+               <!--<span class="numscroller tma_course_counters" data-min='1' data-max='${favorite_courses_count}' data-count="${favorite_courses_count}" data-delay='1' data-increment='${favorite_courses_count/3}'>${favorite_courses_count}</span>-->
+               <span id="favorite-counter-number">${favorite_courses_count}</span>
                <img src="${static.url('tma-static/images/etoile.svg')}"/>
             </p>
             <p class="mt-2 tma_course_counters_label">favorite course(s)</p>
           </div>
           <div class="col-4 text-center">
             <p>
-              <span class="tma_course_counters" class="numscroller" data-min='1' data-max='${ongoing_courses}' data-delay='1' data-increment='${ongoing_courses/3}'>${ongoing_courses}</span>
+              <span class="tma_course_counters" class="numscroller" data-min='1' data-max='${ongoing_courses_count}' data-delay='1' data-increment='${ongoing_courses_count/3}'>${ongoing_courses_count}</span>
               <img src="${static.url('tma-static/images/drapeau.svg')}"/>
             </p>
             <p class="mt-2 tma_course_counters_label">ongoing course(s)</p>
@@ -238,386 +241,45 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         </div>
       </div>
     </div>
-    <!--Course cards-->
 
-    <!-- First row : 2 first courses + static card-->
+
+    <!--Course cards--------------------------------------------------------------------------------------->
+
+    <!-- First row -->
     <div class="row">
-      % if course_overviews:
-        % for course in course_overviews[:2]:
-          <% course_object = get_course(course.id) %>
-          <div class="col-lg-3 col-md-6 flip-container">
-            <div class="flipper">
-                <!--flip front content-->
-                <div class="course-card-sm front">
-                  % if str(course.id) in mandatory_courses:
-                    <div class="col mandatory-tag">
-                        <p class="text-center">Mandatory Course!</p>
-                    </div>
-                  % endif
-                  <div class="cover-image">
-                      <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
-                  </div>
-                  <!-- Pins & title block -->
-                  <div class="container-fluid">
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col course-name">
-                          <div class="row pin-row ${course.id}">
-                            <div>
-                              <div class="category-tag">Bureautique</div>
-                            </div>
-                              % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
-                                <div>
-                                  <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-placement="top" title="Manager Only" class="pin">
-                                </div>
-                              % endif
-                              % if str(course.id) in favorite_course_enrollments:
-                                <span class="pin favorite fav-on"></span>
-                              % else:
-                                <span class="pin favorite fav-off"></span>
-                              % endif
-                          </div>
-                          <div class="row course-title">
-                            <p>${course.display_name}</p>
-                          </div>
-                          <!-- Arrow block -->
-                          <div class="pictos-box">
-                            <div class="row course-pictos ${course.id}">
-                              <div class="col-4 text-center pl-2 pr-2">
-                                <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">${TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).liked_total}</span></span>
-
-                              </div>
-                              <div class="col-4 text-center pl-2 pr-2">
-                                  <img src="${static.url('tma-static/images/Time.png')}">
-                                  <span>${course.effort}<span>
-                              </div>
-                              <div class="col-4 text-center pl-2 pr-2">
-                                  % if course_object.language == "fr":
-                                    <img src="${static.url('tma-static/images/lang_fr.svg')}">
-                                  % else:
-                                    <img src="${static.url('tma-static/images/lang_en.svg')}">
-                                  % endif
-                                  <span class="text-uppercase">${course_object.language}</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col text-center">
-                                <a href="#"><img src="${static.url('tma-static/images/flechebas.png')}"></a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-                <!--flip back content-->
-                <div class="course-card-sm back">
-                  % if str(course.id) in mandatory_courses:
-                    <div class="col mandatory-tag">
-                        <p class="text-center">Mandatory Course!</p>
-                    </div>
-                  % endif
-                  <div class="cover-image">
-                    <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
-                  </div>
-                  <div class="container-fluid">
-                    <div class="container-fluid">
-                    <div class="row">
-                      <div class="row pin-row ${course.id}">
-                        <div class="category-tag">Bureautique</div>
-                          % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
-                            <div>
-                              <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
-                            </div>
-                          % endif
-                          % if str(course.id) in favorite_course_enrollments:
-                            <span class="pin favorite fav-on"></span>
-                          % else:
-                            <span class="pin favorite fav-off"></span>
-                          % endif
-                          <span class="pin like like-false"></span>
-                        </div>
-                      </div>
-                      <div class="row course-title">
-                        <h3>${course.display_name}</h3>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col">
-                        %if course.short_description :
-                        <p>${course.short_description[:220]}...</p>
-                        %else :
-                        <p></p>
-                        %endif
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                      <div class="text-center course-btn">
-                        %if CourseEnrollment.is_enrolled(user, course.id):
-                          %if not "Vodeclic" in str(course.id).split('+')[2]:
-                              <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
-                          %else:
-                              <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">Continue</a>
-                          %endif
-                        %else:
-                          %if not "Vodeclic" in str(course.id).split('+')[2]:
-                            % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
-                              <a class="enroll-btn no-enroll">Not authorized</a>
-                            % else:
-                              <a href="${'/courses/'+str(course.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
-                            % endif:
-                          %else:
-                            <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="${course.id}">${_("Join")}</a>
-                          %endif
-                        %endif
-                      </div>
-                    </div>
-                </div>
-              </div>
-            </div>
-          %endfor
-        % endif
-        <div class="col-lg-6">
-            <a href="https://www.moncompteactivite.gouv.fr/cpa-public/mes-droits-formation/mon-cpf-compte-personnel-de-formation/decouvrir-le-cpf" target="_blank"><div class="static-card"></div></a>
-        </div>
+      <!-- First two courses -->
+      % if final_course_list :
+        %for course in final_course_list[:2] :
+          <%include file='tma_apps/catalog_course_card.html' args='course=course' />
+        %endfor
+      %endif
+      <!-- First static double card -->
+      <div class="col-lg-6">
+          <a href="https://www.moncompteactivite.gouv.fr/cpa-public/mes-droits-formation/mon-cpf-compte-personnel-de-formation/decouvrir-le-cpf" target="_blank"><div class="static-card"></div></a>
       </div>
-      <div class="row">
-      % for course in course_overviews[2:]:
-        <% course_object = get_course(course.id) %>
-        % if course_overviews.index(course) == 4:
-          <div class="col-lg-6">
-          <div class="course-card-sm">
-            % if str(course.id) in mandatory_courses:
-              <div class="col mandatory-tag">
-                  <p class="text-center">Mandatory Course!</p>
-              </div>
-            % endif
-            <div class="cover-image">
-                <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
-            </div>
-            <div class="row">
-              <div class="col-6 course-name">
-                <div class="container-fluid">
-                  <div class="container-fluid">
-                      <div class="row">
-                        <div class="col course-name">
-                          <div class="row pin-row">
-                            <div>
-                              <div class="category-tag">Bureautique</div>
-                            </div>
-                            % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
-                              <div>
-                                <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
-                              </div>
-                            % endif
-                            % if str(course.id) in favorite_course_enrollments:
-                              <span class="pin favorite fav-on"></span>
-                            % else:
-                              <span class="pin favorite fav-off"></span>
-                            % endif
-                          </div>
-                          <div class="row course-title">
-                            <p>${course.display_name}</p>
-                          </div>
-                          <div class="align-items-end">
-                            <div class="row course-pictos ${course.id}">
-                              <div class="col-4 text-center ${course.id} pl-2 pr-2 ">
-                                  <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">${TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).liked_total}</span></span>
-                              </div>
-                              <div class="col-4 text-center pl-2 pr-2">
-                                  <img src="${static.url('tma-static/images/Time.png')}">
-                                  <span>${course.effort}</span>
-                              </div>
-                              <div class="col-4 text-center pl-2 pr-2">
-                                  % if course_object.language == "fr":
-                                    <img src="${static.url('tma-static/images/lang_fr.svg')}">
-                                  % else:
-                                    <img src="${static.url('tma-static/images/lang_en.svg')}">
-                                  % endif
-                                  <span class="text-uppercase">${course_object.language}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-              </div>
-              <div class="col-6 course-resume">
-                <div class="container-fluid">
-                  <div class="row mb-3">
-                    <div class="col">
-                      %if course.short_description :
-                        <p class="text-card-lg">${course.short_description[:220]}...</p>
-                      %else :
-                        <p class="text-card-lg"></p>
-                      %endif
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                    <div class="col text-center course-btn">
-                      %if CourseEnrollment.is_enrolled(user, course.id):
-                        %if not "Vodeclic" in str(course.id).split('+')[2]:
-                            <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
-                        %else:
-                            <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">Continue</a>
-                        %endif
-                      %else:
-                        %if not "Vodeclic" in str(course.id).split('+')[2]:
-                          % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
-                            <a class="enroll-btn no-enroll">Not authorized</a>
-                          % else:
-                            <a href="${'/courses/'+str(course.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
-                          % endif:
-                        %else:
-                            <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="${course.id}">${_("Join")}</a>
-                        %endif
-                      %endif
-                    </div>
-                  </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        %else:
-          <div class="col-lg-3 col-md-6 flip-container">
-            <div class="flipper">
-                <!--flip front content-->
-                <div class="course-card-sm front">
-                  % if str(course.id) in mandatory_courses:
-                    <div class="col mandatory-tag">
-                        <p class="text-center">Mandatory Course!</p>
-                    </div>
-                  % endif
-                  <div class="cover-image">
-                      <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
-                  </div>
-                  <!-- Pins & title block -->
-                  <div class="container-fluid">
-                    <div class="container-fluid">
-                      <div class="row">
-                        <div class="col course-name">
-                          <div class="row pin-row ${course.id}">
-                            <div>
-                              <div class="category-tag">Bureautique</div>
-                            </div>
-                            % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
-                              <div>
-                                <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
-                              </div>
-                            % endif
-                            % if str(course.id) in favorite_course_enrollments:
-                              <span class="pin favorite fav-on"></span>
-                            % else:
-                              <span class="pin favorite fav-off"></span>
-                            % endif
-                          </div>
-                          <div class="row course-title">
-                            <p>${course.display_name}</p>
-                          </div>
-                          <!-- Arrow block -->
-                          <div class="pictos-box">
-                            <div class="row course-pictos ${course.id}">
-                              <div class="col-4 text-center pl-2 pr-2">
-                                <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">${TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).liked_total}</span></span>
-                              </div>
-                              <div class="col-4 text-center pl-2 pr-2">
-                                  <img src="${static.url('tma-static/images/Time.png')}">
-                                  <span>${course.effort}</span>
-                              </div>
-                              <div class="col-4 text-center pl-2 pr-2">
-                                  % if course_object.language == "fr":
-                                    <img src="${static.url('tma-static/images/lang_fr.svg')}">
-                                  % else:
-                                    <img src="${static.url('tma-static/images/lang_en.svg')}">
-                                  % endif
-                                  <span class="text-uppercase">${course_object.language}</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col text-center">
-                                <a href="#"><img src="${static.url('tma-static/images/flechebas.png')}"></a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-                <!--flip back content-->
-                <div class="course-card-sm back">
-                  % if str(course.id) in mandatory_courses:
-                    <div class="col mandatory-tag">
-                        <p class="text-center">Mandatory Course!</p>
-                    </div>
-                  % endif
-                  <div class="cover-image">
-                    <img src="${course.course_image_url}" alt="${course.display_name_with_default} ${course.display_number_with_default}"/>
-                  </div>
-                  <div class="container-fluid">
-                      <div class="container-fluid">
-                    <div class="row">
-                        <div class="row pin-row ${course.id}">
-                          <div class="category-tag">Bureautique</div>
-                          % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
-                            <div>
-                              <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-placement="top" title="Manager Only" class="pin">
-                            </div>
-                          % endif
-
-                          % if str(course.id) in favorite_course_enrollments:
-                            <span class="pin favorite fav-on"></span>
-                          % else:
-                            <span class="pin favorite fav-off"></span>
-                          % endif
-                          <span class="pin like like-false"></span>
-                        </div>
-                      </div>
-                      <div class="row course-title">
-                        <h3>${course.display_name}</h3>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col">
-                        %if course.short_description :
-                        <p>${course.short_description[:220]}...</p>
-                        %else :
-                        <p></p>
-                        %endif
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="text-center course-btn">
-                      %if CourseEnrollment.is_enrolled(user, course.id):
-                        %if not "Vodeclic" in str(course.id).split('+')[2]:
-                            <a href="${'/courses/'+str(course.id)+'/courseware/'}" class="enroll-btn">Continue</a>
-                        %else:
-                            <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn">Continue</a>
-                        %endif
-                      %else:
-                        %if not "Vodeclic" in str(course.id).split('+')[2]:
-                          % if (course.id in block_courses) or ( (not user.profile.is_manager) and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only ):
-                            <a class="enroll-btn no-enroll">Not authorized</a>
-                          % else:
-                            <a href="${'/courses/'+str(course.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
-                          % endif:
-                        %else:
-                            <a href="${get_vodeclic_href(user,course.id)}" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="${course.id}">${_("Join")}</a>
-                        %endif
-                      %endif
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-        %endif
-      %endfor
     </div>
+
+    <!-- Second row -->
+    <div class="row">
+      <!-- Second two courses -->
+      % if final_course_list :
+        %for course in final_course_list[2:4] :
+          <%include file='tma_apps/catalog_course_card.html' args='course=course' />
+        %endfor
+      %endif
+      <!-- Second static double card -->
+        <%include file='tma_apps/double_course_card.html' args='course=final_course_list[4]' />
+    </div>
+
+    <!-- Third Row -->
+    <div class="row">
+      % if final_course_list :
+        %for course in final_course_list[4:8] :
+          <%include file='tma_apps/catalog_course_card.html' args='course=course' />
+        %endfor
+      %endif
+    </div>
+
     <!--CATEGORIES-->
     <div class="container-fluid bg-grey-light">
       <div class="row mb-5">
@@ -654,6 +316,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 <!-- TMA DASHBORD SCRIPT-->
 <script>
   let etoile_src="${static.url('tma-static/images/etoile.svg')}"
-  let counter = ${favorite_courses}
+  let counter = ${favorite_courses_count}
 </script>
 <script src="${static.url('tma-static/js/dashboard-tma-actions.js')}" charset="utf-8"></script>
+<script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>

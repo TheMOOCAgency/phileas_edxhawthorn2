@@ -15,5 +15,4 @@ def api_update_favourite(request, course_id):
     course_key = CourseKey.from_string(course_id)
     status = request.POST['status'].lower() in ("yes", "true", "t", "1")
     new_status = TmaCourseEnrollment.update_social_attributes("is_favourite",course_key, request.user, status)
-    response['status'] = new_status
-    return JsonResponse(response)
+    return JsonResponse(new_status)
