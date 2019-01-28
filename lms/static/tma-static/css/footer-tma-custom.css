@@ -43,7 +43,7 @@
 }
 
 .footer-stats {
-    top: -60px;
+    top: -90px;
     position: relative;
     font-size: 20px;
     background-color: white;
@@ -61,7 +61,7 @@
     font-weight: bold;
 }
 
-.stat-box {
+.footer-stats > .col-lg-3:nth-child(-n+3) > .stat-box {
     border-right: solid 1px #7777778f;
 }
 .stat-box > div > span:last-of-type {
