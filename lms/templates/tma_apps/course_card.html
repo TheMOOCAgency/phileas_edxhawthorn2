@@ -41,6 +41,7 @@ endif
                 course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
                 endif
                 %>
+                <link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
                 <div class="col-lg-3 col-md-6">
                   <div class="training-card">
                     <div class="container-fluid">
@@ -99,7 +100,16 @@ endif
             </div>
             <div class="row pin-row mb-3">
                 <div class="col-4">
-                    <p class="text-center"><img style="cursor:pointer" data-course-id="${enrollment.course_id}" class="like_picto like_picto_${enrollment.id} like_${str(is_liked).lower()}" src="${static.url('tma-static/images/like.svg')}"/><span class="like_count_${enrollment.id}" data-min='0' data-max='${liked_total}' data-delay='1' data-increment='${int(liked_total/3)}'>${liked_total}</span></p>
+                    <p data-course-id="${str(enrollment.course_id)}" class="text-center ${str(enrollment.course_id).replace(':','').replace('+','')}">
+                      %if is_liked :
+                        <span class="pin like like-on"></span>
+                      %else :
+                        <span class="pin like like-off"></span>
+                      %endif
+                      <span class="like_count" data-min='0' data-max='${liked_total}' data-delay='1' data-increment='${int(liked_total/3)}'>
+                        ${liked_total}
+                      </span>
+                    </p>
                 </div>
 
                     <div class="col-8">

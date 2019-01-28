@@ -529,29 +529,7 @@ a.enroll-btn:hover {
     border-radius: 18px;
     margin-right: 10px;
 }
-.pin {
-    width: 36px;
-    height: 36px;
-}
-.favorite, .like {
-    cursor: pointer;
-}
-.fav-on {
-    background-image: url('/static/tma-static/images/epingle_on.svg');
-    background-size: contain;
-}
-.fav-off {
-    background-image: url('/static/tma-static/images/epingle_off.svg');
-    background-size: contain;
-}
-.like {
-    background-image: url('/static/tma-static/images/like.svg');
-    background-size: cover;
-}
-.course-pictos > div > .like {
-    height: 40px;
-    width: 40px;
-}
+
 .pin-row > .like {
     background-color: #d4d3d3;
     border-radius: 50px;

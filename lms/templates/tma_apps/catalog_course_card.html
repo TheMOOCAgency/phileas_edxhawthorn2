@@ -1,0 +1,151 @@
+<%page args="course"/>
+<%def name="online_help_token()"><% return "catalogCourseCard" %></%def>
+<%namespace name='static' file='../static_content.html'/>
+
+
+<%
+from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
+from django.utils.translation import ugettext as _
+from opaque_keys.edx.locations import SlashSeparatedCourseKey
+%>
+
+
+<div class="col-lg-3 col-md-6 flip-container">
+  <div class="flipper">
+      <!--flip front content-->
+      <div class="course-card-sm front">
+        % if course['is_mandatory']:
+          <div class="col mandatory-tag">
+              <p class="text-center">Mandatory Course!</p>
+          </div>
+        % endif
+        <div class="cover-image">
+            <img src="${course['course_image_url']}" alt="${course['display_name_with_default']} ${course['display_number_with_default']}"/>
+        </div>
+        <!-- Pins & title block -->
+        <div class="container-fluid">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col course-name">
+                <div data-course-id="${str(course['id'])}" class="row pin-row ${str(course['id']).replace(':','').replace('+','')}">
+                  <div>
+                    <div class="category-tag">Bureautique</div>
+                  </div>
+                    % if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
+                      <div>
+                        <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-placement="top" title="Manager Only" class="pin">
+                      </div>
+                    % endif
+                    % if course['is_favorite']:
+                      <span class="pin favorite favorite-on"></span>
+                    % else:
+                      <span class="pin favorite favorite-off"></span>
+                    % endif
+                    %if course['is_liked'] :
+                      <span class="pin like like-on"></span>
+                    %else :
+                      <span class="pin like like-off"></span>
+                    %endif
+                </div>
+                <div class="row course-title">
+                  <p>${course['display_name']}</p>
+                </div>
+                <!-- Arrow block -->
+                <div class="pictos-box">
+                  <div data-course-id="${str(course['id'])}" class="row course-pictos ${str(course['id']).replace(':','').replace('+','')}">
+                    <div class="col-4 text-center pl-2 pr-2">
+                      <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count" data-count="${course['liked_total']}">${course['liked_total']}</span></span>
+
+                    </div>
+                    <div class="col-4 text-center pl-2 pr-2">
+                        <img src="${static.url('tma-static/images/Time.png')}">
+                        <span>${course['effort']}<span>
+                    </div>
+                    <div class="col-4 text-center pl-2 pr-2">
+                        % if course['language'] == "fr":
+                          <img src="${static.url('tma-static/images/lang_fr.svg')}">
+                        % else:
+                          <img src="${static.url('tma-static/images/lang_en.svg')}">
+                        % endif
+                        <span class="text-uppercase">${course['language']}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col text-center">
+                      <a href="#"><img src="${static.url('tma-static/images/flechebas.png')}"></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      <!--flip back content-->
+      <div class="course-card-sm back">
+        % if course['is_mandatory']:
+          <div class="col mandatory-tag">
+              <p class="text-center">Mandatory Course!</p>
+          </div>
+        % endif
+        <div class="cover-image">
+          <img src="${course['course_image_url']}" alt="${course['display_name_with_default']} ${course['display_number_with_default']}"/>
+        </div>
+        <div class="container-fluid">
+            <div class="container-fluid">
+          <div class="row">
+              <div data-course-id="${str(course['id'])}" data-course-id="${str(course['id'])}" class="row pin-row ${str(course['id']).replace(':','').replace('+','')}">
+                <div class="category-tag">Bureautique</div>
+                % if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
+                  <div>
+                    <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-placement="top" title="Manager Only" class="pin">
+                  </div>
+                % endif
+                % if course['is_favorite']:
+                  <span class="pin favorite favorite-on"></span>
+                % else:
+                  <span class="pin favorite favorite-off"></span>
+                % endif
+                %if course['is_liked'] :
+                  <span class="pin like like-on"></span>
+                %else :
+                  <span class="pin like like-off"></span>
+                %endif
+              </div>
+            </div>
+            <div class="row course-title">
+              <h3>${course['display_name']}</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              %if course['short_description'] :
+              <p>${course['short_description'][:220]}...</p>
+              %else :
+              <p></p>
+              %endif
+            </div>
+          </div>
+          <div class="row">
+            <div class="col text-center course-btn">
+              %if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
+                <a class="enroll-btn no-enroll">Not authorized</a>
+              %elif course['is_vodeclic'] :
+                %if course['is_enrolled'] :
+                  <a href="${get_vodeclic_href(user,course['id'])}" target="_blank" class="enroll-btn">Continue</a>
+                %else :
+                  <a href="${get_vodeclic_href(user,course['id'])}" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="${course['id']}">${_("Join")}</a>
+                %endif
+              %else :
+                %if course['is_enrolled'] :
+                  <a href="${'/courses/'+str(course['id'])+'/courseware/'}" class="enroll-btn">Continue</a>
+                %else :
+                  <a href="${'/courses/'+str(course['id'])+'/about'}" class="enroll-btn">${_("Join")}</a>
+                %endif
+              %endif
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -62,10 +62,11 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
   if user_enrollment.is_favourite:
     favorite_course_enrollments.append(edx_associated_enrollment)
   is_liked[edx_associated_enrollment.course_id] = user_enrollment.is_liked
-  liked_total[edx_associated_enrollment.course_id]= TmaCourseOverview.get_tma_course_overview_by_course_id(enrollment.course_overview.id).liked_total
+  liked_total[edx_associated_enrollment.course_id]= TmaCourseOverview.get_tma_course_overview_by_course_id(edx_associated_enrollment.course_id).liked_total
 
 
 %>
+
 
 <!-- TMA enable BOOTSTRAP-->
 <link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
@@ -74,9 +75,8 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
 <!-- TMA GLOBAL STYLE -->
 <link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
 <link rel="stylesheet" href="${static.url('tma-static/css/home-tma-custom.css')}">
-<!--<link rel="stylesheet" href="/media/dev/tma-static/css/home-tma-custom.css">-->
 <link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
-<!--<link rel="stylesheet" href="/media/dev/tma-static/css/global-tma-custom.css">-->
+<link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
 
 <div class="container-fluid">
     <div class="row">
@@ -202,3 +202,4 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
   let courseId="${enrollment.course_id}"
 </script>
 <script src="${static.url('tma-static/js/home-dashboard-actions.js')}" charset="utf-8"></script>
+<script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>

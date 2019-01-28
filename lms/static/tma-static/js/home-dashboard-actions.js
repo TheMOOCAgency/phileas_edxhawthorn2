@@ -1,30 +1,14 @@
 // Like
-$('.like_picto').click(function(){
-  var enrolment_id = 0;
-  var classList = $(this).attr('class').split(/\s+/);
-  $.each(classList, function(index, item) {
-      if (item.indexOf('like_picto_') > -1) {
-          enrolment_id = item.split('_')[2];
-      }
-  });
-  var courseId =$(this).attr('data-course-id');
-  var current_count = parseInt($(".like_count_"+enrolment_id).first().html());
-  var status = $(this).hasClass('like_false');
-  if($(this).hasClass('like_false')){
-    $(".like_count_"+enrolment_id).each(function(){$(this).html(current_count+1);});
-    $(".like_picto_"+enrolment_id).each(function(){$(this).toggleClass("like_false like_true");});
+$('.pin.like').click(function(){
+  current_count=parseInt($(this).parent().find('.like_count').html());
+  console.log(current_count)
+  if($(this).hasClass('like-off')){
+    $(this).parent().find('.like_count').html(current_count+1);
+    //$(".like_count_"+enrolment_id).each(function(){$(this).html(current_count+1);});
   }else{
-    $(".like_count_"+enrolment_id).each(function(){$(this).html(current_count-1);});
-    $(".like_picto_"+enrolment_id).each(function(){$(this).toggleClass("like_true like_false");});
+    $(this).parent().find('.like_count').html(current_count-1);
+    //$(".like_count_"+enrolment_id).each(function(){$(this).html(current_count-1);});
   }
-  $.ajax({
-    type: 'POST',
-    url: '/tma_apps/'+ courseId +'/like/update_like',
-    dataType: 'json',
-    data: {status: status, course_id: courseId},
-    success: function(data){
-    }
-  });
 });
 
 function popupOpenClose(popup) {
