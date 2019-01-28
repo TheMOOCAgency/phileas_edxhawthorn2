@@ -1,4 +1,10 @@
 /***** FIRST ROW *****/
+a, a:hover {
+    text-decoration: none !important;
+    color: inherit !important;
+    transition: none !important;
+}
+
 .course-img {
     overflow: hidden;
 }
@@ -12,6 +18,9 @@
 }
 .pr-75 {
     padding-right: 75px;
+}
+.pl-85 {
+    padding-left: 85px;
 }
 
 .tag {
@@ -36,6 +45,12 @@
     }
 }
 
+@media (min-width: 992px) {
+    .teacher-box > .col-lg-2 {
+        max-width: 12.66667% !important;
+    }
+}
+
 /***** SECOND ROW *****/
 .teacher-box {
     position: relative;
@@ -47,7 +62,7 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    padding: 40px 15px 15px 0px
+    padding: 30px 15px 0px 0px;
 }
 .teacher-box p {
     margin: 0px;
@@ -56,7 +71,7 @@
     margin-bottom: 10px;
 }
 .teacher-box .big-btn {
-    top: 43px;
+    top: 25px;
 }
 
 .teacher-img {
@@ -65,6 +80,8 @@
     border-radius: 50px;
     border: 5px solid #009EE0;
     background-color: #E6EDFA;
+    background-image: url('/static/tma-static/images/teacher-test.png');
+    background-size: cover;
 }
 
 .name-box p {
@@ -86,6 +103,7 @@
 
 a.big-btn {
     position: relative;
+    cursor:pointer;
     margin: auto !important;
     width: 200px;
     padding: 14px;
@@ -101,7 +119,8 @@ a.big-btn:hover {
     background-color: white;
     color: #0B1A4C !important;
     border: 1px solid #0B1A4C;
-    text-decoration: none;
+    text-decoration: none !important;
+    transition: none !important;
 }
 
 @media (max-width: 1120px) {
@@ -136,12 +155,17 @@ a.big-btn:hover {
    line-height: 38px;
 }
 
+.favorite {
+    border-left: 1px solid #CACACA;
+    cursor: pointer;
+}
+
 /***** FOURTH ROW *****/
 .content-box {
     width: 90%;
     margin: auto;
     padding-top: 40px;
-    padding-bottom: 100px;
+    padding-bottom: 150px;
 }
 .content-box .big-btn {
     bottom: 0;
@@ -155,9 +179,23 @@ li:not(.nav-item) {
     padding: 10px;
     border-bottom: 1px solid #7A818E;
 }
+#course-map > li {
+    font-weight: 500;
+}
+.subsections {
+    margin: 0.5em 0 0.5rem 0rem;
+}
+.subsections > li {
+    font-weight: 400;
+    padding-bottom: 3px;
+    padding-top: 3px;
+}
 
 img[src="/static/tma-static/images/flechebas.svg"] {
     float: right;
+}
+.rotate180 {
+    transform: rotate(0.5turn);
 }
 
 .downloads-box {

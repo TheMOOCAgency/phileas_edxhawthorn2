@@ -193,7 +193,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         <div class="row">
           <div class="col-4 text-center white-right-border">
             <p>
-               <span class="numscroller tma_course_counters" data-min='1' data-max='${mandatory_courses_count}' data-delay='1' data-increment='${mandatory_courses_count/3}'>${mandatory_courses_count}</span>
+              %if mandatory_course_enrollments <= 2:
+               <span class="numscroller tma_course_counters" data-min='1' data-max='${mandatory_course_enrollments}' data-delay='1' data-increment='${mandatory_course_enrollments}'>${mandatory_course_enrollments}</span>
+              %else:
+                <span class="numscroller tma_course_counters" data-min='1' data-max='${mandatory_course_enrollments}' data-delay='1' data-increment='${mandatory_course_enrollments/3}'>${mandatory_course_enrollments}</span>
+              %endif
                <img src="${static.url('tma-static/images/warning.svg')}">
             </p>
             <p class="mt-2 tma_course_counters_label">mandatory course(s)</p>
@@ -237,8 +241,6 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         </div>
       </div>
     </div>
-
-
 
 
     <!--Course cards--------------------------------------------------------------------------------------->
