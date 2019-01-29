@@ -1090,4 +1090,5 @@ urlpatterns += [
     url(r'tma_apps/', include('tma_apps.urls')),
 ]
 
+
 urlpatterns.extend(plugin_urls.get_patterns(plugin_constants.ProjectType.LMS))

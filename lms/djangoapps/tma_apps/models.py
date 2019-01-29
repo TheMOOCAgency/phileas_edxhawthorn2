@@ -6,6 +6,7 @@ from opaque_keys.edx.keys import CourseKey
 from django.db import models
 from django.dispatch import receiver
 from student.signals import UNENROLL_DONE
+from student.signals import ENROLL_STATUS_CHANGE
 import datetime
 import datetime
 import logging
@@ -151,7 +152,7 @@ class TmaCourseEnrollment(models.Model):
 
     @classmethod
     def count_ongoing_courses(cls, user, org):
-        ongoing_courses = TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user,course_enrollment_edx__course__org=org, has_validated_course=False).count()
+        ongoing_courses = TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user,course_enrollment_edx__course__org=org, has_validated_course=False,course_enrollment_edx__is_active=True).count()
         return ongoing_courses
 
     @classmethod
@@ -178,6 +179,7 @@ class TmaCourseOverview(models.Model):
     is_vodeclic = models.BooleanField(default=False)
     favourite_total = models.IntegerField(default=0)
     liked_total = models.IntegerField(default=0)
+    active_enrollments_total = models.IntegerField(default=0)
     is_course_graded = models.BooleanField(default=True)
 
     @classmethod
@@ -187,6 +189,7 @@ class TmaCourseOverview(models.Model):
             course_overview_edx=course_overview,
         );
         return tma_course_overview
+
     @classmethod
     def add_vodelic_course(cls, course_key):
         tma_course_overview=cls.get_tma_course_overview_by_course_id(course_key)
@@ -195,6 +198,23 @@ class TmaCourseOverview(models.Model):
         return tma_course_overview
 
     @classmethod
+    def change_active_enrollments_total(cls, course_key, event):
+        tma_course_overview=cls.get_tma_course_overview_by_course_id(course_key)
+        if event=="enroll":
+            tma_course_overview.active_enrollments_total+=1
+        elif event=="unenroll":
+            tma_course_overview.active_enrollments_total-=1    
+        tma_course_overview.save()
+        return tma_course_overview
+
+    @classmethod
     def count_mandatory_courses(cls, org):
         mandatory_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=org, is_mandatory=True).count()
         return mandatory_courses
+
+#Track enrollments and unenrollments to update total_active_enrollments
+@receiver(ENROLL_STATUS_CHANGE)
+def update_active_enrollments_total(sender, event=None, user=None, **kwargs):
+    TmaCourseOverview.change_active_enrollments_total(kwargs['course_id'], event)
+    log.info("HELLLLLLOOOOOOOOOOO CHANGEE IT EVENT {}".format(event))
+    log.info("HELLLLLLOOOOOOOOOOO CHANGEE IT USER {}".format(user))

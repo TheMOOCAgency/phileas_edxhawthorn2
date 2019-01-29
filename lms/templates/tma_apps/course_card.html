@@ -64,8 +64,8 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
           </div>
         </div>
         %if not enrollment in mandatory_course_enrollments:
-        <img src="${static.url('tma-static/images/Fermer.svg')}" class="unenroll" alt='${_("Unenroll")}' data-js="open">
-        <div class="popup">
+        <img src="${static.url('tma-static/images/Fermer.svg')}" class="unenroll" alt='${_("Unenroll")}' data-js="open" data-popup-id="${enrollment.id}">
+        <div class="popup popup-${enrollment.id}">
           <p>${_("Do you really want to unenroll?")}</p>
           <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
             ${_("Unenroll")}

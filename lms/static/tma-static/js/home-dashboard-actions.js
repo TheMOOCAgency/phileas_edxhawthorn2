@@ -25,10 +25,13 @@ function popupOpenClose(popup) {
 
 $(document).ready(function () {
     $("[data-js=open]").on("click", function() {
-        popupOpenClose($(".popup"));
+        popupid=$(this).data('popup-id');
+        popupOpenClose($(".popup-"+popupid));
     });
+
     $(".tma_unenroll_student").on("click", function() {
-        course_id=$(this).data('course-to-uneroll')
+        course_id=$(this).data('course-to-uneroll');
+        console.log(course_id);
         $.post("/change_enrollment", {"enrollment_action": "unenroll","course_id":course_id})
     });
     //Enroll when click on vodeclic courses join because no course about page -> USEFUL FOR FAVORITES which are not always active enrollments

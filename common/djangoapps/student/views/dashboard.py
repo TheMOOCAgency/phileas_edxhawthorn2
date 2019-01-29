@@ -62,6 +62,9 @@ from openedx.core.djangoapps.content.course_overviews.models import CourseOvervi
 from lms.djangoapps.tma_apps.models import TmaCourseOverview, TmaCourseEnrollment
 from lms.djangoapps.tma_apps.sspeaking.sspeaking import get_sspeaking_href
 from lms.djangoapps.courseware.courses import get_course_by_id
+from operator import itemgetter
+from student.signals import ENROLL_STATUS_CHANGE
+
 
 log = logging.getLogger("edx.student")
 
@@ -861,12 +864,26 @@ def _student_dashboard(request):
 
 
 
-
-
     #TMA - Get List of courses to display
+    courses_to_display=[]
     current_organisation = configuration_helpers.get_value('course_org_filter','phileas')
     frontpage_courses = configuration_helpers.get_value('frontpage_courses','')
-    if frontpage_courses:
+    accepted_filters=['likes', 'enrollments']
+    filter = request.GET.get('filter')
+
+    if filter and filter in accepted_filters :
+        if filter=="likes":
+            likes_ordered_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).order_by('-liked_total')[:9]
+            for course in likes_ordered_courses :
+                courses_to_display.append(course.course_overview_edx)
+
+        elif filter =="enrollments":
+            enrollments_ordered_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).order_by('-active_enrollments_total')[:9]
+            for course in enrollments_ordered_courses :
+                courses_to_display.append(course.course_overview_edx)
+
+
+    elif frontpage_courses:
         courses_to_display = CourseOverview.objects.filter(org=current_organisation, id__in=frontpage_courses)
     else :
         courses_to_display = CourseOverview.objects.filter(org=current_organisation)[:9]
@@ -881,6 +898,8 @@ def _student_dashboard(request):
     for course in courses_to_display :
         course_info=get_tma_course_info(user, course.id, block_courses)
         final_course_list.append(course_info)
+        if filter and filter=="likes":
+            final_course_list = sorted(final_course_list, key=itemgetter('liked_total'), reverse=True)
 
     #Get user course enrollments
     enrollment_course_list=[]

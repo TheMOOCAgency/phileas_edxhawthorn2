@@ -10,6 +10,8 @@ $('.pin.favorite').on('click',function(){
 $('.pin.like').on('click',function(){
   let update_info = change_social_attributes($(this),'like');
   let like_counter=$('.'+update_info['courseSelector']+' .like_count');
+  console.log('.'+update_info['courseSelector']+' .like_count')
+  console.log(like_counter)
   update_counter(like_counter, update_info['status']);
 });
 
