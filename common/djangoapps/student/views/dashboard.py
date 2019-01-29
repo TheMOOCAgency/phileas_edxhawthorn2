@@ -892,7 +892,7 @@ def _student_dashboard(request):
     context.update({
         'final_course_list':final_course_list,
         'language': request.LANGUAGE_CODE,
-        'sspeaking_url': get_sspeaking_href(user),
+        'sspeaking_data': get_sspeaking_href(user),
         'mandatory_courses_count':mandatory_courses_count,
         'favorite_courses_count':favorite_courses_count,
         'ongoing_courses_count':ongoing_courses_count,

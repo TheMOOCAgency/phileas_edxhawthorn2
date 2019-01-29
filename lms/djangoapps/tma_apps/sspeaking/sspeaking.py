@@ -23,7 +23,22 @@ def get_sspeaking_href(user):
             url = 'https://www.lms.7speaking.com/7sautolog.cfm?'
             data_fr = 'prenom='+first_name+'&nom='+last_name+'&email='+email+'&key='+key+'&groupe='+groupe+'&id_interne='+id_interne
             href_sso = url+data_fr
-            return href_sso
+
+            data = {
+                "prenom": first_name,
+                "nom": last_name,
+                "email": email,
+                "key": key,
+                "groupe": groupe,
+                "id_interne": id_interne
+            }
+
+            sspeaking_data = {
+                "sspeaking_url": url,
+                "sspeaking_data": data
+            }
+            
+            return sspeaking_data
         else:
             return "TMA_SSPEAKING_DISABLED"
 
