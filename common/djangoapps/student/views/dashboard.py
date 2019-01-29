@@ -878,7 +878,9 @@ def _student_dashboard(request):
                 courses_to_display.append(course.course_overview_edx)
 
         elif filter =="enrollments":
-            pass
+            enrollments_ordered_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).order_by('-active_enrollments_total')[:9]
+            for course in enrollments_ordered_courses :
+                courses_to_display.append(course.course_overview_edx)
 
 
     elif frontpage_courses:

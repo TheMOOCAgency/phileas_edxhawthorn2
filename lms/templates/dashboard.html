@@ -212,7 +212,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
           </div>
           <div class="col-4 text-center">
             <p>
-              <span class="tma_course_counters" class="numscroller" data-min='1' data-max='${ongoing_courses_count}' data-delay='1' data-increment='${ongoing_courses_count/3}'>${ongoing_courses_count}</span>
+              <span id="ongoin-counter-number" class="tma_course_counters" class="numscroller" data-min='1' data-max='${ongoing_courses_count}' data-delay='1' data-increment='${ongoing_courses_count/3}'>${ongoing_courses_count}</span>
               <img src="${static.url('tma-static/images/drapeau.svg')}"/>
             </p>
             <p class="mt-2 tma_course_counters_label">ongoing course(s)</p>

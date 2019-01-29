@@ -152,7 +152,7 @@ class TmaCourseEnrollment(models.Model):
 
     @classmethod
     def count_ongoing_courses(cls, user, org):
-        ongoing_courses = TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user,course_enrollment_edx__course__org=org, has_validated_course=False).count()
+        ongoing_courses = TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user,course_enrollment_edx__course__org=org, has_validated_course=False,course_enrollment_edx__is_active=True).count()
         return ongoing_courses
 
     @classmethod
@@ -198,9 +198,12 @@ class TmaCourseOverview(models.Model):
         return tma_course_overview
 
     @classmethod
-    def add_vodelic_course(cls, course_key):
+    def change_active_enrollments_total(cls, course_key, event):
         tma_course_overview=cls.get_tma_course_overview_by_course_id(course_key)
-        tma_course_overview.is_vodeclic=True
+        if event=="enroll":
+            tma_course_overview.active_enrollments_total+=1
+        elif event=="unenroll":
+            tma_course_overview.active_enrollments_total-=1    
         tma_course_overview.save()
         return tma_course_overview
 
@@ -211,5 +214,7 @@ class TmaCourseOverview(models.Model):
 
 #Track enrollments and unenrollments to update total_active_enrollments
 @receiver(ENROLL_STATUS_CHANGE)
-def update_active_enrollments_total(sender=None, event=event, user=user, mode=mode, course_id=course_id, cost=cost, currency=currency):
-    log.info("HELLLLLLOOOOOOOOOOO CHANGEE IT BABY")
+def update_active_enrollments_total(sender, event=None, user=None, **kwargs):
+    TmaCourseOverview.change_active_enrollments_total(kwargs['course_id'], event)
+    log.info("HELLLLLLOOOOOOOOOOO CHANGEE IT EVENT {}".format(event))
+    log.info("HELLLLLLOOOOOOOOOOO CHANGEE IT USER {}".format(user))
