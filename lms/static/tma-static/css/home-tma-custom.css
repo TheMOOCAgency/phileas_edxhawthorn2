@@ -2,6 +2,14 @@
 html, body {
     height: 100%;
 }
+
+a:hover {
+    text-decoration: none !important;
+}
+a {
+    color: #0B1A4C !important;
+}
+
 /* 1st ROW */
 .home-box {
     height: 300px;
@@ -24,10 +32,17 @@ html, body {
     padding-left: 70px;
     padding-right: 70px;
 }
-.bg-blue {
+.bg-blue-box {
+    position: absolute;
+    height: 300px;
+    width: 100%;
     background-color: #0B1A4C;
 }
-.bg-grey {
+.bg-grey-box {
+    position: absolute;
+    top: 300px;
+    height: 100%;
+    width: 100%;
     background-color: #f5f5f5;
 }
 .title-36-black {
@@ -51,8 +66,9 @@ html, body {
     font-weight: bold;
     color: #0B1A4C;
     letter-spacing: normal;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     text-transform: none;
+    z-index: 2;
 }
 .title-20 {
     font-size: 20px;
@@ -69,20 +85,31 @@ html, body {
 }
 .picto {
     width: 24px;
-    margin: 10px;
+    margin: 10px 0px 10px 10px;
 }
 
 .separator {
     position: relative;
     width: 45%;
-    height: 2px;
+    height: 1px;
     margin: auto;
     background-color: #D8D8D8;
+}
+.table-separator {
+    position: relative;
+    width: 100%;
+    height: 2px;
+    margin: 10px 0 10px 0;
+    background-color: #D8D8D8;
+    opacity: 0.5;
 }
 
 /* 2d ROW */
 .ongoing-box {
     height: auto;
+}
+.ongoing-box > .row > h1 {
+    z-index: 2;
 }
 
 .training-card {
@@ -102,6 +129,7 @@ html, body {
     min-height: 79px;
     border-bottom: 1px solid rgba(0,0,0,0.09);
     font-size: 20px;
+    font-weight: 600;
     line-height: normal;
     color: #0B1A4C;
 }
@@ -141,6 +169,11 @@ html, body {
 
 .progress {
     height: 20px;
+    padding: 0;
+    border-radius: 0px;
+}
+.progress-bar {
+    background-color: #00A1E9;
 }
 .progress.not-mandatory-course-enrolment {
     height: 35px;
@@ -167,6 +200,7 @@ html, body {
 }
 .dates-box span {
     color: #0B1A4C;
+    font-weight: 500;
 }
 
 .pin-row img {
@@ -180,23 +214,23 @@ html, body {
     color: #009EE0;
 }
 
-a.continue-btn {
+a.continue-btn, a.enroll-btn {
     cursor: pointer;
     width: 150px;
     padding: 6px;
     margin: 1rem;
     border-radius: 28px;
-    border: 2px solid #B9c6d4;
+    border: 1px solid #0B1A4C;
     background-color: transparent;
-    color: #0B1A4C;
-    font-weight: bold;
+    color: #0B1A4C !important;
+    font-weight: 600 !important;
     display: inline-block;
     vertical-align: middle;
 }
 
-a.continue-btn:hover {
-    background-color: white;
-    color: #B9c6d4 !important;
+a.continue-btn:hover, a.enroll-btn:hover {
+    background-color: #0B1A4C;
+    color: white !important;
     border: 2px solid #0B1A4C;
     text-decoration: none;
 }
@@ -204,13 +238,11 @@ a.continue-btn:hover {
 /* 3d ROW */
 .mandatory-box {
     position: relative;
-    padding-top: 70px;
 }
 
 /* 4th ROW */
 .favorite-box {
     position: relative;
-    padding-top: 70px;
 }
 
 /* 5th ROW */
