@@ -6,7 +6,6 @@
 <%inherit file="../main.html" />
 <%
   course_discovery_enabled = settings.FEATURES.get('ENABLE_COURSE_DISCOVERY')
-  course_discovery_enabled = True
 %>
 
 <%namespace name='static' file='../static_content.html'/>
@@ -30,25 +29,98 @@
 % endif
 
 <%block name="pagetitle">${_("Courses")}</%block>
-<script>
-  console.log('${course_discovery_enabled}')
-</script>
 
 <!-- TMA GLOBAL STYLE -->
 <link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
 <link rel="stylesheet" href="${static.url('tma-static/css/courses-tma-custom.css')}">
-<!--<link rel="stylesheet" href="/media/dev/tma-static/css/courses-tma-custom.css">-->
 <link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
-<!--<link rel="stylesheet" href="/media/dev/tma-static/css/global-tma-custom.css">-->
+<link rel="stylesheet" href="${static.url('tma-static/css/catalog-course-card.css')}">
 
+<div class="container-fluid">
+  <div class="row p-5">
+    <div class="col">
+      <h1>${_("Search results")}</h1>
+      <div class="dropdown-container">
+        <button>${_("Filter")}<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
+        <ul class="dropdown">
+          <li value="2"><a href="">${_("Highest rated")}</a><div class="separator"></div></li>
+          <li value="3"><a href="">${_("Most subscribed")}</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="container-fluid criteria-box">
+        <div class="row">
+          <h3 class="text-center mt-4 mb-4 w-100">${_("Search filters")}</h1>
+        </div>
+        <!--FILTER-->
+        <div class="row">
+          <div class="col">
+            <h4 class="header-facet">${_("Language")}</h4>
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-10"><p class="facet-option">${_("English")}</p></div>
+                <div class="col-2"><span class="count">12</span></div>
+              </div>
+              <div class="row">
+                <div class="col-10"><p class="facet-option">${_("French")}</p></div>
+                <div class="col-2"><span class="count">25</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="separator"></div>
+        <!--FILTER-->
+        <div class="row">
+          <div class="col">
+            <h4 class="header-facet">${_("Topics")}</h4>
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-10"><p class="facet-option">${_("IT")}</p></div>
+                <div class="col-2"><span class="count">12</span></div>
+              </div>
+              <div class="row">
+                <div class="col-10"><p class="facet-option">${_("Communication")}</p></div>
+                <div class="col-2"><span class="count">25</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="container-fluid">
+          <div class="row">
+            % if final_course_list :
+              %for course in final_course_list :
+                <%include file='../tma_apps/catalog_course_card.html' args='course=course' />
+              %endfor
+            %endif
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<script src="${static.url('tma-static/js/dashboard-tma-actions.js')}" charset="utf-8"></script>
+<script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
+<script>
+  $(document).ready(function(){
+    // Resize cols for search page 
+    $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4')
+  });
+</script>
+<!--
 <main id="main" aria-label="Content" tabindex="-1">
     <section class="find-courses">
       <section class="courses-container container-fluid">
         % if course_discovery_enabled:
         <div id="discovery-form" role="search" aria-label="course" class="wrapper-search-context pb-5 row">
           <div id="discovery-message" class="search-status-label">Search results</div>
-          <!--<form class="wrapper-search-input">
+            <form class="wrapper-search-input">
             <label for="discovery-input" class="sr">${_('Search for a course')}</label>
             <input id="discovery-input" class="discovery-input" placeholder="${_('Search for a course')}" type="text"/>
             <button type="submit" class="button postfix discovery-submit" title="${_('Search')}">
@@ -60,7 +132,7 @@
                 </div>
               </div>
             </button>
-          </form>-->
+          </form>
           <div class="dropdown-container">
             <button>Filter<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
             <ul class="dropdown">
@@ -105,39 +177,4 @@
       </section>
     </section>
 </main>
-<script>
-  var config = { attributes: true, childList: true, subtree: true };
-
-  var create = function(t) {
-    var observer = new MutationObserver(function(mutations){
-      mutations.forEach(function(mutation){
-        console.log('change observed');
-        $(mutation.addedNodes).hover(function(){
-          $(this).toggleClass("applyflip");
-        });
-        $('.search-facets-lists .facet-list').removeClass('collapse');
-
-        /*if ($('#discovery-message').text().indexOf('Browse our catalog') > -1) {
-          $('#no-results').text('We couldn\'t find any results. Browse our catalog.')
-        }*/
-
-        //Change filters wording
-        $('.search-facets-lists h3:nth-of-type(2)').hide();
-        $('ul[data-facet="modes"]').hide();
-      });
-    });
-    observer.observe(t, config);
-  }
-
-  // For earch .course-listing element, create a DOMchange observer
-  var target = document.querySelectorAll('.courses-listing');
-  for (i = 0; i < target.length; i++) {
-    create(target[i]);
-  };
-
-  // Filter dropdown
-  $('.dropdown-container > button').click(function(){
-    $('.dropdown').toggleClass("is-down");
-  })
-  
-  </script>
+-->
