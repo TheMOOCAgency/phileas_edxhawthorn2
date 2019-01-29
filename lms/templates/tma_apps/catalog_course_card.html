@@ -50,7 +50,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
                 <div class="pictos-box">
                   <div data-course-id="${str(course['id'])}" class="row course-pictos ${str(course['id']).replace(':','').replace('+','')}">
                     <div class="col-4 text-center pl-2 pr-2">
-                      <p data-course-id="${str(course['id'])}" class="text-center ${str(course['id']).replace(':','').replace('+','')} margin-null">
+                      <div data-course-id="${str(course['id'])}" class="text-center ${str(course['id']).replace(':','').replace('+','')} margin-null">
                       %if course['is_liked'] :
                         <span class="pin like like-on"></span>
                       %else :
@@ -59,7 +59,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
                       <p class="like_count margin-null" data-min='0' data-max="${course['liked_total']}" data-delay='1' data-increment="${int(course['liked_total']/3)}">
                         ${course['liked_total']}
                       </p>
-                      </p>
+                    </div>
 
                     </div>
                     <div class="col-4 text-center pl-2 pr-2">

@@ -6,6 +6,7 @@ from opaque_keys.edx.keys import CourseKey
 from django.db import models
 from django.dispatch import receiver
 from student.signals import UNENROLL_DONE
+from student.signals import ENROLL_STATUS_CHANGE
 import datetime
 import datetime
 import logging
@@ -178,6 +179,7 @@ class TmaCourseOverview(models.Model):
     is_vodeclic = models.BooleanField(default=False)
     favourite_total = models.IntegerField(default=0)
     liked_total = models.IntegerField(default=0)
+    active_enrollments_total = models.IntegerField(default=0)
     is_course_graded = models.BooleanField(default=True)
 
     @classmethod
@@ -187,6 +189,14 @@ class TmaCourseOverview(models.Model):
             course_overview_edx=course_overview,
         );
         return tma_course_overview
+
+    @classmethod
+    def add_vodelic_course(cls, course_key):
+        tma_course_overview=cls.get_tma_course_overview_by_course_id(course_key)
+        tma_course_overview.is_vodeclic=True
+        tma_course_overview.save()
+        return tma_course_overview
+
     @classmethod
     def add_vodelic_course(cls, course_key):
         tma_course_overview=cls.get_tma_course_overview_by_course_id(course_key)
@@ -198,3 +208,8 @@ class TmaCourseOverview(models.Model):
     def count_mandatory_courses(cls, org):
         mandatory_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=org, is_mandatory=True).count()
         return mandatory_courses
+
+#Track enrollments and unenrollments to update total_active_enrollments
+@receiver(ENROLL_STATUS_CHANGE)
+def update_active_enrollments_total(sender=None, event=event, user=user, mode=mode, course_id=course_id, cost=cost, currency=currency):
+    log.info("HELLLLLLOOOOOOOOOOO CHANGEE IT BABY")

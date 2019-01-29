@@ -232,11 +232,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       </div>
       <div class="col-lg-2">
         <div class="dropdown-container">
-          <button onclick="Swal.fire('Not yet implemented !','Thank you for your understanding','info');">Filter<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
+          <button>Filter<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
           <ul class="dropdown">
-            <li value="1"><a href="">The front page</a><div class="separator"></div></li>
-            <li value="2"><a href="">Highest rated</a><div class="separator"></div></li>
-            <li value="3"><a href="">Most subscribed</a></li>
+            <li value="1"><a href="/dashboard">The front page</a><div class="separator"></div></li>
+            <li value="2"><a href="/dashboard/?filter=likes">Highest rated</a><div class="separator"></div></li>
+            <li value="3"><a href="/dashboard/?filter=enrollments">Most subscribed</a></li>
           </ul>
         </div>
       </div>
