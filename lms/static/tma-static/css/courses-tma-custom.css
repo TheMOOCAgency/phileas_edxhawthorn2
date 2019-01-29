@@ -1,0 +1,394 @@
+/* OVERWRITE EDX STYLES */
+#discovery-message {
+    width: 100% !important;
+    margin-right: 0px !important;
+    color: black !important;
+    text-align: center;
+}
+
+input[type="text"],input[type="text"]:focus {
+    border: none;
+    border-bottom: 1px solid black;
+    border-radius: 0px;
+    text-shadow: none;
+    box-shadow: none;
+    padding: none;
+    background-color: transparent;
+    background: none;
+    caret-color: black ;
+    color: black ;
+    font-style: normal;
+}
+input::placeholder {
+    color: black;
+    opacity: 0.5;
+    font-style: normal;
+}
+
+.courses {
+    width: 90% !important;
+    padding: 0px !important;
+}
+
+.courses-listing-item {
+    margin-top: 0px !important;
+}
+
+.courses-container {
+    max-width: none;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.find-courses {
+    background-color: #f5f5f5;
+}
+.find-courses .courses .course a {
+    position: inherit;
+    display: inline-block;
+}
+.find-courses .search-facets {
+    width: 100%;
+    background-color: transparent;
+    border-top: none;
+    box-shadow: none;
+}
+.find-courses .search-facets .header-facet {
+    border-top: 1px solid #979797 !important;
+    padding: 10px;
+    color: #0C1C49;
+    text-transform: none;
+}
+.find-courses .search-facets .header-facet:first-of-type{
+    border-top: none !important;
+}
+.facet-option, .facet-option:hover {
+    margin: 10px;
+    color: #0C1C49 !important;
+}
+.facet-option .count {
+    width: 30px !important;
+    height: 30px;
+    text-align:center ! important;
+    background-color: white;
+    padding: 5px;
+    border-radius: 50px;
+}
+.find-courses .search-facets .facet-option:hover .count {
+    color: #0C1C49 !important;
+}
+.facet-option.discovery-button:hover {
+    color: #777777 !important;
+    background: none !important;
+}
+
+.filters-inner {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.find-courses .filters .clear-filters {
+    color: black
+}
+/* OTHER */
+.criteria-box h4, .criteria-box h3 {
+    color: #0C1C49;
+}
+
+.criteria-box {
+    min-height: 700px;
+    background-color: #E6EDFA;
+}
+.bubble {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    padding: 5px;
+    border-radius: 50px;
+}
+
+/********** COURSE CARDS **********/
+/********** Flipping **********/
+.back p {
+    overflow: hidden;
+    font-size: 12px;
+    color: #777777;
+}
+
+.courses-listing-item {
+	perspective: 1000px !important;
+	-webkit-perspective: 1000px !important;
+	-moz-perspective: 1000px !important;
+	-o-perspective: 1000px !important;
+	-ms-perspective: 1000px !important;
+    height: 400px !important;
+    margin-bottom: 30px !important;
+    max-height: none !important;
+}
+
+.courses-listing-item .flipper {
+	transition: 0.5s ease-out !important;
+	-webkit-transition: 0.5s ease-out !important;
+	-moz-transition: 0.5s ease-out !important;
+	-o-transition: 0.5s ease-out !important;
+	-ms-transition: 0.5s ease-out !important;
+	transform-style: preserve-3d !important;
+	-webkit-transform-style: preserve-3d !important;
+	-moz-transform-style: preserve-3d !important;
+	-o-transform-style: preserve-3d !important;
+	-ms-transform-style: preserve-3d !important;
+	/*.flipper backface is visible so that static.flipper still appears 
+	backface-visibility: visible;
+	-webkit-backface-visibility: visible;
+	-moz-backface-visibility: visible;
+	-o-backface-visibility: visible;
+	-ms-backface-visibility: visible;*/
+	position:relative !important;
+	width: 100% !important;
+	height: 100% !important;
+	
+}
+.courses-listing-item.applyflip .flipper {
+	transform: rotateY(180deg) !important;
+	-webkit-transform: rotateY(180deg) !important;
+	-moz-transform: rotateY(180deg) !important;
+	-o-transform: rotateY(180deg) !important;
+	-ms-transform: rotateY(180deg) !important;
+}
+.courses-listing-item .flipper .front, .courses-listing-item .flipper .back {
+	/* Backface visibility works great for all but IE. As such, we mark the backface visible in IE and manage visibility ourselves */
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	-o-backface-visibility: hidden;
+	-ms-backface-visibility: visible;
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+    width: 100% !important;
+    margin-bottom: 30px !important;
+	height: 400px !important;
+}
+.courses-listing-item .flipper .front, .courses-listing-item.applyflip .flipper .front {
+	transform: rotateY(0deg) !important;
+	-webkit-transform: rotateY(0deg) !important;
+	-moz-transform: rotateY(0deg) !important;
+	-o-transform: rotateY(0deg) !important;
+	-ms-transform: rotateY(0deg) !important;
+}
+.courses-listing-item .flipper .back, .courses-listing-item.applyflip .flipper .back {
+	transform: rotateY(-180deg) !important;
+	-webkit-transform: rotateY(-180deg) !important;
+	-moz-transform: rotateY(-180deg) !important;
+	-o-transform: rotateY(-180deg) !important;
+    -ms-transform: rotateY(-180deg) !important;
+}
+.courses-listing-item .flipper .front, .courses-listing-item.applyflip .flipper .back {
+    /* IE Hack. Halfway through the.courses-listing-item flip, set visibility. Keep other browsers visible throughout the.courses-listing-item flip. */
+    /*
+	animation: stayvisible 0.5s both;
+	-webkit-animation: stayvisible 0.5s both;
+	-moz-animation: stayvisible 0.5s both;
+	-o-animation: stayvisible 0.5s both; 
+	-ms-animation: donothing 0.5s;
+    -ms-transition: visibility 0s linear 0.17s;
+    */
+    visibility: visible;
+}
+.courses-listing-item.applyflip .flipper .back {
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
+}
+.courses-listing-item .flipper .front {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+.courses-listing-item.applyflip .flipper .front, .courses-listing-item .flipper .back {
+    /* IE Hack. Halfway through the.courses-listing-item flip, set visibility. Keep other browsers visible throughout the.courses-listing-item flip. */
+    /*
+	animation: stayvisible 0.5s both;
+	-webkit-animation: stayvisible 0.5s both;
+	-moz-animation: stayvisible 0.5s both;
+	-o-animation: stayvisible 0.5s both;
+	-ms-animation: donothing 0.5s;
+    -ms-transition: visibility 0s linear 0.17s;
+    */
+	visibility: hidden;
+}
+@keyframes stayvisible { from { visibility: visible; } to { visibility: visible; } }
+@-webkit-keyframes stayvisible { from { visibility: visible; } to { visibility: visible; } }
+@-moz-keyframes stayvisible { from { visibility: visible; } to { visibility: visible; } }
+@-o-keyframes stayvisible { from { visibility: visible; } to { visibility: visible; } }
+@-ms-keyframes donothing { 0% { } 100% { } }
+
+/********** End flipping **********/
+
+.back-description, .text-card-lg {
+    overflow: hidden;
+    font-size: 12px;
+    color: #777777;
+}
+.course-resume {
+    padding: 20px;
+}
+a.enroll-btn {
+    width: 150px;
+    padding: 10px;
+    margin: 1rem;
+    border-radius: 28px;
+    background-color: #0B1A4C;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+    vertical-align: middle;
+}
+a.enroll-btn:hover {
+    background-color: white;
+    color: #0B1A4C;
+    border: 1px solid #0B1A4C;
+    text-decoration: none;
+}
+@media (max-width: 485px) {
+    a.enroll-btn {
+        width: 100px;
+    }
+}
+/* Course cards */
+.courses-sm-card, .course {
+    margin-bottom: 30px !important;
+    height: 400px !important;
+    width: 100% !important;
+    background-color: white !important;
+    border: 1px solid rgba(0,0,0,0.09) !important;
+    border-radius: 10px !important;
+    box-shadow: 1px 5px 12px 0px rgba(0,0,0,0.09) !important; 
+    overflow: hidden !important;
+}
+
+.cover-image {
+    height: 130px;
+    border-radius: 10px 10px 0px 0px;
+    overflow: hidden;
+}
+.cover-image > img {
+    width: 100%;
+}
+
+.course-title-name {
+    min-height: 79px;
+    border-bottom: 1px solid rgba(0,0,0,0.09);
+    padding: 10px 10px 20px 10px;
+    font-size: 20px;
+    line-height: normal;
+    color: #0B1A4C;
+}
+.course-title-name-back {
+    font-size: 20px;
+    line-height: normal;
+    color: #0B1A4C;
+}
+.course-name > span {
+    top: -0.5rem;
+    position: relative;
+}
+
+.category-tag {
+    padding: 10px;
+    background-color: #E6500F;
+    color: white;
+    border-radius: 18px;
+}
+.pin {
+    width: 36px;
+    height: 36px;
+}
+.pin-row {
+    position: relative;
+    top: -18px;
+}
+.back .pin-row {
+    left: 10px;
+}
+.pin-row > div {
+    margin-right: 5px;
+}
+.course-pictos {
+    margin-top: 1rem;
+}
+.course-pictos > .col-4 img {
+    height: 40px;
+}
+.course-pictos > .col-4 > span {
+    font-size: 14px;
+    color: #777777;
+}
+
+/******DROPDOWN****************/
+/* Filter */
+.dropdown-container {
+    position: absolute;
+    right: 200px;
+}
+
+.dropdown {
+    display: none;
+    padding: 0px;
+    margin-top: -2px;
+    border: 2px solid #b9c6d4;
+    background-color: white;
+    position: absolute;
+    z-index: 2;
+    width: 150px;
+}
+
+@media (max-width: 992px) {
+  .dropdown-container {
+    position: relative;
+    width: 100%;
+  }
+}
+
+.dropdown-container > button {
+    width: 150px;
+    margin: auto;
+    padding: 20px 5px 20px 5px;
+    border: 2px solid #b9c6d4;
+    border-radius: 0px;
+    color: #0c1c49;
+    text-transform: none;
+    line-height: normal;
+    font-size: 14px;
+}
+.dropdown-container > button > img {
+    width: 20px;
+    margin-left: 10px;
+}
+.dropdown > li {
+    list-style-type: none;
+    text-decoration: none;
+    padding: 20px 5px 20px 5px;
+    text-align: center;
+}
+.dropdown > li > a {
+    color: #0c1c49 !important;
+    font-size: 14px;
+}
+.dropdown > li > a:hover, .dropdown-container > button:hover, .dropdown > li > a:focus {
+    color: #b9c6d4 !important;
+    text-decoration: none;
+}
+.dropdown > li:nth-of-type(2) {
+    border-top: none;
+    border-bottom: none;
+}
+.is-down {
+    display: block;
+}
+
+.dropdown .separator {
+  width: 90px;
+  height: 2px;
+  top: 10px;
+  background-color: #b9c6d4;
+  position: relative;
+  display: inline-block;
+}
