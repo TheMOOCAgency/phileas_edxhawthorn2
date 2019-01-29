@@ -1,16 +1,3 @@
-// Like
-$('.pin.like').click(function(){
-  current_count=parseInt($(this).parent().find('.like_count').html());
-  console.log(current_count)
-  if($(this).hasClass('like-off')){
-    $(this).parent().find('.like_count').html(current_count+1);
-    //$(".like_count_"+enrolment_id).each(function(){$(this).html(current_count+1);});
-  }else{
-    $(this).parent().find('.like_count').html(current_count-1);
-    //$(".like_count_"+enrolment_id).each(function(){$(this).html(current_count-1);});
-  }
-});
-
 function popupOpenClose(popup) {
     /* Add div inside popup for layout if one doesn't exist */
     if ($(".wrapper").length == 0){

@@ -1,9 +1,22 @@
+$('.pin.favorite').on('click',function(){
+  let update_info = change_social_attributes($(this),'favorite');
+  let favorite_counter=$('#favorite-counter-number');
+  if(favorite_counter.length>0){
+    update_counter(favorite_counter, update_info['status']);
+  }
+});
+
+
+$('.pin.like').on('click',function(){
+  let update_info = change_social_attributes($(this),'like');
+  let like_counter=$('.'+update_info['courseSelector']+' .like_count');
+  update_counter(like_counter, update_info['status']);
+});
+
 
 let change_social_attributes =  function(element, social_attribute){
   let courseId = element.parent().data('course-id');
-  console.log(courseId)
   let courseSelector = courseId.split('+').join('').split(':').join('');
-  console.log('.'+ courseSelector + ' > .'+social_attribute)
 
   $('.'+ courseSelector + ' > .'+social_attribute).each(function(){
     $(this).toggleClass(`${social_attribute}-off ${social_attribute}-on`);
@@ -22,14 +35,19 @@ let change_social_attributes =  function(element, social_attribute){
     success: function(data){
     }
   });
+  return {
+    status:status,
+    courseSelector:courseSelector
+  };
 }
 
-$('.pin.favorite').on('click',function(){
-  console.log('clicked favorite');
-  change_social_attributes($(this),'favorite');
-});
-
-$('.pin.like').click(function(){
-  console.log('clicked-like');
-  change_social_attributes($(this),'like')
-});
+let update_counter = function(counter, status){
+  let current_count=parseInt(counter.html());
+  if(status=="true"){
+    let new_count= current_count+1
+    counter.html(new_count);
+  }else{
+    let new_count= current_count-1
+    counter.html(new_count);
+  }
+}

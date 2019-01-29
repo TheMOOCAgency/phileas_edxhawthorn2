@@ -249,6 +249,11 @@ a.continue-btn:hover {
     width: 50px;
 }
 
+.like_count{
+  position: relative!important;
+  bottom: 8px!important;
+}
+
 @media (max-width: 992px) {
     .title-36.mb-5 {
         padding-left: 0px;

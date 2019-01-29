@@ -10,3 +10,8 @@
 *::before,*::after{
   font-family: FontAwesome!important;
 }
+
+/* Usefull classes */
+.margin-null{
+  margin:0;
+}
