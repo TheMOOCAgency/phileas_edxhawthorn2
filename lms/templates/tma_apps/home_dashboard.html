@@ -88,10 +88,14 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
             </div>
             <div class="row">
                 <div class="col-lg-2 text-right">
-                    <div class="profile-img"></div>
+                    % if user.first_name and user.last_name:
+                        <div class="profile-img">${user.first_name[0] + user.last_name[0]}</div>
+                    % else:
+                        <div class="profile-img">${user.first_name[0] + user.last_name[0]}</div>
+                    % endif
                 </div>
                 <div class="col-lg-5">
-                    <h2 class="title-24"><span class="font-weight-bold">Hello</span> ${user.username}</h2>
+                    <h2 class="title-24"><span class="font-weight-bold">Hello</span> ${user.first_name}</h2>
                     <p class="grey-text">${_("You'll find on this page all your ongoing courses, mandatory or not, as well as your favorite and finished courses.")}</p>
                 </div>
             </div>
