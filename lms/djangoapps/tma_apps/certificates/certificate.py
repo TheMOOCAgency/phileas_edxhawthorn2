@@ -54,11 +54,14 @@ class certificate():
             last_name = _("Unknown last name")
 
         name = last_name+" "+first_name
+        certificate_info=TmaCourseEnrollment.get_courseenrollment(course_key, self.user)
+
         context = {
             "passed":passed,
             "course_name":self.course.display_name_with_default,
             "first_name":first_name,
             "last_name":last_name,
+            "certificate_info":certificate_info
         }
 
         return render_to_response('tma_apps/certificate.html',context)

@@ -990,7 +990,7 @@ def get_tma_course_info(user, course_id, block_courses):
     course['liked_total'] = TmaOverviewInfo.liked_total
 
     #TmaCourseEnrollment Info
-    if TmaCourseEnrollment.objects.filter(course_enrollment_edx__course_id=course_key).exists():
+    if TmaCourseEnrollment.objects.filter(course_enrollment_edx__course_id=course_key, course_enrollment_edx__user=user).exists():
         TmaEnrollmentInfo = TmaCourseEnrollment.objects.get(course_enrollment_edx__course_id=course_key, course_enrollment_edx__user=user)
         course['is_favorite'] = TmaEnrollmentInfo.is_favourite
         course['is_liked'] = TmaEnrollmentInfo.is_liked

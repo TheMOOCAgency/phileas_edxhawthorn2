@@ -3,6 +3,7 @@
   if (settings.url.indexOf('get_user_grade')>-1) {
     response=JSON.parse(xhr.responseText);
     if(response['popup_text'] && response['popup_title']){
+      console.log('bravo')
       certificate_url ='/tma_apps/'+global_courseid+"/certificate/render"
       $('#tma_course_end_popup a').attr("href",certificate_url)
       $('#tma_course_end_popup .modal-body h5').html(response['popup_title'])
