@@ -26,6 +26,10 @@ a {
     border-radius: 50px;
     background-color: #00A1E9;
     color: white;
+    padding-top: 15px;
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
 }
 
 .padding-70 {
