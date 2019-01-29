@@ -1,3 +1,5 @@
+// THIS SCRIPT IS ALSO USED IN COURSES.HTML
+
 $(document).ready(function() {
   // Flip cards effect
   $('.flip-container').hover(function(){

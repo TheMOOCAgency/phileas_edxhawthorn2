@@ -281,16 +281,163 @@ input::placeholder {
   position: relative;
   display: inline-block;
 }
-
+/*
+select.custom-select {
+    background-image: url('media/microsite/phileas/assets/img/flechebas.png')
+}
+select.custom-select::-ms-expand {
+    display: none;
+}
+select.custom-select > option, select.custom-select > option[selected]  {
+    text-align: center;
+    color: #0B1A4C !important;
+    font-size: 14px;
+    padding: 10px;
+}
+*/
 /********** COURSE CARDS **********/
-.static-card {
+/********** Flipping **********/
+.flip-container {
+	perspective: 1000px;
+	-webkit-perspective: 1000px;
+	-moz-perspective: 1000px;
+	-o-perspective: 1000px;
+	-ms-perspective: 1000px;
+    height: 400px;
+    margin-bottom: 30px;
+}
+
+.flip-container .flipper {
+	transition: 0.5s ease-out;
+	-webkit-transition: 0.5s ease-out;
+	-moz-transition: 0.5s ease-out;
+	-o-transition: 0.5s ease-out;
+	-ms-transition: 0.5s ease-out;
+	transform-style: preserve-3d;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	-o-transform-style: preserve-3d;
+	-ms-transform-style: preserve-3d;
+	/*.flipper backface is visible so that static.flipper still appears
+	backface-visibility: visible;
+	-webkit-backface-visibility: visible;
+	-moz-backface-visibility: visible;
+	-o-backface-visibility: visible;
+	-ms-backface-visibility: visible;*/
+	position:relative;
+	width: 100%;
+	height: 100%;
+
+}
+.flip-container.applyflip .flipper {
+	transform: rotateY(180deg);
+	-webkit-transform: rotateY(180deg);
+	-moz-transform: rotateY(180deg);
+	-o-transform: rotateY(180deg);
+	-ms-transform: rotateY(180deg);
+}
+.flip-container .flipper .front, .flip-container .flipper .back {
+	/* Backface visibility works great for all but IE. As such, we mark the backface visible in IE and manage visibility ourselves */
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	-o-backface-visibility: hidden;
+	-ms-backface-visibility: visible;
+	position: absolute;
+	top: 0;
+	left: 0;
+    width: 100%;
+    margin-bottom: 30px;
+	height: 400px;
+}
+.flip-container .flipper .front, .flip-container.applyflip .flipper .front {
+	transform: rotateY(0deg);
+	-webkit-transform: rotateY(0deg);
+	-moz-transform: rotateY(0deg);
+	-o-transform: rotateY(0deg);
+	-ms-transform: rotateY(0deg);
+}
+.flip-container .flipper .back, .flip-container.applyflip .flipper .back {
+	transform: rotateY(-180deg);
+	-webkit-transform: rotateY(-180deg);
+	-moz-transform: rotateY(-180deg);
+	-o-transform: rotateY(-180deg);
+    -ms-transform: rotateY(-180deg);
+}
+.flip-container .flipper .front, .flip-container.applyflip .flipper .back {
+	/* IE Hack. Halfway through the.flip-container flip, set visibility. Keep other browsers visible throughout the.flip-container flip. */
+	animation: stayvisible 0.5s both;
+	-webkit-animation: stayvisible 0.5s both;
+	-moz-animation: stayvisible 0.5s both;
+	-o-animation: stayvisible 0.5s both;
+	-ms-animation: donothing 0.5s;
+	-ms-transition: visibility 0s linear 0.17s;
+	visibility: visible;
+}
+.flip-container.applyflip .flipper .front, .flip-container .flipper .back {
+	/* IE Hack. Halfway through the.flip-container flip, set visibility. Keep other browsers visible throughout the.flip-container flip. */
+	animation: stayvisible 0.5s both;
+	-webkit-animation: stayvisible 0.5s both;
+	-moz-animation: stayvisible 0.5s both;
+	-o-animation: stayvisible 0.5s both;
+	-ms-animation: donothing 0.5s;
+	-ms-transition: visibility 0s linear 0.17s;
+	visibility: hidden;
+}
+@keyframes stayvisible { from { visibility: visible; } to { visibility: visible; } }
+@-webkit-keyframes stayvisible { from { visibility: visible; } to { visibility: visible; } }
+@-moz-keyframes stayvisible { from { visibility: visible; } to { visibility: visible; } }
+@-o-keyframes stayvisible { from { visibility: visible; } to { visibility: visible; } }
+@-ms-keyframes donothing { 0% { } 100% { } }
+
+/********** End flipping **********/
+.back {
+    position: relative !important;
+}
+
+.back p, .text-card-lg {
+    overflow: hidden;
+    font-size: 12px;
+    color: #777777;
+}
+.text-card-lg {
+    height: 140px;
+    overflow: hidden;
+}
+.course-resume {
+    padding: 20px;
+}
+
+a.enroll-btn {
+    width: 150px;
+    padding: 8px;
+    margin: 0 1rem 1rem 1rem;
+    border-radius: 28px;
+    background-color: white;
+    color: #0B1A4C !important;
+    border: 1px solid #0B1A4C;
+    font-weight: bold;
+    display: inline-block;
+    vertical-align: middle;
+}
+a.enroll-btn:hover {
+    background-color: #0B1A4C;
+    color: white !important;
+    text-decoration: none;
+    cursor:pointer;
+}
+@media (max-width: 485px) {
+    a.enroll-btn {
+        width: 100px;
+    }
+}
+/* Course cards */
+.course-card-sm {
+    position: relative;
     margin-bottom: 30px;
     height: 400px;
     width: 100%;
-    background-image: url('/static/tma-static/images/tuile_static.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: white;
     border: 1px solid rgba(0,0,0,0.09);
     border-radius: 10px;
     box-shadow: 1px 5px 12px 0px rgba(0,0,0,0.09);
@@ -308,6 +455,125 @@ input::placeholder {
     border-radius: 10px;
     box-shadow: 1px 5px 12px 0px rgba(0,0,0,0.09);
     overflow: hidden;
+}
+
+.mandatory-tag {
+    position: absolute;
+    height: 35px;
+    background-color:#F8005B;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+}
+.mandatory-tag p {
+    top: 20%;
+    position: relative;
+    color: white;
+}
+
+.cover-image {
+    height: 130px;
+    border-radius: 10px 10px 0px 0px;
+    overflow: hidden;
+}
+.cover-image > img {
+    width: 100%;
+}
+
+.course-name > .course-title > p  {
+    min-height: 79px;
+    padding: 10px 0px 20px 0px;
+    font-size: 20px;
+    line-height: normal;
+    color: #0B1A4C;
+}
+
+.course-title > h3 {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: #0B1A4C;
+}
+
+.course-name > span {
+    top: -0.5rem;
+    position: relative;
+}
+
+.tma_course_counters{
+  font-size: 30px;
+  line-height: normal;
+  color: white;
+}
+
+.tma_course_counters_label{
+  font-size: 12px;
+  line-height: normal;
+  color:white;
+}
+.white-right-border{
+  border-right: 1px solid white;
+}
+#tma_counter_link{
+  text-decoration: none!important;
+  color: white!important;
+}
+
+.course-name .align-items-end, .pictos-box {
+  border-top: 1px solid rgba(0,0,0,0.09);
+  margin-bottom: 20px;
+}
+
+.category-tag {
+    padding: 6px 10px 6px 10px;
+    background-color: #E6500F;
+    color: white;
+    border-radius: 18px;
+    margin-right: 10px;
+}
+
+.pin-row > .like {
+    background-color: #d4d3d3;
+    border-radius: 50px;
+}
+.like-count {
+  display: block;
+}
+
+
+.pin-row {
+    position: relative;
+    top: -18px;
+}
+.back .pin-row {
+    left: 10px;
+}
+.pin-row > div {
+    margin-right: 5px;
+}
+.course-pictos {
+    margin-top: 1rem;
+}
+.course-pictos > .col-4 img {
+    height: 40px;
+}
+.course-pictos > .col-4 > span {
+  display: block;
+    font-size: 14px;
+    color: #777777;
+}
+
+.course-btn {
+    display: flex;
+}
+.course-btn > .enroll-btn {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 /* Categories */
