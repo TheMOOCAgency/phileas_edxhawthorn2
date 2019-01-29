@@ -91,7 +91,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                     % if user.first_name and user.last_name:
                         <div class="profile-img">${user.first_name[0] + user.last_name[0]}</div>
                     % else:
-                        <div class="profile-img">${user.first_name[0] + user.last_name[0]}</div>
+                        <div class="profile-img">${user.username}</div>
                     % endif
                 </div>
                 <div class="col-lg-5">
@@ -205,7 +205,6 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
 <!-- TMA Home Dashboard Script -->
 <script>
   let user_email="${request.user.email}"
-  let courseId="${enrollment.course_id}"
 </script>
 <script src="${static.url('tma-static/js/home-dashboard-actions.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
