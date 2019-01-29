@@ -107,8 +107,11 @@ from xmodule.x_module import STUDENT_VIEW
 from ..entrance_exams import user_can_skip_entrance_exam
 from ..module_render import get_module, get_module_by_usage_id, get_module_for_descriptor
 
+# TMA IMPORTS
 from student.models import CourseEnrollment
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
+from student.views.dashboard import get_tma_course_info, get_course_enrollments, is_course_blocked
+from shoppingcart.models import CourseRegistrationCode
 
 log = logging.getLogger("edx.courseware")
 
@@ -229,12 +232,48 @@ def courses(request):
     # Add marketable programs to the context.
     programs_list = get_programs_with_type(request.site, include_hidden=False)
 
+    # TMA CODE #
+    course_enrollments = get_course_enrollments(request.user, org_whitelist=None, org_blacklist=None)
+    block_courses = frozenset(
+        enrollment.course_id for enrollment in course_enrollments
+        if is_course_blocked(
+            request,
+            CourseRegistrationCode.objects.filter(
+                course_id=enrollment.course_id,
+                registrationcoderedemption__redeemed_by=request.user
+            ),
+            enrollment.course_id
+        )
+    )
+
+    #TMA - Get List of courses to display
+    current_organisation = configuration_helpers.get_value('course_org_filter','phileas')
+    frontpage_courses = configuration_helpers.get_value('frontpage_courses','')
+    if frontpage_courses:
+        courses_to_display = CourseOverview.objects.filter(org=current_organisation, id__in=frontpage_courses)
+    else :
+        courses_to_display = CourseOverview.objects.filter(org=current_organisation)
+
+    # Add TMA course info
+    final_course_list = []
+    for course in courses_to_display :
+        course_info = get_tma_course_info(request.user, course.id, block_courses)
+        final_course_list.append(course_info)
+
+    #Get user course enrollments
+    enrollment_course_list = []
+    for enrollment in course_enrollments:
+        course_info = get_tma_course_info(user, enrollment.course_overview.id, block_courses)
+        enrollment_course_list.append(course_info)
+
     return render_to_response(
         "courseware/courses.html",
         {
             'courses': courses_list,
             'course_discovery_meanings': course_discovery_meanings,
-            'programs_list': programs_list
+            'programs_list': programs_list,
+            'final_course_list': final_course_list,
+            'enrollment_course_list':enrollment_course_list
         }
     )
 
