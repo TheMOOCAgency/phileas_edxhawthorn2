@@ -249,7 +249,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     <div class="row">
       <!-- First two courses -->
       % if final_course_list :
-        %for course in final_course_list[:2] :
+        %for course in final_course_list[0:2] :
           <%include file='tma_apps/catalog_course_card.html' args='course=course' />
         %endfor
       %endif
@@ -274,7 +274,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     <!-- Third Row -->
     <div class="row">
       % if final_course_list :
-        %for course in final_course_list[4:8] :
+        %for course in final_course_list[5:9] :
           <%include file='tma_apps/catalog_course_card.html' args='course=course' />
         %endfor
       %endif

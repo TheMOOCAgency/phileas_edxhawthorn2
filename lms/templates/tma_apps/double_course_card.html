@@ -24,13 +24,11 @@ from django.utils.translation import ugettext as _
         <div class="container-fluid">
             <div class="row">
               <div class="col course-name">
-                <div class="row pin-row">
-                  <div>
-                    <div class="category-tag">Bureautique</div>
-                  </div>
+                <div data-course-id="${str(course['id'])}" data-course-id="${str(course['id'])}" class="row pin-row ${str(course['id']).replace(':','').replace('+','')}">
+                  <div class="category-tag">Bureautique</div>
                   % if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
                     <div>
-                      <img src="${static.url('tma-static/images/cadenas.svg')}" class="pin">
+                      <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-placement="top" title="Manager Only" class="pin">
                     </div>
                   % endif
                   % if course['is_favorite']:
@@ -38,11 +36,6 @@ from django.utils.translation import ugettext as _
                   % else:
                     <span class="pin favorite favorite-off"></span>
                   % endif
-                  %if course['is_liked'] :
-                    <span class="pin like like-on"></span>
-                  %else :
-                    <span class="pin like like-off"></span>
-                  %endif
                 </div>
                 <div class="row course-title">
                   <p>${course['display_name']}</p>
@@ -50,7 +43,17 @@ from django.utils.translation import ugettext as _
                 <div class="align-items-end">
                   <div class="row course-pictos ${course['id']}">
                     <div class="col-4 text-center ${course['id']} pl-2 pr-2 ">
-                        <span class="like like-off"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count">${course['liked_total']}</span></span>
+                      <p data-course-id="${str(course['id'])}" class="text-center ${str(course['id']).replace(':','').replace('+','')} margin-null">
+                      %if course['is_liked'] :
+                        <span class="pin like like-on"></span>
+                      %else :
+                        <span class="pin like like-off"></span>
+                      %endif
+                      <p class="like_count margin-null" data-min='0' data-max="${course['liked_total']}" data-delay='1' data-increment="${int(course['liked_total']/3)}">
+                        ${course['liked_total']}
+                      </p>
+                      </p>
+
                     </div>
                     <div class="col-4 text-center pl-2 pr-2">
                         <img src="${static.url('tma-static/images/Time.png')}">

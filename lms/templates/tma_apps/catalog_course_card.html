@@ -12,13 +12,14 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
 
 <div class="col-lg-3 col-md-6 flip-container">
   <div class="flipper">
-      <!--flip front content-->
-      <div class="course-card-sm front">
-        % if course['is_mandatory']:
-          <div class="mandatory-tag">
-              <p class="text-center">Mandatory Course!</p>
-          </div>
-        % endif
+    <!--flip front content-->
+    <div class="course-card-sm front">
+      % if course['is_mandatory']:
+      <div class="col mandatory-tag">
+        <p class="text-center">Mandatory Course!</p>
+      </div>
+      % endif
+
         <div class="cover-image">
             <img src="${course['course_image_url']}" alt="${course['display_name_with_default']} ${course['display_number_with_default']}"/>
         </div>
@@ -26,7 +27,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
         <div class="container-fluid">
           <div class="container-fluid">
             <div class="row">
-              <div class="course-name">
+              <div class="course-name col">
                 <div data-course-id="${str(course['id'])}" class="row pin-row ${str(course['id']).replace(':','').replace('+','')}">
                   <div>
                     <div class="category-tag">Bureautique</div>
@@ -41,11 +42,6 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
                     % else:
                       <span class="pin favorite favorite-off"></span>
                     % endif
-                    %if course['is_liked'] :
-                      <span class="pin like like-on"></span>
-                    %else :
-                      <span class="pin like like-off"></span>
-                    %endif
                 </div>
                 <div class="row course-title">
                   <p>${course['display_name']}</p>
@@ -54,7 +50,16 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
                 <div class="pictos-box">
                   <div data-course-id="${str(course['id'])}" class="row course-pictos ${str(course['id']).replace(':','').replace('+','')}">
                     <div class="col-4 text-center pl-2 pr-2">
-                      <span class="like like-false"><img src="${static.url('tma-static/images/like.svg')}"><span class="like-count" data-count="${course['liked_total']}">${course['liked_total']}</span></span>
+                      <p data-course-id="${str(course['id'])}" class="text-center ${str(course['id']).replace(':','').replace('+','')} margin-null">
+                      %if course['is_liked'] :
+                        <span class="pin like like-on"></span>
+                      %else :
+                        <span class="pin like like-off"></span>
+                      %endif
+                      <p class="like_count margin-null" data-min='0' data-max="${course['liked_total']}" data-delay='1' data-increment="${int(course['liked_total']/3)}">
+                        ${course['liked_total']}
+                      </p>
+                      </p>
 
                     </div>
                     <div class="col-4 text-center pl-2 pr-2">

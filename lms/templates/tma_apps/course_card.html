@@ -27,112 +27,107 @@ from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
 from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from math import ceil
 
-
-
 %>
 <%
 additional_not_mandatory_class=""
 if enrollment not in mandatory_course_enrollments:
   additional_not_mandatory_class="not-mandatory-course-enrolment"
-endif
-%>
-                <%
-                is_vodeclic = "Vodeclic" in str(enrollment.course_id).split('+')[2]
-                course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
-                endif
-                %>
-                <link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
-                <div class="col-lg-3 col-md-6">
-                  <div class="training-card">
-                    <div class="container-fluid">
-                        <div class="row">
-                        %if enrollment in mandatory_course_enrollments:
-                            <div class="col mandatory-tag">
-                                <p class="text-center">${_("mandatory course!")}</p>
-                            </div>
-                        %endif
-                        </div>
-                        <div class="row">
-                            <div class="col progress ${additional_not_mandatory_class}">
-                                <%
-                                    completion_rate=int(100*TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).completion_rate)
-                                    progress_bar_size = ceil(ceil(completion_rate)/10)*10
-                                %>
-                                %if completion_rate > 0 and not is_vodeclic:
-                                <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
-                                %elif is_vodeclic:
-                                <div class="progress-bar"></div>
-                                %else:
-                                <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
-                                %endif
-                            </div>
-                        </div>
-                        %if not enrollment in mandatory_course_enrollments:
-                        <img src="${static.url('tma-static/images/Fermer.svg')}" class="unenroll" alt='${_("Unenroll")}' data-js="open">
-                        <div class="popup">
-                            <p>${_("Do you really want to unenroll?")}</p>
-                            <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
-                              ${_("Unenroll")}
-                            </a>
 
-                        </div>
-                        %endif
-                      </div>
-            <div class="row">
-                <div class="col m-3">
-                    <p class="title-course">${enrollment.course_overview.display_name_with_default}</p>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col dates-box m-3">
-                    %if not is_vodeclic:
-                        <p>Start date: <span>${enrollment.course_overview.dashboard_start_display.strftime('%Y-%m-%d')}</span></p>
-                        %if enrollment.course_overview.end:
-                        <p>End date: <span>${enrollment.course_overview.end.strftime('%Y-%m-%d')}</span></p>
-                        %else:
-                        <p>End date: <span>${_("No end date")}</span></p>
-                        %endif
-                    % else:
-                        <p>Start date: <span>${_("No start date")}</span></p>
-                        <p>End date: <span>${_("No end date")}</span></p>
-                    %endif
-                </div>
-            </div>
-            <div class="row pin-row mb-3">
-                <div class="col-4">
-                    <p data-course-id="${str(enrollment.course_id)}" class="text-center ${str(enrollment.course_id).replace(':','').replace('+','')}">
-                      %if is_liked :
-                        <span class="pin like like-on"></span>
-                      %else :
-                        <span class="pin like like-off"></span>
-                      %endif
-                      <span class="like_count" data-min='0' data-max='${liked_total}' data-delay='1' data-increment='${int(liked_total/3)}'>
-                        ${liked_total}
-                      </span>
-                    </p>
-                </div>
-                <div class="col-8">
-                  <a href="mailto:?subject=${enrollment.course_overview.display_name_with_default} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !">
-                  <p class="text-center"><img src="${static.url('tma-static/images/recommend.svg')}"/>${_("Recommend")}</p>
-                  </a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="text-center">
-                  %if is_vodeclic :
-                    %if enrollment.is_active:
-                    <a href="${get_vodeclic_href(request.user,enrollment._course_id)}" target="_blank" class="continue-btn">${_("Continue")}</a>
-                    %else :
-                      <a href="${get_vodeclic_href(request.user,enrollment._course_id)}" target="_blank" class="continue-btn vodeclick_register" data-vodeclic-id="${enrollment._course_id}" >${_("Join")}</a>
-                    %endif
-                  %else :
-                    %if enrollment.is_active :
-                    <a href="${course_target}" class="continue-btn">${_("Continue")}</a>
-                    %else :
-                    <a href="${'/courses/'+str(enrollment._course_id)+'/about'}" class="enroll-btn">${_("Join")}</a>
-                    %endif
-                  %endif
-                </div>
-            </div>
+completion_rate=int(100*TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).completion_rate)
+progress_bar_size = ceil(ceil(completion_rate)/10)*10
+
+is_vodeclic = "Vodeclic" in str(enrollment.course_id).split('+')[2]
+course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
+%>
+
+<link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
+
+<div class="col-lg-3 col-md-6">
+  <div class="training-card">
+    <div class="container-fluid">
+        <div class="row">
+        %if enrollment in mandatory_course_enrollments:
+          <div class="col mandatory-tag">
+              <p class="text-center">${_("mandatory course!")}</p>
+          </div>
+        %endif
         </div>
+        <div class="row">
+          <div class="col progress ${additional_not_mandatory_class}">
+            %if completion_rate > 0 and not is_vodeclic:
+            <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
+            %elif is_vodeclic:
+            <div class="progress-bar"></div>
+            %else:
+            <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
+            %endif
+          </div>
+        </div>
+        %if not enrollment in mandatory_course_enrollments:
+        <img src="${static.url('tma-static/images/Fermer.svg')}" class="unenroll" alt='${_("Unenroll")}' data-js="open">
+        <div class="popup">
+          <p>${_("Do you really want to unenroll?")}</p>
+          <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
+            ${_("Unenroll")}
+          </a>
+        </div>
+        %endif
+      <div class="row">
+        <div class="col m-3">
+        <p class="title-course">${enrollment.course_overview.display_name_with_default}</p>
+        </div>
+      </div>
+      <div class="row mb-3">
+      <div class="col dates-box m-3">
+        %if not is_vodeclic:
+          <p>Start date: <span>${enrollment.course_overview.dashboard_start_display.strftime('%Y-%m-%d')}</span></p>
+          %if enrollment.course_overview.end:
+          <p>End date: <span>${enrollment.course_overview.end.strftime('%Y-%m-%d')}</span></p>
+          %else:
+          <p>End date: <span>${_("No end date")}</span></p>
+          %endif
+          % else:
+          <p>Start date: <span>${_("No start date")}</span></p>
+          <p>End date: <span>${_("No end date")}</span></p>
+          %endif
+        </div>
+      </div>
+      <div class="row pin-row mb-3">
+        <div class="col-4">
+          <p data-course-id="${str(enrollment.course_id)}" class="text-center ${str(enrollment.course_id).replace(':','').replace('+','')}">
+          %if is_liked :
+            <span class="pin like like-on"></span>
+          %else :
+            <span class="pin like like-off"></span>
+          %endif
+          <span class="like_count" data-min='0' data-max='${liked_total}' data-delay='1' data-increment='${int(liked_total/3)}'>
+            ${liked_total}
+          </span>
+          </p>
+        </div>
+        <div class="col-8">
+          <a href="mailto:?subject=${enrollment.course_overview.display_name_with_default} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !">
+          <p class="text-center"><img src="${static.url('tma-static/images/recommend.svg')}"/>${_("Recommend")}</p>
+          </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-center">
+        %if is_vodeclic :
+          %if enrollment.is_active:
+          <a href="${get_vodeclic_href(request.user,enrollment._course_id)}" target="_blank" class="continue-btn">${_("Continue")}</a>
+          %else :
+          <a href="${get_vodeclic_href(request.user,enrollment._course_id)}" target="_blank" class="continue-btn vodeclick_register" data-vodeclic-id="${enrollment._course_id}" >${_("Join")}</a>
+          %endif
+        %else :
+          %if enrollment.is_active :
+          <a href="${course_target}" class="continue-btn">${_("Continue")}</a>
+          %else :
+          <a href="${'/courses/'+str(enrollment._course_id)+'/about'}" class="enroll-btn">${_("Join")}</a>
+          %endif
+        %endif
+        </div>
+      </div>
     </div>
+  </div>
+</div>
