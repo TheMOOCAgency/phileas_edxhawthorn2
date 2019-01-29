@@ -161,7 +161,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       </video>
     <!--Black & White img-->
     <div class="zoomEffect col-lg-3 text-center img-bw-1">
-      <a href="${sspeaking_url}" target="_blank">Language <br>skills</a>
+      <a onclick="postSspeaking()" target="_blank">Language <br>skills</a>
     </div>
     <div class="zoomEffect col-lg-3 text-center img-bw-2">
         <a href="#">Regulatory<br> (eCampus)</a>
@@ -317,6 +317,25 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 <script>
   let etoile_src="${static.url('tma-static/images/etoile.svg')}"
   let counter = ${favorite_courses_count}
+  const ssData = ${dump_js_escaped_json(sspeaking_data) | n, decode.utf8};
+
+  const postSspeaking = function() {
+    var form = document.createElement("form");
+    form.setAttribute("method", "POST");
+    form.setAttribute("action", ssData.sspeaking_url);
+    for (var key in ssData.sspeaking_data) {
+      if (ssData.sspeaking_data.hasOwnProperty(key)) {
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", key);
+        hiddenField.setAttribute("value", ssData.sspeaking_data[key]);
+
+        form.appendChild(hiddenField);
+      }
+    }
+    document.body.appendChild(form);
+    form.submit();
+  }
 </script>
 <script src="${static.url('tma-static/js/dashboard-tma-actions.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
