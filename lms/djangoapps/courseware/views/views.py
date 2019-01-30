@@ -108,10 +108,12 @@ from ..entrance_exams import user_can_skip_entrance_exam
 from ..module_render import get_module, get_module_by_usage_id, get_module_for_descriptor
 
 # TMA IMPORTS
+from openedx.core.djangoapps.lang_pref.api import released_languages
 from student.models import CourseEnrollment
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
-from student.views.dashboard import get_tma_course_info, get_course_enrollments, is_course_blocked
+from student.views.dashboard import get_tma_course_info, get_tma_course_json, get_course_enrollments, is_course_blocked
 from shoppingcart.models import CourseRegistrationCode
+from collections import Counter
 
 log = logging.getLogger("edx.courseware")
 
@@ -256,24 +258,40 @@ def courses(request):
 
     # Add TMA course info
     final_course_list = []
+    json_course_list = []
     for course in courses_to_display :
         course_info = get_tma_course_info(request.user, course.id, block_courses)
+        course_json_info = get_tma_course_json(request.user, course.id, block_courses)
         final_course_list.append(course_info)
+        json_course_list.append(course_json_info)
 
-    #Get user course enrollments
+    # Get user course enrollments
     enrollment_course_list = []
     for enrollment in course_enrollments:
         course_info = get_tma_course_info(user, enrollment.course_overview.id, block_courses)
         enrollment_course_list.append(course_info)
 
+    # Get tags and tags counts
+    try:
+        tag_counters = TmaCourseOverview.get_all_tags()
+    except:
+        tag_counters = []
+        
+    language_counters = Counter()
+    for course in final_course_list:
+        language_counters[course['language']] += 1
+
     return render_to_response(
         "courseware/courses.html",
         {
             'courses': courses_list,
+            'json_courses': json_course_list,
             'course_discovery_meanings': course_discovery_meanings,
             'programs_list': programs_list,
             'final_course_list': final_course_list,
-            'enrollment_course_list':enrollment_course_list
+            'enrollment_course_list':enrollment_course_list,
+            'tag_counters': tag_counters,
+            'language_counters': language_counters
         }
     )
 

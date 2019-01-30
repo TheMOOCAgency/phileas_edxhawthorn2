@@ -1007,6 +1007,7 @@ def get_tma_course_info(user, course_id, block_courses):
     course['is_manager_only'] = TmaOverviewInfo.is_manager_only
     course['is_vodeclic'] = TmaOverviewInfo.is_vodeclic
     course['liked_total'] = TmaOverviewInfo.liked_total
+    course['tag'] = TmaOverviewInfo.tag
 
     #TmaCourseEnrollment Info
     if TmaCourseEnrollment.objects.filter(course_enrollment_edx__course_id=course_key, course_enrollment_edx__user=user).exists():
@@ -1019,5 +1020,31 @@ def get_tma_course_info(user, course_id, block_courses):
     if CourseEnrollment.objects.filter(user=user, course_id=course_id, is_active=True).exists():
         course['is_enrolled'] = True
 
-
     return course
+
+
+def get_tma_course_json(user, course_id, block_courses):
+    """
+    Creates a TMA course info dict JSON serializable by changing the type of several values, and discarding other keys that are not needed to generate course cards.
+    """
+
+    course = get_tma_course_info(user, course_id, block_courses)
+    course['id'] = str(course['id'])
+
+    try:
+        course['start'] = course['start'].strftime('%Y-%m-%d')
+    except:
+        pass
+    try:
+        course['enrollment_start'] = course['enrollment_start'].strftime('%Y-%m-%d')
+    except:
+        pass
+    try:
+        course['end'] = course['end'].strftime('%Y-%m-%d')
+    except:
+        pass
+
+    keys_not_needed = {'_location', '_state', 'modified', 'certificate_available_date', 'created', 'lowest_passing_grade'}
+    course_json = {x: course[x] for x in course if x not in keys_not_needed}
+
+    return course_json

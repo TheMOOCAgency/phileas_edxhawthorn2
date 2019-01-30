@@ -181,6 +181,7 @@ class TmaCourseOverview(models.Model):
     liked_total = models.IntegerField(default=0)
     active_enrollments_total = models.IntegerField(default=0)
     is_course_graded = models.BooleanField(default=True)
+    tag = models.CharField(db_index=True, max_length=30, default=None)
 
     @classmethod
     def get_tma_course_overview_by_course_id(cls, course_key):
@@ -211,6 +212,17 @@ class TmaCourseOverview(models.Model):
     def count_mandatory_courses(cls, org):
         mandatory_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=org, is_mandatory=True).count()
         return mandatory_courses
+
+    @staticmethod
+    def get_all_tags():
+        all_tags = []
+        try:
+            tag_counters = TmaCourseOverview.objects.order_by().values_list('tag').annotate(models.Count('tag'))
+            for item in tag_counters:
+                all_tags.append(item)
+        except:
+            pass
+        return all_tags
 
 #Track enrollments and unenrollments to update total_active_enrollments
 @receiver(ENROLL_STATUS_CHANGE)
