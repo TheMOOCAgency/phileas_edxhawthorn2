@@ -29,6 +29,17 @@ input::placeholder {
     background-color: #E6EDFA;
 }
 
+.criteria-box button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-image: url("/static/tma-static/images/loupe_black.svg") !important;
+    background-size: cover;
+}
+.criteria-box button:hover {
+    background-image: url("/static/tma-static/images/loupe_black.svg") !important;
+}
+
 .separator {
     height: 1px;
     width: 90%;
