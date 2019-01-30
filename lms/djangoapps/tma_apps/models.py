@@ -216,9 +216,12 @@ class TmaCourseOverview(models.Model):
     @staticmethod
     def get_all_tags():
         all_tags = []
-        tag_counters = TmaCourseOverview.objects.order_by().values_list('tag').annotate(models.Count('tag'))
-        for item in tag_counters:
-            all_tags.append(item)
+        try:
+            tag_counters = TmaCourseOverview.objects.order_by().values_list('tag').annotate(models.Count('tag'))
+            for item in tag_counters:
+                all_tags.append(item)
+        except:
+            pass
         return all_tags
 
 #Track enrollments and unenrollments to update total_active_enrollments

@@ -111,7 +111,7 @@ from ..module_render import get_module, get_module_by_usage_id, get_module_for_d
 from openedx.core.djangoapps.lang_pref.api import released_languages
 from student.models import CourseEnrollment
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
-from student.views.dashboard import get_tma_course_info, get_course_enrollments, is_course_blocked
+from student.views.dashboard import get_tma_course_info, get_tma_course_json, get_course_enrollments, is_course_blocked
 from shoppingcart.models import CourseRegistrationCode
 from collections import Counter
 
@@ -258,9 +258,12 @@ def courses(request):
 
     # Add TMA course info
     final_course_list = []
+    json_course_list = []
     for course in courses_to_display :
         course_info = get_tma_course_info(request.user, course.id, block_courses)
+        course_json_info = get_tma_course_json(request.user, course.id, block_courses)
         final_course_list.append(course_info)
+        json_course_list.append(course_json_info)
 
     # Get user course enrollments
     enrollment_course_list = []
@@ -269,7 +272,11 @@ def courses(request):
         enrollment_course_list.append(course_info)
 
     # Get tags and tags counts
-    tag_counters = TmaCourseOverview.get_all_tags()
+    try:
+        tag_counters = TmaCourseOverview.get_all_tags()
+    except:
+        tag_counters = []
+        
     language_counters = Counter()
     for course in final_course_list:
         language_counters[course['language']] += 1
@@ -278,6 +285,7 @@ def courses(request):
         "courseware/courses.html",
         {
             'courses': courses_list,
+            'json_courses': json_course_list,
             'course_discovery_meanings': course_discovery_meanings,
             'programs_list': programs_list,
             'final_course_list': final_course_list,
