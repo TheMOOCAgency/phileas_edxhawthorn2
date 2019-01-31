@@ -152,7 +152,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
             <div class="row">
              %if favorite_course_enrollments:
                 %for enrollment in favorite_course_enrollments:
-                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id],is_liked=is_liked[enrollment.course_id]' />
+                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id],is_liked=is_liked[enrollment.course_id],favorite=true' />
                 % endfor
              %else:
                     <div style="margin:0 auto"><p>${_("You have no favorite courses yet")}</p></div>
@@ -164,15 +164,15 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
     <!-- FINISHED COURSES-->
     <div class="row">
         <div class="container-fluid padding-70 pt-4 finished-box">
-            <div class="row pt-4">
-                <h1 class="title-28">Your finished courses</h1>
+            <div class="row pt-4 pl-3">
+                <h1 class="title-28">${_("Your finished courses")}</h1>
             </div>
             <div class="row legend">
-                <div class="col-lg-3">Course :</div>
-                <div class="col-lg-3">Date :</div>
-                <div class="col-lg-2">Score :</div>
-                <div class="col-lg-2">Certification :</div>
-                <div class="col-lg-2">Download certificate :</div>
+                <div class="col-lg-3">${_("Course :")}</div>
+                <div class="col-lg-3">${_("Date :")}</div>
+                <div class="col-lg-2">${_("Score :")}</div>
+                <div class="col-lg-2">${_("Certification :")}</div>
+                <div class="col-lg-2">${_("Download certificate :")}</div>
             </div>
             <div class="table-separator"></div>
      %if done_course_enrollments:
@@ -196,12 +196,13 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
      %else:
         <div class="row" style="text-align:center"><p class="col text-center">${_("You have no finished course yet")}</p></div>
      %endif
-
             <div class="table-separator"></div>
             <div class="row mb-5 mt-3">
-                <div class="col text-center more-btn">
-                    <a href="#"><img src="${static.url('tma-static/images/+.svg')}"></a>
-                </div>
+                % if len(done_course_enrollments) > 4:
+                    <div class="col text-center more-btn">
+                        <a href="#"><img src="${static.url('tma-static/images/+.svg')}"></a>
+                    </div>
+                % endif
             </div>
         </div>
     </div>
