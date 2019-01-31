@@ -139,6 +139,9 @@
     cursor: pointer;
     display: inline-block;
 }
+.like {
+    margin: auto;
+}
 .favorite-on {
     background-image: url('/static/tma-static/images/epingle_on.svg');
     background-size: contain;
