@@ -156,23 +156,25 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
           </button>-->
         </div>
       </form>
+      <div class="header-box col-lg-6">
+      </div>
       <video autoplay="true" class="embed-responsive-item" height="420" loop muted>
         <source src="${static.url('tma-static/video/hp_femme_comp.mp4')}" type="video/mp4">
       </video>
     <!--Black & White img-->
     <div class="zoomEffect col-lg-3 text-center img-bw-1">
-      <a onclick="postSspeaking()" target="_blank">Language <br>skills</a>
+      <a id="7speaking" class="ext-links" target="_blank">Language <br>skills</a>
     </div>
     <div class="zoomEffect col-lg-3 text-center img-bw-2">
-        <a href="#">Regulatory<br> (eCampus)</a>
+        <a href="#" class="ext-links">Regulatory<br> (eCampus)</a>
     </div>
     % if language == 'fr':
     <div class="zoomEffect col-lg-3 text-center img-bw-3">
-        <a href="https://www.e-exercises.com/speakingtime/07cdfd23373b17c6b337251c22b7ea57">Get <br> together</a>
+        <a href="https://www.e-exercises.com/speakingtime/07cdfd23373b17c6b337251c22b7ea57" class="ext-links">Get <br> together</a>
     </div>
     %else:
     <div class="zoomEffect col-lg-3 text-center img-bw-3">
-        <a href="#">US <br>regulatory courses</a>
+        <a href="#" class="ext-links">US <br>regulatory courses</a>
     </div>
     %endif
     <!--User dark blue box-->
@@ -230,11 +232,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       <div class="col-lg-10 title-col">
         <h1>Our Selection</h1>
       </div>
-      <div class="col-lg-2">
+      <div class="col-lg-2 pl-0">
         <div class="dropdown-container">
           <button>Filter<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
           <ul class="dropdown">
-            <li value="1"><a href="/dashboard">The front page</a><div class="separator"></div></li>
+            <li value="1"><a href="/dashboard">On the front page</a><div class="separator"></div></li>
             <li value="2"><a href="/dashboard/?filter=likes">Highest rated</a><div class="separator"></div></li>
             <li value="3"><a href="/dashboard/?filter=enrollments">Most subscribed</a></li>
           </ul>
@@ -319,7 +321,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   let counter = ${favorite_courses_count}
   const ssData = ${dump_js_escaped_json(sspeaking_data) | n, decode.utf8};
 
-  const postSspeaking = function() {
+  const postSspeaking = function(ssData) {
     var form = document.createElement("form");
     form.setAttribute("method", "POST");
     form.setAttribute("action", ssData.sspeaking_url);
@@ -335,7 +337,13 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     }
     document.body.appendChild(form);
     form.submit();
-  }
+  };
+
+  $('#7speaking').click(function() {
+    postSspeaking(ssData);
+  });
+
+
 </script>
 <script src="${static.url('tma-static/js/dashboard-tma-actions.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>

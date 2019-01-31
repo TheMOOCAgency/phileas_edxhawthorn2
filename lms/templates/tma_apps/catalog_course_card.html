@@ -33,9 +33,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
                     <div class="category-tag">Bureautique</div>
                   </div>
                     % if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
-                      <div>
-                        <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-placement="top" title="Manager Only" class="pin">
-                      </div>
+                      <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-delay='{"show":"100", "hide":"100"}' data-placement="top" title="Manager Only" class="pin">
                     % endif
                     % if course['is_favorite']:
                       <span class="pin favorite favorite-on"></span>
@@ -50,15 +48,15 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
                 <div class="pictos-box">
                   <div data-course-id="${str(course['id'])}" class="row course-pictos ${str(course['id']).replace(':','').replace('+','')}">
                     <div class="col-4 text-center pl-2 pr-2">
-                      <div data-course-id="${str(course['id'])}" class="text-center ${str(course['id']).replace(':','').replace('+','')} margin-null">
+                      <div data-course-id="${str(course['id'])}" class="text-center ${str(course['id']).replace(':','').replace('+','')}">
                       %if course['is_liked'] :
                         <span class="pin like like-on"></span>
                       %else :
                         <span class="pin like like-off"></span>
                       %endif
-                      <p class="like_count margin-null" data-min='0' data-max="${course['liked_total']}" data-delay='1' data-increment="${int(course['liked_total']/3)}">
+                      <span class="like_count count-box" data-min='0' data-max="${course['liked_total']}" data-delay='1' data-increment="${int(course['liked_total']/3)}">
                         ${course['liked_total']}
-                      </p>
+                      </span>
                     </div>
 
                     </div>
@@ -102,9 +100,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
               <div data-course-id="${str(course['id'])}" data-course-id="${str(course['id'])}" class="row pin-row ${str(course['id']).replace(':','').replace('+','')}">
                 <div class="category-tag">Bureautique</div>
                 % if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
-                  <div>
-                    <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-placement="top" title="Manager Only" class="pin">
-                  </div>
+                  <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-placement="top" data-delay='{"show":"100", "hide":"100"}' title="Manager Only" class="pin">
                 % endif
                 % if course['is_favorite']:
                   <span class="pin favorite favorite-on"></span>
@@ -114,7 +110,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
                 %if course['is_liked'] :
                   <span class="pin like like-on"></span>
                 %else :
-                  <span class="pin like like-off"></span>
+                  <span class="pin like like-off"><img src="${static.url('tma-static/images/like-off-white.svg')}" alt=""></span>
                 %endif
               </div>
             </div>
@@ -125,9 +121,9 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
           <div class="row">
             <div class="">
               %if course['short_description'] :
-              <p style='padding:15px;'>${course['short_description'][:220]}...</p>
+                <p style='padding:15px;'>${course['short_description'][:125]}...</p>
               %else :
-              <p></p>
+                <p></p>
               %endif
             </div>
           </div>

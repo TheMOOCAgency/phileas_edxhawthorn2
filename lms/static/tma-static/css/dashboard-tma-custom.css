@@ -45,16 +45,19 @@ input::placeholder {
     font-size: 36px;
     color: white;
 }
-/*
-.header-people {
-    display: none;
-    background-image: url('/static/tma-static/images/header-people.jpg');
-    background-position: center;
+
+.header-man {
+    background-image: url('/static/tma-static/images/illu-man.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.header-woman {
+    background-image: url('/static/tma-static/images/illu-woman.jpg');
     background-size: cover;
     background-repeat: no-repeat;
 }
 .header-box {
-    min-height: 200px;
+    min-height: 420px;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -62,38 +65,37 @@ input::placeholder {
 
 @media (min-width: 992px) {
     .header-box {
-        min-height: 450px;
-    }
-    .header-people {
         display: block;
     }
 }
-@media (min-width: 768px) and (max-width: 992px) {
-    .header-box {
-        min-height: 350px;
+@media (max-width: 992px) {
+    video {
+        display: none !important;
     }
-    .header-people {
+    .header-box {
         display: none;
     }
-}
-@media (max-width: 768px) {
-    .header-box {
-        min-height: 450px;
-    }
-    .header-people {
-        display: none;
+    .gif-box {
+        position: relative;
+        width: 100%;
+        padding: 50px 0px 50px 50px;
     }
 }
-*/
 
 .gif-box {
     position: absolute;
     z-index: 1;
     padding-top: 145px;
     padding-left: 85px;
+    background-color: #00A0E3;
 }
 
 /* Second row */
+.ext-links {
+    line-height: normal !important;
+    font-weight: 500 !important;
+}
+
 .img-bw-1, .img-bw-2, .img-bw-3 {
     min-height: 120px;
     background-position: center;
@@ -127,7 +129,7 @@ input::placeholder {
 }
 
 .user-box {
-    height: 315px;
+    height: 308px;
     right: 0;
     position: absolute;
     top: 312px;
@@ -159,9 +161,9 @@ input::placeholder {
 }
 
 /* Dark blue box */
-.user-box > .container-fluid > .row:nth-of-type(2) > .col-4:nth-of-type(2) {
-    border-right: 1px solid #EBEBEB;
-    border-left: 1px solid #EBEBEB;
+.user-box > .container-fluid > #tma_counter_link > .row > .col-4:nth-of-type(2) {
+    border-right: 2px solid rgba(128, 128, 128, 0.5);
+    border-left: 2px solid rgba(128, 128, 128, 0.5);
 }
 .user-box > .container-fluid > .row:nth-of-type(1) > .col-12:nth-of-type(1) > p:nth-of-type(2) {
     font-size: 24px;
@@ -184,18 +186,18 @@ input::placeholder {
     height: 25px;
 }
 .user-box .separator {
-  height: 1px;
-  width: auto;
-  margin-bottom: 0px;
-  background-color: #EBEBEB;
+    height: 2px;
+    width: auto;
+    margin-bottom: 0px;
+    background-color: rgba(128, 128, 128, 0.5);
 }
-.user-box p.last-course-title{
+.user-box p.last-course-title {
     cursor:pointer;
 }
 
 /* Course listing */
 @media (min-width: 992px) {
-    .container-fluid.bg-grey-light > .container-fluid{
+    .container-fluid.bg-grey-light > .container-fluid {
         padding-right: 75px;
         padding-left: 75px;
     }
@@ -218,13 +220,13 @@ input::placeholder {
     margin-top: -2px;
     border: 2px solid #b9c6d4;
     background-color: white;
-    /*position: absolute;*/
+    position: absolute;
     z-index: 2;
-    width: 150px;
+    width: 200px;
 }
 
 .dropdown-container {
-  position: absolute;
+  position: relative;
 }
 @media (max-width: 992px) {
   .dropdown-container {
@@ -237,7 +239,7 @@ input::placeholder {
 }
 
 .dropdown-container > button {
-    width: 150px;
+    width: 200px;
     margin: auto;
     padding: 20px 5px 20px 5px;
     border: 2px solid #b9c6d4;
@@ -254,7 +256,7 @@ input::placeholder {
 .dropdown > li {
     list-style-type: none;
     text-decoration: none;
-    padding: 20px 5px 20px 5px;
+    padding: 15px 5px 15px 5px;
     text-align: center;
 }
 .dropdown > li > a {
