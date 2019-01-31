@@ -47,8 +47,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
                 <!-- Arrow block -->
                 <div class="pictos-box">
                   <div data-course-id="${str(course['id'])}" class="row course-pictos ${str(course['id']).replace(':','').replace('+','')}">
-                    <div class="col-4 text-center pl-2 pr-2">
-                      <div data-course-id="${str(course['id'])}" class="text-center ${str(course['id']).replace(':','').replace('+','')}">
+                      <div data-course-id="${str(course['id'])}" class="col-4 text-center pl-2 pr-2 ${str(course['id']).replace(':','').replace('+','')}">
                       %if course['is_liked'] :
                         <span class="pin like like-on"></span>
                       %else :
@@ -57,8 +56,6 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
                       <span class="like_count count-box" data-min='0' data-max="${course['liked_total']}" data-delay='1' data-increment="${int(course['liked_total']/3)}">
                         ${course['liked_total']}
                       </span>
-                    </div>
-
                     </div>
                     <div class="col-4 text-center pl-2 pr-2">
                         <img src="${static.url('tma-static/images/Time.png')}">
@@ -110,7 +107,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
                 %if course['is_liked'] :
                   <span class="pin like like-on"></span>
                 %else :
-                  <span class="pin like like-off"><img src="${static.url('tma-static/images/like-off-white.svg')}" alt=""></span>
+                  <span class="pin like like-off"></span>
                 %endif
               </div>
             </div>
