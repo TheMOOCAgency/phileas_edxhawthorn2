@@ -17,13 +17,13 @@
     height: 35px;
     background-color:#F8005B;
     color: white;
-    font-size: 15px;
-    font-weight: bold;
 }
 .mandatory-tag p {
     top: 20%;
     position: relative;
-    color: white;
+    color: white !important;
+    font-size: 15px !important;
+    font-weight: bold;
 }
 
 .cover-image {
@@ -44,6 +44,7 @@
 }
 
 .course-title > h3 {
+    padding-top: 10px;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -67,9 +68,7 @@
   line-height: normal;
   color:white;
 }
-.white-right-border{
-  border-right: 1px solid white;
-}
+
 #tma_counter_link{
   text-decoration: none!important;
   color: white!important;
@@ -77,7 +76,7 @@
 
 .course-name .align-items-end, .pictos-box {
   border-top: 1px solid rgba(0,0,0,0.09);
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .category-tag {
@@ -281,7 +280,7 @@ a.enroll-btn {
     border-radius: 28px;
     background-color: white;
     color: #0B1A4C !important;
-    border: 1px solid #0B1A4C;
+    border: 2px solid #0B1A4C;
     font-weight: bold;
     display: inline-block;
     vertical-align: middle;

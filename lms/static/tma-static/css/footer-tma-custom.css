@@ -67,6 +67,7 @@
 .stat-box > div > span:last-of-type {
     margin-top: 0px;
     margin-bottom: 0px;
+    line-height: 10px;
 }
 .stat-box > div > span:first-of-type {
     margin-bottom: 0px;

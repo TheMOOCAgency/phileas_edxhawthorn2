@@ -84,7 +84,7 @@ input::placeholder {
     background-color: white;
     position: absolute;
     z-index: 2;
-    width: 150px;
+    width: 200px;
 }
 
 @media (max-width: 992px) {
@@ -95,7 +95,7 @@ input::placeholder {
 }
 
 .dropdown-container > button {
-    width: 150px;
+    width: 200px;
     margin: auto;
     padding: 20px 5px 20px 5px;
     border: 2px solid #b9c6d4;
@@ -112,7 +112,7 @@ input::placeholder {
 .dropdown > li {
     list-style-type: none;
     text-decoration: none;
-    padding: 20px 5px 20px 5px;
+    padding: 15px 5px 15px 5px;
     text-align: center;
 }
 .dropdown > li > a {

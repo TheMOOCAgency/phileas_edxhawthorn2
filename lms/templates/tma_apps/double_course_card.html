@@ -43,15 +43,15 @@ from django.utils.translation import ugettext as _
                 <div class="align-items-end">
                   <div class="row course-pictos ${course['id']}">
                     <div class="col-4 text-center ${course['id']} pl-2 pr-2 ">
-                      <div data-course-id="${str(course['id'])}" class="text-center ${str(course['id']).replace(':','').replace('+','')} margin-null">
+                      <div data-course-id="${str(course['id'])}" class="text-center ${str(course['id']).replace(':','').replace('+','')} count-box">
                         %if course['is_liked'] :
                           <span class="pin like like-on"></span>
                         %else :
                           <span class="pin like like-off"></span>
                         %endif
-                        <p class="like_count margin-null" data-min='0' data-max="${course['liked_total']}" data-delay='1' data-increment="${int(course['liked_total']/3)}">
+                        <span class="like_count count-box" data-min='0' data-max="${course['liked_total']}" data-delay='1' data-increment="${int(course['liked_total']/3)}">
                           ${course['liked_total']}
-                        </p>
+                        </span>
                       </div>
 
                     </div>

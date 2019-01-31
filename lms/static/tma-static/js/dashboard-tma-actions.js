@@ -17,5 +17,24 @@ $(document).ready(function() {
     $.post("/change_enrollment", {"enrollment_action": "enroll","course_id":course_id})
     ongoing_counter=parseInt($('#ongoin-counter-number').html());
     $('#ongoin-counter-number').html(ongoing_counter+1)
-  })
+  });
+
+  const randomBanner = function() {
+    randomNumber = Math.floor(Math.random()*3); 
+    if (randomNumber == 1) {
+      $('video').hide();
+      $('.gif-box').addClass('col-lg-6').css('position', 'initial');
+      $('.header-box').show().css('padding', '0px').addClass('header-man');
+    } else {
+      if (randomNumber == 2) {
+        $('video').hide();
+        $('.gif-box').addClass('col-lg-6').css('position', 'initial');
+        $('.header-box').show().css('padding', '0px').addClass('header-woman');
+      } else {
+        $('video').show();
+        $('.gif-box').removeClass('col-lg-6').css('position', 'absolute');
+        $('.header-box').hide();
+      }
+    }
+  }();
 });
