@@ -55,30 +55,43 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
         <div class="row">
           <div class="col progress ${additional_not_mandatory_class}">
             %if completion_rate > 0 and not is_vodeclic:
-            <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
+              <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
             %elif is_vodeclic:
-            <div class="progress-bar"></div>
+              <div class="no-progress"></div>
             %else:
-            <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
+              <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
             %endif
           </div>
         </div>
         %if not enrollment in mandatory_course_enrollments:
         <img src="${static.url('tma-static/images/Fermer.svg')}" class="unenroll" alt='${_("Unenroll")}' data-js="open" data-popup-id="${enrollment.id}">
         <div class="popup popup-${enrollment.id}">
-          <p>${_("Do you really want to unenroll?")}</p>
-          <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
-            ${_("Unenroll")}
-          </a>
+          <div class="wrapper" data-course-id="${enrollment.course_id}">
+            % if favorite:
+              <p>${_("Do you really want to unenroll?")}</p>
+              <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
+                ${_("Unenroll")}
+              </a>
+            % else:
+              <p>${_("What do you want to do?")}</p>
+              <a href="" class="continue-btn tma_unfav">
+                ${_("Remove from favorites")}
+              </a>
+              <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
+                ${_("Unenroll")}
+              </a>
+            % endif
+            <img class="close-box" width="20px" src="/static/tma-static/images/Fermer.svg">
+          </div>
         </div>
         %endif
       <div class="row">
-        <div class="col m-3">
+        <div class="col m-3 pl-1">
         <p class="title-course">${enrollment.course_overview.display_name_with_default}</p>
         </div>
       </div>
       <div class="row mb-3">
-      <div class="col dates-box m-3">
+      <div class="col dates-box m-3 pl-1">
         %if not is_vodeclic:
           <p>Start date: <span>${enrollment.course_overview.dashboard_start_display.strftime('%Y-%m-%d')}</span></p>
           %if enrollment.course_overview.end:
@@ -105,7 +118,7 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
           </span>
           </p>
         </div>
-        <div class="col-8">
+        <div class="col-8 pl-4">
           <a href="mailto:?subject=${enrollment.course_overview.display_name_with_default} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !">
           <p class="text-center"><img src="${static.url('tma-static/images/recommend.svg')}"/>${_("Recommend")}</p>
           </a>
