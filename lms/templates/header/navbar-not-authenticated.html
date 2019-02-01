@@ -70,20 +70,19 @@ from six import text_type
 </div>
 <script>
     $(document).ready(function(){
-        $('#en, #fr').click(function(){
-            $('.switch').toggleClass('active')
-        });
-        /* Language selector
-        $('#fr').on('click', function(){
-            console.log('FR');
-            $('#settings-language-value > option[value="fr"]').attr('selected','selected');
-            $('#settings-language-value > option[value="en"]').removeAttr('selected').trigger("change");
-        });
-        $('#en').on('click', function(){
-            console.log('EN');
+        if ($('#settings-language-value > option[value="en"]').attr('selected')) {
+            $('.switch').toggleClass('en')
+        }
+        // Language selector
+        $('#en').click(function(){
             $('#settings-language-value > option[value="en"]').attr('selected','selected');
             $('#settings-language-value > option[value="fr"]').removeAttr('selected').trigger("change");
+            $('.switch').toggleClass('en')
         });
-        */
+        $('#fr').click(function(){
+            $('#settings-language-value > option[value="fr"]').attr('selected','selected');
+            $('#settings-language-value > option[value="en"]').removeAttr('selected').trigger("change");
+            $('.switch').toggleClass('fr')
+        });
     });
 </script>

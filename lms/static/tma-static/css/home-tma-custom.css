@@ -178,6 +178,8 @@ a {
 }
 .no-progress {
     background-color: white;
+    height: 35px;
+    margin-bottom: 20px;
 }
 .progress-bar {
     background-color: #00A1E9;
