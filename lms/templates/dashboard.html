@@ -268,9 +268,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         %for course in final_course_list[2:4] :
           <%include file='tma_apps/catalog_course_card.html' args='course=course' />
         %endfor
-      %endif
       <!-- Second static double card -->
-        <%include file='tma_apps/double_course_card.html' args='course=final_course_list[4]' />
+        %if final_course_list[4]:
+          <%include file='tma_apps/double_course_card.html' args='course=final_course_list[4]' />
+        %endif
+      %endif
     </div>
 
     <!-- Third Row -->

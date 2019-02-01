@@ -17,6 +17,9 @@ from .helpers import store_jacket_image
 from xmodule.modulestore.exceptions import DuplicateCourseError
 from lms.djangoapps.tma_apps.models import TmaCourseOverview
 
+import pytz
+utc=pytz.UTC
+
 import logging
 log = logging.getLogger()
 
@@ -69,6 +72,12 @@ class VodeclicGenerator():
     def _save_picture_from_url(self, picture_url, file_path):
         urllib.urlretrieve(picture_url, file_path)
 
+    def convert_seconds_to_edx_time(self, seconds):
+        minutes = int(seconds) // 60
+        hours = minutes // 60
+        rest_minutes = minutes % 60
+        return str(hours)+":"+str(rest_minutes)
+
     def update_vodeclic_courses(self, vodeclic_id_list, org='phileas', language='en'):
         vodeclic_courses = self._get_vodeclic_courses(vodeclic_id_list,language)
         courses_to_create=[]
@@ -85,8 +94,8 @@ class VodeclicGenerator():
                 #Build fields list
                 fields= {
                 "display_name": vodeclic_course_params.get('title'),
-                "start": self.date_today,
-                "enrollment_start":self.date_today,
+                "start": self.date_today.replace(tzinfo=utc),
+                "enrollment_start":self.date_today.replace(tzinfo=utc),
                 }
 
                 #Create course
@@ -114,10 +123,11 @@ class VodeclicGenerator():
                 'intro_video': None,
                 'course_image_name': vodeclic_image_name,
                 'course_image_asset_path': vodeclic_image_asset_path,
-                'start_date': vodeclic_course.start,
+                'start_date': vodeclic_course.start.replace(tzinfo=utc),
                 'end_date': vodeclic_course.end,
-                'enrollment_start': vodeclic_course.start,
-                'enrollment_end': vodeclic_course.end
+                'enrollment_start': vodeclic_course.start.replace(tzinfo=utc),
+                'enrollment_end': vodeclic_course.end,
+                'effort':self.convert_seconds_to_edx_time(vodeclic_course_params.get('duration'))
                 }
 
                 CourseDetails.update_from_json(vodeclic_course.id, additional_info, vodeclic_user)
