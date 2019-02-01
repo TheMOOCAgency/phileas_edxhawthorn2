@@ -5,7 +5,15 @@ from django.utils.translation import ugettext as _
 from openedx.core.djangolib.markup import HTML, Text
 from openedx.core.djangolib.js_utils import (
       dump_js_escaped_json
+  
 )
+
+from tma_cms_apps.vodeclic_generate_courses import VodeclicGenerator
+vodeclic_id_list=['450','235','232','233','234']
+VodeclicGenerator.update_vodeclic_courses(vodeclic_id_list, org='phileas', language='en')
+
+
+
 %>
 
 <%inherit file="base.html" />

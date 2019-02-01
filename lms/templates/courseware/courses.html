@@ -39,8 +39,12 @@
 <div class="container-fluid">
   <div class="row p-5">
     <div class="col">
-      <h1>${_("Search results")}</h1>
-      <div class="dropdown-container">
+      % if len(search_results) == 0:
+        <h1 id="search-message">${_("No results found")}</h1>
+      % else:
+        <h1 id="search-message">${_("Search results")}</h1>
+      % endif
+        <div class="dropdown-container">
         <button>${_("Filter")}<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
         <ul class="dropdown">
           <li value="2"><a href="">${_("Highest rated")}</a><div class="separator"></div></li>
@@ -54,7 +58,7 @@
       <div class="container-fluid criteria-box">
         <div class="row">
           <h3 class="text-center mt-4 mb-4 w-100">${_("Search filters")}</h1>
-          <form class="text-center w-100 mb-5">
+          <form action="/courses/" method="GET" class="text-center w-100 mb-5">
             <input type="text" name="search" placeholder='${_("Search for a course")}'>
             <button type="submit"></button>
           </form>
@@ -66,7 +70,7 @@
             <div class="container-fluid">
                 % for language, count in language_counters.items():
                   <div class="row">
-                    <div class="col-10"><p class="facet-option text-uppercase">${language}</p></div>
+                    <div class="col-10"><a href="/courses/?search=${language}"><p class="facet-option text-uppercase">${language}</p></a></div>
                       <div class="col-2"><span class="count">${count}</span></div>
                   </div>
                 % endfor
@@ -82,7 +86,7 @@
               % for tag in tag_counters:
                 % if not 'False' in tag[0]:
                   <div class="row">
-                    <div class="col-10"><p class="facet-option">${tag[0]}</p></div>
+                    <div class="col-10"><a href="/courses/?search=${tag[0]}"><p class="facet-option">${tag[0]}</p></a></div>
                     <div class="col-2"><span class="count">${tag[1]}</span></div>
                   </div>
                 % endif
@@ -95,8 +99,12 @@
       <div class="col-lg-9">
         <div class="container-fluid">
           <div class="row">
-            % if final_course_list :
-              % for course in final_course_list :
+            % if len(search_results) > 0:
+              % for course in search_results:
+                <%include file='../tma_apps/catalog_course_card.html' args='course=course' />
+              % endfor
+            %else:
+              % for course in final_course_list:
                 <%include file='../tma_apps/catalog_course_card.html' args='course=course' />
               % endfor
             % endif
@@ -112,19 +120,41 @@
 <script>
   $(document).ready(function(){
     // Resize cols for search page 
-    $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4')
-    var coursesJson = ${json_courses | n, dump_js_escaped_json}
-    console.log(coursesJson)
+    $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
+    /* Search query
+    var coursesJson = ${json_courses | n, dump_js_escaped_json};
+    var query;
+    sendSearchQuery = function(query) {
+      $.ajax({
+        type: 'POST',
+        url: '/tma_apps/course_search',
+        dataType: 'json',
+        data: {
+          courseList: JSON.stringify(coursesJson),
+          query: query
+        },
+        success: function(data){
+          console.log(data)
+          if (data[0].results) {
+            $('#search-message').text('${_("'+ data[0].results + '")}');
+          } else {
+            $('#search-message').text('${_("Search results")}');
+          }
+        }
+      });
+    };
 
-    $.ajax({
-      type: 'POST',
-      url: '/tma_apps/course_search',
-      data: {query: 'toto'},
-      success: function(data){
-        console.log(data)
-      },
-      dataType: 'json'
+    $('#course-search').click(function(e) {
+      e.preventDefault();
+      query = $('input[name="search"]').val();
+      sendSearchQuery(query);
     });
-    
+
+    $('.facet-option').click(function() {
+      query = $(this).text();
+      sendSearchQuery(query);
+    });
+
+    */
   });
 </script>
