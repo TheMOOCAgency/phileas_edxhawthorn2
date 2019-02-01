@@ -181,7 +181,7 @@ class TmaCourseOverview(models.Model):
     liked_total = models.IntegerField(default=0)
     active_enrollments_total = models.IntegerField(default=0)
     is_course_graded = models.BooleanField(default=True)
-    tag = models.CharField(db_index=True, max_length=30, default=None)
+    tag = models.CharField(db_index=True, max_length=30, blank=True)
 
     @classmethod
     def get_tma_course_overview_by_course_id(cls, course_key):
@@ -204,7 +204,7 @@ class TmaCourseOverview(models.Model):
         if event=="enroll":
             tma_course_overview.active_enrollments_total+=1
         elif event=="unenroll":
-            tma_course_overview.active_enrollments_total-=1    
+            tma_course_overview.active_enrollments_total-=1
         tma_course_overview.save()
         return tma_course_overview
 
@@ -228,5 +228,3 @@ class TmaCourseOverview(models.Model):
 @receiver(ENROLL_STATUS_CHANGE)
 def update_active_enrollments_total(sender, event=None, user=None, **kwargs):
     TmaCourseOverview.change_active_enrollments_total(kwargs['course_id'], event)
-    log.info("HELLLLLLOOOOOOOOOOO CHANGEE IT EVENT {}".format(event))
-    log.info("HELLLLLLOOOOOOOOOOO CHANGEE IT USER {}".format(user))
