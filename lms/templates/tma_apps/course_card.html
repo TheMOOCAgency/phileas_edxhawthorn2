@@ -53,15 +53,17 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
         %endif
         </div>
         <div class="row">
-          <div class="col progress ${additional_not_mandatory_class}">
-            %if completion_rate > 0 and not is_vodeclic:
-              <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
-            %elif is_vodeclic:
-              <div class="no-progress"></div>
-            %else:
-              <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
-            %endif
-          </div>
+          % if is_vodeclic:
+            <div class="col no-progress ${additional_not_mandatory_class}"></div>
+          % else:
+            <div class="col progress ${additional_not_mandatory_class}">
+              %if completion_rate > 0 and not is_vodeclic:
+                <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
+              %else:
+                <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
+              %endif
+            </div>
+          % endif
         </div>
         %if not enrollment in mandatory_course_enrollments:
         <img src="${static.url('tma-static/images/Fermer.svg')}" class="unenroll" alt='${_("Unenroll")}' data-js="open" data-popup-id="${enrollment.id}">
