@@ -17,9 +17,12 @@ input::placeholder {
     opacity: 0.5;
     font-style: normal;
 }
+a, a:hover, a:visited {
+    text-decoration: none !important;
+    color: #0C1C49 !important;
+}
 
-/* SEARCh FILTERS */
-
+/* SEARCH FILTERS */
 .criteria-box h4, .criteria-box h3 {
     color: #0C1C49;
 }
