@@ -36,15 +36,11 @@
 <link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
 <link rel="stylesheet" href="${static.url('tma-static/css/catalog-course-card.css')}">
 
-<div class="container-fluid">
+<div class="container-fluid" style="padding-bottom: 150px;">
   <div class="row p-5">
     <div class="col">
-      % if len(search_results) == 0:
-        <h1 id="search-message">${_("No results found")}</h1>
-      % else:
-        <h1 id="search-message">${_("Search results")}</h1>
-      % endif
-        <div class="dropdown-container">
+      <h1 id="search-message">${_("Search results")}</h1>
+      <div class="dropdown-container">
         <button>${_("Filter")}<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
         <ul class="dropdown">
           <li value="2"><a href="">${_("Highest rated")}</a><div class="separator"></div></li>
@@ -58,9 +54,9 @@
       <div class="container-fluid criteria-box">
         <div class="row">
           <h3 class="text-center mt-4 mb-4 w-100">${_("Search filters")}</h1>
-          <form action="/courses/" method="GET" class="text-center w-100 mb-5">
+          <form class="text-center w-100 mb-5">
             <input type="text" name="search" placeholder='${_("Search for a course")}'>
-            <button type="submit"></button>
+            <button id="course-search"></button>
           </form>
         </div>
         <!--FILTER-->
@@ -98,16 +94,10 @@
       </div>
       <div class="col-lg-9">
         <div class="container-fluid">
-          <div class="row">
-            % if len(search_results) > 0:
-              % for course in search_results:
-                <%include file='../tma_apps/catalog_course_card.html' args='course=course' />
-              % endfor
-            %else:
-              % for course in final_course_list:
-                <%include file='../tma_apps/catalog_course_card.html' args='course=course' />
-              % endfor
-            % endif
+          <div id="cards-box" class="row">
+            % for course in final_course_list:
+              <%include file='../tma_apps/catalog_course_card.html' args='course=course' />
+            % endfor
           </div>
         </div>
       </div>
@@ -117,44 +107,48 @@
 
 <script src="${static.url('tma-static/js/dashboard-tma-actions.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
+<script src="${static.url('tma-static/js/course-search.js')}" charset="utf-8"></script>
 <script>
   $(document).ready(function(){
     // Resize cols for search page 
     $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
-    /* Search query
-    var coursesJson = ${json_courses | n, dump_js_escaped_json};
-    var query;
-    sendSearchQuery = function(query) {
-      $.ajax({
-        type: 'POST',
-        url: '/tma_apps/course_search',
-        dataType: 'json',
-        data: {
-          courseList: JSON.stringify(coursesJson),
-          query: query
-        },
-        success: function(data){
-          console.log(data)
-          if (data[0].results) {
-            $('#search-message').text('${_("'+ data[0].results + '")}');
-          } else {
-            $('#search-message').text('${_("Search results")}');
-          }
-        }
-      });
-    };
 
-    $('#course-search').click(function(e) {
+    var coursesJson = ${json_courses | n, dump_js_escaped_json};
+    console.log(coursesJson)
+
+    /* SEARCH QUERY */
+    var query;
+    var results;
+    // From input
+    $('#course-search').on('click', function(e) {
       e.preventDefault();
       query = $('input[name="search"]').val();
-      sendSearchQuery(query);
+      results = searchQuery(coursesJson, query);
+      if (results.length > 0) {
+        displayResults(results);
+        $('#search-message').html('${_("Search results")}');
+      } else {
+        displayResults(coursesJson);
+        $('#search-message').html('${_("No results found")}');
+      }
+      flipEffect();
     });
-
-    $('.facet-option').click(function() {
+    // From filters
+    $('.facet-option').on('click', function(e){
+      e.preventDefault();
       query = $(this).text();
-      sendSearchQuery(query);
+      console.log(query)
+      results = searchQuery(coursesJson, query);
+      displayResults(results);
+      flipEffect();
     });
 
+      /*
+    // Favorite and like 
+    $('#cards-box').on('click', '.pin.favorite', function(){
+      let update_info = change_social_attributes($(this), 'favorite');
+      console.log(update_info)
+    });
     */
   });
 </script>

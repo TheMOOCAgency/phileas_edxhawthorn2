@@ -6,7 +6,6 @@ from .completion import views as completion_views
 from .favourite import views as favourite_views
 from .like import views as like_views
 from .activity_dashboard import views as activity_dashboard_views
-from .course_search import views as course_search_views
 
 
 urlpatterns = [
@@ -28,8 +27,5 @@ urlpatterns = [
 
     #Student Grade Tracking
     url(r'^{}/grade_tracking/get_user_grade$'.format(settings.COURSE_ID_PATTERN), grade_views.get_user_grade),
-    url(r'^{}/grade_tracking/message_displayed$'.format(settings.COURSE_ID_PATTERN), grade_views.mark_displayed_message),
-
-    # Course search
-    url(r'^course_search$', course_search_views.search_courses, name='course_search'),
+    url(r'^{}/grade_tracking/message_displayed$'.format(settings.COURSE_ID_PATTERN), grade_views.mark_displayed_message)
 ]

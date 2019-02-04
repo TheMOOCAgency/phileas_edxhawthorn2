@@ -111,7 +111,6 @@ from ..module_render import get_module, get_module_by_usage_id, get_module_for_d
 from openedx.core.djangoapps.lang_pref.api import released_languages
 from student.models import CourseEnrollment
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
-from lms.djangoapps.tma_apps.course_search.course_search import update_course_json
 from student.views.dashboard import get_tma_course_info, get_tma_course_json, get_course_enrollments, is_course_blocked
 from shoppingcart.models import CourseRegistrationCode
 from collections import Counter
@@ -265,9 +264,6 @@ def courses(request):
         course_json_info = get_tma_course_json(request.user, course.id, block_courses)
         final_course_list.append(course_info)
         json_course_list.append(course_json_info)
-    
-    # Update global json of all courses 
-    update_course_json('/edx/app/edxapp/edx-platform/lms/static/tma-static/js/courses-list-info.json', json_course_list)
 
     # Get user course enrollments
     enrollment_course_list = []
@@ -285,26 +281,11 @@ def courses(request):
     for course in final_course_list:
         language_counters[course['language']] += 1
 
-    # Get filtered results if search query
-    search_results = []    
-    query = request.GET.get('search')
-    log.info(query)
-    if query:
-        for course in final_course_list:
-            for key in course:
-                # Look for query in 3 fields only
-                if key == 'tag' or key == 'short_description' or key == 'display_name' or key == 'language':
-                    # Can't iterate if value is None
-                    if course[key] is not None:
-                        if query.lower() in course[key].lower():
-                            search_results.append(course)
-
     return render_to_response(
         "courseware/courses.html",
         {
             'courses': courses_list,
             'json_courses': json_course_list,
-            'search_results': search_results,
             'course_discovery_meanings': course_discovery_meanings,
             'programs_list': programs_list,
             'final_course_list': final_course_list,
