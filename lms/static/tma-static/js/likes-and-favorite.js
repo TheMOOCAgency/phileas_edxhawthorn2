@@ -24,10 +24,10 @@ let change_social_attributes =  function(element, social_attribute){
   })
   if (element.hasClass(`${social_attribute}-on`)){
     status=true;
-  }
-  else{
+  } else {
     status=false;
   }
+
   $.ajax({
     type: 'POST',
     url: '/tma_apps/'+ courseId +'/'+social_attribute+'/update_'+social_attribute,
@@ -36,9 +36,10 @@ let change_social_attributes =  function(element, social_attribute){
     success: function(data){
     }
   });
+
   return {
-    status:status,
-    courseSelector:courseSelector
+    status: status,
+    courseSelector: courseSelector
   };
 }
 

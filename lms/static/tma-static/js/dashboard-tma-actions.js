@@ -1,10 +1,13 @@
 // THIS SCRIPT IS ALSO USED IN COURSES.HTML
-
-$(document).ready(function() {
-  // Flip cards effect
+const flipEffect = function() {
   $('.flip-container').hover(function(){
     $(this).toggleClass("applyflip");
   });
+};
+
+$(document).ready(function() {
+  // Flip effect
+  flipEffect();
 
   // Dropdown filter behavior
   $('.dropdown-container > button').click(function(){
@@ -19,6 +22,7 @@ $(document).ready(function() {
     $('#ongoin-counter-number').html(ongoing_counter+1)
   });
 
+  // Random banner display
   const randomBanner = function() {
     randomNumber = Math.floor(Math.random()*3); 
     if (randomNumber == 1) {
