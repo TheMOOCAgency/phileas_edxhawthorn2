@@ -276,7 +276,7 @@ def courses(request):
         tag_counters = TmaCourseOverview.get_all_tags()
     except:
         tag_counters = []
-        
+
     language_counters = Counter()
     for course in final_course_list:
         language_counters[course['language']] += 1
