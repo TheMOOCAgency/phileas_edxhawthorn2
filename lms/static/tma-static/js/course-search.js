@@ -39,24 +39,24 @@ const displayResults = function(results) {
         var language = item.language;
         var isEnrolled = item.is_enrolled;
         var isBlocked = item.is_blocked;
-        var courseId = item.id.replace(':','').replace('+','');
+        var courseId = item.id.split('+').join('').split(':').join('');
 
         var buttonText = function(){
             var buttonText;
             if (isManagerOnly || isBlocked) {
-                buttonText = '<a class="enroll-btn no-enroll">Not authorized</a>';
+                buttonText = '<a class="enroll-btn no-enroll">'+item.button_text+'</a>';
             } else {
                 if (isVodeclic) {
                     if (isEnrolled) {
-                        buttonText = 'a href="${get_vodeclic_href(user,'+item.id+')}" target="_blank" class="enroll-btn">Continue</a>';
+                        buttonText = 'a href="'+item.vodeclic_link+'" target="_blank" class="enroll-btn">'+item.button_text+'</a>';
                     } else {
-                        buttonText = '<a href="${get_vodeclic_href(user,'+item.id+')}" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="'+item.id+'">Join</a>';
+                        buttonText = '<a href="'+item.vodeclic_link+'" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="'+item.id+'">'+item.button_text+'</a>';
                     };
                 } else {
                     if (isEnrolled) {
-                        buttonText = '<a href="/courses/'+item.id+'/courseware/" class="enroll-btn">Continue</a>';
+                        buttonText = '<a href="/courses/'+item.id+'/courseware/" class="enroll-btn">'+item.button_text+'</a>';
                     } else {
-                        buttonText = '<a href="/courses/'+item.id+'/about" class="enroll-btn">Join</a>';
+                        buttonText = '<a href="/courses/'+item.id+'/about" class="enroll-btn">'+item.button_text+'</a>';
                     };
                 };
             };

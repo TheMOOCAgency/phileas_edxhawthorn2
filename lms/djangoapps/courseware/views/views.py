@@ -111,6 +111,7 @@ from ..module_render import get_module, get_module_by_usage_id, get_module_for_d
 from openedx.core.djangoapps.lang_pref.api import released_languages
 from student.models import CourseEnrollment
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
+from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from student.views.dashboard import get_tma_course_info, get_tma_course_json, get_course_enrollments, is_course_blocked
 from shoppingcart.models import CourseRegistrationCode
 from collections import Counter
@@ -263,6 +264,20 @@ def courses(request):
         course_info = get_tma_course_info(request.user, course.id, block_courses)
         course_json_info = get_tma_course_json(request.user, course.id, block_courses)
         final_course_list.append(course_info)
+        # JSON info for dynamic course cards
+        # Vodelic link
+        vodeclic_link = get_vodeclic_href(request.user, course.id)
+        course_json_info['vodeclic_link'] = vodeclic_link
+        # Button text
+        button_text = ''
+        if course_json_info['is_manager_only'] and not request.user.profile.is_manager or course_json_info['is_blocked']:
+            button_text = _("Not authorized")
+        elif course_json_info['is_enrolled'] :
+            button_text = _("Continue")
+        else :
+            button_text = _("Join")
+        course_json_info['button_text'] = button_text
+
         json_course_list.append(course_json_info)
 
     # Get user course enrollments
