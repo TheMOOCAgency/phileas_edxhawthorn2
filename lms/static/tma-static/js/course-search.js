@@ -106,8 +106,4 @@ const displayResults = function(results) {
         buttonText() + 
         '</div></div></div></div></div></div></div>');
     });
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> 78de33d04b0d40bc1b6ea1b55221796828ca2e97
