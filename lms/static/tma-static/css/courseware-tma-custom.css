@@ -5,7 +5,9 @@
 /*FONT*/
 h1,h2,h3,h4,h5,h6,p, div.vertical-title{
   font-family: 'Montserrat', sans-serif;
-  color:#0C1C49;
+}
+h1,h2,h3,h4,h5,h6{
+    color:#0C1C49!important;
 }
 
 /* COMPLETION NAV STYLE */
@@ -22,6 +24,25 @@ h1,h2,h3,h4,h5,h6,p, div.vertical-title{
   height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
+  position: fixed;
+
+  /*
+  background-color: #E6EDFA;
+  border: none;
+  left: 0;
+  max-width: 40%;
+  padding: 20px;
+  position: absolute;
+  z-index: 10;
+  transition: left 2s;
+  top: 0;
+  height: calc(100vh - 450px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  */
+}
+.tma-visibility-hidden{
+  visibility: hidden;
 }
 #tma-completion-nav.folded{
   left: -1000px;
@@ -43,6 +64,7 @@ span.fa.fa-chevron-right.fa-rotate-90{
 }
 #tma-completion-nav span.fa.fa-chevron-right{
   color:#0C1C49;
+  margin-right:2px;
 }
 #tma-completion-nav .accordion-trigger{
   display: flex;
@@ -104,15 +126,22 @@ span.fa.fa-chevron-right.fa-rotate-90{
 #tma_course_header{
   padding: 20px;
 }
+#tma_course_header h1{
+  padding:0px 0px 10px 60px;
+  font-weight: 500;
+}
 .award{
   max-height: 35px;
 }
 .tma-grade{
-  display: flex;
   align-items: baseline;
   font-size: 1.3rem;
-  display: flex;
-  align-items: center;
+  text-align: center;
+}
+#tma-completion-value-wrapper{
+  position: relative;
+  top: -20px;
+  text-align: center;
 }
 .tma-grade span{
   padding-left: 10px;
@@ -165,6 +194,12 @@ body.view-in-course .wrapper-course-material{
 .tma-coursenav-btn{
   padding-top: 15px;
   min-height: 44px;
+  position: relative;
+  top: 46px;
+  z-index: 10;
+  background-color: transparent!important;
+  box-shadow: none!important;
+  display: inline!important;
 }
 .close-courseware-nav .fa-times, .tma-coursenav-btn .fa-plus{
   padding: 4px;
@@ -172,8 +207,17 @@ body.view-in-course .wrapper-course-material{
   font-size: 15px;
   cursor: pointer;
 }
-.tma-coursenav-btn{
+.tma-coursenav-btn .fa-plus
+{
+  border: 1px solid #0C1C49;
+  border-radius: 50%;
+  padding: 7px 9px;
+  margin-left: 10px;
+}
+.open-courseware-nav{
   cursor: pointer;
+}
+.tma-coursenav-btn{
   display: inline;
   border: none!important;
 }
@@ -219,6 +263,13 @@ nav.sequence-bottom .sequence-nav-button{
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
 }
+nav.sequence-bottom .sequence-nav-button:hover{
+  background-color: #0C1C49!important;
+  color: white!important;
+}
+nav.sequence-bottom .sequence-nav-button:hover .icon{
+  color:white!important;
+}
 
 /*Modale Bravo Echec */
 #tma_course_end_popup{
@@ -261,4 +312,25 @@ nav.sequence-bottom .sequence-nav-button{
 
 #tma_course_end_popup .modal-content{
   padding-bottom: 50px;
+}
+
+#tma-completion-nav h4{
+  font-size: 16px;
+  font-weight: 500;
+}
+#tma-completion-nav .outline-item{
+  margin-left: 9px!important;
+}
+
+@media screen and (max-width: 1350px) {
+  .tma-coursenav-btn {
+    position: static;
+  }
+}
+
+.tma-current-unit{
+  background-color: white!important;
+}
+.subsection.accordion{
+  border-bottom: 1px solid #7A818E!important;
 }

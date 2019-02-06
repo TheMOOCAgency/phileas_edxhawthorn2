@@ -1,29 +1,32 @@
 /*Toggle Menu*/
 $('span.open-courseware-nav').on('click', function(){
   $('#tma-completion-nav').removeClass('folded');
-  $('.open-courseware-nav').hide();
+  $('.open-courseware-nav').addClass('tma-visibility-hidden');
 })
 $('button.close-courseware-nav').on('click', function(){
   $('#tma-completion-nav').addClass('folded');
-  $('.open-courseware-nav').show();
+  $('.open-courseware-nav').removeClass('tma-visibility-hidden');
 })
-
+$('.xmodule_display.xmodule_SequenceModule .sequence-bottom .sequence-nav-button').live('click',function(){
+  $('#tma-completion-nav').addClass('folded');
+  $('.open-courseware-nav').removeClass('tma-visibility-hidden');
+  close_all_subsections();
+})
 
 /*Prepare completion coursenav on pageload */
 $(document).ready(function(){
   mark_started_subsections();
-  get_course_completion()
+  get_course_completion();
+  close_all_subsections();
 })
 
 /*Update completion coursenav between units*/
 $(document).ajaxSuccess(function(e, xhr, settings) {
-  if (settings.url.indexOf('get_completion')>-1) {
+  if (settings.url.indexOf('publish_completion')>-1) {
     response=JSON.parse(xhr.responseText);
     mark_started_subsections();
-    if(response['complete']){
-      unit_id=settings.data.replace('usage_key=','');
-      mark_unit_completed(decodeURIComponent(unit_id));
-    }
+    unit_id=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
+    mark_unit_completed(unit_id);
     get_course_completion()
   }
 });
@@ -60,4 +63,32 @@ function get_course_completion(){
       }
     }
   })
+}
+
+// On  Menu close close all subsections - On menu open open current subsection
+$('#tma-completion-nav .close-courseware-nav').on('click', function(){
+  close_all_subsections();
+})
+
+function close_all_subsections(){
+  $('#tma-completion-nav .subsection .outline-item.accordion-panel').each(function(){
+    $(this).addClass('is-hidden');
+  })
+  $('#tma-completion-nav .fa-chevron-right').each(function(){
+    $(this).removeClass('fa-rotate-90');
+  })
+  $('.tma-current-unit').each(function(){
+    $(this).removeClass('tma-current-unit')
+  })
+}
+
+$('.open-courseware-nav').on('click', function(){
+  highlight_current_unit();
+})
+
+function highlight_current_unit(){
+  unit_id=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
+  $('#' + unit_id.replace(/([$%&()*+,./:;<=>?@\[\\\]^\{|}~])/g,'\\$1')).addClass('tma-current-unit');
+  $('#' + unit_id.replace(/([$%&()*+,./:;<=>?@\[\\\]^\{|}~])/g,'\\$1')).parents('.accordion-panel').removeClass('is-hidden');
+  $('#' + unit_id.replace(/([$%&()*+,./:;<=>?@\[\\\]^\{|}~])/g,'\\$1')).parents('li.accordion').find('.fa-chevron-right ').addClass('fa-rotate-90');
 }
