@@ -127,26 +127,33 @@ ${HTML(fragment.foot_html())}
 <!-- TMA Course Header -->
 <div id="tma_course_header">
   <div class="row">
-    <div class="col-sm-8">
+    <div class="col-md-8">
       <h1>${course.display_name_with_default}</h1>
     </div>
-    <div class="col-sm-4">
+    <div class="col-md-4">
       <div class="row">
         <div class="col-md-6">
           %if is_course_graded :
           <div class="tma-grade">
-            <img class="award" src="${static.url('tma-static/images/award.png')}" alt="award">
-            <span class="font-weight-bold"><span id="tma-grade-value" class="primary-color-text first-part-grade"></span>/<span class="second-part-grade">100</span></span>
+            <div>
+              <img class="award" src="${static.url('tma-static/images/award.png')}" alt="award">
+              <span class="font-weight-bold"><span id="tma-grade-value" class="primary-color-text first-part-grade"></span>/<span class="second-part-grade">100</span></span>
+            </div>
           </div>
           %endif
           <div class="tma-progress-bar">
-            <div class="w3-light-grey" style="min-height: 15px;">
-              <div id="tma-completion-progress" class="w3-container w3-padding-small text-white w3-center" style="width:50%"><span id="tma-completion-value" class="font-weight-bold"></span></div>
+            <div class="w3-light-grey" style="min-height: 20px;">
+              <div id="tma-completion-progress" class="w3-container w3-padding-small text-white w3-center" style="width:50%; min-height:20px;"></div>
+            </div>
+            <div id="tma-completion-value-wrapper">
+              <span id="tma-completion-value" class="font-weight-bold" style="color:white;"></span>
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-
+        <div class="col-md-6 text-center">
+          <a href="/courses/${course.id}/about">
+            <button class="phileas-button" style="margin-top:25px;">${_('Back to description')}</button>
+          </a>
         </div>
       </div>
     </div>
