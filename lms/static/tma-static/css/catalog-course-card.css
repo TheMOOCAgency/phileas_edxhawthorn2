@@ -43,6 +43,10 @@
     color: #0B1A4C;
 }
 
+.front .course-title {
+    border-bottom: 1px solid rgba(0,0,0,0.09);
+}
+
 .course-title > h3 {
     padding-top: 10px;
   font-size: 20px;
@@ -75,7 +79,6 @@
 }
 
 .course-name .align-items-end, .pictos-box {
-  border-top: 1px solid rgba(0,0,0,0.09);
   margin-bottom: 15px;
 }
 
@@ -88,7 +91,7 @@
 }
 
 .pin-row > .like {
-    background-color: #d4d3d3;
+    background-color: white;
     border-radius: 50px;
 }
 .like-count {
@@ -102,9 +105,6 @@
 }
 .back .pin-row {
     left: 10px;
-}
-.pin-row > div {
-    margin-right: 5px;
 }
 .course-pictos {
     margin-top: 1rem;
@@ -132,6 +132,7 @@
 
 /* Likes and favorites */
 .pin {
+    margin-right: 5px;
     width: 36px;
     height: 36px;
 }

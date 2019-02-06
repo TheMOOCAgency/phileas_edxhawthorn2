@@ -33,11 +33,12 @@ a, a:hover, a:visited {
 }
 
 .criteria-box button {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border: none;
-    background-image: url("/static/tma-static/images/loupe_black.svg") !important;
-    background-size: cover;
+    background-image: url(/static/tma-static/images/loupe_black.svg) !important;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 .criteria-box button:hover {
     background-image: url("/static/tma-static/images/loupe_black.svg") !important;
@@ -46,7 +47,7 @@ a, a:hover, a:visited {
 .separator {
     height: 1px;
     width: 90%;
-    margin: 2rem 0rem 3rem 0rem;
+    margin: 1rem 0rem 2rem 0rem;
     background-color: rgba(151, 151, 151, 0.2);
 }
 
@@ -55,12 +56,14 @@ a, a:hover, a:visited {
 }
 
 .count {
-    display: flex;
+    position: absolute;
+    text-align: center;
     width: 30px !important;
     height: 30px;
     background-color: white;
-    padding: 5px 8px 5px 8px;
+    padding: 5px;
     border-radius: 50px;
+    text-align: center;
 }
 
 .bubble {
@@ -138,6 +141,7 @@ a, a:hover, a:visited {
   width: 90px;
   height: 2px;
   top: 10px;
+  margin: 0px;
   background-color: #b9c6d4;
   position: relative;
   display: inline-block;

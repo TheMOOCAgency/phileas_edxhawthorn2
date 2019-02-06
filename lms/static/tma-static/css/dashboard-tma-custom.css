@@ -1,4 +1,8 @@
 /********* PREVENT EDX STYLES *********/
+a:focus, a:hover, a:visited {
+    text-decoration: none;
+}
+
 input[type="text"],input[type="text"]:focus {
     height: 50px;
     width: 365px;
@@ -86,12 +90,13 @@ input::placeholder {
     position: absolute;
     z-index: 1;
     padding-top: 145px;
-    padding-left: 85px;
+    padding-left: 90px;
     background-color: #00a1e9;
 }
 
 /* Second row */
 .ext-links {
+    cursor: pointer;
     line-height: normal !important;
     font-weight: 500 !important;
 }
@@ -264,7 +269,7 @@ input::placeholder {
     font-size: 14px;
 }
 .dropdown > li > a:hover, .dropdown-container > button:hover, .dropdown > li > a:focus {
-    color: #b9c6d4 !important;
+    color: #003063 !important;
     text-decoration: none;
 }
 .dropdown > li:nth-of-type(2) {
