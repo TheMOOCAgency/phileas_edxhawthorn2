@@ -73,7 +73,7 @@ const displayResults = function(results) {
             return tag;
         };
   
-        $('#cards-box').append('<div class="col-lg-4 col-md-6 flip-container"><div class="flipper"><div class="course-card-sm front">'
+        $('#cards-box').append('<div class="col-lg-4 col-md-6 pr-0 mb-3 flip-container"><div class="flipper"><div class="course-card-sm front mb-3">'
         // ---------------  FRONT CARD ---------------
         // Is mandatory
         + mandatoryTag() + 
