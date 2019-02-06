@@ -43,46 +43,83 @@
       <div class="dropdown-container">
         <button>${_("Filter")}<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
         <ul class="dropdown">
-          <li value="2"><a href="">${_("Highest rated")}</a><div class="separator"></div></li>
-          <li value="3"><a href="">${_("Most subscribed")}</a></li>
+          <li value="2"><a href="/courses/?filter=likes">${_("Highest rated")}</a><div class="separator"></div></li>
+          <li value="3"><a href="/courses/?filter=enrollments">${_("Most subscribed")}</a></li>
         </ul>
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-3">
-      <div class="container-fluid criteria-box">
+    <div class="col-lg-3 pr-0 pl-5">
+      <div class="container-fluid criteria-box p-4">
+        <div class="row"><h3 class="col text-center mb-4 w-100">${_("Search filters")}</h1></div>
         <div class="row">
-          <h3 class="text-center mt-4 mb-4 w-100">${_("Search filters")}</h1>
-          <form class="text-center w-100 mb-5">
-            <input type="text" name="search" placeholder='${_("Search for a course")}'>
-            <button id="course-search"></button>
+          <form class="text-center mb-5">
+            <input class="col-10" type="text" name="search" placeholder='${_("Search for a course")}'>
+            <button class="col-2" id="course-search"></button>
           </form>
         </div>
-        <!--FILTER-->
+        <!-- GENERIC FILTERS -->
         <div class="row">
           <div class="col">
-            <h4 class="header-facet">${_("Languages")}</h4>
+            <!-- title -->
+            <div class="container-fluid pl-0 pb-2">
+                <div class="row">
+                  <div class="col-10"><h4 class="header-facet">${_("All")}</h4></div>
+                  <div class="col-2"><span class="count">${len(final_course_list)}</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="separator"></div>
+        <div class="row">
+          <div class="col">
+            <!-- title -->
+            <div class="container-fluid pl-0 pb-2">
+                <div class="row">
+                  <div class="col-10"><h4 class="header-facet">${_("New")}</h4></div>
+                  <div class="col-2"><span class="count">${len(final_course_list)}</span></div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="separator"></div>
+        <!--FILTER LANGUAGES-->
+        <div class="row">
+          <div class="col">
+            <!-- title -->
+            <div class="container-fluid pl-0 pb-2">
+                <div class="row">
+                  <div class="col-10"><h4 class="header-facet">${_("Languages")}</h4></div>
+                  <div class="col-2"><span class="count">${len(final_course_list)}</span></div>
+                </div>
+            </div>
             <div class="container-fluid">
                 % for language, count in language_counters.items():
                   <div class="row">
                     <div class="col-10"><a href="/courses/?search=${language}"><p class="facet-option text-uppercase">${language}</p></a></div>
-                      <div class="col-2"><span class="count">${count}</span></div>
+                    <div class="col-2"><span class="count">${count}</span></div>
                   </div>
                 % endfor
             </div>
           </div>
         </div>
         <div class="separator"></div>
-        <!--FILTER-->
+        <!--FILTER TAGS-->
         <div class="row">
           <div class="col">
-            <h4 class="header-facet">${_("Subjects")}</h4>
+            <!-- title -->
+            <div class="container-fluid pl-0 pb-2">
+                <div class="row">
+                  <div class="col-10"><h4 class="header-facet">${_("Subjects")}</h4></div>
+                  <div class="col-2 pr-0"><span class="count">${len(final_course_list)}</span></div>
+                </div>
+            </div>
             <div class="container-fluid">
               % for tag in tag_counters:
                 % if not 'False' in tag[0]:
                   <div class="row">
-                    <div class="col-10"><a href="/courses/?search=${tag[0]}"><p class="facet-option">${tag[0]}</p></a></div>
+                    <div class="col-10"><a href=""><p class="facet-option">${tag[0]}</p></a></div>
                     <div class="col-2"><span class="count">${tag[1]}</span></div>
                   </div>
                 % endif
@@ -90,9 +127,23 @@
             </div>
           </div>
         </div>
+        <div class="separator"></div>
+        <!--FILTER ORG-->
+        <div class="row">
+          <div class="col">
+            <div class="container-fluid pl-0 pb-2">
+              % for org, count in org_counters.items():
+                <div class="row">
+                  <div class="col-10"><a href=""><h4 class="header-facet">${org}</h4></a></div>
+                  <div class="col-2 pr-0"><span class="count">${count}</span></div>
+                </div>
+              % endfor
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-lg-9">
+      </div>
+      <div class="col-lg-9 pl-0 pr-5">
         <div class="container-fluid">
           <div id="cards-box" class="row">
             % for course in final_course_list:
@@ -110,11 +161,12 @@
 <script src="${static.url('tma-static/js/course-search.js')}" charset="utf-8"></script>
 <script>
   $(document).ready(function(){
-    // Resize cols for search page 
-    $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
+    // Resize cols and cards for search page 
+    $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4 pr-0');
+    $('.course-card-sm, .flip-container').css('margin-bottom', '15px');
 
     var coursesJson = ${json_courses | n, dump_js_escaped_json};
-    console.log(coursesJson)
+    console.log("${final_course_list[0]}")
 
     /* SEARCH QUERY */
     var query;
@@ -142,15 +194,5 @@
       displayResults(results);
       flipEffect();
     });
-
-     
-    // Favorite and like 
-    /*
-    $('#cards-box').on('click', '.pin.favorite', function(){
-      let update_info = change_social_attributes($(this), 'favorite');
-      console.log(update_info)
-    });
-    */
-    
   });
 </script>

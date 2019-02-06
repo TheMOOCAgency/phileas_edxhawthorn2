@@ -115,6 +115,7 @@ from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from student.views.dashboard import get_tma_course_info, get_tma_course_json, get_course_enrollments, is_course_blocked
 from shoppingcart.models import CourseRegistrationCode
 from collections import Counter
+from operator import itemgetter
 
 log = logging.getLogger("edx.courseware")
 
@@ -250,8 +251,24 @@ def courses(request):
     )
 
     #TMA - Get List of courses to display
+    courses_to_display = []
     current_organisation = configuration_helpers.get_value('course_org_filter','phileas')
     frontpage_courses = configuration_helpers.get_value('frontpage_courses','')
+
+    # If filter clicked
+    accepted_filters = ['likes', 'enrollments']
+    filter = request.GET.get('filter')
+    if filter and filter in accepted_filters :
+        if filter=="likes":
+            likes_ordered_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).order_by('-liked_total')
+            for course in likes_ordered_courses :
+                courses_to_display.append(course.course_overview_edx)
+
+        elif filter =="enrollments":
+            enrollments_ordered_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).order_by('-active_enrollments_total')
+            for course in enrollments_ordered_courses :
+                courses_to_display.append(course.course_overview_edx)
+
     if frontpage_courses:
         courses_to_display = CourseOverview.objects.filter(org=current_organisation, id__in=frontpage_courses)
     else :
@@ -264,6 +281,9 @@ def courses(request):
         course_info = get_tma_course_info(request.user, course.id, block_courses)
         course_json_info = get_tma_course_json(request.user, course.id, block_courses)
         final_course_list.append(course_info)
+        if filter and filter=="likes":
+            final_course_list = sorted(final_course_list, key=itemgetter('liked_total'), reverse=True)
+
         # JSON info for dynamic course cards
         # Vodelic link
         vodeclic_link = get_vodeclic_href(request.user, course.id)
@@ -286,15 +306,20 @@ def courses(request):
         course_info = get_tma_course_info(user, enrollment.course_overview.id, block_courses)
         enrollment_course_list.append(course_info)
 
-    # Get tags and tags counts
+    # Get tags and counts
     try:
         tag_counters = TmaCourseOverview.get_all_tags()
     except:
         tag_counters = []
 
     language_counters = Counter()
+    org_counters = Counter()
     for course in final_course_list:
         language_counters[course['language']] += 1
+        if course['is_vodeclic']:
+            org_counters['Vodeclic'] += 1
+        else:
+            org_counters['Amundi'] += 1
 
     return render_to_response(
         "courseware/courses.html",
@@ -306,7 +331,8 @@ def courses(request):
             'final_course_list': final_course_list,
             'enrollment_course_list':enrollment_course_list,
             'tag_counters': tag_counters,
-            'language_counters': language_counters
+            'language_counters': language_counters,
+            'org_counters': org_counters
         }
     )
 
