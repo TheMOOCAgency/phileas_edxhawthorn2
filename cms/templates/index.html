@@ -8,12 +8,6 @@ from openedx.core.djangolib.js_utils import (
 
 )
 
-from cms.djangoapps.tma_cms_apps.vodeclic_generate_courses.generate_courses import VodeclicGenerator
-vodeclic_id_list=['533','431','348','2227','2375','619','1417','1983','1629']
-VodeclicGenerator().update_vodeclic_courses(vodeclic_id_list, org='americas', language='en')
-
-
-
 %>
 
 <%inherit file="base.html" />
