@@ -134,7 +134,7 @@
             <div class="container-fluid pl-0 pb-2">
               % for org, count in org_counters.items():
                 <div class="row">
-                  <div class="col-10"><a href=""><h4 class="header-facet">${org}</h4></a></div>
+                  <div class="col-10"><a href=""><h4 class="header-facet org">${org}</h4></a></div>
                   <div class="col-2 pr-0"><span class="count">${count}</span></div>
                 </div>
               % endfor
@@ -193,5 +193,13 @@
       displayResults(results);
       flipEffect();
     });
+    $('.org').on('click', function(e) {
+      e.preventDefault();
+      query = $(this).text();
+      console.log(query)
+      results = searchQuery(coursesJson, query);
+      displayResults(results);
+      flipEffect();
+    })
   });
 </script>
