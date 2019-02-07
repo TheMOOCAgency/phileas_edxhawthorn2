@@ -196,12 +196,13 @@ a {
     height: 35px;
     background-color:#F8005B;
     color: white;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: bold;
 }
 .mandatory-tag p {
-    top: 30%;
+    top: 8px;
     position: relative;
+    margin-bottom: 1rem;
 }
 
 .dates-box p, .dates-box span {
