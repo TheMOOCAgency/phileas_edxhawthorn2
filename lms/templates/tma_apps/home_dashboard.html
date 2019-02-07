@@ -32,6 +32,8 @@ done_course_enrollments = []
 ongoing_course_enrollments = []
 liked_total = {}
 is_liked = {}
+is_ongoing = False
+is_favorite = False
 
 # Iterate on all course enrollments for ongoing mandatory and done
 for enrollment in course_enrollments:
@@ -115,7 +117,8 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
             <div class="row">
              %if ongoing_course_enrollments:
                 %for enrollment in ongoing_course_enrollments:
-                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id], is_liked=is_liked[enrollment.course_id]' />
+                    <% is_ongoing = True %>
+                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id], is_liked=is_liked[enrollment.course_id], is_ongoing=is_ongoing, is_favorite=is_favorite' />
                 % endfor
              %else:
                     <div style="margin:0 auto"><p>${_("You have no ongoing courses yet")}</p></div>
@@ -133,7 +136,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
             <div class="row">
              %if mandatory_course_enrollments:
                 %for enrollment in mandatory_course_enrollments:
-                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id],is_liked=is_liked[enrollment.course_id]' />
+                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id],is_liked=is_liked[enrollment.course_id], is_ongoing=is_ongoing, is_favorite=is_favorite' />
                 % endfor
              %else:
                     <div style="margin:0 auto"><p>${_("You are not enrolled in mandatory courses yet")}</p></div>
@@ -152,7 +155,8 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
             <div class="row">
              %if favorite_course_enrollments:
                 %for enrollment in favorite_course_enrollments:
-                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id],is_liked=is_liked[enrollment.course_id],favorite=true' />
+                    <% is_favorite = True %>
+                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id],is_liked=is_liked[enrollment.course_id], is_ongoing=is_ongoing, is_favorite=is_favorite' />
                 % endfor
              %else:
                     <div style="margin:0 auto"><p>${_("You have no favorite courses yet")}</p></div>
@@ -194,7 +198,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
             </div>
         %endfor
      %else:
-        <div class="row" style="text-align:center"><p class="col text-center">${_("You have no finished course yet")}</p></div>
+        <div class="row"><p class="col text-center mb-0">${_("You have no finished course yet")}</p></div>
      %endif
             <div class="table-separator"></div>
             <div class="row mb-5 mt-3">

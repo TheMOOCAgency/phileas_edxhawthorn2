@@ -33,7 +33,7 @@ $(document).ready(function () {
     $(".tma_unenroll_student").on("click", function() {
         course_id=$(this).data('course-to-uneroll');
         console.log(course_id);
-        $.post("/change_enrollment", {"enrollment_action": "unenroll","course_id":course_id})
+        $.post("/change_enrollment", {"enrollment_action": "unenroll","course_id":course_id}, function(){window.location.reload()})
     });
 
     // Remove from favorites button

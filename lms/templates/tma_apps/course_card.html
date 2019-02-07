@@ -1,4 +1,4 @@
-<%page args="enrollment,mandatory_course_enrollments,liked_total,is_liked" expression_filter="h"/>
+<%page args="enrollment,mandatory_course_enrollments,liked_total,is_liked,is_favorite" expression_filter="h"/>
 <%def name="online_help_token()"><% return "learnerdashboard" %></%def>
 <%namespace name='static' file='../static_content.html'/>
 
@@ -48,7 +48,7 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
         <div class="row">
         %if enrollment in mandatory_course_enrollments:
           <div class="col mandatory-tag">
-              <p class="text-center">${_("mandatory course!")}</p>
+              <p class="text-center">${_("Mandatory course!")}</p>
           </div>
         %endif
         </div>
@@ -69,16 +69,16 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
         <img src="${static.url('tma-static/images/Fermer.svg')}" class="unenroll" alt='${_("Unenroll")}' data-js="open" data-popup-id="${enrollment.id}">
         <div class="popup popup-${enrollment.id}">
           <div class="wrapper" data-course-id="${enrollment.course_id}">
-            % if favorite:
-              <p>${_("Do you really want to unenroll?")}</p>
-              <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
-                ${_("Unenroll")}
-              </a>
-            % else:
+            % if is_favorite:
               <p class="font-weight-bold">${_("What do you want to do?")}</p>
               <a href="" class="continue-btn tma_unfav">
                 ${_("Remove from favorites")}
               </a>
+              <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
+                ${_("Unenroll")}
+              </a>
+            % else:
+              <p>${_("Do you really want to unenroll?")}</p>
               <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
                 ${_("Unenroll")}
               </a>
@@ -88,7 +88,7 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
         </div>
         %endif
       <div class="row">
-        <div class="col m-3 pl-1">
+        <div class="col m-3 pl-1 pr-0">
         <p class="title-course">${enrollment.course_overview.display_name_with_default}</p>
         </div>
       </div>
@@ -109,7 +109,7 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
       </div>
       <div class="row pin-row mb-3">
         <div class="col-4">
-          <p data-course-id="${str(enrollment.course_id)}" class="text-center ${str(enrollment.course_id).replace(':','').replace('+','')}">
+          <p data-course-id="${str(enrollment.course_id)}" class="${str(enrollment.course_id).replace(':','').replace('+','')}">
           %if is_liked :
             <span class="pin like like-on"></span>
           %else :
@@ -121,8 +121,8 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
           </p>
         </div>
         <div class="col-8 pl-4">
-          <a href="mailto:?subject=${enrollment.course_overview.display_name_with_default} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !">
-          <p class="text-center"><img src="${static.url('tma-static/images/recommend.svg')}"/>${_("Recommend")}</p>
+          <a href="mailto:?subject=${enrollment.course_overview.display_name_with_default} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !" class="w-100 text-right">
+          <p><img src="${static.url('tma-static/images/recommend.svg')}"/>${_("Recommend")}</p>
           </a>
         </div>
       </div>
@@ -146,3 +146,6 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
     </div>
   </div>
 </div>
+<script>
+  console.log('${is_favorite}')
+</script>
