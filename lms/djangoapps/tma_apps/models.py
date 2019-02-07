@@ -185,11 +185,14 @@ class TmaCourseOverview(models.Model):
 
     @classmethod
     def get_tma_course_overview_by_course_id(cls, course_key):
-        course_overview = CourseOverview.objects.get(id=course_key)
-        tma_course_overview, created = TmaCourseOverview.objects.get_or_create(
-            course_overview_edx=course_overview,
-        );
-        return tma_course_overview
+        try:
+            course_overview = CourseOverview.objects.get(id=course_key)
+            tma_course_overview, created = TmaCourseOverview.objects.get_or_create(
+                course_overview_edx=course_overview,
+            );
+            return tma_course_overview
+        except:
+            pass
 
     @classmethod
     def add_vodelic_course(cls, course_key):
