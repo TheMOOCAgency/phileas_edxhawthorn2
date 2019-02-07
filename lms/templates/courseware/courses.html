@@ -65,7 +65,7 @@
             <!-- title -->
             <div class="container-fluid pl-0 pb-2">
                 <div class="row">
-                  <div class="col-10"><h4 class="header-facet">${_("All")}</h4></div>
+                  <div class="col-10"><h4 class="header-facet all">${_("All")}</h4></div>
                   <div class="col-2"><span class="count">${len(final_course_list)}</span></div>
                 </div>
             </div>
@@ -77,8 +77,8 @@
             <!-- title -->
             <div class="container-fluid pl-0 pb-2">
                 <div class="row">
-                  <div class="col-10"><h4 class="header-facet">${_("New")}</h4></div>
-                  <div class="col-2"><span class="count">${len(final_course_list)}</span></div>
+                  <div class="col-10"><h4 class="header-facet new">${_("New")}</h4></div>
+                  <div class="col-2"><span class="count">${new_counter['new']}</span></div>
                 </div>
             </div>
           </div>
@@ -164,12 +164,35 @@
     // Resize cols and cards for search page 
     $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4 pr-0');
     $('.course-card-sm, .flip-container').css('margin-bottom', '15px');
-
-    var coursesJson = ${json_courses | n, dump_js_escaped_json};
-
+    
     /* SEARCH QUERY */
+    var coursesJson = ${json_courses | n, dump_js_escaped_json};
     var query;
     var results;
+
+    const operateSearchFilter = function(event, element) {
+      event.preventDefault();
+      query = element.text();
+      results = searchQuery(coursesJson, query);
+      displayResults(results);
+      flipEffect();
+    };
+
+    // From filters
+    $('.facet-option').on('click', function(e){
+      operateSearchFilter(e, $(this));
+    });
+    $('.org').on('click', function(e) {
+      operateSearchFilter(e, $(this));
+    });
+    $('.new').on('click', function(e) {
+      operateSearchFilter(e, $(this));
+    });
+    $('.all').on('click', function(e) {
+      e.preventDefault();
+      displayResults(coursesJson);
+    });
+
     // From input
     $('#course-search').on('click', function(e) {
       e.preventDefault();
@@ -184,22 +207,5 @@
       }
       flipEffect();
     });
-    // From filters
-    $('.facet-option').on('click', function(e){
-      e.preventDefault();
-      query = $(this).text();
-      console.log(query)
-      results = searchQuery(coursesJson, query);
-      displayResults(results);
-      flipEffect();
-    });
-    $('.org').on('click', function(e) {
-      e.preventDefault();
-      query = $(this).text();
-      console.log(query)
-      results = searchQuery(coursesJson, query);
-      displayResults(results);
-      flipEffect();
-    })
   });
 </script>

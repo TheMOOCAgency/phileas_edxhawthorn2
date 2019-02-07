@@ -51,7 +51,7 @@ a, a:hover, a:visited {
     background-color: rgba(151, 151, 151, 0.2);
 }
 
-.facet-option {
+.facet-option, .org, .new, .all {
     cursor: pointer;
 }
 
