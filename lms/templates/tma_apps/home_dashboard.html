@@ -64,9 +64,10 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
   if user_enrollment.is_favourite:
     favorite_course_enrollments.append(edx_associated_enrollment)
   is_liked[edx_associated_enrollment.course_id] = user_enrollment.is_liked
-  if liked_total[edx_associated_enrollment.course_id]:  
+  try:
     liked_total[edx_associated_enrollment.course_id]= TmaCourseOverview.get_tma_course_overview_by_course_id(edx_associated_enrollment.course_id).liked_total
-
+  except:
+    pass
 
 %>
 
