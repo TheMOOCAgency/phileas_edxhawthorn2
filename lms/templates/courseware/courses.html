@@ -97,7 +97,7 @@
             <div class="container-fluid">
                 % for language, count in language_counters.items():
                   <div class="row">
-                    <div class="col-10"><a href="/courses/?search=${language}"><p class="facet-option text-uppercase">${language}</p></a></div>
+                    <div class="col-10"><a href=""><p class="facet-option text-uppercase">${language}</p></a></div>
                     <div class="col-2"><span class="count">${count}</span></div>
                   </div>
                 % endfor
@@ -166,7 +166,6 @@
     $('.course-card-sm, .flip-container').css('margin-bottom', '15px');
 
     var coursesJson = ${json_courses | n, dump_js_escaped_json};
-    console.log("${final_course_list[0]}")
 
     /* SEARCH QUERY */
     var query;
