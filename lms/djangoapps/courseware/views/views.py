@@ -314,12 +314,15 @@ def courses(request):
 
     language_counters = Counter()
     org_counters = Counter()
+    new_counter = Counter()
     for course in final_course_list:
         language_counters[course['language']] += 1
         if course['is_vodeclic']:
             org_counters['Vodeclic'] += 1
         else:
             org_counters['Amundi'] += 1
+        if course['is_new']:
+            new_counter['new'] += 1
 
     return render_to_response(
         "courseware/courses.html",
@@ -332,7 +335,8 @@ def courses(request):
             'enrollment_course_list':enrollment_course_list,
             'tag_counters': tag_counters,
             'language_counters': language_counters,
-            'org_counters': org_counters
+            'org_counters': org_counters,
+            'new_counter': new_counter
         }
     )
 

@@ -998,8 +998,9 @@ def get_tma_course_info(user, course_id, block_courses):
     #course obj info
     course_key= CourseKey.from_string(str(course_id))
     course_obj = get_course_by_id(course['id'])
-    course['language']=course_obj.language
-    course['display_name_with_default']=course_obj.display_name_with_default
+    course['is_new'] = course_obj.is_new
+    course['language'] = course_obj.language
+    course['display_name_with_default'] = course_obj.display_name_with_default
 
     #TmaCourseOverview Info
     TmaOverviewInfo = TmaCourseOverview.get_tma_course_overview_by_course_id(course_id)

@@ -2,21 +2,29 @@
 const searchQuery = function(coursesJson, query) {
     var regexQuery = new RegExp(query, 'i');
     var results = [];
-    if (query == 'Vodeclic') {
-        coursesJson.forEach(function(course) {
-            if (course.is_vodeclic) {
-                results.push(course);
-            }
-        });
-    } else {
-        if (query == 'Amundi') {
+    switch(query) {
+        case 'Vodeclic':
+            coursesJson.forEach(function(course) {
+                if (course.is_vodeclic) {
+                    results.push(course);
+                }
+            });
+            break;
+        case 'Amundi':
             coursesJson.forEach(function(course) {
                 if (!course.is_vodeclic) {
                     results.push(course);
                 }
             });
-        }
-    };
+            break;
+        case 'New':
+            coursesJson.forEach(function(course) {
+                if (course.is_new) {
+                    results.push(course);
+                }
+            });
+            break;
+    }
     
     coursesJson.forEach(function(course){
         var title = course.display_name;
@@ -34,8 +42,6 @@ const searchQuery = function(coursesJson, query) {
                 } else {
                     if (language && (language.search(regexQuery) > -1)) {
 
-                    } else {
-                        console.log('No results found');
                     }
                 }
             }
