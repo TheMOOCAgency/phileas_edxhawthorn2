@@ -1,6 +1,6 @@
 /********* PREVENT EDX STYLES *********/
 a:focus, a:hover, a:visited {
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 input[type="text"],input[type="text"]:focus {
