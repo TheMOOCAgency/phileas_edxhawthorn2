@@ -1,4 +1,9 @@
 /**** First row *****/
+.blue-wave {
+    background-image: url('/static/tma-static/images/decroche-hp.jpg');
+    background-size: cover;
+}
+
 #vjs_video_3 {
     width: 100% !important;
     background-color: transparent !important;
