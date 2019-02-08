@@ -1,3 +1,17 @@
+// Load finished courses 5 by 5
+var currentIndex = 5
+// Only show 5
+$('.finished').hide();
+$('.finished').slice(0, 5).show();
+// On click, show 5 more, and if no more to show, hide button
+function loadMore() {
+    $('.finished').slice(0, currentIndex + 5).show();
+    currentIndex += 5;
+    if ($('.finished:hidden').length == 0) {
+        $('.more-btn').hide();
+    }
+};
+
 function popupOpenClose(popup) {
     /* Add div inside popup for layout if one doesn't exist */
     if ($(".wrapper").length == 0){
