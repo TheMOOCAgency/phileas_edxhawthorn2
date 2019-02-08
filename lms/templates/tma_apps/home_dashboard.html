@@ -116,14 +116,15 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
             <div class="row pt-4">
                 <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">Your ongoing courses</h1>
             </div>
-            <div class="row">
              %if ongoing_course_enrollments:
+             <div class="row">
                 %for enrollment in ongoing_course_enrollments:
                     <% is_ongoing = True %>
                     <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id], is_liked=is_liked[enrollment.course_id], is_ongoing=is_ongoing, is_favorite=is_favorite' />
                 % endfor
              %else:
-                    <div style="margin:0 auto"><p>${_("You have no ongoing courses yet")}</p></div>
+             <div class="row" style="margin-bottom:180px;">
+                <div style="margin:0 auto;z-index:2"><p class="text-white">${_("You have no ongoing courses yet")}</p></div>
              %endif
             </div>
         </div>
