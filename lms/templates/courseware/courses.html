@@ -160,16 +160,22 @@
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/course-search.js')}" charset="utf-8"></script>
 <script>
-  $(document).ready(function(){
-    // Resize cols and cards for search page 
-    $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4 pr-0');
-    $('.course-card-sm, .flip-container').css('margin-bottom', '15px');
-    
-    /* SEARCH QUERY */
-    var coursesJson = ${json_courses | n, dump_js_escaped_json};
-    var query;
-    var results;
+  /* SEARCH QUERY */
+  // Resize cols and cards for search page 
+  $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
 
+  var coursesJson = ${json_courses | n, dump_js_escaped_json};
+  var query;
+  var results;
+
+  // From URL
+  if (window.location.search) {
+    query = window.location.search.slice(8);
+    results = searchQuery(coursesJson, query);
+    displayResults(results);
+  }
+
+  $(document).ready(function(){
     const operateSearchFilter = function(event, element) {
       event.preventDefault();
       query = element.text();

@@ -101,10 +101,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 <link rel="stylesheet" href="${static.url('tma-static/css/dashboard-tma-custom.css')}">
 <link rel="stylesheet" href="${static.url('tma-static/css/catalog-course-card.css')}">
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.0.1/dist/sweetalert2.all.min.js"></script>
 <div class="dashboard-notifications" tabindex="-1">
-
-
 
     %if banner_account_activation_message:
         <div class="dashboard-banner">
@@ -163,7 +160,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       </video>
     <!--Black & White img-->
     <div class="zoomEffect col-lg-3 text-center img-bw-1">
-      <a id="7speaking" class="ext-links" target="_blank">Language <br>skills</a>
+      <a id="7speaking" class="ext-links">Language <br>skills</a>
     </div>
     <div class="zoomEffect col-lg-3 text-center img-bw-2">
         <a href="https://amundi.elearning.ca-ifcam.fr" class="ext-links" target="_blank">Regulatory<br> (eCampus)</a>
@@ -174,7 +171,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     </div>
     %else:
     <div class="zoomEffect col-lg-3 text-center img-bw-3">
-        <a href="#" class="ext-links">US <br>regulatory courses</a>
+        <a href="/courses?filter=regulatory" target="_blank" class="ext-links">US <br>regulatory courses</a>
     </div>
     %endif
     <!--User dark blue box-->
@@ -292,7 +289,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
           </div>
       </div>
       <div class="row mt-3">
-          <div class="col">
+          <div class="col mb-4">
             <h1>Categories</h1>
           </div>
       </div>
@@ -319,7 +316,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 
 <!-- TMA DASHBORD SCRIPT-->
 <script>
-  let etoile_src="${static.url('tma-static/images/etoile.svg')}"
+  let etoile_src = "${static.url('tma-static/images/etoile.svg')}"
   let counter = ${favorite_courses_count}
   const ssData = ${dump_js_escaped_json(sspeaking_data) | n, decode.utf8};
 
@@ -327,6 +324,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     var form = document.createElement("form");
     form.setAttribute("method", "POST");
     form.setAttribute("action", ssData.sspeaking_url);
+    form.setAttribute("target", "_blank");
     for (var key in ssData.sspeaking_data) {
       if (ssData.sspeaking_data.hasOwnProperty(key)) {
         var hiddenField = document.createElement("input");

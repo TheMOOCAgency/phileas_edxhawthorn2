@@ -5,6 +5,9 @@
   from django.utils.translation import ugettext as _
   from branding.api import get_footer
   from openedx.core.djangoapps.lang_pref.api import footer_language_selector_is_enabled
+  from student.views.dashboard import get_tma_footer_info
+
+  footer_counters = get_tma_footer_info()
 %>
 <% footer = get_footer(is_secure=is_secure) %>
 <%namespace name='static' file='static_content.html'/>
@@ -25,31 +28,31 @@
     <div class="col-lg-3">
       <div class="stat-box">
         <div>
-          <span class="text-center numscroller" data-min='1' data-max='3660' data-delay='5' data-increment='10'>3660</span>
-          <span class="text-center">Users</span>
+          <span class="text-center numscroller" data-min='1' data-max='${footer_counters["users_counter"]}' data-delay='5' data-increment='${footer_counters["users_counter"]}/3'>${footer_counters["users_counter"]}</span>
+          <span class="text-center">${_("Users")}</span>
         </div>
       </div>
       </div>
     <div class="col-lg-3">
       <div class="stat-box">
         <div>
-          <span class="text-center numscroller" data-min='1' data-max='130' data-delay='5' data-increment='10'>130</span>
-          <span class="text-center">Courses</span>
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-3">
-      <div class="stat-box">
-        <div>
-          <span class="text-center numscroller" data-min='1' data-max='750' data-delay='5' data-increment='10'>750</span>
-          <span class="text-center">Likes</span>
+            <span class="text-center numscroller" data-min='1' data-max='${footer_counters["courses_counter"]}' data-delay='5' data-increment='${footer_counters["courses_counter"]}/3'>${footer_counters["courses_counter"]}</span>
+            <span class="text-center">${_("Courses")}</span>
         </div>
       </div>
     </div>
     <div class="col-lg-3">
       <div class="stat-box">
         <div>
-          <span class="text-center numscroller" data-min='1' data-max='384' data-delay='5' data-increment='10'>384</span>
+          <span class="text-center numscroller" data-min='1' data-max='${footer_counters["likes_counter"]}' data-delay='5' data-increment='${footer_counters["likes_counter"]}/3'>'${footer_counters["likes_counter"]}</span>
+          <span class="text-center">${_("Likes")}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="stat-box">
+        <div>
+          <span class="text-center numscroller" data-min='1' data-max='${footer_counters["hours_counter"]}' data-delay='5' data-increment='${footer_counters["hours_counter"]}/3'>${footer_counters["hours_counter"]}</span>
           <span class="text-center">Training hours</span>
         </div>
       </div>

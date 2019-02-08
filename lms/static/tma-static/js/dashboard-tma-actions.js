@@ -16,9 +16,9 @@ $(document).ready(function() {
 
   //Enroll when click on vodeclic courses join because no course about page
   $('.vodeclick_register').on('click', function(){
-    let course_id=$(this).data('vodeclic-id')
+    let course_id = $(this).data('vodeclic-id')
     $.post("/change_enrollment", {"enrollment_action": "enroll","course_id":course_id})
-    ongoing_counter=parseInt($('#ongoin-counter-number').html());
+    ongoing_counter = parseInt($('#ongoin-counter-number').html());
     $('#ongoin-counter-number').html(ongoing_counter+1)
   });
 
@@ -36,7 +36,7 @@ $(document).ready(function() {
         $('.header-box').show().css('padding', '0px').addClass('header-woman');
       } else {
         $('video').show();
-        $('.gif-box').removeClass('col-lg-6').css('position', 'absolute');
+        $('.gif-box').removeClass('col-lg-6').css({'position':'absolute', 'background-color':'#1194ed'});
         $('.header-box').hide();
       }
     }

@@ -116,14 +116,15 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
             <div class="row pt-4">
                 <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">Your ongoing courses</h1>
             </div>
-            <div class="row">
              %if ongoing_course_enrollments:
+             <div class="row">
                 %for enrollment in ongoing_course_enrollments:
                     <% is_ongoing = True %>
                     <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id], is_liked=is_liked[enrollment.course_id], is_ongoing=is_ongoing, is_favorite=is_favorite' />
                 % endfor
              %else:
-                    <div style="margin:0 auto"><p>${_("You have no ongoing courses yet")}</p></div>
+             <div class="row" style="margin-bottom:180px;">
+                <div style="margin:0 auto;z-index:2"><p class="text-white">${_("You have no ongoing courses yet")}</p></div>
              %endif
             </div>
         </div>
@@ -183,7 +184,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
             <div class="table-separator"></div>
      %if done_course_enrollments:
         %for enrollment in done_course_enrollments:
-            <div class="row">
+            <div class="row finished">
             %if enrollment.course_id in show_courseware_links_for:
                 <div class="col-lg-3 title-20" style="cursor:pointer"><p class="mb-0" onclick="window.location.href ='/courses/+${enrollment.course_id}+'/courseware'">${enrollment.course_overview.display_name_with_default}</p></div>
             %else:
@@ -197,25 +198,27 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                 </div>
                 <div class="col-lg-2 pl-5"><p class="mb-0"><img class="badge-cert" src="${static.url('tma-static/images/certificate.svg')}"></div>
                 <div class="col-lg-2"><a href="/tma_apps/${enrollment._course_id}/certificate/render">Télécharger</a></div>
+                <div class="table-separator"></div>
             </div>
+
         %endfor
      %else:
         <div class="row"><p class="col text-center mb-0">${_("You have no finished course yet")}</p></div>
+        <div class="table-separator"></div>
      %endif
-            <div class="table-separator"></div>
-            <div class="row mb-5 mt-3">
-                % if len(done_course_enrollments) > 4:
-                    <div class="col text-center more-btn">
-                        <a href="#"><img src="${static.url('tma-static/images/+.svg')}"></a>
-                    </div>
-                % endif
-            </div>
+        <div class="row mb-5 mt-3">
+            % if len(done_course_enrollments) > 4:
+                <div class="col text-center more-btn">
+                    <a onclick="loadMore()"><img src="${static.url('tma-static/images/+.svg')}"></a>
+                </div>
+            % endif
+        </div>
         </div>
     </div>
 </div>
 <!-- TMA Home Dashboard Script -->
 <script>
-  let user_email="${request.user.email}"
+    let user_email="${request.user.email}"
 </script>
 <script src="${static.url('tma-static/js/home-dashboard-actions.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
