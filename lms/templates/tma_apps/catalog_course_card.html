@@ -16,7 +16,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
     <div class="course-card-sm front">
       % if course['is_mandatory']:
       <div class="col mandatory-tag">
-        <p class="text-center">Mandatory Course!</p>
+        <p class="text-center">Mandatory Course</p>
       </div>
       % endif
 
@@ -85,7 +85,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
       <div class="course-card-sm back">
         % if course['is_mandatory']:
           <div class="col mandatory-tag">
-              <p class="text-center">Mandatory Course!</p>
+              <p class="text-center">Mandatory Course</p>
           </div>
         % endif
         <div class="cover-image">
@@ -107,7 +107,7 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
                 %if course['is_liked'] :
                   <span class="pin like like-on"></span>
                 %else :
-                  <span class="pin like like-off"></span>
+                  <span class="pin like like-off white"></span>
                 %endif
               </div>
             </div>

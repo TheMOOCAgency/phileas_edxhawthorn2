@@ -906,7 +906,7 @@ def _student_dashboard(request):
     for enrollment in course_enrollments:
         course_info=get_tma_course_info(user, enrollment.course_overview.id, block_courses)
         enrollment_course_list.append(course_info)
-
+    
 
     context.update({
         'final_course_list':final_course_list,
@@ -917,14 +917,6 @@ def _student_dashboard(request):
         'ongoing_courses_count':ongoing_courses_count,
         'enrollment_course_list':enrollment_course_list
     })
-
-
-
-
-
-
-
-
 
 
     """
@@ -1049,3 +1041,21 @@ def get_tma_course_json(user, course_id, block_courses):
     course_json = {x: course[x] for x in course if x not in keys_not_needed}
 
     return course_json
+
+def get_tma_footer_info():
+    """
+    Gets indicators to be displayed in the footer
+    """
+    footer = {}
+    footer['courses_counter'] = len(TmaCourseOverview.objects.all())
+    footer['users_counter'] = len(UserProfile.objects.all())
+
+    likes_counter = 0
+
+    for course in TmaCourseOverview.objects.all():
+        likes_counter = likes_counter + course.liked_total
+    footer['likes_counter'] = likes_counter
+
+    footer['hours_counter'] = int(footer['courses_counter'] * 2.5)
+
+    return footer
