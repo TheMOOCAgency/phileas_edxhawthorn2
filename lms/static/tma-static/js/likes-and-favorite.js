@@ -9,8 +9,8 @@ $('#cards-box').on('click', '.pin.favorite' ,function(){
 $('#cards-box').on('click', '.pin.like', function(){
   let update_info = change_social_attributes($(this), 'like');
   let like_counter= $('.'+update_info['courseSelector']+' .like_count');
-  console.log('.'+update_info['courseSelector']+' .like_count');
-  console.log(like_counter);
+  /*console.log('.'+update_info['courseSelector']+' .like_count');
+  console.log(like_counter);*/
   update_counter(like_counter, update_info['status']);
 });
 
@@ -19,7 +19,7 @@ let change_social_attributes =  function(element, social_attribute){
   let courseSelector = courseId.split('+').join('').split(':').join('');
 
   $('.'+ courseSelector + ' > .'+ social_attribute).each(function(){
-    console.log('.'+ courseSelector + ' > .'+ social_attribute)
+    /*console.log('.'+ courseSelector + ' > .'+ social_attribute)*/
 
     $(this).toggleClass(`${social_attribute}-on ${social_attribute}-off`);
   });
