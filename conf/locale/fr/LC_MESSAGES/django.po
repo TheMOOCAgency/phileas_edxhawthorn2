@@ -25289,3 +25289,10 @@ msgstr "Vous n'êtes inscrit(e) à aucune formation obligatoire"
 msgid "You have no favorite courses yet"
 msgstr "Vous n'avez aucune formation favorite"
 
+#: lms/templates/courseware/course_about.html
+msgid "Back to courses"
+msgstr "Retour aux formations"
+
+#: lms/templates/courseware/courseware.html
+msgid "Back to description"
+msgstr "Retour vers description"
