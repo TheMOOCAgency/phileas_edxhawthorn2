@@ -136,7 +136,7 @@ ${HTML(fragment.foot_html())}
           %if is_course_graded :
           <div class="tma-grade">
             <div>
-              <img class="award" src="${static.url('tma-static/images/award.png')}" alt="award">
+              <img class="award" src="${static.url('tma-static/images/coupe.png')}" alt="award">
               <span class="font-weight-bold"><span id="tma-grade-value" class="primary-color-text first-part-grade"></span>/<span class="second-part-grade">100</span></span>
             </div>
           </div>
@@ -175,7 +175,37 @@ ${HTML(fragment.foot_html())}
   >
 
 
-
+<style>
+  #tma_course_header{
+    background-image: url('${static.url("tma-static/images/bg_gris.png")}');
+  }
+  .course-wrapper .course-content .xblock ol li::before {
+    content: counter(li);
+    border: 1px solid #009EE0!important;
+    border-radius: 50%;
+    padding: 3px 9px;
+    margin-right: 8px;
+    font-family: 'Montserrat', sans-serif!important;
+  }
+  .course-wrapper .course-content .xblock ol li{
+    margin-bottom: 10px;
+    counter-increment: li;
+  }
+  .course-wrapper .course-content .xblock ol{
+    padding-left: 0px;
+  }
+  .course-wrapper .course-content .xblock ul{
+    list-style-image: url("${static.url('tma-static/images/bullet.svg')}")!important;
+  }
+  blockquote::before {
+    content:url("${static.url('tma-static/images/two-quotes.png')}");
+    transform: rotate(180deg);
+    display: inline-block;
+  }
+  blockquote::after {
+    content:url("${static.url('tma-static/images/two-quotes.png')}")
+  }
+</style>
 <!-- TMA COMPLETION NAV -->
   <div class="tma-coursenav-btn">
     <span class="open-courseware-nav">Menu<i class="fa fa-plus"></i></span>

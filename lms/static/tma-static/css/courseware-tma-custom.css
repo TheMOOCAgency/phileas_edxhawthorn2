@@ -12,34 +12,18 @@ h1,h2,h3,h4,h5,h6{
 
 /* COMPLETION NAV STYLE */
 #tma-completion-nav{
-  background-color: #E6EDFA ;
-  border: none;
-  left: 0;
-  max-width: 40%;
-  padding: 20px;
-  position: absolute;
-  z-index: 10;
-  transition: left 2s;
-  bottom: 0;
-  height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  position: fixed;
-
-  /*
   background-color: #E6EDFA;
   border: none;
   left: 0;
   max-width: 40%;
   padding: 20px;
-  position: absolute;
+  position: fixed;
   z-index: 10;
   transition: left 2s;
-  top: 0;
-  height: calc(100vh - 450px);
+  top: 320px;
   overflow-y: scroll;
   overflow-x: hidden;
-  */
+  max-height: 550px;
 }
 .tma-visibility-hidden{
   visibility: hidden;
@@ -125,10 +109,16 @@ span.fa.fa-chevron-right.fa-rotate-90{
 /*Zone Header */
 #tma_course_header{
   padding: 20px;
+  background-size: cover;
+  background-position: center;
+  padding-bottom: 0px;
 }
 #tma_course_header h1{
   padding:0px 0px 10px 60px;
   font-weight: 500;
+}
+.container{
+  padding-top: 25px;
 }
 .award{
   max-height: 35px;
@@ -200,6 +190,7 @@ body.view-in-course .wrapper-course-material{
   background-color: transparent!important;
   box-shadow: none!important;
   display: inline!important;
+  position: sticky;
 }
 .close-courseware-nav .fa-times, .tma-coursenav-btn .fa-plus{
   padding: 4px;
@@ -209,17 +200,21 @@ body.view-in-course .wrapper-course-material{
 }
 .tma-coursenav-btn .fa-plus
 {
-  border: 1px solid #0C1C49;
+  border: 2px solid #0C1C49;
   border-radius: 50%;
-  padding: 7px 9px;
+  padding: 6px 8px;
   margin-left: 10px;
 }
 .open-courseware-nav{
   cursor: pointer;
+  position: relative;
+  top: 51px;
+  background-color: white!important;
 }
 .tma-coursenav-btn{
   display: inline;
   border: none!important;
+  position: sticky;
 }
 .sequence-bottom{
   display: flex!important;
@@ -263,7 +258,7 @@ nav.sequence-bottom .sequence-nav-button{
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
 }
-nav.sequence-bottom .sequence-nav-button:hover{
+nav.sequence-bottom .sequence-nav-button:hover, .phileas-button:hover{
   background-color: #0C1C49!important;
   color: white!important;
 }
@@ -322,15 +317,27 @@ nav.sequence-bottom .sequence-nav-button:hover .icon{
   margin-left: 9px!important;
 }
 
-@media screen and (max-width: 1350px) {
-  .tma-coursenav-btn {
-    position: static;
-  }
-}
-
 .tma-current-unit{
   background-color: white!important;
 }
 .subsection.accordion{
   border-bottom: 1px solid #7A818E!important;
+}
+
+.course-wrapper .course-content .xblock{
+  padding-left: 10px;
+}
+.course-wrapper .course-content .xblock h3{
+  padding-top: 20px!important;
+}
+
+/* Course content styles */
+
+.course-wrapper .course-content .xblock ul{
+  list-style: none!important;
+}
+
+.course-wrapper .course-content .xblock ol {
+  list-style: none!important;
+  counter-reset: li!important
 }
