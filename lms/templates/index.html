@@ -32,29 +32,29 @@ from openedx.core.djangolib.markup import HTML, Text
       <div class="col-lg-3 text-center">
         <div class="w-100">
           <img class="picto" src="${static.url('tma-static/images/rythme.svg')}">
-          <h3 class="md-blue-title">Adapté à votre rythme</h3>
-          <p class="sm-grey-txt">Accédez depuis n'importe quel device à vos formations là où vous les avez interrompues</p>
+          <h3 class="md-blue-title">${_("At your own pace")}</h3>
+          <p class="sm-grey-txt">${_("Access from any device to your trainings where you left off")}</p>
         </div>
       </div>
       <div class="col-lg-3 text-center">
         <div class="w-100">
           <img class="picto" src="${static.url('tma-static/images/contenu.svg')}">
-          <h3 class="md-blue-title">Des contenus variés</h3>
-          <p class="sm-grey-txt">Cherchez le module qui correspond à vos besoins et lancez-vous dès à présent !</p>
+          <h3 class="md-blue-title">${_("Various contents")}</h3>
+          <p class="sm-grey-txt">${_("Look for the module that fits your needs and get started now!")}</p>
         </div>
       </div>
       <div class="col-lg-3 text-center">
         <div class="w-100">
           <img class="picto" src="${static.url('tma-static/images/apprentissage.svg')}">
-          <h3 class="md-blue-title">Auto apprentissage</h3>
-          <p class="sm-grey-txt">Soyez autonome dans l'acquisition de vos nouvelles compétences</p>
+          <h3 class="md-blue-title">${_("Self learning")}</h3>
+          <p class="sm-grey-txt">${_("Be autonomous in acquiring your new skills")}</p>
         </div>
       </div>
       <div class="col-lg-3 text-center">
         <div class="w-100">
           <img class="picto" src="${static.url('tma-static/images/competences.svg')}">
-          <h3 class="md-blue-title">Orienté compétences</h3>
-          <p class="sm-grey-txt">Maintenez vos compétences à jour et développez de nouveaux savoirs</p>
+          <h3 class="md-blue-title">${_("Skills oriented")}</h3>
+          <p class="sm-grey-txt">${_("Keep your skills up to date and develop new knowledge")}</p>
         </div>
       </div>
     </div>
@@ -66,14 +66,10 @@ from openedx.core.djangolib.markup import HTML, Text
               <img src="${static.url('tma-static/images/trophee.png')}">
             </div>
             <div class="col-lg-8">
-              <h3 class="md-blue-title">Innover et entreprendre ensemble</h3>
-              <p class="text-black font-italic">Lauréat de l’Innovation Cup 2015, Phileas est né de convictions communes
-                des équipes RH et IT autour du partage des connaissances et de la formation.</p>
-              <p class="text-black">Phileas, c’est « Project HR, IT, Learn And Share ». Développé avec énergie, cœur et
-                conviction, il démontre qu’il y a toujours une place pour les idées et les projets d’ouverture quand un
-                collectif est engagé.</p>
-              <p class="sm-blue-txt">Corinne Fleury, Guénola Morand, Florane Eono, Philippe Blayo, Jérémy Delom et
-                Thierry Moulès.</p>
+              <h3 class="md-blue-title">${_("Innovate and undertake together")}</h3>
+              <p class="text-black font-italic">${_("Winner of the Innovation Cup 2015, Phileas is born of common convictions HR and IT teams around sharing knowledge and training.")}</p>
+              <p class="text-black">${_("Phileas stands for Project HR, IT, Learn And Share. Developed with energy, heart and conviction, it demonstrates that there is always a place for ideas and projects of openness when a collective is engaged.")}</p>
+              <p class="sm-blue-txt">Corinne Fleury, Guénola Morand, Florane Eono, Philippe Blayo, Jérémy Delom ${_("and")} Thierry Moulès.</p>
             </div>
           </div>
         </div>

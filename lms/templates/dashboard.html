@@ -139,15 +139,15 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   <!--PRESENTATION ROW-->
   <div class="row bg-white">
       <form method="get" action="/courses" class="gif-box">
-        <p class="title-36">Find your course <br>among
+        <p class="title-36">${_("Find your course")} <br>${_("among")}
           <span class="numscroller" data-min='1' data-max='130' data-delay='5' data-increment='10'>130</span>
-           available
+           ${_("available")}
         </p>
         <div class="search-field-wrapper">
           <button type="submit" class="search-button btn" title="${_('Search')}">
             <img src="${static.url('tma-static/images/loupe.svg')}" style="width:30px">
           </button>
-          <input name="search_query" id="dashboard-search-input" type="text" class="search-input" placeholder="What do you want to learn?"/>
+          <input name="search_query" id="dashboard-search-input" type="text" class="search-input" placeholder="${_("What do you want to learn?")}"/>
           <!--<button type="button" class="cancel-button" title="${_('Clear search')}">
             <span class="icon fa fa-remove" aria-hidden="true"></span>
           </button>-->
@@ -160,7 +160,13 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       </video>
     <!--Black & White img-->
     <div class="zoomEffect col-lg-3 text-center img-bw-1">
-      <a id="7speaking" class="ext-links">Language <br>skills</a>
+      <a id="7speaking" class="ext-links">
+      % if language == 'fr':
+          Apprenez une<br>langue étrangère
+      %else:      
+          Language <br>skills
+      %endif
+      </a>
     </div>
     <div class="zoomEffect col-lg-3 text-center img-bw-2">
         <a href="https://amundi.elearning.ca-ifcam.fr" class="ext-links" target="_blank">Regulatory<br> (eCampus)</a>
@@ -199,7 +205,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
               %endif
                <img src="${static.url('tma-static/images/warning.svg')}">
             </p>
-            <p class="mt-2 tma_course_counters_label">mandatory course(s)</p>
+            <p class="mt-2 tma_course_counters_label">${_("mandatory course(s)")}</p>
           </div>
           <div class="col-4 text-center white-right-border">
             <p id="fav-counter" class="tma_course_counters">
@@ -207,14 +213,14 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
                <span id="favorite-counter-number">${favorite_courses_count}</span>
                <img src="${static.url('tma-static/images/etoile.svg')}"/>
             </p>
-            <p class="mt-2 tma_course_counters_label">favorite course(s)</p>
+            <p class="mt-2 tma_course_counters_label">${_("favorite course(s)")}</p>
           </div>
           <div class="col-4 text-center">
             <p>
               <span id="ongoin-counter-number" class="tma_course_counters" class="numscroller" data-min='1' data-max='${ongoing_courses_count}' data-delay='1' data-increment='${ongoing_courses_count/3}'>${ongoing_courses_count}</span>
               <img src="${static.url('tma-static/images/drapeau.svg')}"/>
             </p>
-            <p class="mt-2 tma_course_counters_label">ongoing course(s)</p>
+            <p class="mt-2 tma_course_counters_label">${_("ongoing course(s)")}</p>
           </div>
         </div>
       </a>
@@ -227,15 +233,15 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     <!--Title and filter-->
     <div class="row mt-3 mb-3">
       <div class="col-lg-10 title-col">
-        <h1>Our Selection</h1>
+        <h1>${_("Our Selection")}</h1>
       </div>
       <div class="col-lg-2 pl-0">
         <div class="dropdown-container">
-          <button>Filter<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
+          <button>${_("Filter")}<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
           <ul class="dropdown">
-            <li value="1"><a href="/dashboard">On the front page</a><div class="separator"></div></li>
-            <li value="2"><a href="/dashboard/?filter=likes">Highest rated</a><div class="separator"></div></li>
-            <li value="3"><a href="/dashboard/?filter=enrollments">Most subscribed</a></li>
+            <li value="1"><a href="/dashboard">${_("On the front page")}</a><div class="separator"></div></li>
+            <li value="2"><a href="/dashboard/?filter=likes">${_("Highest rated")}</a><div class="separator"></div></li>
+            <li value="3"><a href="/dashboard/?filter=enrollments">${_("Most subscribed")}</a></li>
           </ul>
         </div>
       </div>
@@ -290,23 +296,23 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       </div>
       <div class="row mt-3">
           <div class="col mb-4">
-            <h1>Categories</h1>
+            <h1>${_("Categories")}</h1>
           </div>
       </div>
       <div class="row categories">
-        <div class="zoomEffect col-lg-4 text-center cat-1"><a href="#">Software</a></div>
-        <div class="zoomEffect col-lg-4 text-center cat-2"><a href="#">Business basics</a></div>
+        <div class="zoomEffect col-lg-4 text-center cat-1"><a href="#">${_("Software")}</a></div>
+        <div class="zoomEffect col-lg-4 text-center cat-2"><a href="#">${_("Business basics")}</a></div>
         <div class="zoomEffect col-lg-4 text-center cat-3">
-          <a href="#">Business applications</a>
+          <a href="#">${_("Business applications")}</a>
         </div>
         <div class="zoomEffect col-lg-4 text-center cat-4">
-          <a href="#">Marketing and communication</a>
+          <a href="#">${_("Marketing and communication")}</a>
         </div>
         <div class="zoomEffect col-lg-4 text-center cat-5">
-          <a href="#">Compliance</a>
+          <a href="#">${_("Compliance")}</a>
         </div>
         <div class="zoomEffect col-lg-4 text-center cat-6">
-          <a href="#">Management</a>
+          <a href="#">${_("Management")}</a>
         </div>
       </div>
     </div>

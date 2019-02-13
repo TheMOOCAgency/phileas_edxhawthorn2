@@ -25076,3 +25076,116 @@ msgid ""
 msgstr ""
 "Une nouvelle révision a été créée : Fusion entre la révision #%(r1)d et la "
 "révision #%(r2)d"
+
+#: lms/templates/index.html
+msgid "Develop your skills and explore new horizons"
+msgstr "Développez vos compétences et découvrez de nouveaux horizons"
+
+#: lms/templates/index.html
+msgid "Login"
+msgstr "Connexion"
+
+#: lms/templates/index.html
+msgid "At your own pace"
+msgstr "Adapté à votre rythme"
+
+#: lms/templates/index.html
+msgid "Access from any device to your trainings where you left off"
+msgstr "Accédez depuis n'importe quel device à vos formations là où vous les avez interrompues"
+
+#: lms/templates/index.html
+msgid "Various contents"
+msgstr "Des contenus variés"
+
+#: lms/templates/index.html
+msgid "Look for the module that fits your needs and get started now!"
+msgstr "Cherchez le module qui correspond à vos besoins et lancez-vous dès à présent !"
+
+#: lms/templates/index.html
+msgid "Self learning"
+msgstr "Auto apprentissage"
+
+#: lms/templates/index.html
+msgid "Be autonomous in acquiring your new skills"
+msgstr "Soyez autonome dans l'acquisition de vos nouvelles compétences"
+
+#: lms/templates/index.html
+msgid "Skills oriented"
+msgstr "Orienté compétences"
+
+#: lms/templates/index.html
+msgid "Keep your skills up to date and develop new knowledge"
+msgstr "Maintenez vos compétences à jour et développez de nouveaux savoirs"
+
+#: lms/templates/index.html
+msgid "Innovate and undertake together"
+msgstr "Innover et entreprendre ensemble"
+
+#: lms/templates/index.html
+msgid "Winner of the Innovation Cup 2015, Phileas is born of common convictions HR and IT teams around sharing knowledge and training."
+msgstr "Lauréat de l’Innovation Cup 2015, Phileas est né de convictions communes des équipes RH et IT autour du partage des connaissances et de la formation."
+
+#: lms/templates/index.html
+msgid "Phileas stands for Project HR, IT, Learn And Share. Developed with energy, heart and conviction, it demonstrates that there is always a place for ideas and projects of openness when a collective is engaged."
+msgstr "Phileas, c’est « Project HR, IT, Learn And Share ». Développé avec énergie, cœur et conviction, il démontre qu’il y a toujours une place pour les idées et les projets d’ouverture quand un collectif est engagé."
+
+#: lms/templates/footer.html
+msgid "Training hours"
+msgstr "Heures"
+
+#: lms/templates/dashboard.html
+msgid "Find your course"
+msgstr "Trouvez votre formation"
+
+#: lms/templates/dashboard.html
+msgid "among"
+msgstr "parmi"
+
+#: lms/templates/dashboard.html
+msgid "available"
+msgstr "disponibles"
+
+#: lms/templates/dashboard.html
+msgid "What do you want to learn?"
+msgstr "Que voulez-vous apprendre ?"
+
+#: lms/templates/dashboard.html
+msgid "Regulatory"
+msgstr "Réglementaires"
+
+#: lms/templates/dashboard.html
+msgid "Last course"
+msgstr "Dernière formation"
+
+#: lms/templates/dashboard.html
+msgid "mandatory course(s)"
+msgstr "formation(s) obligatoire(s)"
+
+#: lms/templates/dashboard.html
+msgid "favorite course(s)"
+msgstr "formation(s) favorite(s)"
+
+#: lms/templates/dashboard.html
+msgid "ongoing course(s"
+msgstr "formation(s) en cours"
+
+#: lms/templates/dashboard.html
+msgid "Our Selection"
+msgstr "Notre Sélection"
+
+#: lms/templates/dashboard.html
+msgid "On the front page"
+msgstr "A la une"
+
+#: lms/templates/dashboard.html
+msgid "Highest rated"
+msgstr "Les mieux notées"
+
+#: lms/templates/dashboard.html
+msgid "Most subscribed"
+msgstr "Les plus consultées"
+
+#: lms/templates/dashboard.html
+msgid "Categories"
+msgstr "Catégories"
+
