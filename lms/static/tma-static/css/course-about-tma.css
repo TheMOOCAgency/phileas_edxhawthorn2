@@ -5,9 +5,14 @@ a, a:hover {
     transition: none !important;
 }
 
+#cards-box {
+    position: relative;
+    z-index: 1;
+}
+
 .course-img {
     overflow: hidden;
-    position: relative;
+    z-index: -2;
 }
 
 .h-350 {
@@ -119,10 +124,23 @@ a.big-btn {
     margin: auto !important;
     width: 200px;
     padding: 14px;
-    margin: 0 1rem 1rem 1rem;
     border-radius: 28px;
     background-color: #0B1A4C;
     color: white !important;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+}
+a.big-btn-back {
+    position: relative;
+    cursor:pointer;
+    margin: auto !important;
+    width: 200px;
+    padding: 14px;
+    border-radius: 28px;
+    border: 1px solid #0B1A4C;
+    background-color: white;
+    color: #0B1A4C !important;
     font-weight: bold;
     display: inline-block;
     text-align: center;
@@ -131,6 +149,12 @@ a.big-btn:hover {
     background-color: white;
     color: #0B1A4C !important;
     border: 1px solid #0B1A4C;
+    text-decoration: none !important;
+    transition: none !important;
+}
+a.big-btn-back:hover {
+    background-color: #0B1A4C;
+    color: white !important;
     text-decoration: none !important;
     transition: none !important;
 }
@@ -194,7 +218,7 @@ li:not(.nav-item) {
     border-bottom: 1px solid #7A818E;
 }
 #course-map > li {
-    font-weight: 500;
+    font-weight: 600;
 }
 .subsections {
     margin: 0.5em 0 0.5rem 0rem;

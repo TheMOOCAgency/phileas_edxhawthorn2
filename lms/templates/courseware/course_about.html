@@ -118,7 +118,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 
 <div id="cards-box" class="container-fluid">
   <!--FIRST ROW-->
-  <div class="row h-350 primary-color-bg text-white">
+  <div class="row h-350 decroche-bg text-white">
     <div class="col-lg-6 pl-85">
       <p class="mt-4">${_("Mandatory Course!")}</p>
       <h3 class="title-36">${course.display_name_with_default_escaped} 
@@ -128,20 +128,19 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       </h3>
       <p id="course-description"></p>
       <div class="row">
-        <div class="col-lg-8 ${str(course.id).replace(':','').replace('+','')}" data-course-id="${str(course.id)}">
+        <div class="col-lg-8 d-flex align-items-end ${str(course.id).replace(':','').replace('+','')}" data-course-id="${str(course.id)}">
           <span class="tag"><a href="#">Informatique</a></span>
             %if is_liked :
               <span class="pin like like-on ml-4"></span>
             %else :
               <span class="pin like like-off ml-4"></span>
             %endif
-              <span class="like_count count-box" data-min='0' data-max="${liked_total}" data-delay='1' data-increment="${int(liked_total/3)}">${liked_total}</span>
+              <span class="like_count count-box m-2" data-min='0' data-max="${liked_total}" data-delay='1' data-increment="${int(liked_total/3)}">${liked_total}</span>
         </div>
       </div>
     </div>
-    <div class="col-lg-6 course-img"><img src="${course_image_urls['large']}" alt="" /></div>
+    <div class="col-lg-6 pr-0 course-img"><img src="${course_image_urls['large']}" class="w-100"/></div>
   </div>
-  <div class="decroche-bg"></div>
   <!--SECOND ROW-->
   <div class="row bg-white pl-3 teacher-box">
     <div class="col-lg-1 col-3">
@@ -151,26 +150,30 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       <p id="teacher-name"></p>
       <p id="teacher-email" class="text-black"></p>
     </div>
-    % if not course.start_date_is_still_default:
-      <%
-          course_start_date = course.advertised_start or course.start
-      %>
-      <div class="col-lg-2 col-2 text-center">
-        <img src="${static.url('tma-static/images/calendrier.svg')}" width="36">
-        <p>Date de début</p>
+    <div class="col-lg-2 col-2 text-center">
+      <img src="${static.url('tma-static/images/calendrier.svg')}" width="36">
+      <p>Date de début</p>
+      % if not course.start_date_is_still_default:
+        <%
+            course_start_date = course.advertised_start or course.start
+        %>
         <p class="font-weight-bold">${course_start_date.strftime('%d/%m/%Y')}</p>
-      </div>
-    % endif
-    % if course.end:
-      <%
-          course_end_date = course.end
-      %>
-      <div class="col-lg-2 col-2 text-center border-left-grey">
-        <img src="${static.url('tma-static/images/calendrier.svg')}" width="36">
-        <p>Date de fin</p>
+      % else:
+        <p class="font-weight-bold">Cours permanent</p>
+      % endif
+    </div>
+    <div class="col-lg-2 col-2 text-center border-left-grey">
+      <img src="${static.url('tma-static/images/calendrier.svg')}" width="36">
+      <p>Date de fin</p>
+      % if course.end:
+        <%
+            course_end_date = course.end
+        %>
         <p class="font-weight-bold">${course_end_date.strftime('%d/%m/%Y')}</p>
-      </div>
-    % endif
+      % else :
+        <p class="font-weight-bold">Cours permanent</p>
+      % endif
+    </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/time.svg')}" width="36">
       <p>Durée</p>
@@ -182,7 +185,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       <p class="text-uppercase font-weight-bold">${course.language}</p>
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
-      <img src="${static.url('tma-static/images/award.png')}" width="36">
+      <img src="${static.url('tma-static/images/coupe.png')}" width="36">
       <p>Score requis</p>
       <p id="course-score" class="font-weight-bold">${int(course.grade_cutoffs.get("Pass")*100)}%</p>
     </div>
@@ -203,12 +206,12 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       <p id="course-goals" class="text-blue-dark"></p>
     </div>
     <div class="col-lg-3">
-      <div class="text-right ${str(course.id).replace(':','').replace('+','')}" data-course-id="${str(str(course.id))}">
+      <div class="d-flex align-items-end justify-content-end ${str(course.id).replace(':','').replace('+','')}" data-course-id="${str(str(course.id))}">
         <a href="mailto:?subject=${course.display_name_with_default_escaped} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !"><img class="pr-2 mail" src="${static.url('tma-static/images/mail.svg')}" width="45"></a>
         % if is_favourite:
-          <span class="pin favorite favorite-on"></span>
+          <span class="pin favorite favorite-on m-1"></span>
         % else:
-          <span class="pin favorite favorite-off"></span>
+          <span class="pin favorite favorite-off m-1"></span>
         % endif
       </div>
     </div>
@@ -233,7 +236,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       <div class="downloads-box">
         <h3 class="mb-5">Téléchargements</h3>
       </div>
-      <a href="/courses/" class="big-btn">${_("Back to courses")}</a>
+      <a href="/courses/" class="big-btn-back">${_("Back to courses")}</a>
     </div>
   </div>
 </div>
@@ -255,15 +258,14 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         $('#course-description').text(courseData.description);
         $('#teacher-name').text(courseData.teacherName);
         $('#teacher-email').text(courseData.teacherEmail);
-        //TODO: this is specified in course config already
-        //$('#course-duration').text(courseData.duration);
-        //$('#course-score').text(courseData.requiredScore);
 
         // Goals
         $('#course-goals').text(courseData.goals)
         // Populate course map
         courseData.courseMap.forEach(function(element, i){
-          $('#course-map').append('<li><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.section+ '<a href="arrow"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a><ul class="subsections sub-'+i+'"></ul></li>');
+          $('#course-map').append('<li><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.section + 
+          (element.subsections ? '<a href="arrow"><img src="${static.url("tma-static/images/flechebas.svg")}"': '') +
+          'width="20px"/></a><ul class="subsections sub-'+ i +'"></ul></li>');
           if (element.subsections) {
             element.subsections.forEach(function(subsection){
               $('.sub-'+i).append('<li>'+ subsection +'</li>')
