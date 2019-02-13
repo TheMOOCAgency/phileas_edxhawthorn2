@@ -264,8 +264,8 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         // Populate course map
         courseData.courseMap.forEach(function(element, i){
           $('#course-map').append('<li><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.section + 
-          (element.subsections ? '<a href="arrow"><img src="${static.url("tma-static/images/flechebas.svg")}"': '') +
-          'width="20px"/></a><ul class="subsections sub-'+ i +'"></ul></li>');
+          (element.subsections ? '<a href="arrow"><img src="${static.url("tma-static/images/flechebas.svg")} width="20px"/></a>"': '') +
+          '<ul class="subsections sub-'+ i +'"></ul></li>');
           if (element.subsections) {
             element.subsections.forEach(function(subsection){
               $('.sub-'+i).append('<li>'+ subsection +'</li>')
@@ -293,46 +293,6 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     $(this).children().toggleClass('rotate180');
     $(this).next('.subsections').toggle();
   })
-    /*
-    $('.pin.favorite').click(function(){
-      $("#fav_off").toggle();
-      $("#fav_on").toggle();
-      var courseId ="${course.id}";
-      var status = true;
-      if ($(this).attr('id') == "fav_on") {
-        status = false;
-      }
-      $.ajax({
-        type: 'POST',
-        url: '/tma_apps/'+ courseId +'/favourite/update_favourite',
-        dataType: 'json',
-        data: {status: status, course_id: courseId},
-        success: function(data){
-          console.log(data);
-        }
-      });
-    });
-
-    $('#like_picto').click(function(){
-      var courseId ="${course.id}";
-      var status = $(this).hasClass('like_false');
-      if($(this).hasClass('like_false')){
-        $("#like_count").html(parseInt($("#like_count").html())+1);
-      }else{
-        $("#like_count").html($("#like_count").html()-1);
-      }
-      $(this).toggleClass('like_false like_true');
-      $.ajax({
-        type: 'POST',
-        url: '/tma_apps/'+ courseId +'/like/update_like',
-        dataType: 'json',
-        data: {status: status, course_id: courseId},
-        success: function(data){
-          console.log(data);
-        }
-      });
-     
-    });*/
 
 </script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
