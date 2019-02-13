@@ -24461,7 +24461,7 @@ msgstr ""
 #: wiki/plugins/attachments/templates/wiki/plugins/attachments/history.html
 #: wiki/plugins/attachments/templates/wiki/plugins/attachments/search.html
 msgid "Download"
-msgstr ""
+msgstr "Télécharger"
 
 #: wiki/plugins/attachments/templates/wiki/plugins/attachments/history.html
 msgid "Use this!"
@@ -25166,7 +25166,7 @@ msgid "favorite course(s)"
 msgstr "formation(s) favorite(s)"
 
 #: lms/templates/dashboard.html
-msgid "ongoing course(s"
+msgid "ongoing course(s)"
 msgstr "formation(s) en cours"
 
 #: lms/templates/dashboard.html
@@ -25189,3 +25189,90 @@ msgstr "Les plus consultées"
 msgid "Categories"
 msgstr "Catégories"
 
+#: lms/templates/header/navbar-authenticated.html
+msgid "My activity"
+msgstr "Mon activité"
+
+#: lms/templates/header/navbar-authenticated.html
+msgid "Explore"
+msgstr "Explorer"
+
+#: lms/templates/header/navbar-authenticated.html
+msgid "Hello"
+msgstr "Bonjour"
+
+#: lms/templates/tma_apps/course_card.html
+msgid "Remove from favorites"
+msgstr "Retirer des favoris"
+
+#: lms/templates/tma_apps/course_card.html
+msgid "Join"
+msgstr "S'inscrire"
+
+#: lms/templates/tma_apps/course_card.html
+msgid "Do you really want to unenroll?"
+msgstr "Voulez-vous vraiment vous désinscrire ?"
+
+#: lms/templates/tma_apps/course_card.html
+msgid "What do you want to do?"
+msgstr "Que voulez-vous faire ?"
+
+#: lms/templates/tma_apps/course_card.html
+msgid "Mandatory Course"
+msgstr "Formation obligatoire"
+
+#: lms/templates/tma_apps/course_card.html
+msgid "No end date"
+msgstr "Pas de date de fin"
+
+#: lms/templates/tma_apps/course_card.html
+msgid "No start date"
+msgstr "Pas de date de début"
+
+#: lms/templates/tma_apps/course_card.html
+msgid "Not authorized"
+msgstr "Non autorisé"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "Your dashboard"
+msgstr "Votre tableau de bord"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "You'll find on this page all your ongoing courses, mandatory or not, as well as your favorite and finished courses."
+msgstr "Retrouvez ici l'ensemble des formations en cours de réalisation, obligatoires ou non, ainsi que les cours sélectionnés en favoris ou terminés"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "Your ongoing courses"
+msgstr "Vos formations en cours"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "Your mandatory courses"
+msgstr "Vos formations obligatoires"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "Your favorite courses"
+msgstr "Vos formations favorites"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "Course :"
+msgstr "Formation :"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "Download certificate :"
+msgstr "Télécharger le certificat"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "Your finished courses"
+msgstr "Vos formations terminées"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "You have no ongoing courses yet"
+msgstr "Vous n'avez pas de formation en cours"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "You are not enrolled in mandatory courses yet"
+msgstr "Vous n'êtes inscrit(e) à aucune formation obligatoire"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "You have no favorite courses yet"
+msgstr "Vous n'avez aucune formation favorite"

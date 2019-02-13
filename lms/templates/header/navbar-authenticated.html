@@ -30,13 +30,13 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
 <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="${reverse('home_dashboard')}">Hello ${user.email}</a>
+        <a class="nav-link" href="${reverse('home_dashboard')}">${_("Hello")} ${user.email}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="${reverse('home_dashboard')}">My activity</a>
+        <a class="nav-link" href="${reverse('home_dashboard')}">${_("My activity")}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="${reverse('courses')}">Explore</a>
+        <a class="nav-link" href="${reverse('courses')}">${_("Explore")}</a>
       </li>
       % if header_language_selector_is_enabled():
       <% languages = released_languages() %>
