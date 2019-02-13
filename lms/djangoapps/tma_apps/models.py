@@ -7,6 +7,7 @@ from django.db import models
 from django.dispatch import receiver
 from student.signals import UNENROLL_DONE
 from student.signals import ENROLL_STATUS_CHANGE
+from collections import Counter
 import datetime
 import datetime
 import logging
@@ -181,7 +182,7 @@ class TmaCourseOverview(models.Model):
     liked_total = models.IntegerField(default=0)
     active_enrollments_total = models.IntegerField(default=0)
     is_course_graded = models.BooleanField(default=True)
-    tag = models.CharField(db_index=True, max_length=30, blank=True)
+    tag = models.CharField(db_index=True, max_length=50, blank=True)
 
     @classmethod
     def get_tma_course_overview_by_course_id(cls, course_key):
@@ -220,11 +221,17 @@ class TmaCourseOverview(models.Model):
     def get_all_tags():
         all_tags = []
         try:
-            tag_counters = TmaCourseOverview.objects.order_by().values_list('tag').annotate(models.Count('tag'))
-            for item in tag_counters:
-                all_tags.append(item)
+            tag_lists = TmaCourseOverview.objects.values_list('tag', flat=True)
+            for tag in tag_lists:
+                if ',' in str(tag):
+                    all_tags.extend(tag.split(','))
+                else:
+                    all_tags.append(str(tag))
+
+            all_tags = Counter(all_tags)
         except:
             pass
+        
         return all_tags
 
 #Track enrollments and unenrollments to update total_active_enrollments

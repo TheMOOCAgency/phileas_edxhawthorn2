@@ -116,11 +116,11 @@
                 </div>
             </div>
             <div class="container-fluid">
-              % for tag in tag_counters:
-                % if not 'False' in tag[0]:
+              % for tag, count in tag_counters.items():
+                % if 'False' not in tag:
                   <div class="row">
-                    <div class="col-10"><a href=""><p class="facet-option">${tag[0]}</p></a></div>
-                    <div class="col-2"><span class="count">${tag[1]}</span></div>
+                    <div class="col-10"><a href=""><p class="facet-option">${tag}</p></a></div>
+                    <div class="col-2"><span class="count">${count}</span></div>
                   </div>
                 % endif
               % endfor
