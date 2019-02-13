@@ -25233,6 +25233,18 @@ msgstr "Pas de date de début"
 msgid "Not authorized"
 msgstr "Non autorisé"
 
+#: lms/templates/tma_apps/course_card.html
+msgid "Recommend"
+msgstr "Recommander"
+
+#: lms/templates/tma_apps/course_card.html
+msgid "Start date"
+msgstr "Date de début"
+
+#: lms/templates/tma_apps/course_card.html
+msgid "End date"
+msgstr "Date de fin"
+
 #: lms/templates/tma_apps/home_dashboard.html
 msgid "Your dashboard"
 msgstr "Votre tableau de bord"
@@ -25276,3 +25288,4 @@ msgstr "Vous n'êtes inscrit(e) à aucune formation obligatoire"
 #: lms/templates/tma_apps/home_dashboard.html
 msgid "You have no favorite courses yet"
 msgstr "Vous n'avez aucune formation favorite"
+
