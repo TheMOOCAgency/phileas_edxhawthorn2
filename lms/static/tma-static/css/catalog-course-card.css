@@ -83,11 +83,13 @@
 }
 
 .category-tag {
+    width: 150px;
     padding: 6px 10px 6px 10px;
     background-color: #E6500F;
     color: white;
     border-radius: 18px;
     margin-right: 10px;
+    text-align: center;
 }
 
 .pin-row > .like {

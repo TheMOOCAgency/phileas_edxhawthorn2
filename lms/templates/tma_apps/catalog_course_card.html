@@ -30,7 +30,12 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
               <div class="course-name col">
                 <div data-course-id="${str(course['id'])}" class="row pin-row ${str(course['id']).replace(':','').replace('+','')}">
                   <div>
-                    <div class="category-tag">${_("Bureautique")}</div>
+                    % if ',' in course['tag']:
+                      <% split_tags = course['tag'].split(',') %>
+                        <div class="category-tag">${split_tags[0]}</div>
+                    % else:
+                        <div class="category-tag">${course['tag']}</div>
+                    % endif
                   </div>
                     % if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
                       <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-delay='{"show":"100", "hide":"100"}' data-placement="top" title="Manager Only" class="pin">
