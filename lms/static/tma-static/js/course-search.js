@@ -129,3 +129,7 @@ const displayResults = function(results) {
         '</div></div></div></div></div></div></div>');
     });
 };
+
+function noResults() {
+    $('#cards-box').html('<div class="row no-results text-center w-100 mt-5"><div class="col"><h3></h3><h3></h3><a class="discover-btn" href="/courses"></a></div></div>');
+};
