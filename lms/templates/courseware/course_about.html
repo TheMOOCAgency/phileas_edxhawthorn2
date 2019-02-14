@@ -129,7 +129,14 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       <p id="course-description"></p>
       <div class="row">
         <div class="col-lg-8 d-flex align-items-end ${str(course.id).replace(':','').replace('+','')}" data-course-id="${str(course.id)}">
-          <span class="tag"><a href="#">Informatique</a></span>
+          <span class="tag">
+            % if ',' in tag:
+              <% split_tags = tag.split(',') %>
+              <a href="/courses">${split_tags[0]}</a>
+            % else:
+                <div class="category-tag">${tag}</div>
+            % endif
+            </span>
             %if is_liked :
               <span class="pin like like-on ml-4"></span>
             %else :
