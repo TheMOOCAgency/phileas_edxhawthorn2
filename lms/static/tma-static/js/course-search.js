@@ -2,6 +2,7 @@
 const searchQuery = function(coursesJson, query) {
     var regexQuery = new RegExp(query, 'i');
     var results = [];
+    // For boolean values
     switch(query) {
         case 'Vodeclic':
             coursesJson.forEach(function(course) {
@@ -26,6 +27,7 @@ const searchQuery = function(coursesJson, query) {
             break;
     }
     
+    // For textual values
     coursesJson.forEach(function(course){
         var title = course.display_name;
         var description = course.short_description;
@@ -41,7 +43,7 @@ const searchQuery = function(coursesJson, query) {
                     results.push(course);
                 } else {
                     if (language && (language.search(regexQuery) > -1)) {
-
+                        results.push(course);
                     }
                 }
             }
