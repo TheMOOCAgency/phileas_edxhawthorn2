@@ -962,6 +962,7 @@ def course_about(request, course_id):
         tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course.id)
         liked_total = tma_course_overview.liked_total
         favourite_total = tma_course_overview.favourite_total
+        tag = tma_course_overview.tag
         context = {
             'course': course,
             'course_details': course_details,
@@ -996,6 +997,7 @@ def course_about(request, course_id):
             'is_liked': is_liked,
             'favourite_total': favourite_total,
             'liked_total': liked_total,
+            'tag': tag
         }
 
         return render_to_response('courseware/course_about.html', context)
