@@ -1,7 +1,7 @@
 /* OVERWRITE EDX STYLES */
 input[type="text"],input[type="text"]:focus {
+    height: 50px;
     border: none;
-    border-bottom: 1px solid black;
     border-radius: 0px;
     text-shadow: none;
     box-shadow: none;
@@ -22,6 +22,11 @@ a, a:hover, a:visited {
     color: #0C1C49 !important;
 }
 
+.search-title {
+    font-size: 36px !important;
+    margin-bottom: 0px !important;
+}
+
 /* SEARCH FILTERS */
 .criteria-box h4, .criteria-box h3 {
     color: #0C1C49;
@@ -32,13 +37,16 @@ a, a:hover, a:visited {
     background-color: #E6EDFA;
 }
 
+.criteria-box form {
+    width: 95%;
+    margin: auto;
+    border-bottom: 1px solid black;
+}
+
 .criteria-box button {
-    width: 35px;
-    height: 35px;
-    border: none;
-    background-image: url(/static/tma-static/images/loupe_black.svg) !important;
-    background-size: contain;
-    background-repeat: no-repeat;
+    width: auto;
+    height: 50px;
+    border: none
 }
 .criteria-box button:hover {
     background-image: url("/static/tma-static/images/loupe_black.svg") !important;
@@ -46,11 +54,18 @@ a, a:hover, a:visited {
 
 .separator {
     height: 1px;
-    width: 90%;
+    width: 100%;
     margin: 1rem 0rem 2rem 0rem;
     background-color: rgba(151, 151, 151, 0.2);
 }
 
+.header-facet {
+    margin-left: -15px;
+}
+
+.facet-option, .header-facet {
+    font-size: 14px;
+}
 .facet-option, .org, .new, .all {
     cursor: pointer;
     margin-bottom: 0px;
@@ -64,8 +79,9 @@ a, a:hover, a:visited {
 .count {
     position: absolute;
     text-align: center;
-    width: 30px !important;
-    height: 30px;
+    width: 25px !important;
+    height: 25px;
+    font-size: 12px;
     background-color: white;
     padding: 5px;
     border-radius: 50px;
@@ -151,4 +167,23 @@ a, a:hover, a:visited {
   background-color: #b9c6d4;
   position: relative;
   display: inline-block;
+}
+
+/* No Results */
+.no-results h3 {
+    font-size: 28px !important;
+    color: #0B1A4C !important;
+}
+
+.discover-btn {
+    width: 200px;
+    padding: 8px;
+    margin: 2rem 1rem 1rem 1rem;
+    border-radius: 28px;
+    background-color: white;
+    color: #0B1A4C !important;
+    border: 2px solid #0B1A4C;
+    font-weight: bold !important;
+    display: inline-block;
+    vertical-align: middle;
 }

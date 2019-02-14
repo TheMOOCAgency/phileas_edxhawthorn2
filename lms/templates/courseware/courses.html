@@ -39,7 +39,7 @@
 <div class="container-fluid" style="padding-bottom: 150px;">
   <div class="row p-5">
     <div class="col">
-      <h1 id="search-message">${_("Search results")}</h1>
+      <h1 class="search-title">${_("Search results")}</h1>
       <div class="dropdown-container">
         <button>${_("Filter")}<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
         <ul class="dropdown">
@@ -52,18 +52,16 @@
   <div class="row">
     <div class="col-lg-3 pr-0 pl-5">
       <div class="container-fluid criteria-box p-4">
-        <div class="row"><h3 class="col text-center mb-4 w-100">${_("Search filters")}</h1></div>
-        <div class="row">
-          <form class="text-center mb-5">
-            <input class="col-10" type="text" name="search" placeholder='${_("Search for a course")}'>
-            <button class="col-2" id="course-search"></button>
-          </form>
-        </div>
+        <div class="row"><h3 class="col mb-4 w-100">${_("Search & Filters")}</h1></div>
+        <form class="row text-center mb-5">
+          <button class="col-2 pl-0 pb-0" id="course-search"><img src="/static/tma-static/images/loupe_black.svg" style="width:30px"></button>
+          <input class="col-10" type="text" name="search" placeholder='${_("Search for a course")}'>
+        </form>
         <!-- GENERIC FILTERS -->
         <div class="row">
           <div class="col">
             <!-- title -->
-            <div class="container-fluid pl-0 pb-2">
+            <div class="container-fluid pb-2">
                 <div class="row">
                   <div class="col-10 d-flex align-items-center"><h4 class="header-facet all">${_("All")}</h4></div>
                   <div class="col-2 d-flex align-items-center"><span class="count">${len(final_course_list)}</span></div>
@@ -75,7 +73,7 @@
         <div class="row">
           <div class="col">
             <!-- title -->
-            <div class="container-fluid pl-0 pb-2">
+            <div class="container-fluid pb-2">
                 <div class="row">
                   <div class="col-10 d-flex align-items-center"><h4 class="header-facet new">${_("New")}</h4></div>
                   <div class="col-2 d-flex align-items-center"><span class="count">${new_counter['new']}</span></div>
@@ -88,7 +86,7 @@
         <div class="row">
           <div class="col">
             <!-- title -->
-            <div class="container-fluid pl-0 pb-2">
+            <div class="container-fluid pb-2">
                 <div class="row">
                   <div class="col-10 d-flex align-items-center"><h4 class="header-facet">${_("Languages")}</h4></div>
                   <div class="col-2 d-flex align-items-center"><span class="count">${len(final_course_list)}</span></div>
@@ -97,7 +95,12 @@
             <div class="container-fluid">
                 % for language, count in language_counters.items():
                   <div class="row facet">
-                    <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option text-uppercase"><img src="${static.url('tma-static/images/lang_'+language+'.svg')}" height="40px" class="mr-2"/>${language}</p></a></div>
+                    <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option">
+                      % if 'fr' in language:
+                        <img src="${static.url('tma-static/images/lang_'+language+'.svg')}" height="40px" class="mr-2"/>${_("French")}</p></a></div>
+                      % else:
+                        <img src="${static.url('tma-static/images/lang_'+language+'.svg')}" height="40px" class="mr-2"/>${_("English")}</p></a></div>
+                      % endif
                     <div class="col-2 d-flex align-items-center"><span class="count">${count}</span></div>
                   </div>
                 % endfor
@@ -109,7 +112,7 @@
         <div class="row">
           <div class="col">
             <!-- title -->
-            <div class="container-fluid pl-0 pb-2">
+            <div class="container-fluid pb-2">
                 <div class="row">
                   <div class="col-10 d-flex align-items-center"><h4 class="header-facet">${_("Subjects")}</h4></div>
                   <div class="col-2 pr-0 d-flex align-items-center"><span class="count">${len(final_course_list)}</span></div>
@@ -131,7 +134,7 @@
         <!--FILTER ORG-->
         <div class="row">
           <div class="col">
-            <div class="container-fluid pl-0 pb-2">
+            <div class="container-fluid pb-2">
               % for org, count in org_counters.items():
                 <div class="row">
                   <div class="col-10 d-flex align-items-center"><a href=""><h4 class="header-facet org">${org}</h4></a></div>
@@ -206,10 +209,11 @@
       results = searchQuery(coursesJson, query);
       if (results.length > 0) {
         displayResults(results);
-        $('#search-message').html('${_("Search results")}');
       } else {
-        displayResults(coursesJson);
-        $('#search-message').html('${_("No results found")}');
+        noResults();
+        $('.no-results h3:first-of-type').html('${_("No results were found matching your request.")}')
+        $('.no-results h3:last-of-type').html('${_("Browse our catalog.")}')
+        $('.no-results .discover-btn').html('${_("Discover")}')
       }
       flipEffect();
     });
