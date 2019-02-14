@@ -168,6 +168,10 @@
   $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
 
   var coursesJson = ${json_courses | n, dump_js_escaped_json};
+  var context = ${tag_counters | n, dump_js_escaped_json};
+  console.log(context)
+  console.log(coursesJson)
+  
   var query;
   var results;
 
