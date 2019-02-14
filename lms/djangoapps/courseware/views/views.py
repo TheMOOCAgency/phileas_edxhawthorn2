@@ -257,14 +257,14 @@ def courses(request):
 
     # If filter clicked
     accepted_filters = ['likes', 'enrollments']
-    filter = request.GET.get('filter')
-    if filter and filter in accepted_filters :
-        if filter=="likes":
+    drop_filter = request.GET.get('filter')
+    if drop_filter and drop_filter in accepted_filters :
+        if drop_filter == "likes":
             likes_ordered_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).order_by('-liked_total')
             for course in likes_ordered_courses :
                 courses_to_display.append(course.course_overview_edx)
 
-        elif filter =="enrollments":
+        elif drop_filter  == "enrollments":
             enrollments_ordered_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).order_by('-active_enrollments_total')
             for course in enrollments_ordered_courses :
                 courses_to_display.append(course.course_overview_edx)
@@ -281,7 +281,7 @@ def courses(request):
         course_info = get_tma_course_info(request.user, course.id, block_courses)
         course_json_info = get_tma_course_json(request.user, course.id, block_courses)
         final_course_list.append(course_info)
-        if filter and filter=="likes":
+        if drop_filter and drop_filter == "likes":
             final_course_list = sorted(final_course_list, key=itemgetter('liked_total'), reverse=True)
 
         # JSON info for dynamic course cards

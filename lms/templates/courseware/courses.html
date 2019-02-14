@@ -136,7 +136,7 @@
           <div class="col">
             <div class="container-fluid pb-2">
               % for org, count in org_counters.items():
-                <div class="row">
+                <div class="row mb-3">
                   <div class="col-10 d-flex align-items-center"><a href=""><h4 class="header-facet org">${org}</h4></a></div>
                   <div class="col-2 pr-0 d-flex align-items-center"><span class="count">${count}</span></div>
                 </div>
@@ -168,24 +168,31 @@
   $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
 
   var coursesJson = ${json_courses | n, dump_js_escaped_json};
-  var context = ${tag_counters | n, dump_js_escaped_json};
-  console.log(context)
-  console.log(coursesJson)
-  
   var query;
   var results;
 
-  // From URL
+  // From URL without interfering with filter dropdown
   if (window.location.search) {
     query = window.location.search.slice(8);
-    results = searchQuery(coursesJson, query);
-    displayResults(results);
+    if (query != 'likes' && query != 'enrollments') {
+      results = searchQuery(coursesJson, query);
+      displayResults(results);
+    }
   }
 
   $(document).ready(function(){
+
     const operateSearchFilter = function(event, element) {
       event.preventDefault();
-      query = element.text();
+      if ((element.text().trim() == 'French' ) || (element.text().trim() == 'Français')) {
+        query = 'fr';
+      } else {
+        if ((element.text().trim() == 'English') || (element.text().trim() == 'Anglais')) {
+          query = 'en';
+        } else {
+          query = element.text();
+        }
+      }
       results = searchQuery(coursesJson, query);
       displayResults(results);
       flipEffect();
