@@ -325,6 +325,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   let etoile_src = "${static.url('tma-static/images/etoile.svg')}"
   let counter = ${favorite_courses_count}
   const ssData = ${dump_js_escaped_json(sspeaking_data) | n, decode.utf8};
+  console.log('${final_course_list[0]}')
 
   const postSspeaking = function(ssData) {
     var form = document.createElement("form");
