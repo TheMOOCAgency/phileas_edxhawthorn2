@@ -1,4 +1,10 @@
 'Use strict'
+const cleanText = function(text) {
+    text = text.replace('é','e').replace('à','a').replace('è','e').replace('ô','o').replace('\'','');
+    console.log(text);
+    return text
+};
+
 const searchByFilter = function(coursesJson, query, filter) {
     var results = [];
     // if language
@@ -27,6 +33,10 @@ const searchByInput = function(coursesJson, query) {
         } else {
             if (course.short_description && (course.short_description.search(regexQuery) > -1)) {
                 results.push(course);
+            } else {
+                if (course.display_name && (cleanText(course.display_name).search(regexQuery) > -1)) {
+                    results.push(course);
+                }
             }
         }
     });
