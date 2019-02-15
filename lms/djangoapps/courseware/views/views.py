@@ -301,13 +301,13 @@ def courses(request):
         
         # Tag text ugettext
         tag_text = ''
-        if ',' in course.tag:
-            split_tags = course['tag'].split(',')
+        if ',' in course_info['tag']:
+            split_tags = course_info['tag'].split(',')
             tag_text = _(split_tags[0])
         else:
-            tag = _(course.tag)
+            tag_text = _(course_info['tag'])
         course_json_info['tag_text'] = tag_text
-        
+
         json_course_list.append(course_json_info)
 
     # Get user course enrollments
