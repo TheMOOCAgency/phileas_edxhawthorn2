@@ -12,7 +12,7 @@ h1,h2,h3,h4,h5,h6{
 
 /* COMPLETION NAV STYLE */
 #tma-completion-nav{
-  background-color: #E6EDFA;
+  background-color: rgba(255, 255, 255, 0.95);
   border: none;
   left: 0;
   max-width: 40%;
@@ -20,10 +20,11 @@ h1,h2,h3,h4,h5,h6{
   position: fixed;
   z-index: 10;
   transition: left 2s;
-  top: 320px;
+  top: 0px;
   overflow-y: scroll;
   overflow-x: hidden;
-  max-height: 550px;
+  /* max-height: 550px; */
+  height: 100vh;
 }
 .tma-visibility-hidden{
   visibility: hidden;

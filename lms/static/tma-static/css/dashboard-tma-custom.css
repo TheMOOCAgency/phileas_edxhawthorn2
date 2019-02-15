@@ -362,6 +362,7 @@ input::placeholder {
     color: #003063 !important;
     font: inherit;
     font-size: 24px;
+    font-weight: 500;
     text-decoration: none;
     transition: all 0.1s linear 0s;
 }
