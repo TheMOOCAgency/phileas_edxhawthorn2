@@ -265,6 +265,7 @@ input::placeholder {
     text-align: center;
 }
 .dropdown > li > a {
+    display: block;
     color: #0c1c49 !important;
     font-size: 14px;
 }

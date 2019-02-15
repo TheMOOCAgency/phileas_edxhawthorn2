@@ -1,8 +1,50 @@
 'Use strict'
-const searchQuery = function(coursesJson, query) {
-    var regexQuery = new RegExp(query, 'i');
+const cleanText = function(text) {
+    text = text.replace('é','e').replace('à','a').replace('è','e').replace('ô','o').replace('\'','');
+    console.log(text);
+    return text
+};
+
+const searchByFilter = function(coursesJson, query, filter) {
     var results = [];
-    // For boolean values
+    // if language
+    if ((query == 'French' ) || (query == 'Français')) {
+        query = 'fr';
+    } else {
+        if ((query == 'English') || (query == 'Anglais')) {
+            query = 'en';
+        }
+    }
+    var regexQuery = new RegExp(query, 'i');
+    coursesJson.forEach(function(course){
+        if (course[filter] && course[filter].search(regexQuery) > -1) {
+            results.push(course);
+        }
+    });
+    return results;
+};
+
+const searchByInput = function(coursesJson, query) {
+    var results = [];
+    var regexQuery = new RegExp(query, 'i');
+    coursesJson.forEach(function(course){
+        if (course.display_name && (course.display_name.search(regexQuery) > -1)) {
+            results.push(course);
+        } else {
+            if (course.short_description && (course.short_description.search(regexQuery) > -1)) {
+                results.push(course);
+            } else {
+                if (course.display_name && (cleanText(course.display_name).search(regexQuery) > -1)) {
+                    results.push(course);
+                }
+            }
+        }
+    });
+    return results;
+};
+
+const searchByBool = function(coursesJson, query) {
+    var results = [];
     switch(query) {
         case 'Vodeclic':
             coursesJson.forEach(function(course) {
@@ -26,29 +68,6 @@ const searchQuery = function(coursesJson, query) {
             });
             break;
     }
-    
-    // For textual values
-    coursesJson.forEach(function(course){
-        var title = course.display_name;
-        var description = course.short_description;
-        var tag = course.tag;
-        var language = course.language;
-        if (tag && (tag.search(regexQuery) > -1)) {
-            results.push(course);
-        } else {
-            if (title && (title.search(regexQuery) > -1)) {
-                results.push(course);
-            } else {
-                if (description && (description.search(regexQuery) > -1)) {
-                    results.push(course);
-                } else {
-                    if (language && (language.search(regexQuery) > -1)) {
-                        results.push(course);
-                    }
-                }
-            }
-        }
-    });
     return results;
 };
 
@@ -64,6 +83,7 @@ const displayResults = function(results) {
         var isEnrolled = item.is_enrolled;
         var isBlocked = item.is_blocked;
         var courseId = item.id.split('+').join('').split(':').join('');
+        var subjectTag = item.tag;
 
         var buttonText = function(){
             var buttonText;
@@ -96,12 +116,22 @@ const displayResults = function(results) {
             }
             return tag;
         };
+
+        var tag = function() {
+            var tag;
+            if (subjectTag.indexOf(',') > -1) {
+                tag = subjectTag.split(',', 1);
+            } else {
+                tag = subjectTag;
+            }
+            return tag;
+        }
   
         $('#cards-box').append('<div class="col-lg-4 col-md-6 flip-container"><div class="flipper"><div class="course-card-sm front mb-3">'
         // ---------------  FRONT CARD ---------------
         // Is mandatory
         + mandatoryTag() + 
-        '<div class="cover-image"><img src="'+item.course_image_url+'" alt="'+item.display_name_with_default+'"/></div><div class="container-fluid"><div class="container-fluid"><div class="row"><div class="course-name col"><div data-course-id="'+item.id+'" class="row pin-row '+courseId+'"><div><div class="category-tag">Bureautique</div></div>' + 
+        '<div class="cover-image"><img src="'+item.course_image_url+'" alt="'+item.display_name_with_default+'"/></div><div class="container-fluid"><div class="container-fluid"><div class="row"><div class="course-name col"><div data-course-id="'+item.id+'" class="row pin-row '+courseId+'"><div><div class="category-tag">'+ tag() +'</div></div>' +
         // Manager Only or Blocked
         ((isManagerOnly || isBlocked) ? '<img src="/static/tma-static/images/cadenas.svg" data-toggle="tooltip" data-delay=\'{"show":"100", "hide":"100"}\' data-placement="top" title="Manager Only" class="pin">' : '') +
         // Is favorite
@@ -117,7 +147,7 @@ const displayResults = function(results) {
         '<div class="course-card-sm back">' +
         // Is mandatory
         mandatoryTag() + 
-        '<div class="cover-image"><img src="'+item.course_image_url+'" alt="'+item.display_name_with_default+'"/></div><div class="container-fluid"><div class="container-fluid"><div class="row"><div data-course-id="'+item.id+'" class="row pin-row '+courseId+'"><div class="category-tag">Bureautique</div>'+
+        '<div class="cover-image"><img src="'+item.course_image_url+'" alt="'+item.display_name_with_default+'"/></div><div class="container-fluid"><div class="container-fluid"><div class="row"><div data-course-id="'+item.id+'" class="row pin-row '+courseId+'"><div class="category-tag">'+ tag() +'</div>'+
         // Manager Only or Blocked
         ((isManagerOnly || isBlocked) ? '<img src="/static/tma-static/images/cadenas.svg" data-toggle="tooltip" data-delay=\'{"show":"100", "hide":"100"}\' data-placement="top" title="Manager Only" class="pin">' : '') +
         // Is favorite

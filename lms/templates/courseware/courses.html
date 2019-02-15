@@ -95,7 +95,7 @@
             <div class="container-fluid">
                 % for language, count in language_counters.items():
                   <div class="row facet">
-                    <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option">
+                    <div class="col-10 d-flex align-items-center"><a href="" class="language"><p class="facet-option">
                       % if 'fr' in language:
                         <img src="${static.url('tma-static/images/lang_'+language+'.svg')}" height="40px" class="mr-2"/>${_("French")}</p></a></div>
                       % else:
@@ -122,7 +122,7 @@
               % for tag, count in tag_counters.items():
                 % if 'False' not in tag:
                   <div class="row facet">
-                    <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option">${tag}</p></a></div>
+                    <div class="col-10 d-flex align-items-center"><a href="" class="tag"><p class="facet-option">${tag}</p></a></div>
                     <div class="col-2 d-flex align-items-center"><span class="count">${count}</span></div>
                   </div>
                 % endif
@@ -175,38 +175,24 @@
   if (window.location.search) {
     query = window.location.search.slice(8);
     if (query != 'likes' && query != 'enrollments') {
-      results = searchQuery(coursesJson, query);
+      results = searchByInput(coursesJson, query);
       displayResults(results);
     }
   }
 
   $(document).ready(function(){
-
-    const operateSearchFilter = function(event, element) {
-      event.preventDefault();
-      if ((element.text().trim() == 'French' ) || (element.text().trim() == 'Français')) {
-        query = 'fr';
-      } else {
-        if ((element.text().trim() == 'English') || (element.text().trim() == 'Anglais')) {
-          query = 'en';
-        } else {
-          query = element.text();
-        }
-      }
-      results = searchQuery(coursesJson, query);
-      displayResults(results);
-      flipEffect();
-    };
-
     // From filters
     $('.facet-option').on('click', function(e){
-      operateSearchFilter(e, $(this));
+      e.preventDefault();
+      results = searchByFilter(coursesJson, $(this).text().trim(), $(this).parent().attr('class'));
+      displayResults(results);
+      flipEffect();
     });
-    $('.org').on('click', function(e) {
-      operateSearchFilter(e, $(this));
-    });
-    $('.new').on('click', function(e) {
-      operateSearchFilter(e, $(this));
+    $('.org, .new').on('click', function(e) {
+      e.preventDefault();
+      results = searchByBool(coursesJson, $(this).text().trim());
+      displayResults(results);
+      flipEffect();
     });
     $('.all').on('click', function(e) {
       e.preventDefault();
@@ -216,8 +202,8 @@
     // From input
     $('#course-search').on('click', function(e) {
       e.preventDefault();
-      query = $('input[name="search"]').val();
-      results = searchQuery(coursesJson, query);
+      query = $('input[name="search"]').val().trim();
+      results = searchByInput(coursesJson, query);
       if (results.length > 0) {
         displayResults(results);
       } else {
