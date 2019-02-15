@@ -48,9 +48,6 @@ a, a:hover, a:visited {
     height: 50px;
     border: none
 }
-.criteria-box button:hover {
-    background-image: url("/static/tma-static/images/loupe_black.svg") !important;
-}
 
 .separator {
     height: 1px;
