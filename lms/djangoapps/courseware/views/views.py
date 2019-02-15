@@ -288,7 +288,8 @@ def courses(request):
         # Vodelic link
         vodeclic_link = get_vodeclic_href(request.user, course.id)
         course_json_info['vodeclic_link'] = vodeclic_link
-        # Button text
+
+        # Button text ugettext
         button_text = ''
         if course_json_info['is_manager_only'] and not request.user.profile.is_manager or course_json_info['is_blocked']:
             button_text = _("Not authorized")
@@ -297,7 +298,16 @@ def courses(request):
         else :
             button_text = _("Join")
         course_json_info['button_text'] = button_text
-
+        
+        # Tag text ugettext
+        tag_text = ''
+        if ',' in course.tag:
+            split_tags = course['tag'].split(',')
+            tag_text = _(split_tags[0])
+        else:
+            tag = _(course.tag)
+        course_json_info['tag_text'] = tag_text
+        
         json_course_list.append(course_json_info)
 
     # Get user course enrollments
