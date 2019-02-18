@@ -185,7 +185,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         <div class="row">
             <div class="col-12 mb-3">
               <p class="text-blue-light">${_("Last course")}</p>
-              % if course_enrollments:
+              % if last_enrollment:
                 <p class="last-course-title" onclick="window.location.href = '/courses/${last_enrollment.course_id}/courseware';">${last_enrollment.course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
               % else:
                 <p>${_("No enrollment yet")}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
