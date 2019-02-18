@@ -166,6 +166,13 @@ a, a:hover, a:visited {
   display: inline-block;
 }
 
+.filter-selected {
+    color: rgb(0, 160, 227);
+}
+.close-filter {
+    font-weight: 500;
+    cursor: pointer;
+}
 /* No Results */
 .no-results h3 {
     font-size: 28px !important;
