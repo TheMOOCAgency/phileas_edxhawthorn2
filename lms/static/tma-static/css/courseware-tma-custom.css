@@ -114,7 +114,6 @@ span.fa.fa-chevron-right.fa-rotate-90{
 /*Zone Header */
 #tma_course_header{
   padding: 20px;
-  background-image: url('${static.url("tma-static/images/bg_gris.png")}');
   background-size: cover;
   background-position: center;
   padding-bottom: 0px;
@@ -346,40 +345,4 @@ nav.sequence-bottom .sequence-nav-button:hover .icon{
 .course-wrapper .course-content .xblock ol {
   list-style: none!important;
   counter-reset: li!important
-}
-
-.course-wrapper .course-content .xblock ol li::before {
-  content: counter(li);
-  display: inline-block;
-  height: 30px !important;
-  width: 30px !important;
-  padding: 3px 5px 5px 5px;
-  margin-right: 8px;
-  border: 1px solid #009EE0!important;
-  border-radius: 50%;
-  font-family: 'Montserrat', sans-serif!important;
-  font-size: 13px;
-  text-align: center;
-}
-
-.course-wrapper .course-content .xblock ol li{
-  margin-bottom: 10px;
-  counter-increment: li;
-}
-.course-wrapper .course-content .xblock ol{
-  padding-left: 0px;
-}
-.course-wrapper .course-content .xblock ul{
-  list-style-image: url("${static.url('tma-static/images/bullet.svg')}")!important;
-}
-blockquote {
-  font-size: 24px !important;
-}
-blockquote::before {
-  content:url("${static.url('tma-static/images/two-quotes.png')}");
-  transform: rotate(180deg);
-  display: inline-block;
-}
-blockquote::after {
-  content:url("${static.url('tma-static/images/two-quotes.png')}")
 }
