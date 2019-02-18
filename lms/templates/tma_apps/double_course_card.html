@@ -6,6 +6,8 @@
 <%
 from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from django.utils.translation import ugettext as _
+
+split_tags = course['tag'].split(',')
 %>
 
 <div class="col-lg-6">
@@ -26,10 +28,9 @@ from django.utils.translation import ugettext as _
               <div class="col course-name">
                 <div data-course-id="${str(course['id'])}" data-course-id="${str(course['id'])}" class="row pin-row ${str(course['id']).replace(':','').replace('+','')}">
                   % if ',' in course['tag']:
-                    <% split_tags = course['tag'].split(',') %>
-                      <div class="category-tag">${split_tags[0]}</div>
+                    <div class="category-tag"><a href="/courses?filter=${split_tags[0]}" target="_blank">${split_tags[0]}</a></div>
                   % else:
-                      <div class="category-tag">${course['tag']}</div>
+                    <div class="category-tag"><a href="/courses?filter=${split_tags[0]}" target="_blank">${course['tag']}</a></div>
                   % endif
                   % if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
                     <div>

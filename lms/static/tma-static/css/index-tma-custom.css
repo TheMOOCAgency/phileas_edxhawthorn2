@@ -51,11 +51,11 @@ video {
 
 /***** Second row *****/
 .middle-box {
-    min-height: 400px;
+    height: 300px;
 }
 
 .middle-box .w-100 {
-    padding-top: 100px;
+    padding-top: 60px;
 }
 .pl-80 {
     padding-left: 80px;
@@ -88,9 +88,8 @@ video {
 
 /***** Last row *****/
 .bottom-box {
-    min-height: 400px;
-    top: 60px;
-    padding-bottom: 100px;
+    top: 55px;
+    padding-bottom: 135px;
     background-color: white;
     display: flex;
     align-items: center;

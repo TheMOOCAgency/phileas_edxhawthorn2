@@ -37,11 +37,6 @@ button, button:hover, button:hover:not(:disabled), button:active:not(:disabled),
     text-decoration: none;
 }
 
-#fr:hover, #en:hover {
-    cursor: pointer;
-    color: #003063 !important;
-}
-
 @media (min-width: 992px) {
     .navbar-expand-lg .navbar-nav .nav-link {
         padding-right: 3rem !important;
@@ -116,16 +111,13 @@ button, button:hover, button:hover:not(:disabled), button:active:not(:disabled),
 
 .slider {
     background-color: #00A0E3;
-}
-
-.slider {
     box-shadow: 0 0 1px #00A0E3;
 }
 
 .fr > .slider:before {
-    -webkit-transform: translateX(-26px);
-    -ms-transform: translateX(-26px);
-    transform: translateX(-26px);
+    -webkit-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    transform: translateX(0px);
 }
 .en > .slider:before {
     -webkit-transform: translateX(26px);

@@ -906,7 +906,10 @@ def _student_dashboard(request):
     for enrollment in course_enrollments:
         course_info=get_tma_course_info(user, enrollment.course_overview.id, block_courses)
         enrollment_course_list.append(course_info)
-    
+
+    last_enrollment = ''
+    if len(course_enrollments) > 0:
+        last_enrollment = CourseEnrollment.objects.filter(user=user, is_active=True).latest('created')
 
     context.update({
         'final_course_list':final_course_list,
@@ -915,7 +918,8 @@ def _student_dashboard(request):
         'mandatory_courses_count':mandatory_courses_count,
         'favorite_courses_count':favorite_courses_count,
         'ongoing_courses_count':ongoing_courses_count,
-        'enrollment_course_list':enrollment_course_list
+        'enrollment_course_list':enrollment_course_list,
+        'last_enrollment': last_enrollment
     })
 
 
