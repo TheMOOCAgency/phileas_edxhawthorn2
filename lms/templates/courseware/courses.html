@@ -168,7 +168,7 @@
   $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
 
   var coursesJson = ${json_courses | n, dump_js_escaped_json};
-  var query;
+  var query = [];
   var results;
 
   // From URL without interfering with filter dropdown
@@ -184,10 +184,23 @@
     // From filters
     $('.facet-option').on('click', function(e){
       e.preventDefault();
-      results = searchByFilter(coursesJson, $(this).text().trim(), $(this).parent().attr('class'));
-      displayResults(results);
-      flipEffect();
+      // Put filter in selection if not already
+      if (query.indexOf($(this).text().trim()) == -1) {
+        query.push($(this).text().trim());
+
+        // Change facet style
+        $(this).addClass('filter-selected');
+        $(this).parent().parent().parent().children('.col-2').children().text('X').addClass('close-filter');
+        /* Don't change text() but rather hide/show div with X in it */
+
+        // Search query
+        results = searchByFilter(coursesJson, query, $(this).parent().attr('class'));
+        console.log(query)
+        //displayResults(results);
+        flipEffect();
+      };
     });
+
     $('.org, .new').on('click', function(e) {
       e.preventDefault();
       results = searchByBool(coursesJson, $(this).text().trim());
@@ -197,6 +210,21 @@
     $('.all').on('click', function(e) {
       e.preventDefault();
       displayResults(coursesJson);
+    });
+
+    // Remove filter from results
+    $('.criteria-box').on('click', 'span.close-filter', function() {
+      // Splice facet out of selected
+      var indexToSplice = query.indexOf($(this).parent().parent().children('.col-10').text());
+      query.splice(indexToSplice);
+      console.log(query);
+
+      // Remove styling
+      /*$(this).parent().parent().children('.col-10').children().children().removeClass('filter-selected');
+      $(this).removeClass('close-filter').text();
+
+      // Display all
+      */
     });
 
     // From input
@@ -213,6 +241,7 @@
         $('.no-results .discover-btn').html('${_("Discover")}')
       }
       flipEffect();
+      query = [];
     });
   });
 </script>
