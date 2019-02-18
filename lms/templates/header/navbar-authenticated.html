@@ -70,10 +70,6 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
       % endif
     % endif
     </ul>
-    <!--<form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>-->
   </div>
 </div>
 <script>
@@ -81,16 +77,17 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
         if ($('#settings-language-value > option[value="en"]').attr('selected')) {
             $('.switch').toggleClass('en')
         }
-        // Language selector
-        $('#en').click(function(){
-            $('#settings-language-value > option[value="en"]').attr('selected','selected');
-            $('#settings-language-value > option[value="fr"]').removeAttr('selected').trigger("change");
-            $('.switch').toggleClass('en')
-        });
-        $('#fr').click(function(){
-            $('#settings-language-value > option[value="fr"]').attr('selected','selected');
-            $('#settings-language-value > option[value="en"]').removeAttr('selected').trigger("change");
-            $('.switch').toggleClass('fr')
+        $('.switch').on('click', function(){
+            $(this).toggleClass('en fr');
+            if ($(this).hasClass('en')) {
+                $('#settings-language-value > option[value="en"]').attr('selected','selected');
+                $('#settings-language-value > option[value="fr"]').removeAttr('selected').trigger("change");
+            } else {
+                if ($(this).hasClass('fr')) {
+                    $('#settings-language-value > option[value="fr"]').attr('selected','selected');
+                    $('#settings-language-value > option[value="en"]').removeAttr('selected').trigger("change");
+                }
+            }
         });
     });
 </script>

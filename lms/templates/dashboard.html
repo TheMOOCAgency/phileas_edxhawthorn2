@@ -132,7 +132,6 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         % endfor
       </div>
     %endif
-
 </div>
 
 <div class="container-fluid bg-grey-light">
@@ -140,7 +139,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   <div class="row bg-white">
       <form method="get" action="/courses" class="gif-box">
         <p class="title-36">${_("Find your course")} <br>${_("among")}
-          <span class="numscroller" data-min='1' data-max='130' data-delay='5' data-increment='10'>130</span>
+          <span class="numscroller" data-min='1' data-max='${len(final_course_list)}' data-delay='5' data-increment='${len(final_course_list)}/3'>${len(final_course_list)}</span>
            ${_("available")}
         </p>
         <div class="search-field-wrapper">
@@ -187,7 +186,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
             <div class="col-12 mb-3">
               <p class="text-blue-light">${_("Last course")}</p>
               % if course_enrollments:
-                <p class="last-course-title" onclick="window.location.href = '/courses/${course_enrollments[-1].course_id}/courseware';">${course_enrollments[-1].course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
+                <p class="last-course-title" onclick="window.location.href = '/courses/${last_enrollment.course_id}/courseware';">${last_enrollment.course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
               % else:
                 <p>${_("No enrollment yet")}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
               % endif
@@ -300,13 +299,13 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
           </div>
       </div>
       <div class="row categories">
-        <div class="zoomEffect col-lg-4 text-center cat-1"><a href="/courses?filter=software">${_("Software")}</a></div>
-        <div class="zoomEffect col-lg-4 text-center cat-2"><a href="/courses?filter=fundamentals">${_("Business basics")}</a></div>
+        <div class="zoomEffect col-lg-4 text-center cat-1"><a href="/courses?filter=software">${_("Office Tools")}</a></div>
+        <div class="zoomEffect col-lg-4 text-center cat-2"><a href="/courses?filter=fundamentals">${_("Fundamentals")}</a></div>
         <div class="zoomEffect col-lg-4 text-center cat-3">
           <a href="/courses?filter=business">${_("Business applications")}</a>
         </div>
         <div class="zoomEffect col-lg-4 text-center cat-4">
-          <a href="/courses?filter=communication">${_("Marketing and communication")}</a>
+          <a href="/courses?filter=communication">${_("Marketing")}</a>
         </div>
         <div class="zoomEffect col-lg-4 text-center cat-5">
           <a href="/courses?filter=compliance">${_("Compliance")}</a>
@@ -325,7 +324,6 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   let etoile_src = "${static.url('tma-static/images/etoile.svg')}"
   let counter = ${favorite_courses_count}
   const ssData = ${dump_js_escaped_json(sspeaking_data) | n, decode.utf8};
-  console.log('${final_course_list[0]}')
 
   const postSspeaking = function(ssData) {
     var form = document.createElement("form");
