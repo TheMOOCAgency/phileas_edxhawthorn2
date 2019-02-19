@@ -864,9 +864,8 @@ def _student_dashboard(request):
 
 
     #TMA - Get List of courses to display
-    courses_to_display=[]
-    current_organisation = configuration_helpers.get_value('course_org_filter')
-    log.info(current_organisation)
+    courses_to_display = []
+    current_organisation = configuration_helpers.get_value('course_org_filter', 'phileas')
     frontpage_courses = configuration_helpers.get_value('frontpage_courses','')
     accepted_filters = ['likes', 'enrollments']
     filter = request.GET.get('filter')
@@ -895,7 +894,7 @@ def _student_dashboard(request):
     #Complete with tmaoverview and tmaenrollment info
     final_course_list = []
     for course in courses_to_display :
-        course_info=get_tma_course_info(user, course.id, block_courses)
+        course_info = get_tma_course_info(user, course.id, block_courses)
         final_course_list.append(course_info)
         if filter and filter=="likes":
             final_course_list = sorted(final_course_list, key=itemgetter('liked_total'), reverse=True)
@@ -1050,15 +1049,15 @@ def get_tma_footer_info():
     Gets indicators to be displayed in the footer
     """
     footer = {}
-    footer['courses_counter'] = len(TmaCourseOverview.objects.all())
+    current_organisation = configuration_helpers.get_value('course_org_filter')
+
+    footer['courses_counter'] = len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation))
     footer['users_counter'] = len(UserProfile.objects.all())
 
     likes_counter = 0
-
-    for course in TmaCourseOverview.objects.all():
+    for course in TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation):
         likes_counter = likes_counter + course.liked_total
     footer['likes_counter'] = likes_counter
-
     footer['hours_counter'] = int(footer['courses_counter'] * 2.5)
 
     return footer
