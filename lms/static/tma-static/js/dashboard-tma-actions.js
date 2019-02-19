@@ -36,7 +36,7 @@ $(document).ready(function() {
         $('.header-box').show().css('padding', '0px').addClass('header-woman');
       } else {
         $('video').show();
-        $('.gif-box').removeClass('col-lg-6').css({'position':'absolute', 'background-color':'#1194ed'});
+        $('.gif-box').removeClass('col-lg-6').css({'position':'absolute', 'background-color':'transparent'});
         $('.header-box').hide();
       }
     }
