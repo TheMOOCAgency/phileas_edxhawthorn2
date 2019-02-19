@@ -17,7 +17,7 @@ input::placeholder {
     opacity: 0.5;
     font-style: normal;
 }
-a, a:hover, a:visited {
+a:not(.filter-selected), a:not(.filter-selected):hover, a:not(.filter-selected):visited {
     text-decoration: none !important;
     color: #0C1C49 !important;
 }
@@ -28,9 +28,11 @@ a, a:hover, a:visited {
 }
 
 /* SEARCH FILTERS */
+/*
 .criteria-box h4, .criteria-box h3 {
     color: #0C1C49;
 }
+*/
 
 .criteria-box {
     min-height: 700px;
@@ -167,9 +169,11 @@ a, a:hover, a:visited {
 }
 
 .filter-selected {
-    color: rgb(0, 160, 227);
+    color: rgb(0, 160, 227) !important;
+    text-decoration: none !important;
 }
 .close-filter {
+    display: none;
     font-weight: 500;
     cursor: pointer;
 }
