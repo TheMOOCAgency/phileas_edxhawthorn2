@@ -863,12 +863,12 @@ def _student_dashboard(request):
     })
 
 
-
     #TMA - Get List of courses to display
     courses_to_display=[]
-    current_organisation = configuration_helpers.get_value('course_org_filter','phileas')
+    current_organisation = configuration_helpers.get_value('course_org_filter')
+    log.info(current_organisation)
     frontpage_courses = configuration_helpers.get_value('frontpage_courses','')
-    accepted_filters=['likes', 'enrollments']
+    accepted_filters = ['likes', 'enrollments']
     filter = request.GET.get('filter')
 
     if filter and filter in accepted_filters :
@@ -881,7 +881,6 @@ def _student_dashboard(request):
             enrollments_ordered_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).order_by('-active_enrollments_total')[:9]
             for course in enrollments_ordered_courses :
                 courses_to_display.append(course.course_overview_edx)
-
 
     elif frontpage_courses:
         courses_to_display = CourseOverview.objects.filter(org=current_organisation, id__in=frontpage_courses)
