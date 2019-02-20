@@ -221,8 +221,9 @@
       if (key == 'is_new') {
         query[key] = false;
       } else {
-        if (value.trim() == 'Français' || value.trim() == 'French') { value = 'fr'} else 
-        if (value.trim() == 'Anglais' || value.trim() == 'English') { value == 'en'}
+        if (value.trim() == 'Français' || value.trim() == 'French') {value = 'fr'} else {
+          if (value.trim() == 'Anglais' || value.trim() == 'English') { value == 'en'}
+        } 
         // Remove item from query object
         query[key].forEach(function(item, index){
           if (item === value) {
