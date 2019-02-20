@@ -118,7 +118,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 
 <div id="cards-box" class="container-fluid">
   <!--FIRST ROW-->
-  <div class="row h-350 decroche-bg text-white">
+  <div class="row h-375 decroche-bg text-white">
     <div class="col-lg-6 pl-85">
       <p class="mt-4">${_("Mandatory Course!")}</p>
       <h3 class="title-36">${course.display_name_with_default_escaped} 
@@ -132,9 +132,9 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
           <span class="tag">
             % if ',' in tag:
               <% split_tags = tag.split(',') %>
-              <a href="/courses">${split_tags[0]}</a>
+                <div class="category-tag"><a href="/courses">${split_tags[0]}</a></div>
             % else:
-                <div class="category-tag">${tag}</div>
+                <div class="category-tag"><a href="/courses">${tag}</a></div>
             % endif
             </span>
             %if is_liked :
@@ -151,7 +151,9 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   <!--SECOND ROW-->
   <div class="row bg-white pl-3 teacher-box">
     <div class="col-lg-1 col-3">
-      <div class="teacher-img"></div>
+      <div class="teacher-img">
+        <img src="${static.url('tma-static/images/teacher-text.png')}" width="90px">
+      </div>
     </div>
     <div class="col-lg-3 col-9 pl-4 name-box">
       <p id="teacher-name"></p>
@@ -265,13 +267,16 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         $('#course-description').text(courseData.description);
         $('#teacher-name').text(courseData.teacherName);
         $('#teacher-email').text(courseData.teacherEmail);
+        if (courseData.teacherImage) {
+          $('.teacher-img img').attr('src', courseData.teacherImage);
+        }
 
         // Goals
         $('#course-goals').text(courseData.goals)
         // Populate course map
         courseData.courseMap.forEach(function(element, i){
           $('#course-map').append('<li><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.section + 
-          (element.subsections ? '<a href="arrow"><img src="${static.url("tma-static/images/flechebas.svg")} width="20px"/></a>"': '') +
+          (element.subsections ? '<a href="arrow"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a>"': '') +
           '<ul class="subsections sub-'+ i +'"></ul></li>');
           if (element.subsections) {
             element.subsections.forEach(function(subsection){

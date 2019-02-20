@@ -15,8 +15,8 @@ a, a:hover {
     z-index: -2;
 }
 
-.h-350 {
-    height: 350px;
+.h-375 {
+    height: 375px;
 }
 
 .pl-75 {
@@ -96,9 +96,7 @@ a, a:hover {
     height: 100px;
     border-radius: 50px;
     border: 5px solid #009EE0;
-    background-color: #E6EDFA;
-    background-image: url('/static/tma-static/images/teacher-test.png');
-    background-size: cover;
+    overflow: hidden;
 }
 
 .name-box p {
