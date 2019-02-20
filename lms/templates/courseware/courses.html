@@ -76,7 +76,7 @@
             <div class="container-fluid pb-2">
                 <div class="row">
                   <div class="col-10 d-flex align-items-center"><a href=""><h4 class="header-facet new" data-filtertype="is_new">${_("New")}</h4></a></div>
-                  <div class="col-2 d-flex align-items-center"><span class="count">${new_counter['new']}</span><span class="count close-filter" data-filtertype="new">X</span></div>
+                  <div class="col-2 d-flex align-items-center"><span class="count">${new_counter['new']}</span><span class="count close-filter" data-filtertype="is_new">X</span></div>
                 </div>
             </div>
           </div>
@@ -168,115 +168,69 @@
   $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
 
   var coursesJson = ${json_courses | n, dump_js_escaped_json};
-<<<<<<< HEAD
-  var query = {tag: [], language: [], org: [], is_new: false};
+  var query = {tag: [], language: [], org: [], is_new: false, input: ''};
   var results = [];
-=======
-  var query = [];
-  var results;
->>>>>>> e278f6c934d05be4d72709f3c31a979244d9c198
 
   // From URL without interfering with filter dropdown
   if (window.location.search) {
     query = window.location.search.slice(8);
     if (query != 'likes' && query != 'enrollments') {
-      results = searchByInput(coursesJson, query);
+      results = searchByFilter(coursesJson, query);
       displayResults(results);
     }
   }
-
-
 
   $(document).ready(function(){
     // From filters
     $('.facet-option, .org, .new').on('click', function(e){
       e.preventDefault();
-<<<<<<< HEAD
+      // Type of filter and value
       var key = $(this).attr('data-filtertype');
       var value;
-      if ($(this).text().trim() == 'Français' || $(this).text().trim() == 'French') {
-        value = 'fr';
-      } else if ($(this).text().trim() == 'Anglais' || $(this).text().trim() == 'English') {
-        value = 'en';
-      } else if (key == 'is_new') {
-        value = true
+      if ($(this).text().trim() == 'Français' || $(this).text().trim() == 'French') { value = 'fr'; } else 
+      if ($(this).text().trim() == 'Anglais' || $(this).text().trim() == 'English') { value = 'en'; } else 
+      if (key == 'is_new') { value = true } else { var value = $(this).text().trim(); }
+
+      // Check is filter was already clicked
+      if (key === 'is_new') {
+        query[key] = true;
       } else {
-        var value = $(this).text().trim();
-      }
-      if (query[key].indexOf(value) > -1) {
-        console.log('ALREADY IN');
-      } else {
-        query[key].push(value);
-      }
+          if (query[key].indexOf(value) > -1) {
+          console.log('ALREADY IN');
+        } else {
+          query[key].push(value);
+        }
+      };
 
       // Change facet style
       $(this).addClass('filter-selected');
       $(this).parent().parent().parent().children('.col-2').children('.close-filter').show();
 
       // Search query
-
       results = searchByFilter(coursesJson, query);
-      console.log(results)
-      /*
       displayResults(results);
       flipEffect();
-      */
-    });
-
-/*
-    $('.new').on('click', function(e) {
-=======
-      // Put filter in selection if not already
-      if (query.indexOf($(this).text().trim()) == -1) {
-        query.push($(this).text().trim());
-
-        // Change facet style
-        $(this).addClass('filter-selected');
-        $(this).parent().parent().parent().children('.col-2').children().text('X').addClass('close-filter');
-        /* Don't change text() but rather hide/show div with X in it */
-
-        // Search query
-        results = searchByFilter(coursesJson, query, $(this).parent().attr('class'));
-        console.log(query)
-        //displayResults(results);
-        flipEffect();
-      };
-    });
-
-    $('.org, .new').on('click', function(e) {
->>>>>>> e278f6c934d05be4d72709f3c31a979244d9c198
-      e.preventDefault();
-      // Put filter in selection if not already
-      if (query.indexOf($(this).text().trim()) == -1) {
-        query.push($(this).text().trim());
-        console.log(query)
-
-        // Change facet style
-        $(this).addClass('filter-selected');
-        $(this).parent().parent().children('.col-2').children('.close-filter').show();
-
-        // Filter type
-        filter.push('New');
-        // Search query
-        results = results.concat(searchByFilter(coursesJson, query, filter));
-        displayResults(results);
-        flipEffect();
-      };
-    });
-
-    $('.all').on('click', function(e) {
-      e.preventDefault();
-      displayResults(coursesJson);
     });
 
     // Remove filter from results
     $('.criteria-box').on('click', 'span.close-filter', function() {
-<<<<<<< HEAD
       // Splice filter out of selected
-      var indexToSplice = query.indexOf($(this).parent().parent().children('.col-10').text().trim());
-      if (indexToSplice < -1) {
-        query.splice(indexToSplice, 1);
+      var key = $(this).attr('data-filtertype');
+      var value = $(this).parent().parent().children('.col-10').children().children().text();
+
+      if (key == 'is_new') {
+        query[key] = false;
+      } else {
+        if (value.trim() == 'Français' || value.trim() == 'French') { value = 'fr'} else 
+        if (value.trim() == 'Anglais' || value.trim() == 'English') { value == 'en'}
+        // Remove item from query object
+        query[key].forEach(function(item, index){
+          if (item === value) {
+            query[key].splice(index);
+          }
+        });
       }
+      console.log(query);
 
       // Remove styling if facet-option OR facet-header
       $(this).parent().parent().children('.col-10').children().children().removeClass('filter-selected');
@@ -284,48 +238,29 @@
       $(this).hide();
 
       // New results to display
-      console.log(query);
-      console.log($(this).attr('data-filtertype'))
-      // Get filtertype from queries left
-      resultsToRemove = searchByFilter(coursesJson, query, $(this).attr('data-filtertype'));
-      //displayResults(results);
+      results = searchByFilter(coursesJson, query);
+      displayResults(results);
       flipEffect();
     });
 
-*/
 
-=======
-      // Splice facet out of selected
-      var indexToSplice = query.indexOf($(this).parent().parent().children('.col-10').text());
-      query.splice(indexToSplice);
-      console.log(query);
-
-      // Remove styling
-      /*$(this).parent().parent().children('.col-10').children().children().removeClass('filter-selected');
-      $(this).removeClass('close-filter').text();
-
-      // Display all
-      */
-    });
-
->>>>>>> e278f6c934d05be4d72709f3c31a979244d9c198
     // From input
-    /*
     $('#course-search').on('click', function(e) {
       e.preventDefault();
-      query = $('input[name="search"]').val().trim();
-      results = searchByInput(coursesJson, query);
+      query['input'] = $('input[name="search"]').val().trim();
+      console.log(query);
+      // Search query
+      results = searchByFilter(coursesJson, query);
+      console.log(results)
       if (results.length > 0) {
         displayResults(results);
+        flipEffect();
       } else {
         noResults();
         $('.no-results h3:first-of-type').html('${_("No results were found matching your request.")}')
         $('.no-results h3:last-of-type').html('${_("Browse our catalog.")}')
         $('.no-results .discover-btn').html('${_("Discover")}')
       }
-      flipEffect();
-      query = [];
     });
-    */
   });
 </script>

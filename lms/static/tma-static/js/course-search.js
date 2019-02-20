@@ -14,166 +14,108 @@ function removeDiacritics(str) {
     return str;
 }
 
+const checkValueAsBool = function(course, key, value) {
+    return course[key] === value;
+};
 
-/*
-function multiFilter(coursesJson, filters) {
-    // filters all elements passing the criteria
-    return array.filter((item) => {
-      // dynamically validate all filter criteria
-      return filterKeys.every(key => {
-        // ignores an empty filter
-        if (!filters[key].length) return true;
-        return filters[key].includes(item[key]);
-      });
-    });
-  }
-*/
+const checkValueAsArray = function(course, key, value) {
+    // split and compare lists if several tags for one course
+    var tagIsFound = false;
+    if (course[key].indexOf(',') > -1) {
+        var courseValuesList = course[key].split(',');
+        courseValuesList.forEach(function(courseValue){
+            if (courseValue == value) {
+                tagIsFound = true;
+            }
+        });
+        return tagIsFound;
+    } else {
+        // if one tag
+        return value.indexOf(course[key]) > -1;
+    }
+};
+
+const checkValueAsText = function(course, value) {
+    var regexQuery = new RegExp(value, 'i');
+    if (course.display_name && (removeDiacritics(course.display_name).search(regexQuery) > -1)) {
+            return true;
+        } else {
+            if (course.short_description && (removeDiacritics(course.short_description).search(regexQuery) > -1)) {
+                return true;
+            }
+        }
+};
 
 
 const searchByFilter = function(coursesJson, queryObj) {
     const filterKeys = Object.keys(queryObj);
+    // For each course
     return coursesJson.filter((course) => {
-        return filterKeys.every((key) => {
-            if (!queryObj[key].length) {
-                return true;
+        // for each key
+        var tagIsValid = true
+        var languageIsValid = true
+        var orgIsValid = true
+        var isNewIsValid = true
+        var textIsValid = true
+
+        filterKeys.forEach((key) => {
+            // Check is_new condition
+            if (queryObj[key] && (key === 'is_new')) {
+                console.log('bool');
+                if (checkValueAsBool(course, key, queryObj[key])) {
+                    isNewIsValid = true;
+                } else {
+                    isNewIsValid = false;
+                }
             }
-            console.log(queryObj[key] + ' - '+ course[key])
-            return queryObj[key].indexOf(course[key]) !== -1
-        });
-    });
-
-
-    /*
-    coursesJson.forEach(function(course) {
-        console.log(queryObj.tag)
-        console.log(course.tag)
-        if ((queryObj.tag.length > 0) && (queryObj.tag.indexOf(course.tag) > -1)) {
-            console.log('OUI')
-        }
-        if (
-            ((queryObj.tag.length > 0) && (queryObj.tag.indexOf(course.tag) > -1)) &&
-            ((queryObj.org.length > 0) && (queryObj.org.indexOf(course.org) > -1)) &&
-            ((queryObj.language.length > 0) && (queryObj.indexOf(course.language) > -1)) &&
-            (course.is_new === queryObj.is_new)
-        ) {
-            results.push(course);
-        }
-    });
-    */
-    return results;
-};
-
-
-
-
-
-/*
-const searchByBool = function(coursesJson, query) {
-    var results = [];
-    switch (query) {
-        case 'Vodeclic':
-            coursesJson.forEach(function(course) {
-                if (course.is_vodeclic) {
-                    results.push(course);
+            
+            // Check tag condition
+            if (queryObj[key].length && key === 'tag') {
+                if (checkValueAsArray(course, key, queryObj[key])) {
+                    tagIsValid = true;
+                } else {
+                    tagIsValid = false;
                 }
-            });
-            break;
-        case 'Amundi':
-            coursesJson.forEach(function(course) {
-                if (!course.is_vodeclic) {
-                    results.push(course);
-                }
-            });
-            break;
-        case 'New':
-            coursesJson.forEach(function(course) {
-                if (course.is_new) {
-                    results.push(course);
-                }
-            });
-            break;
-    }
-    return results;
-};
+            }
 
-const searchByFilter = function(coursesJson, queryArray) {
-    var results = [];
-    queryArray.forEach(function(query) {
-        // Get key/filter
-        var filter = Object.keys(query).join();
-        // if language
-        if ((query[filter] == 'French' ) || (query[filter] == 'Français')) {
-            query[filter] = 'fr';
-        } else {
-            if ((query[filter] == 'English') || (query[filter] == 'Anglais')) {
-                query[filter] = 'en';
-            };
-        };
+            // Check language condition
+            if (queryObj[key].length && key === 'language') {
+                if (checkValueAsArray(course, key, queryObj[key])) {
+                    languageIsValid = true;
+                } else {
+                    languageIsValid = false;
+                }
+            }
 
-        var regexQuery = new RegExp(query[filter], 'i');
-        // if bool
-        if (filter == 'org' || filter == 'new') {
-            results = searchByBool(coursesJson, query[filter])
-        } else {
-            coursesJson.forEach(function(course){
-                if (course[filter] && removeDiacritics(course[filter]).search(regexQuery) > -1) {
-                    if (!isCourseAlreadyIn(results, course, filter)) {
-                        results.push(course);
+            // Check org condition
+            if (queryObj[key].length && key === 'org') {
+                // If vodeclic > bool check
+                if (queryObj[key].indexOf('Vodeclic') > -1) {
+                    if (checkValueAsBool(course, 'is_vodeclic', 'true')) {
+                        orgIsValid = true;
+                    }
+                } else {
+                    if (checkValueAsArray(course, key, queryObj[key])) {
+                        orgIsValid = true;
+                    } else {
+                        orgIsValid = false;
                     }
                 }
-            });
-        }
-    });
-    return results;
-};
+            }
 
-const spliceFilter = function(results, queryArray, filter) {
-    queryArray.forEach(function(query) {
-        // if language
-        if ((query == 'French' ) || (query == 'Français')) {
-            query = 'fr';
-        } else {
-            if ((query == 'English') || (query == 'Anglais')) {
-                query = 'en';
-            };
-        };
-
-        var regexQuery = new RegExp(query, 'i');
-        // if bool
-        if (filter == 'org' || filter == 'new') {
-            results = searchByBool(coursesJson, query)
-        } else {
-            coursesJson.forEach(function(course){
-                if (course[filter] && removeDiacritics(course[filter]).search(regexQuery) > -1) {
-                    results.splice(course);
-                }
-            });
-        }
-    });
-    return results;
-};
-*/
-
-const searchByInput = function(coursesJson, query) {
-    var results = [];
-    var regexQuery = new RegExp(query, 'i');
-    coursesJson.forEach(function(course){
-        if (course.display_name && (removeDiacritics(course.tag).search(regexQuery) > -1)) {
-            results.push(course);
-        } else {
-            if (course.short_description && (removeDiacritics(course.short_description).search(regexQuery) > -1)) {
-                results.push(course);
-            } else {
-                if (course.display_name && (removeDiacritics(course.display_name).search(regexQuery) > -1)) {
-                    results.push(course);
+            // Check input text
+            if (queryObj[key] !== '' && key === 'input') {
+                if (checkValueAsText(course, queryObj[key])) {
+                    textIsValid = true;
+                } else {
+                    textIsValid = false;
                 }
             }
-        }
+        });
+        // If all criteria are met, keep course in list
+        return (tagIsValid && languageIsValid && orgIsValid && isNewIsValid && textIsValid);
     });
-    return results;
 };
-
-
 
 const displayResults = function(results) {
     // Alphabetical order

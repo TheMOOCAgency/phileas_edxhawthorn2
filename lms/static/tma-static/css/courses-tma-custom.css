@@ -169,17 +169,11 @@ a:not(.filter-selected), a:not(.filter-selected):hover, a:not(.filter-selected):
 }
 
 .filter-selected {
-<<<<<<< HEAD
     color: rgb(0, 160, 227) !important;
     text-decoration: none !important;
 }
 .close-filter {
     display: none;
-=======
-    color: rgb(0, 160, 227);
-}
-.close-filter {
->>>>>>> e278f6c934d05be4d72709f3c31a979244d9c198
     font-weight: 500;
     cursor: pointer;
 }
