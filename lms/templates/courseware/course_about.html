@@ -132,9 +132,9 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
           <span class="tag">
             % if ',' in tag:
               <% split_tags = tag.split(',') %>
-                <div class="category-tag"><a href="/courses">${split_tags[0]}</a></div>
+                <div class="category-tag"><a href="/courses" target="_blank">${split_tags[0]}</a></div>
             % else:
-                <div class="category-tag"><a href="/courses">${tag}</a></div>
+                <div class="category-tag"><a href="/courses" target="_blank">${tag}</a></div>
             % endif
             </span>
             %if is_liked :
@@ -276,7 +276,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         // Populate course map
         courseData.courseMap.forEach(function(element, i){
           $('#course-map').append('<li><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.section + 
-          (element.subsections ? '<a href="arrow"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a>"': '') +
+          (element.subsections ? '<a href="arrow" class="float-right"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a>': '') +
           '<ul class="subsections sub-'+ i +'"></ul></li>');
           if (element.subsections) {
             element.subsections.forEach(function(subsection){
