@@ -168,8 +168,13 @@
   $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
 
   var coursesJson = ${json_courses | n, dump_js_escaped_json};
+<<<<<<< HEAD
   var query = {tag: [], language: [], org: [], is_new: false};
   var results = [];
+=======
+  var query = [];
+  var results;
+>>>>>>> e278f6c934d05be4d72709f3c31a979244d9c198
 
   // From URL without interfering with filter dropdown
   if (window.location.search) {
@@ -186,6 +191,7 @@
     // From filters
     $('.facet-option, .org, .new').on('click', function(e){
       e.preventDefault();
+<<<<<<< HEAD
       var key = $(this).attr('data-filtertype');
       var value;
       if ($(this).text().trim() == 'Français' || $(this).text().trim() == 'French') {
@@ -219,6 +225,26 @@
 
 /*
     $('.new').on('click', function(e) {
+=======
+      // Put filter in selection if not already
+      if (query.indexOf($(this).text().trim()) == -1) {
+        query.push($(this).text().trim());
+
+        // Change facet style
+        $(this).addClass('filter-selected');
+        $(this).parent().parent().parent().children('.col-2').children().text('X').addClass('close-filter');
+        /* Don't change text() but rather hide/show div with X in it */
+
+        // Search query
+        results = searchByFilter(coursesJson, query, $(this).parent().attr('class'));
+        console.log(query)
+        //displayResults(results);
+        flipEffect();
+      };
+    });
+
+    $('.org, .new').on('click', function(e) {
+>>>>>>> e278f6c934d05be4d72709f3c31a979244d9c198
       e.preventDefault();
       // Put filter in selection if not already
       if (query.indexOf($(this).text().trim()) == -1) {
@@ -245,6 +271,7 @@
 
     // Remove filter from results
     $('.criteria-box').on('click', 'span.close-filter', function() {
+<<<<<<< HEAD
       // Splice filter out of selected
       var indexToSplice = query.indexOf($(this).parent().parent().children('.col-10').text().trim());
       if (indexToSplice < -1) {
@@ -267,6 +294,21 @@
 
 */
 
+=======
+      // Splice facet out of selected
+      var indexToSplice = query.indexOf($(this).parent().parent().children('.col-10').text());
+      query.splice(indexToSplice);
+      console.log(query);
+
+      // Remove styling
+      /*$(this).parent().parent().children('.col-10').children().children().removeClass('filter-selected');
+      $(this).removeClass('close-filter').text();
+
+      // Display all
+      */
+    });
+
+>>>>>>> e278f6c934d05be4d72709f3c31a979244d9c198
     // From input
     /*
     $('#course-search').on('click', function(e) {
