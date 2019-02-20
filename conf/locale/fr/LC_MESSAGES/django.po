@@ -25090,11 +25090,11 @@ msgid "At your own pace"
 msgstr "Adapté à votre rythme"
 
 #: lms/templates/index.html
-msgid "Access from any device to your trainings where you left off"
+msgid "Access your training from any device and from where you left off."
 msgstr "Accédez depuis n'importe quel device à vos formations là où vous les avez interrompues"
 
 #: lms/templates/index.html
-msgid "Various contents"
+msgid "Variety of content"
 msgstr "Des contenus variés"
 
 #: lms/templates/index.html
