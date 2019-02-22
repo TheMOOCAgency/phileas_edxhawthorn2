@@ -55,10 +55,10 @@ from ..entrance_exams import (
 from ..masquerade import setup_masquerade
 from ..model_data import FieldDataCache
 from ..module_render import get_module_for_descriptor, toc_for_course
-from lms.djangoapps.tma_apps.models import TmaCourseOverview
 
 #TMA imports
 from openedx.features.course_experience.views.course_outline import CourseOutlineFragmentView
+from courseware.courses import get_course_by_id
 
 log = logging.getLogger("edx.courseware.views.index")
 
@@ -367,8 +367,9 @@ class CoursewareIndex(View):
         course_url_name = default_course_url_name(self.course.id)
         course_url = reverse(course_url_name, kwargs={'course_id': unicode(self.course.id)})
 
-        #TMA check if course is graded
-        is_course_graded = TmaCourseOverview.get_tma_course_overview_by_course_id(self.course_key).is_course_graded
+        #TMA check if course is graded (is_course_graded = reverse of no_grade from advanced settings)
+        course_descriptor = get_course_by_id(CourseKey.from_string(str(self.course.id)))
+        is_course_graded = not course_descriptor.no_grade
 
         courseware_context = {
             'csrf': csrf(self.request)['csrf_token'],
