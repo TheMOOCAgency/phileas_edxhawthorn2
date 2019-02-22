@@ -9,8 +9,6 @@
 <%inherit file="../main.html" />
 <%
   course_discovery_enabled = settings.FEATURES.get('ENABLE_COURSE_DISCOVERY')
-
-  cours_test = get_course_by_id(CourseKey.from_string('course-v1:phileas+01+2019-2'))
 %>
 
 <%namespace name='static' file='../static_content.html'/>
@@ -169,7 +167,6 @@
 <script src="${static.url('tma-static/js/course-search.js')}" charset="utf-8"></script>
 <script>
   /* SEARCH QUERY */
-  console.log("${cours_test.graded}")
   // Resize cols and cards for search page 
   $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
 
