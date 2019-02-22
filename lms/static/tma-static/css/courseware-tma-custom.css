@@ -272,6 +272,9 @@ nav.sequence-bottom .sequence-nav-button:hover .icon{
 }
 
 /*Modale Bravo Echec */
+.modal-graded-success, .modal-graded-fail, .modal-not-graded-success {
+  display: none;
+}
 #tma_course_end_popup{
   width: 100%;
   left: 0;
