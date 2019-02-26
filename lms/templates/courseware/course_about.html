@@ -131,7 +131,7 @@ import json
         <img src="${static.url('tma-static/images/cadenas.svg')}" width="36"/>
       %endif
       </h3>
-      % if course_about['description']:
+      % if 'description' in course_about.keys():
         <p id="course-description">${course_about['description']}</p>
       % endif
       <div class="row">
@@ -159,7 +159,7 @@ import json
   <div class="row bg-white pl-3 teacher-box">
     <div class="col-lg-1 col-3">
       <div class="teacher-img">
-        % if course_about['teacher_image']:
+        % if 'teacher_image' in course_about.keys():
           <img src="${course_about['teacher_image']}"width="90px">
         % else:
           <img src="${static.url('tma-static/images/teacher-test.png')}" width="90px">
@@ -167,10 +167,10 @@ import json
       </div>
     </div>
     <div class="col-lg-3 col-9 pl-4 name-box">
-      % if course_about['teacher_name']:
+        % if 'teacher_name' in course_about.keys():
         <p id="teacher-name">${course_about['teacher_name']}</p>
       % endif
-      % if course_about['teacher_email']:
+      % if 'teacher_email' in course_about.keys():
         <p id="teacher-email" class="text-black">${course_about['teacher_email']}</p>
       %endif
     </div>
@@ -227,7 +227,7 @@ import json
   <div class="row description-box">
     <div class="col-lg-9">
       <h3>Objectifs</h3>
-      % if course_about['goals']:
+      % if 'goals' in course_about.keys():
         <p id="course-goals" class="text-blue-dark">${course_about['goals']}</p>
       % endif
     </div>
@@ -252,7 +252,7 @@ import json
         <div class="row">
           <div class="col-lg-11">
             <div id="course-map">
-              % if course_about['course_map']:
+              % if 'course_map' in course_about.keys():
                 % for section in course_about['course_map']:
                   % for key, value in section.items():
                     % if 'title' in key:
@@ -280,7 +280,7 @@ import json
     <div class="col-lg-5 pr-0">
       <div class="downloads-box">
         <h3 class="mb-5">Téléchargements</h3>
-        % if course_about['downloads'] :
+        % if 'downloads' in course_about.keys():
           % for item in course_about['downloads']:
             <a href="${item['link']}" class="download-link"><p>${item['text']}</p></a>
           % endfor
