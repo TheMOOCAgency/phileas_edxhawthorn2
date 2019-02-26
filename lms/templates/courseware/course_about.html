@@ -11,6 +11,7 @@ from openedx.core.djangolib.markup import HTML
 from openedx.core.lib.courses import course_image_url
 from six import string_types
 from lms.djangoapps.tma_apps.models import TmaCourseOverview
+import json
 %>
 
 <%inherit file="../main.html" />
@@ -115,7 +116,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 <link rel="stylesheet" href="${static.url('tma-static/css/course-about-tma.css')}">
 <!--<link rel="stylesheet" href="/media/dev/tma-static/css/index-tma-custom.css">-->
 <link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
-
+<%
+  course_about = TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).course_about
+  course_about = dict(course_about)
+  course_json = json.dumps(course_about)
+%>
 <div id="cards-box" class="container-fluid">
   <!--FIRST ROW-->
   <div class="row h-375 decroche-bg text-white">
@@ -126,7 +131,9 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         <img src="${static.url('tma-static/images/cadenas.svg')}" width="36"/>
       %endif
       </h3>
-      <p id="course-description"></p>
+      % if course_about['description']:
+        <p id="course-description">${course_about['description']}</p>
+      % endif
       <div class="row">
         <div class="col-lg-8 d-flex align-items-end ${str(course.id).replace(':','').replace('+','')}" data-course-id="${str(course.id)}">
           <span class="tag">
@@ -152,12 +159,20 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   <div class="row bg-white pl-3 teacher-box">
     <div class="col-lg-1 col-3">
       <div class="teacher-img">
-        <img src="${static.url('tma-static/images/teacher-text.png')}" width="90px">
+        % if course_about['teacher_image']:
+          <img src="${course_about['teacher_image']}"width="90px">
+        % else:
+          <img src="${static.url('tma-static/images/teacher-test.png')}" width="90px">
+        % endif
       </div>
     </div>
     <div class="col-lg-3 col-9 pl-4 name-box">
-      <p id="teacher-name"></p>
-      <p id="teacher-email" class="text-black"></p>
+      % if course_about['teacher_name']:
+        <p id="teacher-name">${course_about['teacher_name']}</p>
+      % endif
+      % if course_about['teacher_email']:
+        <p id="teacher-email" class="text-black">${course_about['teacher_email']}</p>
+      %endif
     </div>
     <div class="col-lg-2 col-2 text-center">
       <img src="${static.url('tma-static/images/calendrier.svg')}" width="36">
@@ -212,7 +227,9 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   <div class="row description-box">
     <div class="col-lg-9">
       <h3>Objectifs</h3>
-      <p id="course-goals" class="text-blue-dark"></p>
+      % if course_about['goals']:
+        <p id="course-goals" class="text-blue-dark">${course_about['goals']}</p>
+      % endif
     </div>
     <div class="col-lg-3">
       <div class="d-flex align-items-end justify-content-end ${str(course.id).replace(':','').replace('+','')}" data-course-id="${str(str(course.id))}">
@@ -235,6 +252,25 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         <div class="row">
           <div class="col-lg-11">
             <div id="course-map">
+              % if course_about['course_map']:
+                % for section in course_about['course_map']:
+                  % for key, value in section.items():
+                    % if 'title' in key:
+                      <li>
+                        <img src="${static.url('tma-static/images/drapeau.svg')}" width="20px"/>${value}
+                    % elif 'subsections' in key:
+                      <a href="arrow" class="float-right"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a>
+                      <ul class="subsections">
+                        % for subtitle in value:
+                        <li>${subtitle}</li>
+                        % endfor
+                      </ul></li>
+                    % else:
+                      </li>
+                    % endif
+                  % endfor
+                % endfor
+              % endif
             </div>
           </div>
         </div>
@@ -244,6 +280,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     <div class="col-lg-5 pr-0">
       <div class="downloads-box">
         <h3 class="mb-5">Téléchargements</h3>
+        % if course_about['downloads'] :
+          % for item in course_about['downloads']:
+            <a href="${item['link']}" class="download-link"><p>${item['text']}</p></a>
+          % endfor
+        % endif
       </div>
       <a href="/courses/" class="big-btn-back">${_("Back to courses")}</a>
     </div>
@@ -251,53 +292,6 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 </div>
 
 <script>
-  // Get content from JSON file
-  $.ajax({
-    type: 'GET',
-    url: '/media/course-about-content.json',
-    dataType: 'json',
-    async: false,
-    success: function(data) {
-      // If data corresponding to course_id
-      if (data['${course.id}']) {
-        // Get data
-        const courseData = data['${course.id}']
-
-        // Populate course
-        $('#course-description').text(courseData.description);
-        $('#teacher-name').text(courseData.teacherName);
-        $('#teacher-email').text(courseData.teacherEmail);
-        if (courseData.teacherImage) {
-          $('.teacher-img img').attr('src', courseData.teacherImage);
-        }
-
-        // Goals
-        $('#course-goals').text(courseData.goals)
-        // Populate course map
-        courseData.courseMap.forEach(function(element, i){
-          $('#course-map').append('<li><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.section + 
-          (element.subsections ? '<a href="arrow" class="float-right"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a>': '') +
-          '<ul class="subsections sub-'+ i +'"></ul></li>');
-          if (element.subsections) {
-            element.subsections.forEach(function(subsection){
-              $('.sub-'+i).append('<li>'+ subsection +'</li>')
-            });
-          }
-        });
-        // Style dynamically generated li
-        $('.subsections > li').css({
-          "list-style-image": "url('/static/tma-static/images/bullet.svg')",
-          "border-bottom": "none"
-        });
-
-        // Populate downloads
-        courseData.downloads.forEach(function(element){
-          $('.downloads-box').append('<a href="'+ element.link +'" class="download-link"><p>'+ element.text +'</p></a>')
-        });
-      }
-    }
-  });
-
   // Dynamic dropdown
   $('.subsections').hide();
   $('a[href="arrow"]').click(function(e){
@@ -305,7 +299,6 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     $(this).children().toggleClass('rotate180');
     $(this).next('.subsections').toggle();
   })
-
 </script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
 <%static:require_module_async module_name="js/dateutil_factory" class_name="DateUtilFactory">
