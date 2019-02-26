@@ -222,6 +222,8 @@ li:not(.nav-item) {
     margin: 0.5em 0 0.5rem 0rem;
 }
 .subsections > li {
+    list-style-image: url('/static/tma-static/images/bullet.svg');
+    border-bottom: none;
     font-weight: 400;
     padding-bottom: 3px;
     padding-top: 3px;

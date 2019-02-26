@@ -7,11 +7,11 @@ from django.db import models
 from django.dispatch import receiver
 from student.signals import UNENROLL_DONE
 from student.signals import ENROLL_STATUS_CHANGE
-from collections import Counter
 import datetime
-import datetime
+import collections
 import logging
 import json
+from jsonfield.fields import JSONField
 from django.utils.translation import ugettext as _
 log = logging.getLogger()
 
@@ -183,6 +183,7 @@ class TmaCourseOverview(models.Model):
     active_enrollments_total = models.IntegerField(default=0)
     is_course_graded = models.BooleanField(default=True)
     tag = models.CharField(db_index=True, max_length=50, blank=True)
+    course_about = JSONField(null=False, blank=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
 
     @classmethod
     def get_tma_course_overview_by_course_id(cls, course_key):
@@ -228,7 +229,7 @@ class TmaCourseOverview(models.Model):
                 else:
                     all_tags.append(str(tag))
 
-            all_tags = Counter(all_tags)
+            all_tags = collections.Counter(all_tags)
         except:
             pass
         
