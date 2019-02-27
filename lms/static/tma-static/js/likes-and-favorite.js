@@ -35,6 +35,7 @@ let change_social_attributes =  function(element, social_attribute){
     dataType: 'json',
     data: {status: status, course_id: courseId},
     success: function(data){
+      console.log(data)
     }
   });
 
