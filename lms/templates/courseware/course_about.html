@@ -137,18 +137,20 @@ import json
       <div class="row">
         <div class="col-lg-8 d-flex align-items-end ${str(course.id).replace(':','').replace('+','')}" data-course-id="${str(course.id)}">
           <span class="tag">
-            % if ',' in tag:
-              <% split_tags = tag.split(',') %>
-                <div class="category-tag"><a href="/courses" target="_blank">${split_tags[0]}</a></div>
-            % else:
-                <div class="category-tag"><a href="/courses" target="_blank">${tag}</a></div>
+            % if tag:
+              % if ',' in tag:
+                <% split_tags = tag.split(',') %>
+                  <div class="category-tag"><a href="/courses" target="_blank">${split_tags[0]}</a></div>
+              % else:
+                  <div class="category-tag"><a href="/courses" target="_blank">${tag}</a></div>
+              % endif
+              </span>
+              %if is_liked :
+                <span class="pin like like-on ml-4"></span>
+              %else :
+                <span class="pin like like-off ml-4"></span>
+              %endif
             % endif
-            </span>
-            %if is_liked :
-              <span class="pin like like-on ml-4"></span>
-            %else :
-              <span class="pin like like-off ml-4"></span>
-            %endif
               <span class="like_count count-box m-2" data-min='0' data-max="${liked_total}" data-delay='1' data-increment="${int(liked_total/3)}">${liked_total}</span>
         </div>
       </div>

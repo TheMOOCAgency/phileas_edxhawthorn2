@@ -182,8 +182,8 @@ class TmaCourseOverview(models.Model):
     liked_total = models.IntegerField(default=0)
     active_enrollments_total = models.IntegerField(default=0)
     is_course_graded = models.BooleanField(default=True)
-    tag = models.CharField(db_index=True, max_length=50, blank=True)
-    course_about = JSONField(null=False, blank=True, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    tag = models.CharField(db_index=True, max_length=50, default=False)
+    course_about = JSONField(null=False, default=collections.OrderedDict, load_kwargs={'object_pairs_hook': collections.OrderedDict})
 
     @classmethod
     def get_tma_course_overview_by_course_id(cls, course_key):
