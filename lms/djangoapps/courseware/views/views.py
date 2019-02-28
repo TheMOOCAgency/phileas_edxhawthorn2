@@ -285,6 +285,8 @@ def courses(request):
         final_course_list.append(course_info)
         if drop_filter and drop_filter == "likes":
             final_course_list = sorted(final_course_list, key=itemgetter('liked_total'), reverse=True)
+        elif drop_filter and drop_filter == "enrollments":
+            final_course_list = sorted(final_course_list, key=itemgetter('active_enrollments_total'), reverse=True)
         else:
             final_course_list = sorted(final_course_list, key=itemgetter('display_name'))
 
