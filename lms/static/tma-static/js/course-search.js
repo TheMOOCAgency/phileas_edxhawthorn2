@@ -62,7 +62,6 @@ const searchByFilter = function(coursesJson, queryObj) {
         filterKeys.forEach((key) => {
             // Check is_new condition
             if (queryObj[key] && (key === 'is_new')) {
-                console.log('bool');
                 if (checkValueAsBool(course, key, queryObj[key])) {
                     isNewIsValid = true;
                 } else {
@@ -126,6 +125,8 @@ const displayResults = function(results) {
         if (a.display_name > b.display_name) { return 1; }
         return 0;
     });
+
+    // Generate cards
     $('#cards-box').html('');
     results.forEach(function(item){
         var isMandatory = item.is_mandatory;

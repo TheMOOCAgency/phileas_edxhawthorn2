@@ -310,6 +310,9 @@ def courses(request):
 
         json_course_list.append(course_json_info)
 
+    # Sort final_course_list alphabetically
+    final_course_list = sorted(final_course_list, key=itemgetter('display_name'))
+
     # Get user course enrollments
     enrollment_course_list = []
     for enrollment in course_enrollments:

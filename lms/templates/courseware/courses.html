@@ -221,6 +221,9 @@
           query[key].push(value);
         }
       };
+
+      console.log(query)
+
       // Change facet style
       $(this).addClass('filter-selected');
       $(this).parent().parent().parent().children('.col-2').children('.close-filter').show();
@@ -228,6 +231,19 @@
       // Search query
       results = searchByFilter(coursesJson, query);
       displayResults(results);
+      flipEffect();
+    });
+
+    // All filter
+    $('.all').on('click', function(e){
+      e.preventDefault();
+      // Empty query object
+      query = {tag: [], language: [], org: [], is_new: false, input: ''};
+      // Remove all filter styling
+      $('.filter-selected').removeClass('filter-selected');
+      $('.close-filter').hide();
+      // Display all courses
+      displayResults(coursesJson);
       flipEffect();
     });
 
@@ -241,7 +257,7 @@
         query[key] = false;
       } else {
         if (value.trim() == 'Français' || value.trim() == 'French') {value = 'fr'} else {
-          if (value.trim() == 'Anglais' || value.trim() == 'English') { value == 'en'}
+          if (value.trim() == 'Anglais' || value.trim() == 'English') {value = 'en'}
         } 
         // Remove item from query object
         query[key].forEach(function(item, index){
@@ -250,6 +266,8 @@
           }
         });
       }
+
+      console.log(query)
 
       // Remove styling if facet-option OR facet-header
       $(this).parent().parent().children('.col-10').children().children().removeClass('filter-selected');
