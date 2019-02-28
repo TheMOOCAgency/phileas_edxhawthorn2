@@ -174,21 +174,29 @@
   var query = {tag: [], language: [], org: [], is_new: false, input: ''};
   var results = [];
 
-  // From URL without interfering with filter dropdown
+  // When coming from HP - query from URL
   if (window.location.search) {
     // Get filter from URL
-    urlParam = window.location.search.slice(8);
+    urlParam = window.location.search.split('=')[1];
+    // Prevent interfering with filter dropdown
     if (urlParam != 'likes' && urlParam != 'enrollments') {
-      // Modify param for 2-words filters
-      if (urlParam == 'Business') {
-        urlParam = 'Business App.';
-      } else {
-        if (urlParam == 'Office') {
-          urlParam = 'Office Tools';
+
+      // Filter case
+      if (window.location.search.split('=')[0].indexOf('filter') > -1) {
+        // Modify param for 2-words filters
+        if (urlParam == 'Business') {
+          urlParam = 'Business App.';
+        } else {
+          if (urlParam == 'Office') {
+            urlParam = 'Office Tools';
+          }
         }
+        query['tag'].push(urlParam);
+      } else {
+        // Input case
+        query['input'] = urlParam;
       }
 
-      query['tag'].push(urlParam);
 
       // Change facet style
       $('p:contains("'+urlParam+'")').addClass('filter-selected');

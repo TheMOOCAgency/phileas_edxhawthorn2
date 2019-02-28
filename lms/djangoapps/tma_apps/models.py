@@ -218,11 +218,11 @@ class TmaCourseOverview(models.Model):
         mandatory_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=org, is_mandatory=True).count()
         return mandatory_courses
 
-    @staticmethod
-    def get_all_tags():
+    @classmethod
+    def get_all_tags(cls, org):
         all_tags = []
         try:
-            tag_lists = TmaCourseOverview.objects.values_list('tag', flat=True)
+            tag_lists = TmaCourseOverview.objects.filter(course_overview_edx__org=org).values_list('tag', flat=True)
             for tag in tag_lists:
                 if ',' in str(tag):
                     all_tags.extend(tag.split(','))
