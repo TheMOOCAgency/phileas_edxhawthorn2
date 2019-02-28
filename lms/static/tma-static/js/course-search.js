@@ -89,16 +89,20 @@ const searchByFilter = function(coursesJson, queryObj) {
 
             // Check org condition
             if (queryObj[key].length && key === 'org') {
-                // If vodeclic > bool check
-                if (queryObj[key].indexOf('Vodeclic') > -1) {
-                    if (checkValueAsBool(course, 'is_vodeclic', 'true')) {
-                        orgIsValid = true;
-                    }
+                // Both orgs
+                if (queryObj[key].length > 1) {
+                    orgIsValid = true
                 } else {
-                    if (checkValueAsArray(course, key, queryObj[key])) {
-                        orgIsValid = true;
+                    // Only Vodeclic
+                    if (queryObj[key].indexOf('Vodeclic') > -1) {
+                        if (checkValueAsBool(course, 'is_vodeclic', false)) {
+                            orgIsValid = false;
+                        }
                     } else {
-                        orgIsValid = false;
+                        // Only Amundi
+                        if (checkValueAsBool(course, 'is_vodeclic', true)) {
+                            orgIsValid = false;
+                        }
                     }
                 }
             }
