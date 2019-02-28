@@ -1003,6 +1003,7 @@ def get_tma_course_info(user, course_id, block_courses):
     course['is_vodeclic'] = TmaOverviewInfo.is_vodeclic
     course['liked_total'] = TmaOverviewInfo.liked_total
     course['tag'] = TmaOverviewInfo.tag
+    course['active_enrollments_total'] = TmaOverviewInfo.active_enrollments_total
 
     #TmaCourseEnrollment Info
     if TmaCourseEnrollment.objects.filter(course_enrollment_edx__course_id=course_key, course_enrollment_edx__user=user).exists():
