@@ -252,7 +252,9 @@ def courses(request):
 
     #TMA - Get List of courses to display
     courses_to_display = []
-    current_organisation = configuration_helpers.get_value('course_org_filter','phileas')
+    current_organisation = configuration_helpers.get_value('course_org_filter')
+    if current_organisation is None:
+        current_organisation = configuration_helpers.get_value('course_org_filter', 'phileas')
     frontpage_courses = configuration_helpers.get_value('frontpage_courses','')
 
     # If filter clicked
@@ -283,6 +285,8 @@ def courses(request):
         final_course_list.append(course_info)
         if drop_filter and drop_filter == "likes":
             final_course_list = sorted(final_course_list, key=itemgetter('liked_total'), reverse=True)
+        else:
+            final_course_list = sorted(final_course_list, key=itemgetter('display_name'))
 
         # JSON info for dynamic course cards
         # Vodelic link
@@ -310,9 +314,6 @@ def courses(request):
 
         json_course_list.append(course_json_info)
 
-    # Sort final_course_list alphabetically
-    final_course_list = sorted(final_course_list, key=itemgetter('display_name'))
-
     # Get user course enrollments
     enrollment_course_list = []
     for enrollment in course_enrollments:
@@ -321,7 +322,7 @@ def courses(request):
 
     # Get tags and counts
     try:
-        tag_counters = TmaCourseOverview.get_all_tags()
+        tag_counters = TmaCourseOverview.get_all_tags(current_organisation)
     except:
         tag_counters = []
 
