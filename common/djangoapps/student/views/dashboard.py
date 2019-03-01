@@ -1050,8 +1050,11 @@ def get_tma_footer_info():
     Gets indicators to be displayed in the footer
     """
     footer = {}
-    current_organisation = configuration_helpers.get_value('course_org_filter')
-
+    org_whitelist,org_blacklist = get_org_black_and_whitelist_for_site()
+    current_organisation = "phileas"
+    if org_whitelist:
+         current_organisation = org_whitelist[0]
+    log.info(current_organisation)
     footer['courses_counter'] = len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation))
     footer['users_counter'] = len(UserProfile.objects.all())
 
