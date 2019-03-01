@@ -217,7 +217,7 @@ import json
     </div>
     <div class="col text-center">
       %if user.is_authenticated and registered and show_courseware_link:
-        <a href="${course_target}courseware" class="big-btn">${_("View Course")}</a>
+        <a href="/courses/${str(course.id)}/courseware" class="big-btn">${_("View Course")}</a>
       %elif (invitation_only and not can_enroll) or (not user.profile.is_manager and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only) :
         <a href="" class="big-btn">${_("Not Authorized")}</a>
       %else:
