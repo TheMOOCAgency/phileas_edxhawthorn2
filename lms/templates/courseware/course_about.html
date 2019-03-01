@@ -136,22 +136,23 @@ import json
       % endif
       <div class="row">
         <div class="col-lg-8 d-flex align-items-end ${str(course.id).replace(':','').replace('+','')}" data-course-id="${str(course.id)}">
+        % if tag and 'False' not in tag:
           <span class="tag">
-            % if tag:
               % if ',' in tag:
                 <% split_tags = tag.split(',') %>
-                  <div class="category-tag"><a href="/courses" target="_blank">${split_tags[0]}</a></div>
+                  <div class="category-tag"><a href="/courses?filter=${split_tags[0]}">${split_tags[0]}</a></div>
               % else:
-                  <div class="category-tag"><a href="/courses" target="_blank">${tag}</a></div>
+                  <div class="category-tag"><a href="/courses?filter=${tag}">${tag}</a></div>
               % endif
-              </span>
-              %if is_liked :
-                <span class="pin like like-on ml-4"></span>
-              %else :
-                <span class="pin like like-off ml-4"></span>
-              %endif
-            % endif
-              <span class="like_count count-box m-2" data-min='0' data-max="${liked_total}" data-delay='1' data-increment="${int(liked_total/3)}">${liked_total}</span>
+          </span>
+        % endif
+        %if is_liked :
+          <span class="pin like like-on ml-4"></span>
+        %else :
+          <span class="pin like like-off ml-4"></span>
+        %endif
+
+          <span class="like_count count-box m-2" data-min='0' data-max="${liked_total}" data-delay='1' data-increment="${int(liked_total/3)}">${liked_total}</span>
         </div>
       </div>
     </div>
@@ -305,6 +306,14 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
     $(this).children().toggleClass('rotate180');
     $(this).next('.subsections').toggle();
   })
+
+  // Readjust tag link to search
+  if ($('.category-tag > a').text() == 'Business App.') {
+    $('.category-tag > a').attr('href', '/courses?filter=Business');
+  }
+  if ($('.category-tag > a').text() == 'Office Tools') {
+    $('.category-tag > a').attr('href', '/courses?filter=Office');
+  }
 </script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
 <%static:require_module_async module_name="js/dateutil_factory" class_name="DateUtilFactory">
