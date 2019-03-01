@@ -190,7 +190,7 @@ body.view-in-course .wrapper-course-material{
   padding-top: 15px;
   min-height: 44px;
   position: relative;
-  top: 46px;
+  /*top: 46px;*/
   z-index: 10;
   background-color: transparent!important;
   box-shadow: none!important;
