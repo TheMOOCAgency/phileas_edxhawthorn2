@@ -140,7 +140,11 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/enrollm
           %endif
         %else :
           %if enrollment.is_active :
-          <a href="${course_target}" class="continue-btn">${_("Continue")}</a>
+            % if TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).has_validated_course:
+              <a href="${course_target}" class="continue-btn">${_("Completed")}</a>
+            % else:
+              <a href="${course_target}" class="continue-btn">${_("Continue")}</a>
+            % endif
           %else :
           <a href="${'/courses/'+str(enrollment._course_id)+'/about'}" class="enroll-btn">${_("Join")}</a>
           %endif

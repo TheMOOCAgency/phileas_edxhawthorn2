@@ -146,7 +146,11 @@ split_tags = course['tag'].split(',')
                 %endif
               %else :
                 %if course['is_enrolled'] :
-                  <a href="${'/courses/'+str(course['id'])+'/courseware/'}" class="enroll-btn">${_("Continue")}</a>
+                  % if course['has_validated_course']:
+                    <a href="${'/courses/'+str(course['id'])+'/courseware/'}" class="enroll-btn">${_("Completed")}</a>
+                  % else:
+                    <a href="${'/courses/'+str(course['id'])+'/courseware/'}" class="enroll-btn">${_("Continue")}</a>
+                  % endif
                 %else :
                   <a href="${'/courses/'+str(course['id'])+'/about'}" class="enroll-btn">${_("Join")}</a>
                 %endif
