@@ -104,7 +104,7 @@ split_tags = course['tag'].split(',')
                 % if ',' in course['tag']:
                   <div class="category-tag"><a href="/courses?filter=${split_tags[0]}">${split_tags[0]}</a></div>
                 % else:
-                  <div class="category-tag"><a href="/courses?filter=${split_tags[0]}">${course['tag']}</a></div>
+                  <div class="category-tag"><a href="/courses?filter=${course['tag']}">${course['tag']}</a></div>
                 % endif
                 % if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
                   <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-placement="top" data-delay='{"show":"100", "hide":"100"}' title="Manager Only" class="pin">
