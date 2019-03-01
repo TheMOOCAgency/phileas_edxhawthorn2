@@ -91,7 +91,7 @@
     margin-right: 10px;
     text-align: center;
 }
-.category-tag > a, .category-tag > a:hover {
+.category-tag > a, .category-tag > a:hover, .category-tag > a:visited {
     color: white !important;
     text-decoration: none;
 }

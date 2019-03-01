@@ -184,10 +184,10 @@
       // Filter case
       if (window.location.search.split('=')[0].indexOf('filter') > -1) {
         // Modify param for 2-words filters
-        if (urlParam == 'Business') {
+        if (urlParam == 'Business' || urlParam == 'Business%20App.') {
           urlParam = 'Business App.';
         } else {
-          if (urlParam == 'Office') {
+          if (urlParam == 'Office' || urlParam == 'Office%20Tools') {
             urlParam = 'Office Tools';
           }
         }
