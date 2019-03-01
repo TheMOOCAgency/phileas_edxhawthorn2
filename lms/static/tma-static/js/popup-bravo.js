@@ -29,7 +29,8 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
       if (response['not_graded_success'] && !response['has_displayed_message']) {
         console.log('cours non noté - bravo');
         $('.modal-not-graded-success').show();
-        $('#tma_course_end_popup').modal('show')
+        $('#tma_course_end_popup').modal('show');
+        mark_popup_as_displayed();
       }
     }
   }
@@ -38,7 +39,6 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
 $('button.mark-as-done').on('click', function(e){
   e.preventDefault();
   mark_as_done();
-  mark_popup_as_displayed();
   $('#tma_course_end_popup').modal('hide');
 });
 
