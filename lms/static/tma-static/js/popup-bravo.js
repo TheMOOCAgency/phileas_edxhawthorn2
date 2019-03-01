@@ -26,14 +26,20 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
       }
     } else {
       // If course is not graded && completed
-      if (response['has_completed'] && !response['has_displayed_message']) {
+      if (response['not_graded_success'] && !response['has_displayed_message']) {
         console.log('cours non noté - bravo');
-        $('.modal-not-graded-success a').show();
+        $('.modal-not-graded-success').show();
         $('#tma_course_end_popup').modal('show')
-        mark_popup_as_displayed();
       }
     }
   }
+});
+
+$('button.mark-as-done').on('click', function(e){
+  e.preventDefault();
+  mark_as_done();
+  mark_popup_as_displayed();
+  $('#tma_course_end_popup').modal('hide');
 });
 
 function mark_popup_as_displayed(){
@@ -43,6 +49,17 @@ function mark_popup_as_displayed(){
     url:url,
     data:{
       'message_displayed_status':'True'
-    },
-  })
-}  
+    }
+  });
+}
+
+function mark_as_done() {
+  url ='/tma_apps/'+global_courseid+'/grade_tracking/mark_as_done'
+  $.ajax({
+    type: 'POST',
+    url: url,
+    data: {
+      'marked_as_done':'True'
+    }
+  });
+}

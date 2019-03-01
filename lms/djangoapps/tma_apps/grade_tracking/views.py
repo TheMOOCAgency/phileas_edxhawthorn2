@@ -50,12 +50,8 @@ def get_user_grade(request, course_id):
     elif not is_course_graded:
         response.update(completion_info)
         response['has_displayed_message'] = TmaCourseEnrollment.get_courseenrollment(course_key, request.user).has_displayed_message
-        # Update date_best_student_grade
-        date_update_status = TmaCourseEnrollment.update_not_graded_status(course_key, request.user, completion_info['completion_rate'])
-        response.update(date_update_status)
         # If has not already seen the popup - has completed all units
         if not response['has_displayed_message'] and completion_info['completion_rate'] == 1:
-            response['has_completed'] = True
             response['not_graded_success'] = True
 
     return JsonResponse(response)
@@ -73,6 +69,25 @@ def mark_displayed_message(request, course_id):
         response = {'status':_('error while registering status')}
     return JsonResponse(response)
 
+@login_required
+@require_POST
+def mark_as_done(request, course_id):
+    course_key = CourseKey.from_string(course_id)
+    course_descriptor = get_course_by_id(course_key)
+    response = {}
+
+    # Completion information
+    completion_info = Completion(request).get_course_completion(course_id)
+
+    marked_as_done = request.POST.get('marked_as_done')
+    # Update date_best_student_grade
+    date_update_status = TmaCourseEnrollment.update_not_graded_status(course_key, request.user, completion_info['completion_rate'])
+    response.update(date_update_status)
+    # Update has_validated
+    has_validated_status = TmaCourseEnrollment.update_course_validation(course_key, request.user, marked_as_done)
+    response.update({'has_validated_status': has_validated_status})
+    response = {'status':'error' }
+    return JsonResponse(response)
 
 @login_required
 @require_POST
@@ -82,6 +97,7 @@ def try_again(request, course_id):
         enrollment = TmaCourseEnrollment.get_courseenrollment(CourseKey.from_string(course_id), request.user)
         enrollment.has_displayed_message = message_displayed_status
         enrollment.save()
+        # ADD RESET SCORE
         response = {'status':_('success resetting message status & score')}
     except :
         response = {'status':_('error while resetting message status & score')}
