@@ -50,6 +50,9 @@ def get_user_grade(request, course_id):
     elif not is_course_graded:
         response.update(completion_info)
         response['has_displayed_message'] = TmaCourseEnrollment.get_courseenrollment(course_key, request.user).has_displayed_message
+        # Update date_best_student_grade
+        date_update_status = TmaCourseEnrollment.update_not_graded_status(course_key, request.user, completion_info['completion_rate'])
+        response.update(date_update_status)
         # If has not already seen the popup - has completed all units
         if not response['has_displayed_message'] and completion_info['completion_rate'] == 1:
             response['has_completed'] = True
