@@ -235,7 +235,11 @@ import json
     </div>
     <div class="col-lg-3">
       <div class="d-flex align-items-end justify-content-end ${str(course.id).replace(':','').replace('+','')}" data-course-id="${str(str(course.id))}">
-        <a href="mailto:?subject=${course.display_name_with_default_escaped} on Phileas&body=Hi,%0D%0A%0D%0AI found this course and thought you might like it%0D%0A%0D%0ABest !"><img class="pr-2 mail" src="${static.url('tma-static/images/mail.svg')}" width="45"></a>
+<%
+base_url="https://"+static.get_value('site_domain', settings.SITE_NAME)
+course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(course.id)+"/about")
+%>
+          <a href="mailto:?subject=${course.display_name_with_default_escaped} on Phileas&body=Hi,%0D%0A%0D%0AI found this course %0D%0A%0D%0A ${course_url} %0D%0A%0D%0AI and thought you might like it%0D%0A%0D%0ABest !"><img class="pr-2 mail" src="${static.url('tma-static/images/mail.svg')}" width="45"></a>
         % if is_favourite:
           <span class="pin favorite favorite-on m-1"></span>
         % else:
