@@ -352,7 +352,7 @@ ${HTML(fragment.foot_html())}
 % endif
 
 <!-- TMA MODAL BRAVO ECHEC -->
-<div id="tma_course_end_popup"class="modal" tabindex="-1" role="dialog">
+<div id="tma_course_end_popup" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -385,10 +385,10 @@ ${HTML(fragment.foot_html())}
       <div class="modal-not-graded-success">
         <div class="modal-body">
           <h5 class="text-center font-weight-bold">${_("Congratulations!")}</h5>
-          <p class="text-center message">${_("You have finished your training.")}<br>${_("You can now return to your dashboard.")}</p>
+          <p class="text-center message">${_("You have finished your training.")}<br>${_("You can now mark this course as completed.")}</p>
         </div>
         <div class="modal-footer">
-          <button onclick="window.location.href='/dashboard'" type="button" class="btn btn-secondary">${_('Return to the dashboard')}</button>
+          <button type="button" class="btn btn-secondary mark-as-done" style="margin:auto">${_('Mark as complete')}</button>
         </div>
       </div>
     </div>
@@ -398,7 +398,6 @@ ${HTML(fragment.foot_html())}
 <!--TMA SCRIPT COURSEWARE -->
 <script>
   let global_courseid = "${course.id | n, js_escaped_string}";
-  console.log('${is_course_graded}')
 </script>
 <script src="${static.url('tma-static/js/courseware-tma-completion-nav.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/courseware-tma-grade.js')}" charset="utf-8"></script>
