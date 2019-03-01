@@ -91,19 +91,35 @@ class TmaCourseEnrollment(models.Model):
         response={}
         enrollment = cls.get_courseenrollment(course_key,user)
         try :
-            response['new_best_grade']=False
-            response['success_moment']=False
+            response['new_best_grade'] = False
+            response['success_moment'] = False
             enrollment.student_grade=grade
             if grade > enrollment.best_student_grade:
                 enrollment.best_student_grade = grade
                 enrollment.date_best_student_grade = datetime.datetime.now()
-                response['new_best_grade']=True
+                response['new_best_grade'] = True
             enrollment.has_validated_course = passed
             enrollment.save()
-            response['status']='success'
-            response['has_displayed_message']=enrollment.has_displayed_message
+            response['status'] = 'success'
+            response['has_displayed_message'] = enrollment.has_displayed_message
         except:
-            response['status']='error'
+            response['status'] = 'error'
+        return response
+
+    @classmethod
+    def update_not_graded_status(cls, course_key, user, completion_rate):
+        """
+        Updates "best student grade date" for a non-graded course, based on the completion rate : if the user completed the course, sets the date of this first success.
+        """
+        response = {}
+        enrollment = cls.get_courseenrollment(course_key, user)
+        if completion_rate == 1:
+            if not enrollment.date_best_student_grade:
+                enrollment.date_best_student_grade = datetime.datetime.now()
+                enrollment.save()
+                response['status'] = 'success - first success date saved'
+            else:
+                response['status'] = 'course already completed'
         return response
 
 

@@ -191,13 +191,23 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                 <div class="col-lg-3 title-20"><p class="mb-0">${enrollment.course_overview.display_name_with_default}</p></div>
             %endif
                 <div class="col-lg-3 grey-text">
-                    <p class="mb-0"><span>FIRST SUCCESS DATE</span></p>
+                    % if TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).date_best_student_grade:
+                        <p class="mb-0"><span>${TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).date_best_student_grade.strftime('%d-%m-%Y')}</span></p>
+                    % endif
                 </div>
                 <div class="col-lg-2">
-                    <p class="mb-0"><span class="font-weight-bold">${int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100)}</span>/100</p>
+                    % if not get_course(enrollment.course_id).no_grade:
+                        <p class="mb-0"><span class="font-weight-bold">${int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100)}</span>/100</p>
+                    % else:
+                        <p class="mb-0">${_("Course not graded")}</p>
+                    % endif
                 </div>
                 <div class="col-lg-2 pl-5"><p class="mb-0"><img class="badge-cert" src="${static.url('tma-static/images/certificate.svg')}"></div>
-                <div class="col-lg-2"><a href="/tma_apps/${enrollment._course_id}/certificate/render">${_("Download")}</a></div>
+                    % if not get_course(enrollment.course_id).no_grade:
+                        <div class="col-lg-2"><a href="/tma_apps/${enrollment._course_id}/certificate/render">${_("Download")}</a></div>
+                    % else:
+                        <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
+                    % endif
                 <div class="table-separator"></div>
             </div>
 
@@ -219,7 +229,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
 <!-- TMA Home Dashboard Script -->
 <script>
     let user_email="${request.user.email}"
-    console.log('${done_course_enrollments[0].__dict__}')
+    console.log('${done_course_enrollments[0].course_overview.__dict__}')
 </script>
 <script src="${static.url('tma-static/js/home-dashboard-actions.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
