@@ -321,7 +321,7 @@ class ProviderConfig(ConfigurationModel):
         """
         Determines if the provider is able to be used with the current site.
         """
-        return self.enabled and self.site == Site.objects.get_current(get_current_request())
+        return self.enabled
 
 
 class OAuth2ProviderConfig(ProviderConfig):
