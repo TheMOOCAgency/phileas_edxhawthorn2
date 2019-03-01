@@ -112,7 +112,7 @@ from openedx.core.djangoapps.lang_pref.api import released_languages
 from student.models import CourseEnrollment
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
 from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
-from student.views.dashboard import get_tma_course_info, get_tma_course_json, get_course_enrollments, is_course_blocked
+from student.views.dashboard import get_tma_course_info, get_tma_course_json, get_course_enrollments, is_course_blocked, get_org_black_and_whitelist_for_site
 from shoppingcart.models import CourseRegistrationCode
 from collections import Counter
 from operator import itemgetter
