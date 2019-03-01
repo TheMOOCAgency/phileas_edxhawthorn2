@@ -229,7 +229,6 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
 <!-- TMA Home Dashboard Script -->
 <script>
     let user_email="${request.user.email}"
-    console.log('${done_course_enrollments[0].course_overview.__dict__}')
 </script>
 <script src="${static.url('tma-static/js/home-dashboard-actions.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
