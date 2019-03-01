@@ -865,7 +865,13 @@ def _student_dashboard(request):
 
     #TMA - Get List of courses to display
     courses_to_display = []
-    current_organisation = configuration_helpers.get_value('course_org_filter', 'phileas')
+    # Get current org
+    org_whitelist,org_blacklist = get_org_black_and_whitelist_for_site()
+    current_organisation = "phileas"
+    if org_whitelist:
+         current_organisation = org_whitelist[0]
+    log.info(current_organisation)
+    
     frontpage_courses = configuration_helpers.get_value('frontpage_courses','')
     accepted_filters = ['likes', 'enrollments']
     filter = request.GET.get('filter')
