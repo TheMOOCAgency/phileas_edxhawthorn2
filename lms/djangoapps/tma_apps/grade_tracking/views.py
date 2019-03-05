@@ -101,7 +101,6 @@ def try_again(request, course_id):
     course_key = CourseKey.from_string(course_id)
     course = modulestore().get_course(course_key, depth=4)
     course_id_str = str(course_id)
-    message_displayed_status = request.POST.get('message_displayed_status')
 
     try:
         # RESET SCORE FOR ALL PROBLEMS IN COURSE
@@ -140,12 +139,6 @@ def try_again(request, course_id):
                                         delete_module=delete_module
                                     )
                                     response = {'status':_('success resetting message status & score')}
-
-                                    # When retry is complete, set has_display_message to true
-                                    enrollment = TmaCourseEnrollment.get_courseenrollment(CourseKey.from_string(course_id), request.user)
-                                    enrollment.has_displayed_message = message_displayed_status
-                                    enrollment.save()
-
                                 except:
                                     response = {'status':_('error while resetting message status & score')}
     except:
