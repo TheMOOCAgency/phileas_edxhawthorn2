@@ -12,7 +12,7 @@ a:not(.nav-link, .enroll-btn, .continue-btn):hover {
 /***** SIDE COLS *****/
 html {
     max-width: 1440px;
-    margin: 0 auto;
+    margin: 0 auto !important;
 }
 .content-wrapper {
     padding: 0px;
