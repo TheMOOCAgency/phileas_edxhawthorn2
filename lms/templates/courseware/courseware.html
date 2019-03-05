@@ -13,6 +13,7 @@ from edxnotes.helpers import is_feature_enabled as is_edxnotes_enabled
 from openedx.core.djangolib.js_utils import js_escaped_string
 from openedx.core.djangolib.markup import HTML
 from openedx.features.course_experience import course_home_page_title, COURSE_OUTLINE_PAGE_FLAG
+from lms.djangoapps.tma_apps.models import TmaCourseOverview
 
 %>
 <%
@@ -215,9 +216,11 @@ ${HTML(fragment.foot_html())}
   }
 </style>
 <!-- TMA COMPLETION NAV -->
+% if TmaCourseOverview.objects.get(course_overview_edx__id=course.id).has_menu:
   <div class="tma-coursenav-btn">
     <span class="open-courseware-nav">Menu<i class="fa fa-plus"></i></span>
   </div>
+% endif
 
   <div class="course-wrapper" role="presentation">
 
@@ -398,6 +401,7 @@ ${HTML(fragment.foot_html())}
 <!--TMA SCRIPT COURSEWARE -->
 <script>
   let global_courseid = "${course.id | n, js_escaped_string}";
+  let hasMenu = "${TmaCourseOverview.objects.get(course_overview_edx__id=course.id).has_menu}"
 </script>
 <script src="${static.url('tma-static/js/courseware-tma-completion-nav.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/courseware-tma-grade.js')}" charset="utf-8"></script>

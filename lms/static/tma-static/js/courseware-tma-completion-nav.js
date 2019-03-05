@@ -1,3 +1,9 @@
+/* Hide Previous & Next buttons if has_menu = false */
+if (hasMenu == 'False') {
+  $('button.sequence-nav-button.button-previous').hide();
+  $('button.sequence-nav-button.button-next').hide();
+}
+
 /*Toggle Menu*/
 $('span.open-courseware-nav').on('click', function(){
   $('#tma-completion-nav').removeClass('folded');
