@@ -1,0 +1,29 @@
+/* Prevent EdX style */
+.xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_incorrect, .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_incorrect:hover {
+    color: white;
+    background-color: #b20610;
+}
+
+.xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_correct, .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_correct:hover {
+    color: white;
+    background-color: #008100;
+}
+
+/* Label icon */
+span.status.correct, span.status.incorrect {
+    display: none;
+}
+
+/* Bottom notification */
+.xmodule_display.xmodule_CapaModule div.problem .notification.success {
+    display: none;
+}
+.xmodule_display.xmodule_CapaModule div.problem .notification.error {
+    border-top: none;
+    font-size: 18px;
+    text-align: center;
+    color: red;
+}
+.xmodule_display.xmodule_CapaModule div.problem .notification.error .icon, .xmodule_display.xmodule_CapaModule div.problem .notification.success .icon {
+    display: none;
+}
