@@ -42,6 +42,23 @@ $('button.mark-as-done').on('click', function(e){
   $('#tma_course_end_popup').modal('hide');
 });
 
+// If student has failed clicks "Start over" button
+$('#try_again').on('click', function(e){
+  e.preventDefault();
+  $.ajax({
+    type:'POST',
+    url: '/tma_apps/'+global_courseid+'/grade_tracking/try_again',
+    data: {
+      'message_displayed_status': 'False'
+    },
+    success : function(response) {
+      console.log(response);
+      $('#tma_course_end_popup').modal('hide');
+      location.reload();
+    }
+  })
+});
+
 function mark_popup_as_displayed(){
   url ='/tma_apps/'+global_courseid+'/grade_tracking/message_displayed'
   $.ajax({

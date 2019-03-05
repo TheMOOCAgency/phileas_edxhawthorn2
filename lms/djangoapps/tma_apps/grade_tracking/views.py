@@ -6,8 +6,13 @@ from django.views.decorators.http import require_POST, require_GET
 from django.http import JsonResponse
 from django.apps import apps
 TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
+from student.models import User
 from opaque_keys.edx.keys import CourseKey
+from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from lms.djangoapps.grades.course_grade_factory import CourseGradeFactory
+from lms.djangoapps.instructor.enrollment import reset_student_attempts
+from lms.djangoapps.instructor.views.tools import get_student_from_identifier, strip_if_string
+from xmodule.modulestore.django import modulestore
 from courseware.courses import get_course_by_id
 from django.utils.translation import ugettext as _
 from lms.djangoapps.tma_apps.completion.completion import Completion
@@ -92,13 +97,58 @@ def mark_as_done(request, course_id):
 @login_required
 @require_POST
 def try_again(request, course_id):
+    user_moi = User.objects.get(email='staff@example.com')
+    course_key = CourseKey.from_string(course_id)
+    course = modulestore().get_course(course_key, depth=4)
+    course_id_str = str(course_id)
     message_displayed_status = request.POST.get('message_displayed_status')
+
     try:
-        enrollment = TmaCourseEnrollment.get_courseenrollment(CourseKey.from_string(course_id), request.user)
-        enrollment.has_displayed_message = message_displayed_status
-        enrollment.save()
-        # ADD RESET SCORE
-        response = {'status':_('success resetting message status & score')}
-    except :
-        response = {'status':_('error while resetting message status & score')}
+        # RESET SCORE FOR ALL PROBLEMS IN COURSE
+        for section in course.get_children():
+            for subsection in section.get_children():
+                for unit in subsection.get_children():
+                    # For each unit which is not of html type
+                    for problem in unit.get_children():
+                        if problem.location.block_type != 'html':
+                            problem_location = str(problem.location)
+                            print(problem.location.block_type)
+                            course_id = SlashSeparatedCourseKey.from_deprecated_string(course_id_str)
+                            problem_to_reset = strip_if_string(problem_location)
+                            student_identifier = request.user.email
+                            student = None
+
+                            if student_identifier is not None:
+                                try:
+                                    student = get_student_from_identifier(student_identifier)
+                                except:
+                                    print(student)
+                            all_students = False
+                            delete_module = True
+
+                            try:
+                                module_state_key = course_id.make_usage_key_from_deprecated_string(problem_to_reset)
+                            except InvalidKeyError:
+                                log.info('invalid Key'+ str(module_state_key))
+                            if student:
+                                try:
+                                    reset_student_attempts(
+                                        course_id,
+                                        student,
+                                        module_state_key,
+                                        requesting_user=user_moi,
+                                        delete_module=delete_module
+                                    )
+                                    response = {'status':_('success resetting message status & score')}
+
+                                    # When retry is complete, set has_display_message to true
+                                    enrollment = TmaCourseEnrollment.get_courseenrollment(CourseKey.from_string(course_id), request.user)
+                                    enrollment.has_displayed_message = message_displayed_status
+                                    enrollment.save()
+
+                                except:
+                                    response = {'status':_('error while resetting message status & score')}
+    except:
+        response = {'status':_('An error occurred')}
+    
     return JsonResponse(response)
