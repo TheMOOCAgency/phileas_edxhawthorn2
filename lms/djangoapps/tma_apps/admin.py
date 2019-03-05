@@ -23,8 +23,8 @@ class TmaCourseEnrollmentAdmin(admin.ModelAdmin):
 
 
 class TmaCourseOverviewAdmin(admin.ModelAdmin):
-    list_display = ('course_overview_edx','is_manager_only','is_mandatory','is_vodeclic','liked_total','favourite_total','is_course_graded','active_enrollments_total','tag', 'course_about')
-    fields=('course_overview_edx','is_manager_only','is_mandatory','is_vodeclic','liked_total','favourite_total','is_course_graded','active_enrollments_total','tag', 'course_about')
+    list_display = ('course_overview_edx','is_manager_only','is_mandatory','is_vodeclic','has_menu','liked_total','favourite_total','is_course_graded','active_enrollments_total','tag', 'course_about')
+    fields=('course_overview_edx','is_manager_only','is_mandatory','is_vodeclic','has_menu','liked_total','favourite_total','is_course_graded','active_enrollments_total','tag', 'course_about')
     readonly_fields =('course_overview_edx',)
 
 admin.site.register(TmaCourseEnrollment, TmaCourseEnrollmentAdmin)

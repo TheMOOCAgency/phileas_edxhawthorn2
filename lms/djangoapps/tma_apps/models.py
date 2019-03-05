@@ -194,6 +194,7 @@ class TmaCourseOverview(models.Model):
     is_manager_only = models.BooleanField(default=False)
     is_mandatory = models.BooleanField(default=False)
     is_vodeclic = models.BooleanField(default=False)
+    has_menu = models.BooleanField(default=True)
     favourite_total = models.IntegerField(default=0)
     liked_total = models.IntegerField(default=0)
     active_enrollments_total = models.IntegerField(default=0)
