@@ -1,7 +1,9 @@
 /* Prevent EdX style */
+.xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_incorrect, .xmodule_display.xmodule_CapaModule div.problem .choicegroup label:hover {
+    border: 2px solid #e4e4e4;
+}
 .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_incorrect, .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_incorrect:hover {
-    color: white;
-    background-color: #b20610;
+    border: 2px solid #e4e4e4;
 }
 
 .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_correct, .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_correct:hover {
@@ -26,4 +28,42 @@ span.status.correct, span.status.incorrect {
 }
 .xmodule_display.xmodule_CapaModule div.problem .notification.error .icon, .xmodule_display.xmodule_CapaModule div.problem .notification.success .icon {
     display: none;
+}
+
+.xmodule_display.xmodule_CapaModule div.problem .choicegroup fieldset .field {
+    margin-left: 40px;
+}
+
+/* Input custom */ 
+input[type="radio"], input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    position: absolute;
+    top: 5px;
+    left: -42px;
+    height: 30px;
+    width: 30px;
+    border-radius: 30px;
+}
+.checkmark:hover {
+    border: 1px solid grey;
+}
+
+.checkfail, .checksuccess {
+    display: none;
+    position: absolute;
+    top: 5px;
+    left: -42px;
+    height: 30px;
+    width: 30px;
+    border-radius: 30px;
+    background-color: white;
+}
+
+.xmodule_display.xmodule_CapaModule div.problem .choicegroup label.selected-tma {
+    background-color: rgb(162, 193, 20)!important;
+    color: rgb(255, 255, 255)!important;
+    border-color: rgb(162, 193, 20)!important;
 }

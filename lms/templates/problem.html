@@ -30,7 +30,7 @@ from openedx.core.djangolib.markup import HTML
       <button type="button" class="submit btn-brand" data-submitting="${ submit_button_submitting }" data-value="${ submit_button }" data-should-enable-submit-button="${ should_enable_submit_button }" aria-describedby="submission_feedback_${short_id}" ${'' if should_enable_submit_button else 'disabled'}>
           <span class="submit-label">${ submit_button }</span>
       </button>
-      <div class="submission-feedback" id="submission_feedback_${short_id}">
+      <div class="submission-feedback" id="submission_feedback_${short_id}" data-remaining="${num_total-num_used if num_total else ''}">
         % if attempts_allowed:
           ${ungettext("You have used {num_used} of {num_total} attempt", "You have used {num_used} of {num_total} attempts", attempts_allowed).format(num_used=attempts_used, num_total=attempts_allowed)}
         % endif
@@ -77,7 +77,7 @@ from openedx.core.djangolib.markup import HTML
                 notification_icon='fa-check',
                 notification_name='submit',
                 is_hidden=False,
-                notification_message=answer_notification_message"
+                notification_message=''"
             />
         % endif
         % if 'incorrect' == answer_notification_type:
@@ -86,7 +86,7 @@ from openedx.core.djangolib.markup import HTML
                 notification_icon='fa-close',
                 notification_name='submit',
                 is_hidden=False,
-                notification_message=answer_notification_message"
+                notification_message='Incorrect answer'"
             />
         % endif
         % if 'partially-correct' == answer_notification_type:
