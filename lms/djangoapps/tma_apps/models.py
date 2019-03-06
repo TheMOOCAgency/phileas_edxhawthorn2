@@ -200,7 +200,7 @@ class TmaCourseOverview(models.Model):
     active_enrollments_total = models.IntegerField(default=0)
     is_course_graded = models.BooleanField(default=True)
     tag = models.CharField(db_index=True, max_length=50, default=False)
-    course_about = JSONField(null=False, default=collections.OrderedDict, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+    course_about = models.TextField(blank=True)
 
     @classmethod
     def get_tma_course_overview_by_course_id(cls, course_key):
