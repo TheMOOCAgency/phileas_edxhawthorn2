@@ -35,7 +35,7 @@ span.status.correct, span.status.incorrect {
 }
 
 /* Input custom */ 
-input[type="radio"], input[type="checkbox"] {
+.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="radio"], .xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="checkbox"] {
     display: none;
 }
 

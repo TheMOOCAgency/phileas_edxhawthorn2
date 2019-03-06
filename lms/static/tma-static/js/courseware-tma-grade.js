@@ -3,36 +3,43 @@ $(document).ready(function(){
   get_user_grade();
   styleAlreadyAnsweredQuestions();
 
+  chosenOption($('.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="checkbox"]'))
+  chosenOption($('.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="radio"]'))
+
   /* Update user grade and get Phileas styling when submitting exercise */
   $(document).ajaxSuccess(function(e, xhr, settings) {
-    if (settings.url.indexOf('problem_check') >- 1) {
+    if (settings.url.indexOf('problem_check') > -1) {
       get_user_grade();
       var data = JSON.parse(xhr.responseText);
       styleQuizOnSubmit(data, settings.url);
+
+      chosenOption($('.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="checkbox"]'))
+      chosenOption($('.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="radio"]'))
     }
   });
-
-  // Color highlight of questions choices - TO FIX: WHY DOUBLE CLICK ?
-  $('span.checkmark').on('click', function(){
-    $(this).parents('.problem').find('label').each(function(){
-      $(this).removeClass('selected-tma');
-    });
-    $(this).parent('label').addClass('selected-tma');
-  });
-  $('label').on('click', function(){
-    $(this).parents('.problem').find('label').each(function(){
-      $(this).removeClass('selected-tma');
-    });
-    $(this).addClass('selected-tma');
-  });
-
-
 });
+
 /************ END DOCUMENT READY ************/
 
 /************ FUNCTIONS ************/
-function styleAlreadyAnsweredQuestions(){
-  $('.problems-wrapper').each(function(){
+function chosenOption(element) {
+  element.each(function(){
+    $(this).change(function(){
+      if ($(this).prop('checked')) {
+        console.log('checked')
+        $(this).parent().addClass('selected-tma');
+      } else {
+        if (!$(this).prop('checked')) {
+          console.log('unchecked')
+          $(this).parent().removeClass('selected-tma');
+        }
+      }
+    });
+  });
+}
+
+function styleAlreadyAnsweredQuestions() {
+  $('.problems-wrapper').each(function() {
     indicatorContainer = $(this).find('.indicator-container span');
     wrongChoice = $(this).find('.choicegroup_incorrect');
     goodChoice = $(this).find('.choicegroup_correct');
@@ -97,10 +104,10 @@ function styleQuizOnSubmit(data, url) {
   }
 }
 
-function restyleButtons(that) {
-  that.append('<span class="checkmark"><svg height="30" width="30"><circle cx="15" cy="15" r="14" shape-rendering="crispEdges" stroke="#eee" stroke-width="1" fill="#eee" /></svg></span>');
-  that.append("<span class='checkfail hide'><img src='/static/tma-static/images/checkfail.png' /></span>");
-  that.append("<span class='checksuccess hide'><img src='/static/tma-static/images/checksuccess.png' /></span>");
+function restyleButtons(element) {
+  element.append('<span class="checkmark"><svg height="30" width="30"><circle cx="15" cy="15" r="14" shape-rendering="crispEdges" stroke="#eee" stroke-width="1" fill="#eee" /></svg></span>');
+  element.append("<span class='checkfail'><img src='/static/tma-static/images/checkfail.png' /></span>");
+  element.append("<span class='checksuccess'><img src='/static/tma-static/images/checksuccess.png' /></span>");
 };
 
 function showAnswers(url, id){
