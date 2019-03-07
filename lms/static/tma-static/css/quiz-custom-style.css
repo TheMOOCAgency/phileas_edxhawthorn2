@@ -73,3 +73,19 @@ span.status.correct, span.status.incorrect {
     color: #313131;
     border: 2px solid #e4e4e4;
 }
+
+/* TMA feedback */
+#tma-feedback-success, #tma-feedback-fail {
+    width: 450px;
+    padding: 20px;
+    margin: auto;
+    display: none;
+    text-align: center;
+    border: 2px solid #e4e4e4;
+}
+
+#tma-feedback-success p, #tma-feedback-fail p, #tma-feedback-success span, #tma-feedback-fail span {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+}

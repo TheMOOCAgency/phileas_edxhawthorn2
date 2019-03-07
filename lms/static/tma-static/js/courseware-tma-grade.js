@@ -104,7 +104,6 @@ function showAnswers(url, id){
     type: 'POST',
     dataType: 'json',
     success : function(data){
-      console.log(data)
       // prepare answers
       answers = data['answers'];
         $.each(answers, function(key, value) {
@@ -134,16 +133,56 @@ function showAnswers(url, id){
   });
 };
 
-function get_user_grade(){
-  url ='/tma_apps/'+global_courseid+'/grade_tracking/get_user_grade'
+
+function displayFinalFeedback(){
+  var allAnswered = true;
+  finalScore = {scoreUser: 0,scoreTotal: 0}
+  $('.problems-wrapper').each(function(){
+    if(!$(this).hasClass('tma-answered')){
+      allAnswered = false;
+    } else {
+      // Count points
+      finalScore.scoreUser += parseInt($(this).attr('data-problem-score'));
+      finalScore.scoreTotal += parseInt($(this).attr('data-problem-total-possible'));
+    }
+  });
+  if (allAnswered) {
+    get_user_grade(finalScore);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+function get_user_grade(finalScore){
+  url ='/tma_apps/'+ global_courseid +'/grade_tracking/get_user_grade'
   $.ajax({
-    type:'get',
-    url:url,
+    type: 'GET',
+    url: url,
     success : function(response) {
-      if(response['status']=='success'){
-        user_grade=Math.round(response['user_grade']*100)
-        $('#tma-grade-value').html(user_grade)
+      console.log(response)
+      // Get grade for displaying final feedback message
+      if (finalScore) {
+        if (response['passed']) {
+          $('#tma-feedback-success').show();
+          $('#tma-feedback-success').css('border','2px solid #008100');
+          $('#tma-feedback-success .score-user').text(finalScore.scoreUser);
+          $('#tma-feedback-success .score-total').text(finalScore.scoreTotal);
+          $('#tma-feedback-success .score-percent').text(Math.round(response['user_grade'] * 100));
+        } else {
+          $('#tma-feedback-fail').show();
+          $('#tma-feedback-fail').css('border','2px solid red');
+          $('#tma-feedback-fail .score-user-percent').text(Math.round(response['user_grade'] * 100));
+          $('#tma-feedback-fail .score-percent').text(Math.round(response['required_score'] * 100));
+        }
+      } else {
+        // Get user grade for tracking current score top of page
+        if (response['status'] == 'success') {
+          user_grade = Math.round(response['user_grade'] * 100);
+          $('#tma-grade-value').html(user_grade)
+        }
       }
     }
-  })
+  });
 };
