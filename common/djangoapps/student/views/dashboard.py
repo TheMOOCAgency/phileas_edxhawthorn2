@@ -1060,14 +1060,17 @@ def get_tma_footer_info():
     current_organisation = "phileas"
     if org_whitelist:
          current_organisation = org_whitelist[0]
-    log.info(current_organisation)
-    footer['courses_counter'] = len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation))
-    footer['users_counter'] = len(UserProfile.objects.all())
 
-    likes_counter = 0
-    for course in TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation):
-        likes_counter = likes_counter + course.liked_total
-    footer['likes_counter'] = likes_counter
-    footer['hours_counter'] = int(footer['courses_counter'] * 2.5)
+    try:
+        footer['courses_counter'] = len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation))
+        footer['users_counter'] = len(UserProfile.objects.all())
+
+        likes_counter = 0
+        for course in TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation):
+            likes_counter = likes_counter + course.liked_total
+        footer['likes_counter'] = likes_counter
+        footer['hours_counter'] = int(footer['courses_counter'] * 2.5)
+    except:
+        pass
 
     return footer
