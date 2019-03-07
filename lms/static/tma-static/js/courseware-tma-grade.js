@@ -13,10 +13,12 @@ $(document).ready(function(){
     $(this).prop('checked') ? $(this).parent().addClass('selected-tma') : $(this).parent().removeClass('selected-tma');
   });
 
-  /* Update user grade and get Phileas styling when submitting exercise */
   $(document).ajaxSuccess(function(e, xhr, settings) {
+    /* Each time a problem is submitted */
     if (settings.url.indexOf('problem_check') > -1) {
+      // Update student grade
       get_user_grade();
+      // Style according to result
       var data = JSON.parse(xhr.responseText);
       styleQuizOnSubmit(data, settings.url);
     }
@@ -133,7 +135,6 @@ function showAnswers(url, id){
   });
 };
 
-
 function displayFinalFeedback(){
   var allAnswered = true;
   finalScore = {scoreUser: 0,scoreTotal: 0}
@@ -154,6 +155,22 @@ function displayFinalFeedback(){
   }
 }
 
+function failedFeedback(response) {
+  $('#tma-feedback-fail').show();
+  $('#tma-feedback-success').hide();
+  $('#tma-feedback-fail').css('border','2px solid red');
+  $('#tma-feedback-fail .score-user-percent').text(Math.round(response['user_grade'] * 100));
+  $('#tma-feedback-fail .score-percent').text(Math.round(response['required_score'] * 100));
+};
+
+function successFeedback(finalScore, response) {
+  $('#tma-feedback-success').show();
+  $('#tma-feedback-fail').hide();
+  $('#tma-feedback-success').css('border','2px solid #008100');
+  $('#tma-feedback-success .score-user').text(finalScore.scoreUser);
+  $('#tma-feedback-success .score-total').text(finalScore.scoreTotal);
+  $('#tma-feedback-success .score-percent').text(Math.round(response['user_grade'] * 100));
+};
 
 function get_user_grade(finalScore){
   url ='/tma_apps/'+ global_courseid +'/grade_tracking/get_user_grade'
@@ -165,16 +182,9 @@ function get_user_grade(finalScore){
       // Get grade for displaying final feedback message
       if (finalScore) {
         if (response['passed']) {
-          $('#tma-feedback-success').show();
-          $('#tma-feedback-success').css('border','2px solid #008100');
-          $('#tma-feedback-success .score-user').text(finalScore.scoreUser);
-          $('#tma-feedback-success .score-total').text(finalScore.scoreTotal);
-          $('#tma-feedback-success .score-percent').text(Math.round(response['user_grade'] * 100));
+          successFeedback(finalScore, response);
         } else {
-          $('#tma-feedback-fail').show();
-          $('#tma-feedback-fail').css('border','2px solid red');
-          $('#tma-feedback-fail .score-user-percent').text(Math.round(response['user_grade'] * 100));
-          $('#tma-feedback-fail .score-percent').text(Math.round(response['required_score'] * 100));
+          failedFeedback(response);
         }
       } else {
         // Get user grade for tracking current score top of page
