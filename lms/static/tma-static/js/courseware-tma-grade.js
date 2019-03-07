@@ -3,18 +3,24 @@ $(document).ready(function(){
   get_user_grade();
   styleAlreadyAnsweredQuestions();
 
-  chosenOption($('.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="checkbox"]'))
-  chosenOption($('.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="radio"]'))
+  // Highlight selected multiple choices
+  $('input[type="checkbox"]').on('click', function(){
+    $(this).prop('checked') ? $(this).parent().css({'backgroundColor':'rgb(162, 193, 20)','color': 'rgb(255, 255, 255)'}) : $(this).parent().css({'backgroundColor':'transparent','color': '#313131'});
+  });
+  
+  // Highlight selected unique choice
+  $('input[type="radio"]').on('change', function(){
+    $(this).prop('checked') ? $(this).parent().addClass('selected-tma') : $(this).parent().removeClass('selected-tma');
+  });
 
-  /* Update user grade and get Phileas styling when submitting exercise */
   $(document).ajaxSuccess(function(e, xhr, settings) {
+    /* Each time a problem is submitted */
     if (settings.url.indexOf('problem_check') > -1) {
+      // Update student grade
       get_user_grade();
+      // Style according to result
       var data = JSON.parse(xhr.responseText);
       styleQuizOnSubmit(data, settings.url);
-
-      chosenOption($('.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="checkbox"]'))
-      chosenOption($('.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="radio"]'))
     }
   });
 });
@@ -22,22 +28,6 @@ $(document).ready(function(){
 /************ END DOCUMENT READY ************/
 
 /************ FUNCTIONS ************/
-function chosenOption(element) {
-  element.each(function(){
-    $(this).change(function(){
-      if ($(this).prop('checked')) {
-        console.log('checked')
-        $(this).parent().addClass('selected-tma');
-      } else {
-        if (!$(this).prop('checked')) {
-          console.log('unchecked')
-          $(this).parent().removeClass('selected-tma');
-        }
-      }
-    });
-  });
-}
-
 function styleAlreadyAnsweredQuestions() {
   $('.problems-wrapper').each(function() {
     indicatorContainer = $(this).find('.indicator-container span');
@@ -116,7 +106,6 @@ function showAnswers(url, id){
     type: 'POST',
     dataType: 'json',
     success : function(data){
-      console.log(data)
       // prepare answers
       answers = data['answers'];
         $.each(answers, function(key, value) {
@@ -146,16 +135,64 @@ function showAnswers(url, id){
   });
 };
 
-function get_user_grade(){
-  url ='/tma_apps/'+global_courseid+'/grade_tracking/get_user_grade'
+function displayFinalFeedback(){
+  var allAnswered = true;
+  finalScore = {scoreUser: 0,scoreTotal: 0}
+  $('.problems-wrapper').each(function(){
+    if(!$(this).hasClass('tma-answered')){
+      allAnswered = false;
+    } else {
+      // Count points
+      finalScore.scoreUser += parseInt($(this).attr('data-problem-score'));
+      finalScore.scoreTotal += parseInt($(this).attr('data-problem-total-possible'));
+    }
+  });
+  if (allAnswered) {
+    get_user_grade(finalScore);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function failedFeedback(response) {
+  $('#tma-feedback-fail').show();
+  $('#tma-feedback-success').hide();
+  $('#tma-feedback-fail').css('border','2px solid red');
+  $('#tma-feedback-fail .score-user-percent').text(Math.round(response['user_grade'] * 100));
+  $('#tma-feedback-fail .score-percent').text(Math.round(response['required_score'] * 100));
+};
+
+function successFeedback(finalScore, response) {
+  $('#tma-feedback-success').show();
+  $('#tma-feedback-fail').hide();
+  $('#tma-feedback-success').css('border','2px solid #008100');
+  $('#tma-feedback-success .score-user').text(finalScore.scoreUser);
+  $('#tma-feedback-success .score-total').text(finalScore.scoreTotal);
+  $('#tma-feedback-success .score-percent').text(Math.round(response['user_grade'] * 100));
+};
+
+function get_user_grade(finalScore){
+  url ='/tma_apps/'+ global_courseid +'/grade_tracking/get_user_grade'
   $.ajax({
-    type:'get',
-    url:url,
+    type: 'GET',
+    url: url,
     success : function(response) {
-      if(response['status']=='success'){
-        user_grade=Math.round(response['user_grade']*100)
-        $('#tma-grade-value').html(user_grade)
+      console.log(response)
+      // Get grade for displaying final feedback message
+      if (finalScore) {
+        if (response['passed']) {
+          successFeedback(finalScore, response);
+        } else {
+          failedFeedback(response);
+        }
+      } else {
+        // Get user grade for tracking current score top of page
+        if (response['status'] == 'success') {
+          user_grade = Math.round(response['user_grade'] * 100);
+          $('#tma-grade-value').html(user_grade)
+        }
       }
     }
-  })
+  });
 };

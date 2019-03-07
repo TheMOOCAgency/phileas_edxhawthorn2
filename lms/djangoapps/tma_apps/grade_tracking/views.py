@@ -27,6 +27,7 @@ def get_user_grade(request, course_id):
 
     response = {}
     response['is_course_graded'] = is_course_graded
+    response['required_score'] = course_descriptor.grade_cutoffs['Pass']
     # Completion information
     completion_info = Completion(request).get_course_completion(course_id)
 
