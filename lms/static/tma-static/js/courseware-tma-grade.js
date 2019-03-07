@@ -2,16 +2,7 @@
 $(document).ready(function(){
   get_user_grade();
   styleAlreadyAnsweredQuestions();
-
-  // Highlight selected multiple choices
-  $('input[type="checkbox"]').on('click', function(){
-    $(this).prop('checked') ? $(this).parent().css({'backgroundColor':'rgb(162, 193, 20)','color': 'rgb(255, 255, 255)'}) : $(this).parent().css({'backgroundColor':'transparent','color': '#313131'});
-  });
-  
-  // Highlight selected unique choice
-  $('input[type="radio"]').on('change', function(){
-    $(this).prop('checked') ? $(this).parent().addClass('selected-tma') : $(this).parent().removeClass('selected-tma');
-  });
+  highlightChoices()
 
   $(document).ajaxSuccess(function(e, xhr, settings) {
     /* Each time a problem is submitted */
@@ -22,12 +13,35 @@ $(document).ready(function(){
       var data = JSON.parse(xhr.responseText);
       styleQuizOnSubmit(data, settings.url);
     }
+    /* When passing from unit to another (no reload) */
+    if (settings.url.indexOf('goto_position') > -1) {
+      // Restyle buttons
+      $(this).find('label').each(function(){
+        restyleButtons($(this));
+      });
+      // If already answered question, style accordingly
+      styleAlreadyAnsweredQuestions();
+      // Highlighted choices behavior
+      highlightChoices()
+    }
   });
 });
 
 /************ END DOCUMENT READY ************/
 
 /************ FUNCTIONS ************/
+function highlightChoices() {
+  // Highlight selected multiple choices
+  $('input[type="checkbox"]').on('click', function(){
+    $(this).prop('checked') ? $(this).parent().css({'backgroundColor':'rgb(162, 193, 20)','color': 'rgb(255, 255, 255)'}) : $(this).parent().css({'backgroundColor':'transparent','color': '#313131'});
+  });
+  
+  // Highlight selected unique choice
+  $('input[type="radio"]').on('change', function(){
+    $(this).prop('checked') ? $(this).parent().addClass('selected-tma') : $(this).parent().removeClass('selected-tma');
+  });
+};
+
 function styleAlreadyAnsweredQuestions() {
   $('.problems-wrapper').each(function() {
     indicatorContainer = $(this).find('.indicator-container span');
