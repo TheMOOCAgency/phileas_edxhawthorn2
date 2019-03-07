@@ -3,8 +3,15 @@ $(document).ready(function(){
   get_user_grade();
   styleAlreadyAnsweredQuestions();
 
-  chosenOption($('.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="checkbox"]'))
-  chosenOption($('.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="radio"]'))
+  // Highlight selected multiple choices
+  $('input[type="checkbox"]').on('click', function(){
+    $(this).prop('checked') ? $(this).parent().css({'backgroundColor':'rgb(162, 193, 20)','color': 'rgb(255, 255, 255)'}) : $(this).parent().css({'backgroundColor':'transparent','color': '#313131'});
+  });
+  
+  // Highlight selected unique choice
+  $('input[type="radio"]').on('change', function(){
+    $(this).prop('checked') ? $(this).parent().addClass('selected-tma') : $(this).parent().removeClass('selected-tma');
+  });
 
   /* Update user grade and get Phileas styling when submitting exercise */
   $(document).ajaxSuccess(function(e, xhr, settings) {
@@ -12,9 +19,6 @@ $(document).ready(function(){
       get_user_grade();
       var data = JSON.parse(xhr.responseText);
       styleQuizOnSubmit(data, settings.url);
-
-      chosenOption($('.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="checkbox"]'))
-      chosenOption($('.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="radio"]'))
     }
   });
 });
@@ -22,22 +26,6 @@ $(document).ready(function(){
 /************ END DOCUMENT READY ************/
 
 /************ FUNCTIONS ************/
-function chosenOption(element) {
-  element.each(function(){
-    $(this).change(function(){
-      if ($(this).prop('checked')) {
-        console.log('checked')
-        $(this).parent().addClass('selected-tma');
-      } else {
-        if (!$(this).prop('checked')) {
-          console.log('unchecked')
-          $(this).parent().removeClass('selected-tma');
-        }
-      }
-    });
-  });
-}
-
 function styleAlreadyAnsweredQuestions() {
   $('.problems-wrapper').each(function() {
     indicatorContainer = $(this).find('.indicator-container span');

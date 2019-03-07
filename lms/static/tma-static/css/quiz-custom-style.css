@@ -67,3 +67,9 @@ span.status.correct, span.status.incorrect {
     color: rgb(255, 255, 255)!important;
     border-color: rgb(162, 193, 20)!important;
 }
+
+.xmodule_display.xmodule_CapaModule div.problem .choicegroup label.unselected-tma {
+    background-color: transparent;
+    color: #313131;
+    border: 2px solid #e4e4e4;
+}
