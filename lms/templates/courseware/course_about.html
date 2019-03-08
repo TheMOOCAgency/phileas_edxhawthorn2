@@ -118,7 +118,7 @@ import json
 <link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
 <%
   course_about = TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).course_about
-  course_about = json.loads(str(course_about))
+  course_about = json.loads(unicode(course_about))
   course_json = json.dumps(course_about)
 %>
 <div id="cards-box" class="container-fluid">
