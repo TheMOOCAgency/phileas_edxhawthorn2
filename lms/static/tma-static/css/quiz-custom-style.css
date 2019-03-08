@@ -8,7 +8,8 @@
 
 .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_correct, .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_correct:hover {
     color: white;
-    background-color: #008100;
+    border: 2px solid #6ac259;
+    background-color: #6ac259;
 }
 
 /* Label icon */

@@ -33,7 +33,7 @@ $(document).ready(function(){
 function highlightChoices() {
   // Highlight selected multiple choices
   $('input[type="checkbox"]').on('click', function(){
-    $(this).prop('checked') ? $(this).parent().css({'backgroundColor':'rgb(162, 193, 20)','color': 'rgb(255, 255, 255)'}) : $(this).parent().css({'backgroundColor':'transparent','color': '#313131'});
+    $(this).prop('checked') ? $(this).parent().css({'backgroundColor':'#00A1E9','color': 'rgb(255, 255, 255)'}) : $(this).parent().css({'backgroundColor':'transparent','color': '#313131'});
   });
   
   // Highlight selected unique choice
@@ -68,7 +68,7 @@ function styleAlreadyAnsweredQuestions() {
     } else {
       if (indicatorContainer.hasClass('correct')  || goodChoice.length > 0) {
         $(this).addClass('tma-success').addClass('tma-answered');
-        problemTitle.html(problemTitle.html()+' <i style="color:green;" class="fas fa-check"></i>');
+        problemTitle.html(problemTitle.html()+' <i style="color:#6ac259;" class="fas fa-check"></i>');
         $('#'+ questionId).find('label > input:checked ~ .checksuccess').show();
         showAnswers(url, questionId);
       }
@@ -100,7 +100,7 @@ function styleQuizOnSubmit(data, url) {
   } else {
     // If correct answer : green icon
     if (data['success'] == 'correct') {
-      problemTitle.html(problemTitle.html()+' <i style="color:green;" class="fas fa-check"></i>');
+      problemTitle.html(problemTitle.html()+' <i style="color:#6ac259;" class="fas fa-check"></i>');
       $('#'+ questionId).find('label > input:checked ~ .checksuccess').show();
       // Mark question as answered and success
       $('#'+ questionId).addClass('tma-success').addClass('tma-answered');
