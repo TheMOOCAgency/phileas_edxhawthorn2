@@ -64,9 +64,9 @@ span.status.correct, span.status.incorrect {
 }
 
 .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.selected-tma {
-    background-color: rgb(162, 193, 20)!important;
-    color: rgb(255, 255, 255)!important;
-    border-color: rgb(162, 193, 20)!important;
+    background-color: #00A1E9;
+    color: rgb(255, 255, 255);
+    border-color: #00A1E9;
 }
 
 .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.unselected-tma {

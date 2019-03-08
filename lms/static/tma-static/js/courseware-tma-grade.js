@@ -34,7 +34,25 @@ $(document).ready(function(){
 function highlightChoices() {
   // Highlight selected multiple choices
   $('input[type="checkbox"]').on('click', function(){
-    $(this).prop('checked') ? $(this).parent().css({'backgroundColor':'#00A1E9','color': 'rgb(255, 255, 255)'}) : $(this).parent().css({'backgroundColor':'transparent','color': '#313131'});
+    if ($(this).prop('checked')) {
+      $(this).parent().css({'backgroundColor':'#00A1E9','color': 'rgb(255, 255, 255)'});
+      if ($(this).parent().children('.checkfail').is(':visible')) {
+        console.log('visible')
+        $(this).parent().children('.checkfail').hide();
+      }
+      if ($(this).parent().children('.checksuccess').is(':visible')) {
+        $(this).parent().children('.checksuccess').hide();
+      }
+    } else {
+      $(this).parent().css({'backgroundColor':'transparent','color': '#313131'})
+      if ($(this).parent().children('.checkfail').is(':visible')) {
+        console.log('visible')
+        $(this).parent().children('.checkfail').hide();
+      }
+      if ($(this).parent().children('.checksuccess').is(':visible')) {
+        $(this).parent().children('.checksuccess').hide();
+      }
+    }
   });
   
   // Highlight selected unique choice
