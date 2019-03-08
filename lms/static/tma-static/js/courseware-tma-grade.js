@@ -12,6 +12,7 @@ $(document).ready(function(){
       // Style according to result
       var data = JSON.parse(xhr.responseText);
       styleQuizOnSubmit(data, settings.url);
+      highlightChoices();
     }
     /* When passing from unit to another (no reload) */
     if (settings.url.indexOf('goto_position') > -1) {
