@@ -60,6 +60,13 @@ a, a:hover {
         height: auto;
         padding-bottom: 20px;
     }
+    .decroche-bg {
+        overflow: hidden;
+        background-color: #00a1e9;
+    }
+    .decroche-bg > .pl-85 {
+        padding-right: 75px;
+    }
 }
 
 @media (min-width: 992px) {
@@ -75,7 +82,7 @@ a, a:hover {
     height: auto;
     margin: auto;
     top: -50px;
-    box-shadow: 1px 5px 12px 5px rgba(0,0,0,0.09);
+    box-shadow: 1px 2px 12px 2px rgba(0,0,0,0.09);
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -99,8 +106,11 @@ a, a:hover {
     overflow: hidden;
 }
 
-.name-box p {
+.name-box p:first-of-type {
     font-size: 20px;
+}
+.name-box p:last-of-type {
+    font-size: 18px;
 }
 .name-box > p:first-of-type {
     color: #777777;
@@ -111,7 +121,9 @@ a, a:hover {
     color: black;
     margin-top: 0px;
 }
-
+#course-duration {
+    height: 24px;
+}
 .border-left-grey {
     border-left: solid 1px #CACACA;
 }
