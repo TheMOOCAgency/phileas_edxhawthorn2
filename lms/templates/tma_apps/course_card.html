@@ -99,11 +99,11 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
           %if enrollment.course_overview.end:
           <p>${_("End date")}: <span>${enrollment.course_overview.end.strftime('%Y-%m-%d')}</span></p>
           %else:
-          <p>${_("End date")}: <span>${_("No end date")}</span></p>
+          <p>${_("End date")}: <span>${_("Permanent")}</span></p>
           %endif
           % else:
           <p>${_("Start date")}: <span>${_("No start date")}</span></p>
-          <p>${_("End date")}: <span>${_("No end date")}</span></p>
+          <p>${_("End date")}: <span>${_("Permanent")}</span></p>
           %endif
         </div>
       </div>

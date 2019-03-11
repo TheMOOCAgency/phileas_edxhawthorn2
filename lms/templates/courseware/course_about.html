@@ -147,9 +147,9 @@ import json
           </span>
         % endif
         %if is_liked :
-          <span class="pin like like-on ml-4"></span>
+          <span class="pin like like-on ml-4 mb-1"></span>
         %else :
-          <span class="pin like like-off ml-4"></span>
+          <span class="pin like like-off ml-4 mb-1"></span>
         %endif
 
           <span class="like_count count-box m-2" data-min='0' data-max="${liked_total}" data-delay='1' data-increment="${int(liked_total/3)}">${liked_total}</span>
@@ -160,7 +160,7 @@ import json
   </div>
   <!--SECOND ROW-->
   <div class="row bg-white pl-3 teacher-box">
-    <div class="col-lg-1 col-3">
+    <div class="col-lg-1 col-3 pl-0 pt-4">
       <div class="teacher-img">
         % if 'teacher_image' in course_about.keys():
           <img src="${course_about['teacher_image']}"width="90px">
@@ -169,7 +169,7 @@ import json
         % endif
       </div>
     </div>
-    <div class="col-lg-3 col-9 pl-4 name-box">
+    <div class="col-lg-3 col-9 pl-2 pt-4 mr-4 name-box">
         % if 'teacher_name' in course_about.keys():
         <p id="teacher-name">${course_about['teacher_name']}</p>
       % endif
@@ -186,7 +186,7 @@ import json
         %>
         <p class="font-weight-bold">${course_start_date.strftime('%d/%m/%Y')}</p>
       % else:
-        <p class="font-weight-bold">Cours permanent</p>
+        <p class="font-weight-bold">${_("Permanent")}</p>
       % endif
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
@@ -198,7 +198,7 @@ import json
         %>
         <p class="font-weight-bold">${course_end_date.strftime('%d/%m/%Y')}</p>
       % else :
-        <p class="font-weight-bold">Cours permanent</p>
+        <p class="font-weight-bold">${_("Permanent")}</p>
       % endif
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
@@ -207,7 +207,7 @@ import json
       <p id="course-duration" class="font-weight-bold">${get_course_about_section(request, course, "effort")}</p>
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
-      <img src="${static.url('tma-static/images/langue.svg')}" width="36">
+      <img src="${static.url('tma-static/images/langue.svg')}" width="50" class="mb-0">
       <p>Langue</p>
       <p class="text-uppercase font-weight-bold">${course.language}</p>
     </div>
@@ -228,23 +228,23 @@ import json
   </div>
   <!--THIRD ROW-->
   <div class="row description-box">
-    <div class="col-lg-9">
+    <div class="col-lg-9 pl-0">
       <h3>Objectifs</h3>
       % if 'goals' in course_about.keys():
         <p id="course-goals" class="text-blue-dark">${course_about['goals']}</p>
       % endif
     </div>
-    <div class="col-lg-3">
+    <div class="col-lg-3 pr-0">
       <div class="d-flex align-items-end justify-content-end ${str(course.id).replace(':','').replace('+','')}" data-course-id="${str(str(course.id))}">
 <%
 base_url="https://"+static.get_value('site_domain', settings.SITE_NAME)
 course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(course.id)+"/about")
 %>
-          <a href="mailto:?subject=${course.display_name_with_default_escaped} on Phileas&body=Hi,%0D%0A%0D%0AI found this course %0D%0A%0D%0A ${course_url} %0D%0A%0D%0AI and thought you might like it%0D%0A%0D%0ABest !"><img class="pr-2 mail" src="${static.url('tma-static/images/mail.svg')}" width="45"></a>
+          <a href="mailto:?subject=${course.display_name_with_default_escaped} on Phileas&body=Hi,%0D%0A%0D%0AI found this course %0D%0A%0D%0A ${course_url} %0D%0A%0D%0AI and thought you might like it%0D%0A%0D%0ABest !"><img class="pr-4 mail" src="${static.url('tma-static/images/mail.svg')}" width="65px"></a>
         % if is_favourite:
-          <span class="pin favorite favorite-on m-1"></span>
+          <span class="pin favorite favorite-on m-1 ml-4"></span>
         % else:
-          <span class="pin favorite favorite-off m-1"></span>
+          <span class="pin favorite favorite-off m-1 ml-4"></span>
         % endif
       </div>
     </div>
@@ -253,7 +253,7 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
 <div class="container-fluid bg-white">
   <div class="row content-box">
     <!--COURSE MAP-->
-    <div class="col-lg-7">
+    <div class="col-lg-7 pl-0">
       <div class="container-fluid pl-0">
         <h3>Plans du cours</h3>
         <div class="row">
@@ -263,7 +263,7 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
                 % for section in course_about['course_map']:
                   % for key, value in section.items():
                     % if 'title' in key:
-                      <li>
+                      <li class="pl-0">
                         <img src="${static.url('tma-static/images/drapeau.svg')}" width="20px"/>${value}
                     % elif 'subsections' in key:
                       <a href="arrow" class="float-right"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a>
