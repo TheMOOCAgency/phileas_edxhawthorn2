@@ -173,6 +173,18 @@
   var coursesJson = ${json_courses | n, dump_js_escaped_json};
   var query = {tag: [], language: [], org: [], is_new: false, input: ''};
   var results = [];
+  const browseCatalogDisplay = function(results) {
+    if (results.length > 0) {
+        displayResults(results);
+        flipEffect();
+      } else {
+        noResults();
+        $('.no-results h3:first-of-type').html('${_("No results were found matching your request.")}');
+        $('.no-results h3:last-of-type').html('${_("Browse our catalog.")}');
+        $('.no-results .discover-btn').html('${_("Discover")}');
+        query = {tag: [], language: [], org: [], is_new: false, input: ''};
+      }
+  };
 
   // When coming from HP - query from URL
   if (window.location.search) {
@@ -197,14 +209,13 @@
         query['input'] = urlParam;
       }
 
-
       // Change facet style
       $('p:contains("'+urlParam+'")').addClass('filter-selected');
       $('p:contains("'+urlParam+'")').parent().parent().parent().children('.col-2').children('.close-filter').show();
 
       // Display results
       results = searchByFilter(coursesJson, query);
-      displayResults(results);
+      browseCatalogDisplay(results);
     }
   }
 
@@ -238,9 +249,7 @@
 
       // Search query
       results = searchByFilter(coursesJson, query);
-      console.log(results)
-      displayResults(results);
-      flipEffect();
+      browseCatalogDisplay(results);
     });
 
     // All filter
@@ -252,8 +261,7 @@
       $('.filter-selected').removeClass('filter-selected');
       $('.close-filter').hide();
       // Display all courses
-      displayResults(coursesJson);
-      flipEffect();
+      browseCatalogDisplay(coursesJson);
     });
 
     // Remove filter from results
@@ -285,10 +293,8 @@
 
       // New results to display
       results = searchByFilter(coursesJson, query);
-      displayResults(results);
-      flipEffect();
+      browseCatalogDisplay(results);
     });
-
 
     // From input
     $('#course-search').on('click', function(e) {
@@ -296,15 +302,7 @@
       query['input'] = $('input[name="search"]').val().trim();
       // Search query
       results = searchByFilter(coursesJson, query);
-      if (results.length > 0) {
-        displayResults(results);
-        flipEffect();
-      } else {
-        noResults();
-        $('.no-results h3:first-of-type').html('${_("No results were found matching your request.")}')
-        $('.no-results h3:last-of-type').html('${_("Browse our catalog.")}')
-        $('.no-results .discover-btn').html('${_("Discover")}')
-      }
+      browseCatalogDisplay(results);
     });
   });
 </script>

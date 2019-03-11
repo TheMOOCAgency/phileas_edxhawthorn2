@@ -22,11 +22,21 @@ const checkValueAsBool = function(course, key, value) {
 const checkValueAsArray = function(course, key, value) {
     // split and compare lists if several tags for one course
     var tagIsFound = false;
+    // If several tags in course value
     if (course[key].indexOf(',') > -1) {
         var courseValuesList = course[key].split(',');
         courseValuesList.forEach(function(courseValue){
-            if (courseValue == value) {
-                tagIsFound = true;
+            // If several tags in query
+            if (value.length > 1) {
+                value.forEach(function(val){
+                    if (courseValue == val) {
+                        tagIsFound = true;
+                    }
+                });
+            } else {
+                if (courseValue == value) {
+                    tagIsFound = true;
+                }
             }
         });
         return tagIsFound;
