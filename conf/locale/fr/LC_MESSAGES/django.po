@@ -25325,6 +25325,18 @@ msgstr "Bureautique"
 msgid "Business App."
 msgstr "App. Métier"
 
+#: lms/templates/courseware/courses.html
+msgid "No results were found matching your request."
+msgstr "Aucun résultat ne correspond à votre recherche."
+
+#: lms/templates/courseware/courses.html
+msgid "Browse our catalog."
+msgstr "Consultez notre catalogue."
+
+#: lms/templates/courseware/courses.html
+msgid "Discover"
+msgstr "Découvrir"
+
 #: lms/templates/dashboard.html
 msgid "Business Applications"
 msgstr "Applications Métier"

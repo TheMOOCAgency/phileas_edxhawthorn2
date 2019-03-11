@@ -33,9 +33,9 @@ split_tags = course['tag'].split(',')
                 <div data-course-id="${str(course['id'])}" class="row pin-row ${str(course['id']).replace(':','').replace('+','')}">
                   <div>
                     % if ',' in course['tag']:
-                        <div class="category-tag">${_("{tag}").format(tag=split_tags[0])}</div>
+                        <div class="category-tag">${_(split_tags[0])}</div>
                     % else:
-                        <div class="category-tag">${_("{tag}").format(tag=course['tag'])}</div>
+                        <div class="category-tag">${_(course['tag'])}</div>
                     % endif
                   </div>
                     % if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :

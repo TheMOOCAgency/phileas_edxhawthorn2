@@ -42,7 +42,7 @@
 <div class="container-fluid" style="padding-bottom: 150px;">
   <div class="row p-5">
     <div class="col">
-      <h1 class="search-title">${_("Search results")}</h1>
+      <h1 class="search-title">${_("Search Results")}</h1>
       <div class="dropdown-container">
         <button>${_("Filter")}<img src="${static.url('tma-static/images/flechebas.svg')}"></button>
         <ul class="dropdown">
@@ -125,7 +125,7 @@
               % for tag, count in tag_counters.items():
                 % if 'False' not in tag:
                   <div class="row facet">
-                    <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option" data-filtertype="tag">${tag}</p></a></div>
+                    <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option" data-filtertype="tag">${_(tag)}</p></a></div>
                     <div class="col-2 d-flex align-items-center"><span class="count">${count}</span><span class="count close-filter" data-filtertype="tag">X</span></div>
                   </div>
                 % endif
