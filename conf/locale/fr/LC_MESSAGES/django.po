@@ -12435,7 +12435,7 @@ msgstr "Réinitialiser"
 #: cms/templates/widgets/footer.html lms/templates/footer.html
 #: themes/red-theme/lms/templates/footer.html
 msgid "Legal"
-msgstr "Légal"
+msgstr "Mentions légales"
 
 #: cms/templates/widgets/header.html lms/templates/header/header.html
 #: lms/templates/navigation/navigation.html
@@ -20306,7 +20306,7 @@ msgstr ""
 
 #: openedx/features/course_search/templates/course_search/course-search-fragment.html
 msgid "Search Results"
-msgstr ""
+msgstr "Résultats de recherche"
 
 #: openedx/features/learner_analytics/templates/learner_analytics/dashboard.html
 msgid "My Stats (Beta)"
@@ -25296,3 +25296,43 @@ msgstr "Retour aux formations"
 #: lms/templates/courseware/courseware.html
 msgid "Back to description"
 msgstr "Retour vers description"
+
+#: lms/templates/courseware/courses.html
+msgid "New"
+msgstr "Nouveau"
+
+#: lms/templates/courseware/courses.html
+msgid "Subjects"
+msgstr "Catégories"
+
+#: lms/templates/courseware/courses.html
+msgid "Languages"
+msgstr "Langues"
+
+#: lms/templates/courseware/courses.html
+msgid "Search & Filters"
+msgstr "Recherche & Filtres"
+
+#: lms/templates/courseware/courses.html
+msgid "Fundamentals"
+msgstr "Fondamentaux"
+
+#: lms/templates/courseware/courses.html
+msgid "Compliance"
+msgstr "Réglementaire"
+
+#: lms/templates/courseware/courses.html
+msgid "Office Tools"
+msgstr "Bureautique"
+
+#: lms/templates/courseware/courses.html
+msgid "Business App."
+msgstr "App. Métier"
+
+#: lms/templates/dashboard.html
+msgid "Business Applications"
+msgstr "Applications Métier"
+
+#: lms/templates/courseware/course_about.html
+msgid "No downloads available for this course."
+msgstr "Aucun document disponible pour ce cours."
