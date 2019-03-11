@@ -29,7 +29,7 @@ from django.utils.translation import ugettext as _
     margin-left: auto;
     margin-right: auto;
     padding: 75px;
-    background-image: url('${static.url('tma-static/images/certificate-bg.png')}');
+    background-image: url("${static.url('tma-static/images/certificate-bg.png')}");
     background-size: contain;
     background-repeat: no-repeat;
   }
@@ -107,7 +107,9 @@ from django.utils.translation import ugettext as _
       <div class="row">
         <div class="col-md-6 certificate-info">
           <div class='bottom-line'>
-            <p>${certificate_info.date_best_student_grade.strftime('%d-%m-%Y')}</p>
+            % if certificate_info.date_best_student_grade:
+              <p>${certificate_info.date_best_student_grade.strftime('%d-%m-%Y')}</p>
+            % endif
           </div>
           <h4 class="sub-title">${_('Date')}</h4>
         </div>
