@@ -186,7 +186,7 @@ import json
         %>
         <p class="font-weight-bold">${course_start_date.strftime('%d/%m/%Y')}</p>
       % else:
-        <p class="font-weight-bold">Cours permanent</p>
+        <p class="font-weight-bold">${_("Permanent")}</p>
       % endif
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
@@ -198,7 +198,7 @@ import json
         %>
         <p class="font-weight-bold">${course_end_date.strftime('%d/%m/%Y')}</p>
       % else :
-        <p class="font-weight-bold">Cours permanent</p>
+        <p class="font-weight-bold">${_("Permanent")}</p>
       % endif
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
