@@ -98,7 +98,7 @@
             <div class="container-fluid">
                 % for language, count in language_counters.items():
                   <div class="row facet">
-                    <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option" data-filtertype="language">
+                    <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option" data-filtertype="language" data-tag="${language}">
                       % if 'fr' in language:
                         <img src="${static.url('tma-static/images/lang_'+language+'.svg')}" height="40px" class="mr-2"/>${_("French")}</p></a></div>
                       % else:
@@ -125,7 +125,7 @@
               % for tag, count in tag_counters.items():
                 % if 'False' not in tag:
                   <div class="row facet">
-                    <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option" data-filtertype="tag">${_(tag)}</p></a></div>
+                    <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option" data-filtertype="tag" data-tag="${tag}">${_(tag)}</p></a></div>
                     <div class="col-2 d-flex align-items-center"><span class="count">${count}</span><span class="count close-filter" data-filtertype="tag">X</span></div>
                   </div>
                 % endif
@@ -225,10 +225,7 @@
       e.preventDefault();
       // Type of filter and value
       var key = $(this).attr('data-filtertype');
-      var value;
-      if ($(this).text().trim() == 'Français' || $(this).text().trim() == 'French') { value = 'fr'; } else 
-      if ($(this).text().trim() == 'Anglais' || $(this).text().trim() == 'English') { value = 'en'; } else 
-      if (key == 'is_new') { value = true } else { var value = $(this).text().trim(); }
+      var value = $(this).attr('data-tag');
 
       // Check is filter was already clicked
       if (key === 'is_new') {
