@@ -14337,7 +14337,7 @@ msgstr ""
 
 #: lms/templates/api_admin/terms_of_service.html
 msgid "Compliance"
-msgstr ""
+msgstr "Réglementaire"
 
 #: lms/templates/api_admin/terms_of_service.html
 msgid ""
@@ -25316,10 +25316,6 @@ msgstr "Recherche & Filtres"
 #: lms/templates/courseware/courses.html
 msgid "Fundamentals"
 msgstr "Fondamentaux"
-
-#: lms/templates/courseware/courses.html
-msgid "Compliance"
-msgstr "Réglementaire"
 
 #: lms/templates/courseware/courses.html
 msgid "Office Tools"
