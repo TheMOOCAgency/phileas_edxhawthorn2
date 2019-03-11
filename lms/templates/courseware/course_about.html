@@ -140,9 +140,9 @@ import json
           <span class="tag">
               % if ',' in tag:
                 <% split_tags = tag.split(',') %>
-                  <div class="category-tag"><a href="/courses?filter=${split_tags[0]}">${split_tags[0]}</a></div>
+                  <div class="category-tag"><a href="/courses?filter=${split_tags[0]}">${_(split_tags[0])}</a></div>
               % else:
-                  <div class="category-tag"><a href="/courses?filter=${tag}">${tag}</a></div>
+                  <div class="category-tag"><a href="/courses?filter=${tag}">${_(tag)}</a></div>
               % endif
           </span>
         % endif
