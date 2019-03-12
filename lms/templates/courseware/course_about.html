@@ -125,7 +125,7 @@ import json
   <!--FIRST ROW-->
   <div class="row h-375 decroche-bg text-white">
     <div class="col-lg-6 pl-85">
-      <p class="mt-4">${_("Mandatory Course!")}</p>
+      <p class="mt-4">${_("Mandatory Course")}</p>
       <h3 class="title-36">${course.display_name_with_default_escaped} 
       %if not user.profile.is_manager and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only:
         <img src="${static.url('tma-static/images/cadenas.svg')}" width="36"/>
@@ -214,7 +214,11 @@ import json
     <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/coupe.png')}" width="36">
       <p>Score requis</p>
-      <p id="course-score" class="font-weight-bold">${int(course.grade_cutoffs.get("Pass")*100)}%</p>
+      % if not TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_course_graded:
+        <p id="course-score" class="font-weight-bold">${int(course.grade_cutoffs.get("Pass")*100)}%</p>
+      % else:
+        <p id="course-score" class="font-weight-bold">${_("Ungraded")}</p>
+      % endif
     </div>
     <div class="col text-center">
       %if user.is_authenticated and registered and show_courseware_link:
@@ -259,25 +263,6 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
         <div class="row">
           <div class="col-lg-11">
             <div id="course-map">
-              % if 'course_map' in course_about.keys():
-                % for section in course_about['course_map']:
-                  % for key, value in section.items():
-                    % if 'title' in key:
-                      <li class="pl-0">
-                        <img src="${static.url('tma-static/images/drapeau.svg')}" width="20px"/>${value}
-                    % elif 'subsections' in key:
-                      <a href="arrow" class="float-right"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a>
-                      <ul class="subsections">
-                        % for subtitle in value:
-                        <li>${subtitle}</li>
-                        % endfor
-                      </ul></li>
-                    % else:
-                      </li>
-                    % endif
-                  % endfor
-                % endfor
-              % endif
             </div>
           </div>
         </div>
@@ -303,6 +288,24 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
 </div>
 
 <script>
+  // Dynamic course map
+  courseJson = ${course_json};
+  courseJson.course_map.forEach(function(element, i){
+    $('#course-map').append('<li><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.title + 
+    (element.subsections ? '<a href="arrow" class="float-right"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a>': '') +
+    '<ul class="subsections sub-'+ i +'"></ul></li>');
+    if (element.subsections) {
+      element.subsections.forEach(function(subsection){
+        $('.sub-'+i).append('<li>'+ subsection +'</li>')
+      });
+    }
+  });
+
+  // Style dynamically generated li
+  $('.subsections > li').css({
+    "list-style-image": "url('/static/tma-static/images/bullet.svg')",
+    "border-bottom": "none"
+  });
   // Dynamic dropdown
   $('.subsections').hide();
   $('a[href="arrow"]').click(function(e){

@@ -1,11 +1,42 @@
 /* Prevent EdX style */
+fieldset {
+    border: none;
+    padding-left: 0px;
+}
+/*
+.problems-wrapper {
+    background-color: #f1f1f17c;
+}
+*/
+
+/* Submit button */
+.xmodule_display.xmodule_CapaModule div.problem .action .submit-attempt-container .submit {
+    float: none;
+}
+.submit-attempt-container {
+    text-align: center;
+}
+
+/* Progress + score */ 
+.xmodule_display.xmodule_CapaModule div.problem-progress {
+    padding-top: 20px;
+}
+.course-wrapper .course-content .xblock h3 {
+    padding-top: 0px !important;
+}
+.tma-attempts {
+    display: inline-block;
+    color: #5e5e5e;
+    font-size: 0.875em;
+}
+
+/*Question labels */
 .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_incorrect, .xmodule_display.xmodule_CapaModule div.problem .choicegroup label:hover {
     border: 2px solid #e4e4e4;
 }
 .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_incorrect, .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_incorrect:hover {
     border: 2px solid #e4e4e4;
 }
-
 .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_correct, .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_correct:hover {
     color: white;
     border: 2px solid #6ac259;
@@ -89,4 +120,11 @@ span.status.correct, span.status.incorrect {
     text-align: center;
     font-size: 18px;
     font-weight: 500;
+}
+
+/* Dropdown styling */
+.xmodule_display.xmodule_CapaModule div.problem select {
+    width: calc(100% - 40px);
+    height: 50px;
+    background-color: white;
 }
