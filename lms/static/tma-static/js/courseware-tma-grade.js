@@ -37,7 +37,6 @@ function highlightChoices() {
     if ($(this).prop('checked')) {
       $(this).parent().css({'backgroundColor':'#00A1E9','color': 'rgb(255, 255, 255)'});
       if ($(this).parent().children('.checkfail').is(':visible')) {
-        console.log('visible')
         $(this).parent().children('.checkfail').hide();
       }
       if ($(this).parent().children('.checksuccess').is(':visible')) {
@@ -46,7 +45,6 @@ function highlightChoices() {
     } else {
       $(this).parent().css({'backgroundColor':'transparent','color': '#313131'})
       if ($(this).parent().children('.checkfail').is(':visible')) {
-        console.log('visible')
         $(this).parent().children('.checkfail').hide();
       }
       if ($(this).parent().children('.checksuccess').is(':visible')) {
@@ -161,7 +159,7 @@ function showAnswers(url, id){
         //Disable submit button
         $('#'+ id).find('.action .check').addClass('is-disabled');
         //Display detailed solution if last attempt
-        if($("#"+ id).find('.submission-feedback').attr('data-remaining')<=0){
+        if($("#"+ id).find('.submission-feedback').attr('data-remaining') <= 0){
           $("#"+ id).addClass('show-detailed');
         }
     }
