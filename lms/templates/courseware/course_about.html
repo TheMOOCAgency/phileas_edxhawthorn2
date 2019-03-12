@@ -125,7 +125,7 @@ import json
   <!--FIRST ROW-->
   <div class="row h-375 decroche-bg text-white">
     <div class="col-lg-6 pl-85">
-      <p class="mt-4">${_("Mandatory Course!")}</p>
+      <p class="mt-4">${_("Mandatory Course")}</p>
       <h3 class="title-36">${course.display_name_with_default_escaped} 
       %if not user.profile.is_manager and TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_manager_only:
         <img src="${static.url('tma-static/images/cadenas.svg')}" width="36"/>
