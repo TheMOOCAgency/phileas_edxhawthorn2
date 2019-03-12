@@ -17,7 +17,7 @@ input::placeholder {
     opacity: 0.5;
     font-style: normal;
 }
-a:not(.filter-selected), a:not(.filter-selected):hover, a:not(.filter-selected):visited {
+.criteria-box a:not(.filter-selected), .criteria-box a:not(.filter-selected):hover, .criteria-box a:not(.filter-selected):visited {
     text-decoration: none !important;
     color: #0C1C49 !important;
 }
@@ -195,4 +195,10 @@ a:not(.filter-selected), a:not(.filter-selected):hover, a:not(.filter-selected):
     font-weight: bold !important;
     display: inline-block;
     vertical-align: middle;
+}
+
+.discover-btn:hover {
+    background-color: #0B1A4C;
+    color: white !important;
+    text-decoration: none !important;
 }
