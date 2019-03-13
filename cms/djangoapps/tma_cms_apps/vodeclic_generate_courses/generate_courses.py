@@ -51,7 +51,6 @@ class VodeclicGenerator():
         json_data=open(file_directory).read()
         data = json.loads(json_data)
         vodeclic_courses=data.get('data',{}).get('subject',{})
-        log.info(vodeclic_courses)
         return vodeclic_courses
 
     def update_vodeclic_json(self, language):
@@ -90,11 +89,13 @@ class VodeclicGenerator():
 
     def save_all_courses_pictures(self, language):
         vodeclic_courses = self._get_vodeclic_courses(language)
+        log.info('Gathering pictures for courses of language {}'.format(language))
         for vodeclic_course_params in vodeclic_courses :
             vodeclic_picture = vodeclic_course_params.get('large_image_png_url')
             vodeclic_language=vodeclic_course_params.get('language')
             vodeclic_id=vodeclic_course_params.get('id')
             self._save_picture_from_url(vodeclic_picture, self.vodeclic_img_path_base+vodeclic_language+'/'+vodeclic_id+'.png')
+        log.info('END - Gathering pictures for courses of language {}'.format(language))
 
     def _save_picture_from_url(self, picture_url, file_path):
         urllib.urlretrieve(picture_url, file_path)
@@ -108,15 +109,16 @@ class VodeclicGenerator():
     def update_vodeclic_courses(self, vodeclic_id_list, org='phileas', language='en'):
         vodeclic_courses = self._get_vodeclic_courses(language)
         courses_to_create=[]
+        log.info('Importing course for language {}'.format(language))
         for vodeclic_course_params in vodeclic_courses :
             if vodeclic_course_params.get('id') in vodeclic_id_list :
+                log.info('Importing course {}'.format(vodeclic_course_params.get('title')))
                 vodeclic_language=vodeclic_course_params.get('language')
                 vodeclic_run="Vodeclic_"+vodeclic_language
                 vodeclic_number=vodeclic_course_params.get('id')
                 vodeclic_user=self._get_course_creator()
                 vodeclic_id=vodeclic_course_params.get('id')
                 vodeclic_picture = vodeclic_course_params.get('large_image_png_url')
-                log.info('importing course {}'.format(vodeclic_course_params.get('title')))
 
                 #Build fields list
                 fields= {
