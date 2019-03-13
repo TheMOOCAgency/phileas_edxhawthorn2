@@ -8,7 +8,14 @@ fieldset {
     padding-top: 5px;
 }
 
+.xmodule_display.xmodule_CapaModule div.problem .action .problem-action-btn[data-value="Save"] {
+    display: none;
+}
+
 /* Submit button */
+.xmodule_display.xmodule_CapaModule div.problem .action {
+    margin-top: 0px;
+}
 .xmodule_display.xmodule_CapaModule div.problem .action .submit-attempt-container .submit {
     float: none;
 }
