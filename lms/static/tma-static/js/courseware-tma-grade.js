@@ -1,8 +1,8 @@
 /************ ON PAGELOAD ************/
 $(document).ready(function(){
+  var hasAttempts = true;
   get_user_grade();
   styleAlreadyAnsweredQuestions();
-  highlightChoices()
 
   $(document).ajaxSuccess(function(e, xhr, settings) {
     /* Each time a problem is submitted */
@@ -12,7 +12,7 @@ $(document).ready(function(){
       // Style according to result
       var data = JSON.parse(xhr.responseText);
       styleQuizOnSubmit(data, settings.url);
-      highlightChoices();
+      highlightChoices(hasAttempts);
     }
     /* When passing from unit to another (no reload) */
     if (settings.url.indexOf('goto_position') > -1) {
@@ -23,7 +23,7 @@ $(document).ready(function(){
       // If already answered question, style accordingly
       styleAlreadyAnsweredQuestions();
       // Highlighted choices behavior
-      highlightChoices()
+      //highlightChoices(hasAttempts)
     }
   });
 });
@@ -31,31 +31,41 @@ $(document).ready(function(){
 /************ END DOCUMENT READY ************/
 
 /************ FUNCTIONS ************/
-function highlightChoices() {
+function highlightChoices(hasAttempts) {
   // Highlight selected multiple choices
-  $('input[type="checkbox"]').on('click', function(){
-    if ($(this).prop('checked')) {
-      $(this).parent().css({'backgroundColor':'#00A1E9','color': 'rgb(255, 255, 255)'});
-      if ($(this).parent().children('.checkfail').is(':visible')) {
-        $(this).parent().children('.checkfail').hide();
-      }
-      if ($(this).parent().children('.checksuccess').is(':visible')) {
-        $(this).parent().children('.checksuccess').hide();
-      }
+  $('input[type="checkbox"]').on('click', function(e){
+    if (!hasAttempts) {
+      console.log('no more attempt')
+      $(this).prop('disabled');
     } else {
-      $(this).parent().css({'backgroundColor':'transparent','color': '#313131'})
-      if ($(this).parent().children('.checkfail').is(':visible')) {
-        $(this).parent().children('.checkfail').hide();
-      }
-      if ($(this).parent().children('.checksuccess').is(':visible')) {
-        $(this).parent().children('.checksuccess').hide();
+      console.log($(this).parent().parent().parent().parent())
+      if ($(this).prop('checked')) {
+        $(this).parent().css({'backgroundColor':'#00A1E9','color': 'rgb(255, 255, 255)'});
+        if ($(this).parent().children('.checkfail').is(':visible')) {
+          $(this).parent().children('.checkfail').hide();
+        }
+        if ($(this).parent().children('.checksuccess').is(':visible')) {
+          $(this).parent().children('.checksuccess').hide();
+        }
+      } else {
+        $(this).parent().css({'backgroundColor':'transparent','color': '#313131'})
+        if ($(this).parent().children('.checkfail').is(':visible')) {
+          $(this).parent().children('.checkfail').hide();
+        }
+        if ($(this).parent().children('.checksuccess').is(':visible')) {
+          $(this).parent().children('.checksuccess').hide();
+        }
       }
     }
   });
   
   // Highlight selected unique choice
-  $('input[type="radio"]').on('change', function(){
-    $(this).prop('checked') ? $(this).parent().addClass('selected-tma') : $(this).parent().removeClass('selected-tma');
+  $('input[type="radio"]').on('change', function(e){
+    if (!hasAttempts) {
+      e.preventDefault();
+    } else {
+      $(this).prop('checked') ? $(this).parent().addClass('selected-tma') : $(this).parent().removeClass('selected-tma');
+    }
   });
 };
 
@@ -90,6 +100,12 @@ function styleAlreadyAnsweredQuestions() {
         showAnswers(url, questionId);
       }
     }
+
+    // If no more attempts : prevent selecting behavior
+    if ($(this).find('.submission-feedback').attr('data-remaining') <= 0){
+      hasAttempts = false;
+      highlightChoices(hasAttempts);
+    }
   });
 };
 
@@ -122,6 +138,12 @@ function styleQuizOnSubmit(data, url) {
       // Mark question as answered and success
       $('#'+ questionId).addClass('tma-success').addClass('tma-answered');
     }
+  }
+
+  // If no more attempts : prevent selecting behavior
+  if ($(this).find('.submission-feedback').attr('data-remaining') <= 0){
+    hasAttempts = false;
+    highlightChoices(hasAttempts);
   }
 }
 
@@ -170,6 +192,7 @@ function showAnswers(url, id){
         //Display detailed solution if last attempt
         if($("#"+ id).find('.submission-feedback').attr('data-remaining') <= 0){
           $("#"+ id).addClass('show-detailed');
+          hasAttempts = false;
         }
     }
   });

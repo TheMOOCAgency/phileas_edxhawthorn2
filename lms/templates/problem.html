@@ -8,9 +8,9 @@ from openedx.core.djangolib.markup import HTML
 <div class="problem-progress" id="${ id }-problem-progress"></div>
 % if attempts_allowed :
   % if attempts_allowed > 1 :
-  <div class="tma-attempts" data-attempts-total="${attempts_allowed}" data-attempts-used="${attempts_used}"> - ${attempts_used} ${_('attempt(s) used')} / ${attempts_allowed} ${_('attempts allowed')}</div>
+  <div class="tma-attempts" data-attempts-total="${attempts_allowed}" data-attempts-used="${attempts_used}"> - ${attempts_used} / ${attempts_allowed} ${_('attempts allowed')}</div>
   % elif attempts_allowed == 1:
-  <div class="tma-attempts" data-attempts-total="${attempts_allowed}" data-attempts-used="${attempts_used}"> - ${attempts_used} ${_('attempt used')} / ${attempts_allowed} ${_('attempt allowed')}</div>
+  <div class="tma-attempts" data-attempts-total="${attempts_allowed}" data-attempts-used="${attempts_used}"> - ${attempts_used} / ${attempts_allowed} ${_('attempt allowed')}</div>
   %endif
 %endif
 

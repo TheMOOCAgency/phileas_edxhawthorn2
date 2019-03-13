@@ -13331,8 +13331,8 @@ msgstr ""
 #: lms/templates/problem.html
 msgid "You have used {num_used} of {num_total} attempt"
 msgid_plural "You have used {num_used} of {num_total} attempts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vous avez utilisé {num_used} sur {num_total} essai"
+msgstr[1] "Vous avez utilisé {num_used} sur {num_total} essais"
 
 #: lms/templates/problem.html
 msgid ""
@@ -25344,6 +25344,12 @@ msgstr "Consultez notre catalogue."
 #: lms/templates/courseware/courses.html
 msgid "Discover"
 msgstr "Découvrir"
+
+#: lms/templates/courseware/courses.html
+msgid "attempt utilisé"
+msgid_plural "attempts utilisés"
+msgstr[0] "essai utilisé"
+msgstr[1] "essais utilisés"
 
 #: lms/templates/dashboard.html
 msgid "Business Applications"
