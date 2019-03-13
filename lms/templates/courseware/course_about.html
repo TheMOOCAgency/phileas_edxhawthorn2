@@ -216,7 +216,7 @@ import json
     <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/coupe.png')}" width="36">
       <p>Score requis</p>
-      % if not TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_course_graded:
+      % if TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_course_graded:
         <p id="course-score" class="font-weight-bold">${int(course.grade_cutoffs.get("Pass")*100)}%</p>
       % else:
         <p id="course-score" class="font-weight-bold">${_("Not graded")}</p>
