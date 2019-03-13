@@ -127,10 +127,16 @@ function styleQuizOnSubmit(data, url) {
 
 function restyleButtons(element) {
   // Checkmarks only for inputs radio or checkboxes
-  if (element.children().is('input[type="radio"]') || element.children().is('input[type="checkbox"]')) {
+  if (element.children().is('input[type="radio"]')) {
     element.append('<span class="checkmark"><svg height="30" width="30"><circle cx="15" cy="15" r="14" shape-rendering="crispEdges" stroke="#eee" stroke-width="1" fill="#eee" /></svg></span>');
     element.append("<span class='checkfail'><img src='/static/tma-static/images/checkfail.png' /></span>");
     element.append("<span class='checksuccess'><img src='/static/tma-static/images/checksuccess.png' /></span>");
+  } else {
+    if (element.children().is('input[type="checkbox"]')) {
+      element.append('<span class="checkmark"><svg height="30" width="30"><rect x="2" y="2" height="25" width="25" shape-rendering="crispEdges" stroke="#eee" stroke-width="1" fill="#eee"></rect></svg></span>');
+      element.append("<span class='checkfail'><img src='/static/tma-static/images/checkfail.png' /></span>");
+      element.append("<span class='checksuccess'><img src='/static/tma-static/images/checksuccess.png' /></span>");
+    }
   }
 };
 
