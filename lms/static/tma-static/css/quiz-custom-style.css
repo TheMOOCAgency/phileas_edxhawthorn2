@@ -9,6 +9,9 @@ fieldset {
 }
 
 /* Submit button */
+.xmodule_display.xmodule_CapaModule div.problem .action {
+    margin-top: 0px;
+}
 .xmodule_display.xmodule_CapaModule div.problem .action .submit-attempt-container .submit {
     float: none;
 }
