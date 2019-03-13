@@ -5,15 +5,19 @@ import importlib
 from django.core.management import execute_from_command_line
 import django
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lms.envs.aws")
-os.environ.setdefault("lms.envs.aws,SERVICE_VARIANT", "lms")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cms.envs.aws")
+os.environ.setdefault("lms.envs.aws,SERVICE_VARIANT", "cms")
 os.environ.setdefault("PATH", "/edx/app/edxapp/venvs/edxapp/bin:/edx/app/edxapp/edx-platform/bin:/edx/app/edxapp/.rbenv/bin:/edx/app/edxapp/.rbenv/shims:/edx/app/edxapp/.gem/bin:/edx/app/edxapp/edx-platform/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
-os.environ.setdefault("SERVICE_VARIANT", "lms")
+os.environ.setdefault("SERVICE_VARIANT", "cms")
 os.chdir("/edx/app/edxapp/edx-platform")
-startup = importlib.import_module("lms.startup")
+startup = importlib.import_module("cms.startup")
 startup.run()
 
-from cms.tma_cms_apps.vodeclic_generate_courses import VodeclicGenerator
+from tma_cms_apps.vodeclic_generate_courses.generate_courses import VodeclicGenerator
+
+#Be sure to get all course pictures
+VodeclicGenerator().save_all_courses_pictures('fr')
+VodeclicGenerator().save_all_courses_pictures('en')
 
 #Ids of courses to create
 courses_id_fr=["223","2005","2555","2353","98","2423","2911","3123","915","517","797","3153","1415","2087","209","194","3181","1909","791","2577","1085","747","2681","2925","3077","991","691","377","677","1049","735","3175","375","192","2559","347","210","1667","200","1649","689","222","196","1601","1149","1785","217","2787","757","383","2291","3163","2097","2225","2093","2179","591","212","1677","1155","3065","1407","346","190","2921","755"]
