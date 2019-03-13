@@ -139,10 +139,13 @@ class VodeclicGenerator():
 
                 #Save Image
                 #self._save_picture_from_url(vodeclic_picture, self.vodeclic_img_path_base+vodeclic_language+'/'+vodeclic_id+'.png')
-                vodeclic_image_name, vodeclic_image_asset_path = store_jacket_image(
-                    vodeclic_course.id, self.vodeclic_img_path_base+vodeclic_language+'/',
-                    vodeclic_id + ".png"
-                )
+                try:
+                    vodeclic_image_name, vodeclic_image_asset_path = store_jacket_image(
+                        vodeclic_course.id, self.vodeclic_img_path_base+vodeclic_language+'/',
+                        vodeclic_id + ".png"
+                    )
+                except:
+                    pass
 
                 #Set other course details
                 additional_info = {
