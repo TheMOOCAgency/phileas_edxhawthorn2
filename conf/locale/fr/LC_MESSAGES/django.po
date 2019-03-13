@@ -25293,6 +25293,14 @@ msgstr "Vous n'avez aucune formation favorite"
 msgid "Back to courses"
 msgstr "Retour aux formations"
 
+#: lms/templates/courseware/course_about.html
+msgid "Not graded"
+msgstr "Non noté"
+
+#: lms/templates/courseware/course_about.html
+msgid "No downloads available for this course."
+msgstr "Aucun document disponible pour ce cours."
+
 #: lms/templates/courseware/courseware.html
 msgid "Back to description"
 msgstr "Retour vers description"
@@ -25340,7 +25348,3 @@ msgstr "Découvrir"
 #: lms/templates/dashboard.html
 msgid "Business Applications"
 msgstr "Applications Métier"
-
-#: lms/templates/courseware/course_about.html
-msgid "No downloads available for this course."
-msgstr "Aucun document disponible pour ce cours."

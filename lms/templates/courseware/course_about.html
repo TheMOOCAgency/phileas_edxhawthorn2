@@ -151,7 +151,7 @@ import json
         %if is_liked :
           <span class="pin like like-on ml-4 mb-1"></span>
         %else :
-          <span class="pin like like-off ml-4 mb-1"></span>
+          <span class="pin like like-off white ml-4 mb-1"></span>
         %endif
 
           <span class="like_count count-box m-2" data-min='0' data-max="${liked_total}" data-delay='1' data-increment="${int(liked_total/3)}">${liked_total}</span>
@@ -216,7 +216,7 @@ import json
     <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/coupe.png')}" width="36">
       <p>Score requis</p>
-      % if not TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_course_graded:
+      % if TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_course_graded:
         <p id="course-score" class="font-weight-bold">${int(course.grade_cutoffs.get("Pass")*100)}%</p>
       % else:
         <p id="course-score" class="font-weight-bold">${_("Not graded")}</p>

@@ -41,6 +41,11 @@ a, a:hover {
     line-height: 37px;
 }
 
+.like-off.white {
+    background-image: url('/static/tma-static/images/like-off-white.svg');
+    background-size: cover;
+}
+
 .count-box {
     display: inline-block !important;
 }
