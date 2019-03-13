@@ -2,6 +2,8 @@ import requests
 import hashlib
 import datetime
 import urllib
+import os
+import json
 from contentstore.views.course import create_new_course
 from contentstore.views.assets import update_course_run_asset
 from django.contrib.auth.admin import User
@@ -36,8 +38,24 @@ class VodeclicGenerator():
         self.date_today=datetime.datetime.now()
         self.vodeclic_img_path_base='/edx/app/edxapp/edx-platform/cms/static/tma-cms-static/vodeclic-course-images/images_'
 
+    def _get_json_file(self, language):
+        if language=="fr":
+            file_directory=os.path.dirname(__file__)+'/vodeclic_fr_courses.json'
+        else :
+            file_directory=os.path.dirname(__file__)+'/vodeclic_en_courses.json'
+        return file_directory
 
-    def _get_vodeclic_courses(self,vodeclic_id_list,language):
+    def _get_vodeclic_courses(self,language):
+        #LOCAL JSON
+        file_directory=self._get_json_file(language)
+        json_data=open(file_directory).read()
+        data = json.loads(json_data)
+        vodeclic_courses=data.get('data',{}).get('subject',{})
+        log.info(vodeclic_courses)
+        return vodeclic_courses
+
+    def update_vodeclic_json(self, language):
+        file_directory=self._get_json_file(language)
         url_catalog=self.url_base+'/catalogue.json?'
         params = dict(
             partenaire=self.partenaire,
@@ -45,8 +63,9 @@ class VodeclicGenerator():
             lang=language,
         )
         resp = requests.get(url=url_catalog, params=params)
-        vodeclic_courses = resp.json().get('data').get('subject')
-        return vodeclic_courses
+        vodeclic_courses_list = resp.json()
+        with open(file_directory, 'w') as file:
+            file.write(vodeclic_courses_list)
 
 
     def _get_course_creator(self):
@@ -69,6 +88,14 @@ class VodeclicGenerator():
         org_data = get_organization_by_short_name(org)
         add_organization_course(org_data, course_id)
 
+    def save_all_courses_pictures(self, language):
+        vodeclic_courses = self._get_vodeclic_courses(language)
+        for vodeclic_course_params in vodeclic_courses :
+            vodeclic_picture = vodeclic_course_params.get('large_image_png_url')
+            vodeclic_language=vodeclic_course_params.get('language')
+            vodeclic_id=vodeclic_course_params.get('id')
+            self._save_picture_from_url(vodeclic_picture, self.vodeclic_img_path_base+vodeclic_language+'/'+vodeclic_id+'.png')
+
     def _save_picture_from_url(self, picture_url, file_path):
         urllib.urlretrieve(picture_url, file_path)
 
@@ -79,7 +106,7 @@ class VodeclicGenerator():
         return str(hours)+":"+str(rest_minutes)
 
     def update_vodeclic_courses(self, vodeclic_id_list, org='phileas', language='en'):
-        vodeclic_courses = self._get_vodeclic_courses(vodeclic_id_list,language)
+        vodeclic_courses = self._get_vodeclic_courses(language)
         courses_to_create=[]
         for vodeclic_course_params in vodeclic_courses :
             if vodeclic_course_params.get('id') in vodeclic_id_list :
@@ -109,7 +136,7 @@ class VodeclicGenerator():
                 self._set_org_info(org, vodeclic_course.id)
 
                 #Save Image
-                self._save_picture_from_url(vodeclic_picture, self.vodeclic_img_path_base+vodeclic_language+'/'+vodeclic_id+'.png')
+                #self._save_picture_from_url(vodeclic_picture, self.vodeclic_img_path_base+vodeclic_language+'/'+vodeclic_id+'.png')
                 vodeclic_image_name, vodeclic_image_asset_path = store_jacket_image(
                     vodeclic_course.id, self.vodeclic_img_path_base+vodeclic_language+'/',
                     vodeclic_id + ".png"
