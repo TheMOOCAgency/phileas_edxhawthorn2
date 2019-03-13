@@ -235,7 +235,7 @@ import json
     <div class="col-lg-9 pl-0">
       <h3>Objectifs</h3>
       % if 'goals' in course_about.keys():
-        <p id="course-goals" class="text-blue-dark">${course_about['goals']}</p>
+        <div id="course-goals" class="text-blue-dark"></div>
       % endif
     </div>
     <div class="col-lg-3 pr-0">
@@ -286,10 +286,10 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
     </div>
   </div>
 </div>
-
 <script>
   // Dynamic course map
   courseJson = ${course_json};
+  console.log(courseJson)
   courseJson.course_map.forEach(function(element, i){
     $('#course-map').append('<li><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.title + 
     (element.subsections ? '<a href="arrow" class="float-right"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a>': '') +
@@ -300,6 +300,9 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
       });
     }
   });
+
+  // Html in course goals
+  $('#course-goals').html(courseJson.goals);
 
   // Style dynamically generated li
   $('.subsections > li').css({

@@ -221,7 +221,7 @@ a.big-btn-back:hover {
     right: 0;
 }
 
-li:not(.nav-item) {
+#course-map > li, .subsections > li {
     color: #0C1C49;
     list-style-type: none;
     padding: 10px;
