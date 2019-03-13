@@ -134,8 +134,8 @@ function restyleButtons(element) {
   } else {
     if (element.children().is('input[type="checkbox"]')) {
       element.append('<span class="checkmark"><svg height="30" width="30"><rect x="2" y="2" height="25" width="25" shape-rendering="crispEdges" stroke="#eee" stroke-width="1" fill="#eee"></rect></svg></span>');
-      element.append("<span class='checkfail'><img src='/static/tma-static/images/checkfail.png' /></span>");
-      element.append("<span class='checksuccess'><img src='/static/tma-static/images/checksuccess.png' /></span>");
+      element.append("<span class='checkfail'><img src='/static/tma-static/images/checkbox-fail.png' /></span>");
+      element.append("<span class='checksuccess'><img src='/static/tma-static/images/checkbox-success.png' /></span>");
     }
   }
 };
