@@ -1,13 +1,12 @@
 /* Prevent EdX style */
 fieldset {
     border: none;
-    padding-left: 0px;
+    padding: 0px;
 }
-/*
-.problems-wrapper {
-    background-color: #f1f1f17c;
+
+.xmodule_display.xmodule_CapaModule div.problem {
+    padding-top: 5px;
 }
-*/
 
 /* Submit button */
 .xmodule_display.xmodule_CapaModule div.problem .action .submit-attempt-container .submit {
@@ -15,6 +14,7 @@ fieldset {
 }
 .submit-attempt-container {
     text-align: center;
+    padding: 0px !important;
 }
 
 /* Progress + score */ 
@@ -78,9 +78,6 @@ span.status.correct, span.status.incorrect {
     height: 30px;
     width: 30px;
     border-radius: 30px;
-}
-.checkmark:hover {
-    border: 1px solid grey;
 }
 
 .checkfail, .checksuccess {
