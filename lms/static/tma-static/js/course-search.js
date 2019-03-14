@@ -190,7 +190,7 @@ const displayResults = function(results) {
         // ---------------  FRONT CARD ---------------
         // Is mandatory
         + mandatoryTag() + 
-        '<div class="cover-image"><img src="'+item.course_image_url+'" alt="'+item.display_name_with_default+'"/></div><div class="container-fluid"><div class="container-fluid"><div class="row"><div class="course-name col"><div data-course-id="'+item.id+'" class="row pin-row '+courseId+'"><div><div class="category-tag">'+ subjectTag +'</div></div>' +
+        '<div class="cover-image"><img src="'+item.course_image_url+'" alt="'+item.display_name_with_default+'"/></div><div class="container-fluid"><div class="container-fluid"><div class="row"><div class="course-name col"><div data-course-id="'+item.id+'" class="row pin-row '+courseId+'"><div><div class="category-tag '+ subjectTag.replace(' ','-').replace('.','').toLowerCase() +'">'+ subjectTag +'</div></div>' +
         // Manager Only or Blocked
         ((isManagerOnly || isBlocked) ? '<img src="/static/tma-static/images/cadenas.svg" data-toggle="tooltip" data-delay=\'{"show":"100", "hide":"100"}\' data-placement="top" title="Manager Only" class="pin">' : '') +
         // Is favorite
@@ -206,7 +206,7 @@ const displayResults = function(results) {
         '<div class="course-card-sm back">' +
         // Is mandatory
         mandatoryTag() + 
-        '<div class="cover-image"><img src="'+item.course_image_url+'" alt="'+item.display_name_with_default+'"/></div><div class="container-fluid"><div class="container-fluid"><div class="row"><div data-course-id="'+item.id+'" class="row pin-row '+courseId+'"><div class="category-tag"><a href="/courses?filter='+subjectTag+'">'+ subjectTag +'</a></div>'+
+        '<div class="cover-image"><img src="'+item.course_image_url+'" alt="'+item.display_name_with_default+'"/></div><div class="container-fluid"><div class="container-fluid"><div class="row"><div data-course-id="'+item.id+'" class="row pin-row '+courseId+'"><div class="category-tag '+ subjectTag.replace(' ','-').replace('.','').toLowerCase() +'"><a href="/courses?filter='+subjectTag+'">'+ subjectTag +'</a></div>'+
         // Manager Only or Blocked
         ((isManagerOnly || isBlocked) ? '<img src="/static/tma-static/images/cadenas.svg" data-toggle="tooltip" data-delay=\'{"show":"100", "hide":"100"}\' data-placement="top" title="Manager Only" class="pin">' : '') +
         // Is favorite
