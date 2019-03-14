@@ -240,6 +240,7 @@ a.big-btn-back:hover {
 /***** FOURTH ROW *****/
 .content-box {
     width: 90%;
+    min-height: 670px;
     margin: auto;
     padding-top: 40px;
     padding-bottom: 150px;
