@@ -8,7 +8,7 @@ fieldset {
     padding-top: 5px;
 }
 
-.xmodule_display.xmodule_CapaModule div.problem .action .problem-action-btn[data-value="Save"] {
+.xmodule_display.xmodule_CapaModule div.problem .action .problem-action-btn[data-value="Save"], .xmodule_display.xmodule_CapaModule div.problem .action .problem-action-btn.show {
     display: none;
 }
 
@@ -60,6 +60,8 @@ span.status.correct, span.status.incorrect {
     display: none;
 }
 .xmodule_display.xmodule_CapaModule div.problem .notification.error {
+    margin-top: 30px;
+    margin-bottom: 20px;
     border-top: none;
     font-size: 18px;
     text-align: center;
@@ -131,4 +133,22 @@ span.status.correct, span.status.incorrect {
     width: calc(100% - 40px);
     height: 50px;
     background-color: white;
+}
+
+.show-detailed .detailed-solution {
+    display: block !important;
+}
+solution > .detailed-solution {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: white;
+    font-size: 20px;
+}
+.detailed-solution > p:first-of-type {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #00A1E9;
+}
+.detailed-solution > p:last-of-type {
+    font-weight: bold;
 }
