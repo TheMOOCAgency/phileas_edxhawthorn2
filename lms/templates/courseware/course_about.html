@@ -277,7 +277,7 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
         % if 'downloads' in course_about.keys():
           % if len(course_about['downloads']) > 0:
             % for item in course_about['downloads']:
-              <a href="${item['link']}" class="download-link"><p>${item['text']}</p></a>
+              <a href="${item['link']}" target="_blank" class="download-link"><p>${item['text']}</p></a>
             % endfor
           % else:
             <p>${_("No downloads available for this course.")}</p>
