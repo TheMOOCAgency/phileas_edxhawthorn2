@@ -134,6 +134,29 @@
           </div>
         </div>
         <div class="separator"></div>
+        <!--ONBOARDING TAGS-->
+        <div class="row">
+            <div class="col">
+              <!-- title -->
+              <div class="container-fluid pb-2">
+                  <div class="row">
+                    <div class="col-10 d-flex align-items-center"><h4 class="header-facet">${_("OnBoarding")}</h4></div>
+                    <div class="col-2 pr-0 d-flex align-items-center"><span class="count">${len(final_course_list)}</span></div>
+                  </div>
+              </div>
+              <div class="container-fluid">
+                % for tag, count in onboarding_counters.items():
+                  % if 'False' not in tag:
+                    <div class="row facet">
+                      <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option" data-filtertype="onboarding" data-tag="${tag}">${_(tag)}</p></a></div>
+                      <div class="col-2 d-flex align-items-center"><span class="count">${count}</span><span class="count close-filter" data-filtertype="onboarding">X</span></div>
+                    </div>
+                  % endif
+                % endfor
+              </div>
+            </div>
+          </div>
+          <div class="separator"></div>
         <!--FILTER ORG-->
         <div class="row">
           <div class="col">
@@ -171,7 +194,7 @@
   $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
 
   var coursesJson = ${json_courses | n, dump_js_escaped_json};
-  var query = {tag: [], language: [], org: [], is_new: false, input: ''};
+  var query = {tag: [], onboarding: [], language: [], org: [], is_new: false, input: ''};
   var results = [];
   const browseCatalogDisplay = function(results) {
     if (results.length > 0) {

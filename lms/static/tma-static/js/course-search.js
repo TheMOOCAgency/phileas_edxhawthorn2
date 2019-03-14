@@ -64,6 +64,7 @@ const searchByFilter = function(coursesJson, queryObj) {
     return coursesJson.filter((course) => {
         // for each key
         var tagIsValid = true
+        var onboardingIsValid = true
         var languageIsValid = true
         var orgIsValid = true
         var isNewIsValid = true
@@ -85,6 +86,15 @@ const searchByFilter = function(coursesJson, queryObj) {
                     tagIsValid = true;
                 } else {
                     tagIsValid = false;
+                }
+            }
+
+            // Check onboarding condition
+            if (queryObj[key].length && key === 'onboarding') {
+                if (checkValueAsArray(course, key, queryObj[key])) {
+                    onboardingIsValid = true;
+                } else {
+                    onboardingIsValid = false;
                 }
             }
 
@@ -127,7 +137,7 @@ const searchByFilter = function(coursesJson, queryObj) {
             }
         });
         // If all criteria are met, keep course in list
-        return (tagIsValid && languageIsValid && orgIsValid && isNewIsValid && textIsValid);
+        return (tagIsValid && onboardingIsValid && languageIsValid && orgIsValid && isNewIsValid && textIsValid);
     });
 };
 

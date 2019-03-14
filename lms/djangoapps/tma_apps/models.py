@@ -200,6 +200,7 @@ class TmaCourseOverview(models.Model):
     active_enrollments_total = models.IntegerField(default=0)
     is_course_graded = models.BooleanField(default=True)
     tag = models.CharField(db_index=True, max_length=50, default=False)
+    onboarding = models.CharField(db_index=True, max_length=50, default=False)
     course_about = models.TextField(blank=True)
 
     @classmethod
@@ -251,6 +252,23 @@ class TmaCourseOverview(models.Model):
             pass
         
         return all_tags
+
+    @classmethod
+    def get_onboardings(cls, org):
+        onboardings = []
+        try:
+            tag_lists = TmaCourseOverview.objects.filter(course_overview_edx__org=org).values_list('onboarding', flat=True)
+            for tag in tag_lists:
+                if ',' in str(tag):
+                    onboardings.extend(tag.split(','))
+                else:
+                    onboardings.append(str(tag))
+
+            onboardings = collections.Counter(onboardings)
+        except:
+            pass
+        
+        return onboardings
 
 #Track enrollments and unenrollments to update total_active_enrollments
 @receiver(ENROLL_STATUS_CHANGE)
