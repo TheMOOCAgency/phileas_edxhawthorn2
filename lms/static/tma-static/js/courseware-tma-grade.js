@@ -2,7 +2,7 @@
 $(document).ready(function(){
   get_user_grade();
   styleAlreadyAnsweredQuestions();
-  highlightChoices()
+  highlightChoices();
 
   $(document).ajaxSuccess(function(e, xhr, settings) {
     /* Each time a problem is submitted */
@@ -22,8 +22,7 @@ $(document).ready(function(){
       });
       // If already answered question, style accordingly
       styleAlreadyAnsweredQuestions();
-      // Highlighted choices behavior
-      highlightChoices()
+      highlightChoices();
     }
   });
 });
@@ -33,7 +32,7 @@ $(document).ready(function(){
 /************ FUNCTIONS ************/
 function highlightChoices() {
   // Highlight selected multiple choices
-  $('input[type="checkbox"]').on('click', function(){
+  $('input[type="checkbox"]').on('click', function(e){
     if ($(this).prop('checked')) {
       $(this).parent().css({'backgroundColor':'#00A1E9','color': 'rgb(255, 255, 255)'});
       if ($(this).parent().children('.checkfail').is(':visible')) {
@@ -54,8 +53,8 @@ function highlightChoices() {
   });
   
   // Highlight selected unique choice
-  $('input[type="radio"]').on('change', function(){
-    $(this).prop('checked') ? $(this).parent().addClass('selected-tma') : $(this).parent().removeClass('selected-tma');
+  $('input[type="radio"]').on('change', function(e){
+      $(this).prop('checked') ? $(this).parent().addClass('selected-tma') : $(this).parent().removeClass('selected-tma');
   });
 };
 
@@ -79,8 +78,9 @@ function styleAlreadyAnsweredQuestions() {
       $('#'+ questionId).find('label > input:checked ~ .checkfail').show();
 
       // For failed quiz only show answers on last attempts
-      if ($(this).find('.submission-feedback').attr('data-remaining') <= 0){
+      if ($(this).find('.tma-attempts').attr('data-remaining') <= 0){
         showAnswers(url, questionId);
+        $(this).css('pointer-events', 'none');
       }
     } else {
       if (indicatorContainer.hasClass('correct')  || goodChoice.length > 0) {
@@ -88,6 +88,9 @@ function styleAlreadyAnsweredQuestions() {
         problemTitle.html(problemTitle.html()+' <i style="color:#6ac259;" class="fas fa-check"></i>');
         $('#'+ questionId).find('label > input:checked ~ .checksuccess').show();
         showAnswers(url, questionId);
+        if ($(this).find('.tma-attempts').attr('data-remaining') <= 0){
+          $(this).css('pointer-events', 'none');
+        }
       }
     }
   });
@@ -111,8 +114,9 @@ function styleQuizOnSubmit(data, url) {
     $('#'+ questionId).addClass('tma-fail').addClass('tma-answered');
 
     // If no more attempts available OR illimited attempts : show right answers
-    if (($('#'+ questionId).find('.submission-feedback').attr('data-remaining') <= 0) || ($('#'+ questionId).find('.submission-feedback').length == 0)) {
+    if (($('#'+ questionId).find('.tma-attempts').attr('data-remaining') <= 0) || ($('#'+ questionId).find('.tma-attempts').length == 0)) {
       showAnswers(url, questionId);
+      $('#'+ questionId).css('pointer-events', 'none');
     }
   } else {
     // If correct answer : green icon
@@ -121,6 +125,10 @@ function styleQuizOnSubmit(data, url) {
       $('#'+ questionId).find('label > input:checked ~ .checksuccess').show();
       // Mark question as answered and success
       $('#'+ questionId).addClass('tma-success').addClass('tma-answered');
+
+      if ($('#'+ questionId).find('.tma-attempts').attr('data-remaining') <= 0) {
+        $('#'+ questionId).css('pointer-events', 'none');
+      }
     }
   }
 }
@@ -168,8 +176,9 @@ function showAnswers(url, id){
         //Disable submit button
         $('#'+ id).find('.action .check').addClass('is-disabled');
         //Display detailed solution if last attempt
-        if($("#"+ id).find('.submission-feedback').attr('data-remaining') <= 0){
+        if($("#"+ id).find('.tma-attempts').attr('data-remaining') <= 0){
           $("#"+ id).addClass('show-detailed');
+          $(this).css('pointer-events', 'none');
         }
     }
   });
