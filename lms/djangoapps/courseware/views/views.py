@@ -318,6 +318,15 @@ def courses(request):
             tag_text = _(course_info['tag'])
         course_json_info['tag_text'] = tag_text
 
+        # Onboarding text ugettext
+        onboarding = ''
+        if ',' in course_info['onboarding']:
+            split_tags = course_info['onboarding'].split(',')
+            onboarding_text = _(split_tags[0])
+        else:
+            onboarding_text = _(course_info['onboarding'])
+        course_json_info['onboarding_text'] = onboarding_text
+
         json_course_list.append(course_json_info)
 
     # Get user course enrollments
@@ -328,8 +337,10 @@ def courses(request):
 
     # Get tags and counts
     try:
+        onboarding_counters = TmaCourseOverview.get_onboardings(current_organisation)
         tag_counters = TmaCourseOverview.get_all_tags(current_organisation)
     except:
+        onboarding_counters = []
         tag_counters = []
 
     language_counters = Counter()
@@ -354,6 +365,7 @@ def courses(request):
             'final_course_list': final_course_list,
             'enrollment_course_list':enrollment_course_list,
             'tag_counters': tag_counters,
+            'onboarding_counters': onboarding_counters,
             'language_counters': language_counters,
             'org_counters': org_counters,
             'new_counter': new_counter
