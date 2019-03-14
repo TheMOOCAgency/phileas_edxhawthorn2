@@ -176,7 +176,7 @@ import json
         <p id="teacher-name">${course_about['teacher_name']}</p>
       % endif
       % if 'teacher_email' in course_about.keys():
-        <p id="teacher-email" class="text-black">${course_about['teacher_email']}</p>
+        <p id="teacher-email" class="text-black"><a href="mailto:${course_about['teacher_email']}">${course_about['teacher_email']}</a></p>
       %endif
     </div>
     <div class="col-lg-2 col-2 text-center">

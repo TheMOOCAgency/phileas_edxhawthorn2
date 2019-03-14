@@ -21,6 +21,10 @@ $('.xmodule_display.xmodule_SequenceModule .sequence-bottom .sequence-nav-button
 
 /*Prepare completion coursenav on pageload */
 $(document).ready(function(){
+  // Open menu when landing on page
+  $('#tma-completion-nav').removeClass('folded');
+  $('.open-courseware-nav').addClass('tma-visibility-hidden');
+  ;
   mark_started_subsections();
   get_course_completion();
   close_all_subsections();

@@ -115,7 +115,7 @@ a, a:hover {
     font-size: 20px;
 }
 .name-box p:last-of-type {
-    font-size: 18px;
+    font-size: 16px;
 }
 .name-box > p:first-of-type {
     color: #777777;
@@ -238,7 +238,7 @@ a.big-btn-back:hover {
 .subsections {
     margin: 0.5em 0 0.5rem 0rem;
 }
-.subsections > li {
+.subsections > li, #course-goals li {
     list-style-image: url('/static/tma-static/images/bullet.svg');
     border-bottom: none;
     font-weight: 400;
