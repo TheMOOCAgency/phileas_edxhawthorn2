@@ -1,8 +1,8 @@
 /************ ON PAGELOAD ************/
 $(document).ready(function(){
-  var hasAttempts = true;
   get_user_grade();
   styleAlreadyAnsweredQuestions();
+  highlightChoices();
 
   $(document).ajaxSuccess(function(e, xhr, settings) {
     /* Each time a problem is submitted */
@@ -12,7 +12,7 @@ $(document).ready(function(){
       // Style according to result
       var data = JSON.parse(xhr.responseText);
       styleQuizOnSubmit(data, settings.url);
-      highlightChoices(hasAttempts);
+      highlightChoices();
     }
     /* When passing from unit to another (no reload) */
     if (settings.url.indexOf('goto_position') > -1) {
@@ -22,8 +22,7 @@ $(document).ready(function(){
       });
       // If already answered question, style accordingly
       styleAlreadyAnsweredQuestions();
-      // Highlighted choices behavior
-      //highlightChoices(hasAttempts)
+      highlightChoices();
     }
   });
 });
@@ -31,41 +30,31 @@ $(document).ready(function(){
 /************ END DOCUMENT READY ************/
 
 /************ FUNCTIONS ************/
-function highlightChoices(hasAttempts) {
+function highlightChoices() {
   // Highlight selected multiple choices
   $('input[type="checkbox"]').on('click', function(e){
-    if (!hasAttempts) {
-      console.log('no more attempt')
-      $(this).prop('disabled');
+    if ($(this).prop('checked')) {
+      $(this).parent().css({'backgroundColor':'#00A1E9','color': 'rgb(255, 255, 255)'});
+      if ($(this).parent().children('.checkfail').is(':visible')) {
+        $(this).parent().children('.checkfail').hide();
+      }
+      if ($(this).parent().children('.checksuccess').is(':visible')) {
+        $(this).parent().children('.checksuccess').hide();
+      }
     } else {
-      console.log($(this).parent().parent().parent().parent())
-      if ($(this).prop('checked')) {
-        $(this).parent().css({'backgroundColor':'#00A1E9','color': 'rgb(255, 255, 255)'});
-        if ($(this).parent().children('.checkfail').is(':visible')) {
-          $(this).parent().children('.checkfail').hide();
-        }
-        if ($(this).parent().children('.checksuccess').is(':visible')) {
-          $(this).parent().children('.checksuccess').hide();
-        }
-      } else {
-        $(this).parent().css({'backgroundColor':'transparent','color': '#313131'})
-        if ($(this).parent().children('.checkfail').is(':visible')) {
-          $(this).parent().children('.checkfail').hide();
-        }
-        if ($(this).parent().children('.checksuccess').is(':visible')) {
-          $(this).parent().children('.checksuccess').hide();
-        }
+      $(this).parent().css({'backgroundColor':'transparent','color': '#313131'})
+      if ($(this).parent().children('.checkfail').is(':visible')) {
+        $(this).parent().children('.checkfail').hide();
+      }
+      if ($(this).parent().children('.checksuccess').is(':visible')) {
+        $(this).parent().children('.checksuccess').hide();
       }
     }
   });
   
   // Highlight selected unique choice
   $('input[type="radio"]').on('change', function(e){
-    if (!hasAttempts) {
-      e.preventDefault();
-    } else {
       $(this).prop('checked') ? $(this).parent().addClass('selected-tma') : $(this).parent().removeClass('selected-tma');
-    }
   });
 };
 
@@ -89,8 +78,9 @@ function styleAlreadyAnsweredQuestions() {
       $('#'+ questionId).find('label > input:checked ~ .checkfail').show();
 
       // For failed quiz only show answers on last attempts
-      if ($(this).find('.submission-feedback').attr('data-remaining') <= 0){
+      if ($(this).find('.tma-attempts').attr('data-remaining') <= 0){
         showAnswers(url, questionId);
+        $(this).css('pointer-events', 'none');
       }
     } else {
       if (indicatorContainer.hasClass('correct')  || goodChoice.length > 0) {
@@ -98,13 +88,10 @@ function styleAlreadyAnsweredQuestions() {
         problemTitle.html(problemTitle.html()+' <i style="color:#6ac259;" class="fas fa-check"></i>');
         $('#'+ questionId).find('label > input:checked ~ .checksuccess').show();
         showAnswers(url, questionId);
+        if ($(this).find('.tma-attempts').attr('data-remaining') <= 0){
+          $(this).css('pointer-events', 'none');
+        }
       }
-    }
-
-    // If no more attempts : prevent selecting behavior
-    if ($(this).find('.submission-feedback').attr('data-remaining') <= 0){
-      hasAttempts = false;
-      highlightChoices(hasAttempts);
     }
   });
 };
@@ -127,8 +114,9 @@ function styleQuizOnSubmit(data, url) {
     $('#'+ questionId).addClass('tma-fail').addClass('tma-answered');
 
     // If no more attempts available OR illimited attempts : show right answers
-    if (($('#'+ questionId).find('.submission-feedback').attr('data-remaining') <= 0) || ($('#'+ questionId).find('.submission-feedback').length == 0)) {
+    if (($('#'+ questionId).find('.tma-attempts').attr('data-remaining') <= 0) || ($('#'+ questionId).find('.tma-attempts').length == 0)) {
       showAnswers(url, questionId);
+      $('#'+ questionId).css('pointer-events', 'none');
     }
   } else {
     // If correct answer : green icon
@@ -137,13 +125,11 @@ function styleQuizOnSubmit(data, url) {
       $('#'+ questionId).find('label > input:checked ~ .checksuccess').show();
       // Mark question as answered and success
       $('#'+ questionId).addClass('tma-success').addClass('tma-answered');
-    }
-  }
 
-  // If no more attempts : prevent selecting behavior
-  if ($(this).find('.submission-feedback').attr('data-remaining') <= 0){
-    hasAttempts = false;
-    highlightChoices(hasAttempts);
+      if ($('#'+ questionId).find('.tma-attempts').attr('data-remaining') <= 0) {
+        $('#'+ questionId).css('pointer-events', 'none');
+      }
+    }
   }
 }
 
@@ -190,9 +176,9 @@ function showAnswers(url, id){
         //Disable submit button
         $('#'+ id).find('.action .check').addClass('is-disabled');
         //Display detailed solution if last attempt
-        if($("#"+ id).find('.submission-feedback').attr('data-remaining') <= 0){
+        if($("#"+ id).find('.tma-attempts').attr('data-remaining') <= 0){
           $("#"+ id).addClass('show-detailed');
-          hasAttempts = false;
+          $(this).css('pointer-events', 'none');
         }
     }
   });
