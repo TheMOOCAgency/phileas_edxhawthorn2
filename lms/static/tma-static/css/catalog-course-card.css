@@ -95,6 +95,24 @@
     color: white !important;
     text-decoration: none;
 }
+.office-tools {
+    background-color: #385d78;
+}
+.fundamentals {
+    background-color: #329696;
+}
+.marketing {
+    background-color: #004388;
+}
+.management {
+    background-color: #e6500f;
+}
+.business-app {
+    background-color: #c83250;
+}
+.compliance {
+    background-color: #a07828;
+}
 
 .pin-row > .like {
     background-color: white;
