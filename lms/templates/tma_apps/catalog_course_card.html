@@ -33,9 +33,9 @@ split_tags = course['tag'].split(',')
                 <div data-course-id="${str(course['id'])}" class="row pin-row ${str(course['id']).replace(':','').replace('+','')}">
                   <div>
                     % if ',' in course['tag']:
-                        <div class="category-tag">${_(split_tags[0])}</div>
+                        <div class="category-tag ${split_tags[0].replace(' ','-').replace('.','').lower()}">${_(split_tags[0])}</div>
                     % else:
-                        <div class="category-tag">${_(course['tag'])}</div>
+                        <div class="category-tag ${course['tag'].replace(' ','-').replace('.','').lower()}">${_(course['tag'])}</div>
                     % endif
                   </div>
                     % if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
@@ -102,9 +102,13 @@ split_tags = course['tag'].split(',')
           <div class="row">
               <div data-course-id="${str(course['id'])}" class="row pin-row ${str(course['id']).replace(':','').replace('+','')}">
                 % if ',' in course['tag']:
-                  <div class="category-tag"><a href="/courses?filter=${split_tags[0]}">${split_tags[0]}</a></div>
+                  <div class="category-tag ${split_tags[0].replace(' ','-').replace('.','').lower()}">
+                    <a href="/courses?filter=${split_tags[0]}">${split_tags[0]}</a>
+                  </div>
                 % else:
-                  <div class="category-tag"><a href="/courses?filter=${course['tag']}">${course['tag']}</a></div>
+                  <div class="category-tag ${course['tag'].replace(' ','-').replace('.','').lower()}">
+                    <a href="/courses?filter=${course['tag']}">${course['tag']}</a>
+                  </div>
                 % endif
                 % if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
                   <img src="${static.url('tma-static/images/cadenas.svg')}" data-toggle="tooltip" data-placement="top" data-delay='{"show":"100", "hide":"100"}' title="Manager Only" class="pin">
