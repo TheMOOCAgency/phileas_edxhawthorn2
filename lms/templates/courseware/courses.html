@@ -106,7 +106,10 @@
                       % else:
                         <img src="${static.url('tma-static/images/lang_'+language+'.svg')}" height="40px" class="mr-2"/>${_("English")}</p></a></div>
                       % endif
-                    <div class="col-2 d-flex align-items-center"><span class="count">${count}</span><span class="count close-filter" data-filtertype="language" data-tag="${language}">X</span></div>
+                    <div class="col-2 d-flex align-items-center">
+                      <span class="count">${count}</span>
+                      <span class="count close-filter" data-filtertype="language" data-tag="${language}">X</span>
+                    </div>
                   </div>
                 % endfor
             </div>
@@ -229,7 +232,7 @@
         $('.no-results h3:first-of-type').html('${_("No results were found matching your request.")}');
         $('.no-results h3:last-of-type').html('${_("Browse our catalog.")}');
         $('.no-results .discover-btn').html('${_("Discover")}');
-        query = {tag: [], language: [], org: [], is_new: false, input: ''};
+        //query = {tag: [], language: [], org: [], is_new: false, input: ''};
       }
   };
 
@@ -325,8 +328,6 @@
         });
       }
 
-      console.log(query)
-
       // Remove styling if facet-option OR facet-header
       $(this).parent().parent().children('.col-10').children().children().removeClass('filter-selected');
       $(this).parent().parent().children('.col-10').children().removeClass('filter-selected');
@@ -344,6 +345,10 @@
       // Search query
       results = searchByFilter(coursesJson, query);
       browseCatalogDisplay(results);
+      if (results.length <= 0) {
+        query['input'] = '';
+        $('input[name="search"]').val('');
+      }
     });
   });
 </script>
