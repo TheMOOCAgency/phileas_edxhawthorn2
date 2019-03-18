@@ -8,7 +8,7 @@ fieldset {
     padding-top: 5px;
 }
 
-.xmodule_display.xmodule_CapaModule div.problem .action .problem-action-btn[data-value="Save"], .xmodule_display.xmodule_CapaModule div.problem .action .problem-action-btn.show {
+.xmodule_display.xmodule_CapaModule div.problem .action .problem-action-btn.save, .xmodule_display.xmodule_CapaModule div.problem .action .problem-action-btn.show {
     display: none;
 }
 
