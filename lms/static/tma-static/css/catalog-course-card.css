@@ -95,10 +95,10 @@
     color: white !important;
     text-decoration: none;
 }
-.office-tools {
+.office-tools, .bureautique {
     background-color: #385d78;
 }
-.fundamentals {
+.fundamentals, .fondamentaux {
     background-color: #329696;
 }
 .design {
@@ -110,10 +110,10 @@
 .management {
     background-color: #e6500f;
 }
-.business-app {
+.business-app, .app-métier {
     background-color: #c83250;
 }
-.compliance {
+.compliance, .réglementaire {
     background-color: #a07828;
 }
 .internet {
