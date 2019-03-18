@@ -98,13 +98,15 @@
             <div class="container-fluid">
                 % for language, count in language_counters.items():
                   <div class="row facet">
-                    <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option" data-filtertype="language" data-tag="${language}">
+                    <div class="col-10 d-flex align-items-center">
+                      <a href="">
+                        <p class="facet-option" data-filtertype="language" data-tag="${language}">
                       % if 'fr' in language:
                         <img src="${static.url('tma-static/images/lang_'+language+'.svg')}" height="40px" class="mr-2"/>${_("French")}</p></a></div>
                       % else:
                         <img src="${static.url('tma-static/images/lang_'+language+'.svg')}" height="40px" class="mr-2"/>${_("English")}</p></a></div>
                       % endif
-                    <div class="col-2 d-flex align-items-center"><span class="count">${count}</span><span class="count close-filter" data-filtertype="language">X</span></div>
+                    <div class="col-2 d-flex align-items-center"><span class="count">${count}</span><span class="count close-filter" data-filtertype="language" data-tag="${language}">X</span></div>
                   </div>
                 % endfor
             </div>
@@ -125,8 +127,14 @@
               % for tag, count in tag_counters.items():
                 % if 'False' not in tag:
                   <div class="row facet">
-                    <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option" data-filtertype="tag" data-tag="${tag}">${_(tag)}</p></a></div>
-                    <div class="col-2 d-flex align-items-center"><span class="count">${count}</span><span class="count close-filter" data-filtertype="tag">X</span></div>
+                    <div class="col-10 d-flex align-items-center">
+                      <a href=""><p class="facet-option" data-filtertype="tag" data-tag="${tag}">${_(tag)}</p>
+                      </a>
+                    </div>
+                    <div class="col-2 d-flex align-items-center">
+                      <span class="count">${count}</span>
+                      <span class="count close-filter" data-filtertype="tag" data-tag="${tag}">X</span>
+                    </div>
                   </div>
                 % endif
               % endfor
@@ -141,15 +149,24 @@
               <div class="container-fluid pb-2">
                   <div class="row">
                     <div class="col-10 d-flex align-items-center"><h4 class="header-facet">${_("OnBoarding")}</h4></div>
-                    <div class="col-2 pr-0 d-flex align-items-center"><span class="count">${sum(value for key, value in onboarding_counters.iteritems() if key!= 'False')}</span></div>
+                    <div class="col-2 pr-0 d-flex align-items-center">
+                      <span class="count">${sum(value for key, value in onboarding_counters.iteritems() if key!= 'False')}</span>
+                    </div>
                   </div>
               </div>
               <div class="container-fluid">
                 % for tag, count in onboarding_counters.items():
                   % if 'False' not in tag:
                     <div class="row facet">
-                      <div class="col-10 d-flex align-items-center"><a href=""><p class="facet-option" data-filtertype="onboarding" data-tag="${tag}">${_(tag)}</p></a></div>
-                      <div class="col-2 d-flex align-items-center"><span class="count">${count}</span><span class="count close-filter" data-filtertype="onboarding">X</span></div>
+                      <div class="col-10 d-flex align-items-center">
+                        <a href="">
+                          <p class="facet-option" data-filtertype="onboarding" data-tag="${tag}">${_(tag)}</p>
+                        </a>
+                      </div>
+                      <div class="col-2 d-flex align-items-center">
+                        <span class="count">${count}</span>
+                        <span class="count close-filter" data-filtertype="onboarding" data-tag="${tag}">X</span>
+                      </div>
                     </div>
                   % endif
                 % endfor
@@ -163,8 +180,15 @@
             <div class="container-fluid pb-2">
               % for org, count in org_counters.items():
                 <div class="row mb-3">
-                  <div class="col-10 d-flex align-items-center"><a href=""><h4 class="header-facet org" data-filtertype="org" data-tag="${org}">${org}</h4></a></div>
-                  <div class="col-2 pr-0 d-flex align-items-center"><span class="count">${count}</span><span class="count close-filter" data-filtertype="org">X</span></div>
+                  <div class="col-10 d-flex align-items-center">
+                    <a href="">
+                      <h4 class="header-facet org" data-filtertype="org" data-tag="${org}">${org}</h4>
+                    </a>
+                  </div>
+                  <div class="col-2 pr-0 d-flex align-items-center">
+                    <span class="count">${count}</span>
+                    <span class="count close-filter" data-filtertype="org" data-tag="${org}">X</span>
+                  </div>
                 </div>
               % endfor
             </div>
@@ -189,7 +213,6 @@
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/course-search.js')}" charset="utf-8"></script>
 <script>
-  console.log("${onboarding_counters}")
   /* SEARCH QUERY */
   // Resize cols and cards for search page 
   $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
@@ -289,14 +312,11 @@
     $('.criteria-box').on('click', 'span.close-filter', function() {
       // Splice filter out of selected
       var key = $(this).attr('data-filtertype');
-      var value = $(this).parent().parent().children('.col-10').children().children().text();
+      var value = $(this).attr('data-tag');
 
       if (key == 'is_new') {
         query[key] = false;
       } else {
-        if (value.trim() == 'Français' || value.trim() == 'French') {value = 'fr'} else {
-          if (value.trim() == 'Anglais' || value.trim() == 'English') {value = 'en'}
-        } 
         // Remove item from query object
         query[key].forEach(function(item, index){
           if (item === value) {
