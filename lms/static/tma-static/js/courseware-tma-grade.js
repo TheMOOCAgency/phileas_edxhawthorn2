@@ -131,6 +131,9 @@ function styleQuizOnSubmit(data, url) {
       }
     }
   }
+  //Update progress to get points
+  $('#'+questionId).attr('data-problem-score', data['current_score']);
+  console.log($('#'+questionId).attr('data-problem-score'))
 }
 
 function restyleButtons(element) {
