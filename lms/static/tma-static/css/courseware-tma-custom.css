@@ -1,3 +1,17 @@
+/* QUOTES */
+blockquote > p::before, blockquote > h1::before, blockquote > h2::before, blockquote > h3::before, blockquote > h4::before, blockquote > p::after, blockquote > h1::after, blockquote > h2::after, blockquote > h3::after, blockquote > h4::after {
+  content: url('/static/tma-static/images/two-quotes.png');
+  display: inline-block;
+  margin: 0px 12px 0px 12px;
+
+}
+blockquote > p::before, blockquote > h1::before, blockquote > h2::before, blockquote > h3::before, blockquote > h4::before {
+  transform: rotate(180deg);
+}
+blockquote::before, blockquote::after {
+  content: none !important;
+}
+
 #expand-collapse-outline-all-button{
   display: none;
 }
