@@ -236,40 +236,39 @@
       }
   };
 
-  // When coming from HP - query from URL
-  if (window.location.search) {
-    // Get filter from URL
-    urlParam = window.location.search.split('=')[1];
-    // Prevent interfering with filter dropdown
-    if (urlParam != 'likes' && urlParam != 'enrollments') {
-
-      // Filter case
-      if (window.location.search.split('=')[0].indexOf('filter') > -1) {
-        // Modify param for 2-words filters
-        if (urlParam == 'Business' || urlParam == 'Business%20App.') {
-          urlParam = 'Business App.';
-        } else {
-          if (urlParam == 'Office' || urlParam == 'Office%20Tools') {
-            urlParam = 'Office Tools';
-          }
-        }
-        query['tag'].push(urlParam);
-      } else {
-        // Input case
-        query['input'] = urlParam;
-      }
-
-      // Change facet style
-      $('p:contains("'+urlParam+'")').addClass('filter-selected');
-      $('p:contains("'+urlParam+'")').parent().parent().parent().children('.col-2').children('.close-filter').show();
-
-      // Display results
-      results = searchByFilter(coursesJson, query);
-      browseCatalogDisplay(results);
-    }
-  }
-
   $(document).ready(function(){
+    // When coming from HP - query from URL
+    if (window.location.search) {
+      // Get filter from URL
+      urlParam = window.location.search.split('=')[1];
+      // Prevent interfering with filter dropdown
+      if (urlParam != 'likes' && urlParam != 'enrollments') {
+        // Filter case
+        if (window.location.search.split('=')[0].indexOf('filter') > -1) {
+          // Modify param for 2-words filters
+          if (urlParam == 'Business' || urlParam == 'Business%20App.') {
+            urlParam = 'Business App.';
+          } else {
+            if (urlParam == 'Office' || urlParam == 'Office%20Tools') {
+              urlParam = 'Office Tools';
+            }
+          }
+          query['tag'].push(urlParam);
+        } else {
+          // Input case
+          query['input'] = urlParam;
+        }
+
+        // Change facet style
+        $('p:contains("'+urlParam+'")').addClass('filter-selected');
+        $('p:contains("'+urlParam+'")').parent().parent().parent().children('.col-2').children('.close-filter').show();
+
+        // Display results
+        results = searchByFilter(coursesJson, query);
+        browseCatalogDisplay(results);
+      };
+    };
+
     // From filters
     $('.facet-option, .org, .new').on('click', function(e){
       e.preventDefault();
