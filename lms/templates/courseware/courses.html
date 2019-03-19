@@ -260,8 +260,8 @@
         }
 
         // Change facet style
-        $('p:contains("'+urlParam+'")').addClass('filter-selected');
-        $('p:contains("'+urlParam+'")').parent().parent().parent().children('.col-2').children('.close-filter').show();
+        $('p.facet-option[data-tag="'+urlParam+'"]').addClass('filter-selected');
+        $('p.facet-option[data-tag="'+urlParam+'"]').parent().parent().parent().children('.col-2').children('.close-filter').show();
 
         // Display results
         results = searchByFilter(coursesJson, query);
