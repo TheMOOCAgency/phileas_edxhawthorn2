@@ -139,7 +139,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   <div class="row bg-white">
       <form method="get" action="/courses" class="gif-box">
         <p class="title-36">${_("Find your course")} <br>${_("among")}
-          <span class="numscroller" data-min='1' data-max='${len(final_course_list)}' data-delay='5' data-increment='${len(final_course_list)}/3'>${len(final_course_list)}</span>
+          <span class="numscroller" data-min='1' data-max='${courses_counter}' data-delay='5' data-increment='${courses_counter}/3'>${courses_counter}</span>
            ${_("available")}
         </p>
         <div class="search-field-wrapper">
@@ -321,6 +321,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 
 <!-- TMA DASHBORD SCRIPT-->
 <script>
+  console.log("")
   let etoile_src = "${static.url('tma-static/images/etoile.svg')}"
   let counter = ${favorite_courses_count}
   const ssData = ${dump_js_escaped_json(sspeaking_data) | n, decode.utf8};
