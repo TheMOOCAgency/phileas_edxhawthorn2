@@ -24,6 +24,10 @@ fieldset {
     padding: 0px !important;
 }
 
+.xmodule_display.xmodule_CapaModule div.problem .submission-feedback {
+    display: none;
+}
+
 /* Progress + score */ 
 .xmodule_display.xmodule_CapaModule div.problem-progress {
     padding-top: 20px;

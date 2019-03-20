@@ -896,6 +896,7 @@ def _student_dashboard(request):
     mandatory_courses_count=TmaCourseOverview.count_mandatory_courses(current_organisation)
     favorite_courses_count=TmaCourseEnrollment.count_favorite_courses(user, current_organisation)
     ongoing_courses_count=TmaCourseEnrollment.count_ongoing_courses(user, current_organisation)
+    courses_counter = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).count()
 
     #Complete with tmaoverview and tmaenrollment info
     final_course_list = []
@@ -923,7 +924,8 @@ def _student_dashboard(request):
         'favorite_courses_count':favorite_courses_count,
         'ongoing_courses_count':ongoing_courses_count,
         'enrollment_course_list':enrollment_course_list,
-        'last_enrollment': last_enrollment
+        'last_enrollment': last_enrollment,
+        'courses_counter': courses_counter
     })
 
 
@@ -1060,7 +1062,7 @@ def get_tma_footer_info():
     org_whitelist,org_blacklist = get_org_black_and_whitelist_for_site()
     current_organisation = "phileas"
     if org_whitelist:
-         current_organisation = org_whitelist[0]
+        current_organisation = org_whitelist[0]
 
     try:
         footer['courses_counter'] = len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation))
