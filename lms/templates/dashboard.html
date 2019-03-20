@@ -321,7 +321,6 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 
 <!-- TMA DASHBORD SCRIPT-->
 <script>
-  console.log("")
   let etoile_src = "${static.url('tma-static/images/etoile.svg')}"
   let counter = ${favorite_courses_count}
   const ssData = ${dump_js_escaped_json(sspeaking_data) | n, decode.utf8};
