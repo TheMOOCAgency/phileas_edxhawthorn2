@@ -251,7 +251,7 @@ import json
 base_url="https://"+static.get_value('site_domain', settings.SITE_NAME)
 course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(course.id)+"/about")
 %>
-          <a href='mailto:?subject=${course.display_name_with_default_escaped} ${_("on Phileas")}&body=Hi,%0D%0A%0D%0A ${_("I found this course:")} %0D%0A%0D%0A {course_url} %0D%0A%0D%0A ${_("And I thought you might like it.")} %0D%0A%0D%0A ${_("Best!")'><img class="pr-4 mail" src="${static.url('tma-static/images/mail.svg')}" width="65px"></a>
+          <a href='mailto:?subject=${course.display_name_with_default_escaped} ${_("on Phileas")}&body=Hi,%0D%0A%0D%0A ${_("I found this course:")} %0D%0A%0D%0A {course_url} %0D%0A%0D%0A ${_("And I thought you might like it.")} %0D%0A%0D%0A ${_("Best!")}'><img class="pr-4 mail" src="${static.url('tma-static/images/mail.svg')}" width="65px"></a>
         % if is_favourite:
           <span class="pin favorite favorite-on m-1 ml-4"></span>
         % else:
