@@ -259,6 +259,9 @@ a.big-btn-back:hover {
 #course-map > li {
     font-weight: 600;
 }
+#course-map > li.has-subsections {
+    cursor: pointer;
+}
 .subsections {
     margin: 0.5em 0 0.5rem 0rem;
 }
