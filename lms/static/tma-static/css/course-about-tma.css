@@ -240,10 +240,9 @@ a.big-btn-back:hover {
 /***** FOURTH ROW *****/
 .content-box {
     width: 90%;
-    min-height: 670px;
+    min-height: 350px;
     margin: auto;
     padding-top: 40px;
-    padding-bottom: 150px;
 }
 .content-box .big-btn-back {
     bottom: 0;
@@ -301,4 +300,11 @@ img[src="/static/tma-static/images/flechebas.svg"] {
         width: 100%;
         box-shadow: none;
     }
+}
+
+.btn-box {
+    width: 90%;
+    margin: auto;
+    padding-top: 20px;
+    padding-bottom: 120px;
 }
