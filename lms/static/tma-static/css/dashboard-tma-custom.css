@@ -87,7 +87,7 @@ input::placeholder {
 }
 
 .gif-box {
-    position: absolute;
+    position: relative;
     z-index: 1;
     padding-top: 145px;
     padding-left: 90px;
