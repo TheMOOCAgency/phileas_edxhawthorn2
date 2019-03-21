@@ -298,42 +298,50 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
   </div>
 </div>
 <script>
-  // Dynamic course map
-  var courseJson = ${course_json};
-  courseJson.course_map.forEach(function(element, i){
-    $('#course-map').append('<li><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.title + 
-    (element.subsections ? '<a href="arrow" class="float-right"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a>': '') +
-    '<ul class="subsections sub-'+ i +'"></ul></li>');
-    if (element.subsections) {
-      element.subsections.forEach(function(subsection){
-        $('.sub-'+i).append('<li>'+ subsection +'</li>')
-      });
+  $(document).ready(function(){
+    // Dynamic course map
+    var courseJson = ${course_json};
+    courseJson.course_map.forEach(function(element, i){
+      $('#course-map').append('<li class="sub' +i+ ' "><img src="${static.url("tma-static/images/drapeau.svg")}" width="20px"/>'+ element.title + 
+      (element.subsections ? '<a href="arrow" class="float-right subsection-true"><img src="${static.url("tma-static/images/flechebas.svg")}" width="20px"/></a>': '') +
+      '<ul class="subsections sub-'+ i +'"></ul></li>');
+      if (element.subsections) {
+        element.subsections.forEach(function(subsection){
+          $('.sub-'+i).append('<li>'+ subsection +'</li>')
+        });
+      }
+    });
+
+    // Html in course goals
+    $('#course-goals').html(courseJson.goals);
+
+    // Style dynamically generated li
+    $('.subsections > li').css({
+      "list-style-image": "url('/static/tma-static/images/bullet.svg')",
+      "border-bottom": "none"
+    });
+    // Dynamic dropdown
+    $('.subsections').hide();
+    $('.subsection-true').parent().addClass('has-subsections');
+    $('.has-subsections').click(function(e){
+      e.preventDefault();
+      $(this).children('.subsection-true').toggleClass('rotate180');
+      $(this).children('.subsections').toggle();
+    })
+
+    // First subsection down
+    $('li.sub1 > a[href="arrow"]').addClass('rotate180');
+    $('ul.sub-1').toggle();
+
+
+    // Readjust tag link to search
+    if ($('.category-tag > a').text() == 'Business App.') {
+      $('.category-tag > a').attr('href', '/courses?filter=Business');
+    }
+    if ($('.category-tag > a').text() == 'Office Tools') {
+      $('.category-tag > a').attr('href', '/courses?filter=Office');
     }
   });
-
-  // Html in course goals
-  $('#course-goals').html(courseJson.goals);
-
-  // Style dynamically generated li
-  $('.subsections > li').css({
-    "list-style-image": "url('/static/tma-static/images/bullet.svg')",
-    "border-bottom": "none"
-  });
-  // Dynamic dropdown
-  $('.subsections').hide();
-  $('a[href="arrow"]').click(function(e){
-    e.preventDefault();
-    $(this).children().toggleClass('rotate180');
-    $(this).next('.subsections').toggle();
-  })
-
-  // Readjust tag link to search
-  if ($('.category-tag > a').text() == 'Business App.') {
-    $('.category-tag > a').attr('href', '/courses?filter=Business');
-  }
-  if ($('.category-tag > a').text() == 'Office Tools') {
-    $('.category-tag > a').attr('href', '/courses?filter=Office');
-  }
 </script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
 <%static:require_module_async module_name="js/dateutil_factory" class_name="DateUtilFactory">
