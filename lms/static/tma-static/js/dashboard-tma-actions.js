@@ -27,12 +27,12 @@ $(document).ready(function() {
     randomNumber = Math.floor(Math.random()*3); 
     if (randomNumber == 1) {
       $('video').hide();
-      $('.gif-box').addClass('col-lg-6').css('position', 'initial');
+      $('.gif-box').addClass('col-lg-6').css('position', 'relative');
       $('.header-box').show().css('padding', '0px').addClass('header-man');
     } else {
       if (randomNumber == 2) {
         $('video').hide();
-        $('.gif-box').addClass('col-lg-6').css('position', 'initial');
+        $('.gif-box').addClass('col-lg-6').css('position', 'relative');
         $('.header-box').show().css('padding', '0px').addClass('header-woman');
       } else {
         $('video').show();
