@@ -27,6 +27,8 @@ $(document).ready(function(){
   ;
   mark_started_subsections();
   get_course_completion();
+  // Check user completion status for popup bravo, for ungraded courses with no exercises
+  get_user_grade()
   close_all_subsections();
 })
 
@@ -38,6 +40,9 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
     unit_id=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
     mark_unit_completed(unit_id);
     get_course_completion()
+
+    // Check user completion status for popup bravo, for ungraded courses with no exercises
+    get_user_grade()
   }
 });
 

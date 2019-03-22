@@ -34,23 +34,12 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
       }
     }
   }
-
-  // Course not graded - no quiz no SCORM 
-  if (settings.url.indexOf('get_course_completion') >- 1) {
-    response = JSON.parse(xhr.responseText);
-    if (response['completion_rate'] >= 1) {
-      $('.modal-not-graded-success').show();
-      $('#tma_course_end_popup').modal('show');
-      mark_popup_as_displayed();
-    }
-  }
 });
 
 $('button.mark-as-done').on('click', function(e){
   e.preventDefault();
   mark_as_done();
   $('#tma_course_end_popup').modal('hide');
-  window.location.assign("/tma_apps/dashboard/home/");
 });
 
 // If student has failed clicks "Start over" button
@@ -88,6 +77,9 @@ function mark_as_done() {
     url: url,
     data: {
       'marked_as_done':'True'
+    },
+    success: function(){
+      window.location.assign("/tma_apps/dashboard/home/");
     }
   });
 }
