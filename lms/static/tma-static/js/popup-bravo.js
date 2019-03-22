@@ -1,8 +1,8 @@
 $(document).ajaxSuccess(function(e, xhr, settings) {
+  // Course with quiz or SCORM
   if (settings.url.indexOf('get_user_grade') >- 1) {
     response = JSON.parse(xhr.responseText);
     console.log(response)
-
     // If course is completed
     if (response['has_completed'] && !response['has_displayed_message']) {
       // If course is graded & success
@@ -32,6 +32,16 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
         $('#tma_course_end_popup').modal('show');
         mark_popup_as_displayed();
       }
+    }
+  }
+
+  // Course not graded - no quiz no SCORM
+  if (settings.url.indexOf('get_completion') >- 1) {
+    response = JSON.parse(xhr.responseText);
+    if (response['complete']) {
+      $('.modal-not-graded-success').show();
+      $('#tma_course_end_popup').modal('show');
+      mark_popup_as_displayed();
     }
   }
 });
@@ -80,3 +90,4 @@ function mark_as_done() {
     }
   });
 }
+
