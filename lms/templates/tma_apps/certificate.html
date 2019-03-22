@@ -127,13 +127,13 @@ from django.utils.translation import ugettext as _
 %else :
 <div id="main">
   <h1>${_('CERTIFICATE UNAVAILABLE')}</h1>
-  <p class="text-center">${_('You did not reach minimum grade to get your certificate')}</p>
+  <p class="text-center">${_('You did not reach minimum grade to get your certificate.')}</p>
 </div>
 %endif
 
 
 <div class="text-center mt-100">
-  <button id="bouton-pdf" onclick="printpage()">VERSION PDF</button>
+  <button id="bouton-pdf" onclick="printpage()">${_("Download PDF")}</button>
 </div>
 
 
