@@ -13,16 +13,20 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
         $('.modal-graded-success .score').html(response['user_grade']*100)
         $('.modal-graded-success').show();
         $('#tma_course_end_popup').modal('show')
-        mark_popup_as_displayed();
+        mark_popup_as_displayed('True');
       } else {
         // If failure
         console.log('cours noté - sorry')
         reset_url = ""
         $('.modal-graded-fail a').attr("href",reset_url)
         $('.modal-graded-fail .score').html(response['user_grade']*100)
+        // If quiz has limited attempts : no retry possible
+        if (!canRetry) {
+          $('#try_again').hide();
+        }
         $('.modal-graded-fail').show();
         $('#tma_course_end_popup').modal('show')
-        mark_popup_as_displayed();
+        mark_popup_as_displayed('True');
       }
     } else {
       // If course is not graded && completed
@@ -30,11 +34,12 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
         console.log('cours non noté - bravo');
         $('.modal-not-graded-success').show();
         $('#tma_course_end_popup').modal('show');
-        mark_popup_as_displayed();
+        mark_popup_as_displayed('True');
       }
     }
   }
 });
+
 
 $('button.mark-as-done').on('click', function(e){
   e.preventDefault();
@@ -54,18 +59,19 @@ $('#try_again').on('click', function(e){
     success : function(response) {
       console.log(response);
       $('#tma_course_end_popup').modal('hide');
+      mark_popup_as_displayed('False');
       location.reload();
     }
   })
 });
 
-function mark_popup_as_displayed(){
+function mark_popup_as_displayed(status){
   url ='/tma_apps/'+global_courseid+'/grade_tracking/message_displayed'
   $.ajax({
     type:'post',
     url:url,
     data:{
-      'message_displayed_status':'True'
+      'message_displayed_status': status
     }
   });
 }

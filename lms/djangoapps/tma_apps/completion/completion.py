@@ -34,7 +34,6 @@ class Completion():
                             quiz_total_components+=1
                             if component.get('complete'):
                                 quiz_completed_components+=1
-
         if quiz_total_components!=0:
             quiz_completion_rate =float(quiz_completed_components)/quiz_total_components
         if total_blocks != 0:

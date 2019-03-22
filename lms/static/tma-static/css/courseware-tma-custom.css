@@ -323,8 +323,12 @@ nav.sequence-bottom .sequence-nav-button:hover .icon{
   font-family: 'Montserrat', sans-serif!important;
   font-weight: 400;
 }
-.modal-footer a{
-  margin: 0 auto;
+.modal-footer button{
+  margin: auto;
+}
+
+.modal-footer>:not(:last-child) {
+  margin-right: none;
 }
 
 #tma_course_end_popup .modal-content{

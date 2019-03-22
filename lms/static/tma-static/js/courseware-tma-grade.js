@@ -1,8 +1,10 @@
 /************ ON PAGELOAD ************/
+var canRetry = true;
 $(document).ready(function(){
   get_user_grade();
   styleAlreadyAnsweredQuestions();
   highlightChoices();
+  checkAttemptsAllowed();
 
   $(document).ajaxSuccess(function(e, xhr, settings) {
     /* Each time a problem is submitted */
@@ -23,6 +25,7 @@ $(document).ready(function(){
       // If already answered question, style accordingly
       styleAlreadyAnsweredQuestions();
       highlightChoices();
+      checkAttemptsAllowed();
     }
   });
 });
@@ -93,6 +96,15 @@ function styleAlreadyAnsweredQuestions() {
         }
       }
     }
+  });
+};
+
+function checkAttemptsAllowed() {
+  // If all problems have more than zero attempts, learner cannot retry when fails
+  $('.tma-attempts').each(function(){
+    if ($(this).attr('data-attempts-total') > 0) {
+    	canRetry = false;
+  	}
   });
 };
 
