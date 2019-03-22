@@ -328,7 +328,7 @@ nav.sequence-bottom .sequence-nav-button:hover .icon{
 }
 
 .modal-footer>:not(:last-child) {
-  margin-right: none;
+  margin-right: none !important;
 }
 
 #tma_course_end_popup .modal-content{
