@@ -85,7 +85,7 @@ function mark_as_done() {
       'marked_as_done':'True'
     },
     success: function(){
-      window.location.assign("/tma_apps/dashboard/home/");
+      window.location.assign("/tma_apps/dashboard/home/#finished-section");
     }
   });
 }
