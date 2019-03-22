@@ -1,8 +1,10 @@
 /************ ON PAGELOAD ************/
+var canRetry = true;
 $(document).ready(function(){
   get_user_grade();
   styleAlreadyAnsweredQuestions();
   highlightChoices();
+  checkAttemptsAllowed();
 
   $(document).ajaxSuccess(function(e, xhr, settings) {
     /* Each time a problem is submitted */
@@ -23,6 +25,7 @@ $(document).ready(function(){
       // If already answered question, style accordingly
       styleAlreadyAnsweredQuestions();
       highlightChoices();
+      checkAttemptsAllowed();
     }
   });
 });
@@ -96,6 +99,15 @@ function styleAlreadyAnsweredQuestions() {
   });
 };
 
+function checkAttemptsAllowed() {
+  // If all problems have more than zero attempts, learner cannot retry when fails
+  $('.tma-attempts').each(function(){
+    if ($(this).attr('data-attempts-total') > 0) {
+    	canRetry = false;
+  	}
+  });
+};
+
 function styleQuizOnSubmit(data, url) {
   var questionId = "problem_"+ url.split('block@')[1].split('/');
   var problemTitle = $('#'+ questionId).find('.problem-header');
@@ -133,7 +145,6 @@ function styleQuizOnSubmit(data, url) {
   }
   //Update progress to get points
   $('#'+questionId).attr('data-problem-score', data['current_score']);
-  console.log($('#'+questionId).attr('data-problem-score'))
 }
 
 function restyleButtons(element) {
@@ -230,7 +241,6 @@ function get_user_grade(finalScore){
     type: 'GET',
     url: url,
     success : function(response) {
-      console.log(response)
       // Get grade for displaying final feedback message
       if (finalScore) {
         if (response['passed']) {

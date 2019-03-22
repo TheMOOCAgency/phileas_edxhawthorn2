@@ -34,10 +34,10 @@ class Completion():
                             quiz_total_components+=1
                             if component.get('complete'):
                                 quiz_completed_components+=1
-
         if quiz_total_components!=0:
             quiz_completion_rate =float(quiz_completed_components)/quiz_total_components
-        completion_rate = float(completed_blocks)/total_blocks
+        if total_blocks != 0:
+            completion_rate = float(completed_blocks)/total_blocks
         TmaCourseEnrollment.update_course_completion(course_key,self.request.user, completion_rate, quiz_completion_rate)
         response={
             'completion_rate':completion_rate,
