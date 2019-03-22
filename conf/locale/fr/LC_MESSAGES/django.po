@@ -25298,6 +25298,18 @@ msgid "Not graded"
 msgstr "Non noté"
 
 #: lms/templates/courseware/course_about.html
+msgid "Required score"
+msgstr "Score requis"
+
+#: lms/templates/courseware/course_about.html
+msgid "Objectives"
+msgstr "Objectifs"
+
+#: lms/templates/courseware/course_about.html
+msgid "Course Map"
+msgstr "Plan du cours"
+
+#: lms/templates/courseware/course_about.html
 msgid "Downloads"
 msgstr "Téléchargements"
 
@@ -25371,3 +25383,31 @@ msgstr[1] "essais utilisés"
 #: lms/templates/dashboard.html
 msgid "Business Applications"
 msgstr "Applications Métier"
+
+#: lms/templates/tma_apps/certificate.html
+msgid "Download PDF"
+msgstr "Télécharger en PDF"
+
+#: lms/templates/tma_apps/certificate.html
+msgid "Certificate"
+msgstr "Certificat"
+
+#: lms/templates/tma_apps/certificate.html
+msgid "Of appreciation"
+msgstr "De mérite"
+
+#: lms/templates/tma_apps/certificate.html
+msgid "This certificate is presented to"
+msgstr "Ce certificat est adressé à"
+
+#: lms/templates/tma_apps/certificate.html
+msgid "This certificate acknowledges that the above named has successfully completed the necessary training and testing including didactif and video modules."
+msgstr "Ce certificat reconnaît que le personne nommée ci-dessus a réussi le parcours et les examens de ce cours, y compris les modules didactiques et vidéo."
+
+#: lms/templates/tma_apps/certificate.html
+msgid "CERTIFICATE UNAVAILABLE"
+msgstr "CERTIFICAT NON DISPONIBLE"
+
+#: lms/templates/tma_apps/certificate.html
+msgid "You did not reach minimum grade to get your certificate."
+msgstr "Vous n'avez pas atteint la note requise pour obtenir votre certificat."

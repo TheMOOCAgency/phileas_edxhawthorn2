@@ -186,7 +186,7 @@ import json
     </div>
     <div class="col-lg-2 col-2 text-center">
       <img src="${static.url('tma-static/images/calendrier.svg')}" width="36">
-      <p>Date de début</p>
+      <p>${_("Start Date")}</p>
       % if not course.start_date_is_still_default:
         <%
             course_start_date = course.advertised_start or course.start
@@ -198,7 +198,7 @@ import json
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/calendrier.svg')}" width="36">
-      <p>Date de fin</p>
+      <p>${_("End date")}</p>
       % if course.end:
         <%
             course_end_date = course.end
@@ -210,17 +210,17 @@ import json
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/time.svg')}" width="36">
-      <p>Durée</p>
+      <p>${_("Duration")}</p>
       <p id="course-duration" class="font-weight-bold">${get_course_about_section(request, course, "effort")}</p>
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/langue.svg')}" width="50" class="mb-0">
-      <p>Langue</p>
+      <p>${_("Language")}</p>
       <p class="text-uppercase font-weight-bold">${course.language}</p>
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/coupe.png')}" width="36">
-      <p>Score requis</p>
+      <p>${_("Required score")}</p>
       % if TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).is_course_graded:
         <p id="course-score" class="font-weight-bold">${int(course.grade_cutoffs.get("Pass")*100)}%</p>
       % else:
@@ -240,7 +240,7 @@ import json
   <!--THIRD ROW-->
   <div class="row description-box">
     <div class="col-lg-9 pl-0">
-      <h3>Objectifs</h3>
+      <h3>${_("Objectives")}</h3>
       % if 'goals' in course_about.keys():
         <div id="course-goals" class="text-blue-dark"></div>
       % endif
@@ -266,7 +266,7 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
     <!--COURSE MAP-->
     <div class="col-lg-7 pl-0">
       <div class="container-fluid pl-0">
-        <h3>Plans du cours</h3>
+        <h3>${_("Course Map")}</h3>
         <div class="row">
           <div class="col-lg-11">
             <div id="course-map">
