@@ -133,7 +133,6 @@ function styleQuizOnSubmit(data, url) {
   }
   //Update progress to get points
   $('#'+questionId).attr('data-problem-score', data['current_score']);
-  console.log($('#'+questionId).attr('data-problem-score'))
 }
 
 function restyleButtons(element) {
@@ -230,7 +229,6 @@ function get_user_grade(finalScore){
     type: 'GET',
     url: url,
     success : function(response) {
-      console.log(response)
       // Get grade for displaying final feedback message
       if (finalScore) {
         if (response['passed']) {
