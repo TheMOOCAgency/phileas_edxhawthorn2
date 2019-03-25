@@ -13,7 +13,7 @@ $('button.close-courseware-nav').on('click', function(){
   $('#tma-completion-nav').addClass('folded');
   $('.open-courseware-nav').removeClass('tma-visibility-hidden');
 })
-$('.xmodule_display.xmodule_SequenceModule .sequence-bottom .sequence-nav-button').live('click',function(){
+$('.xmodule_display.xmodule_SequenceModule .sequence-bottom .sequence-nav-button').on('click',function(){
   $('#tma-completion-nav').addClass('folded');
   $('.open-courseware-nav').removeClass('tma-visibility-hidden');
   close_all_subsections();
