@@ -215,9 +215,10 @@ class TmaCourseOverview(models.Model):
             pass
 
     @classmethod
-    def add_vodelic_course(cls, course_key):
+    def add_vodelic_course(cls, course_key, tag):
         tma_course_overview=cls.get_tma_course_overview_by_course_id(course_key)
-        tma_course_overview.is_vodeclic=True
+        tma_course_overview.is_vodeclic=True,
+        tma_course_overview.tag=tag,
         tma_course_overview.save()
         return tma_course_overview
 
@@ -250,7 +251,7 @@ class TmaCourseOverview(models.Model):
             all_tags = collections.Counter(all_tags)
         except:
             pass
-        
+
         return all_tags
 
     @classmethod
@@ -267,7 +268,7 @@ class TmaCourseOverview(models.Model):
             onboardings = collections.Counter(onboardings)
         except:
             pass
-        
+
         return onboardings
 
 #Track enrollments and unenrollments to update total_active_enrollments
