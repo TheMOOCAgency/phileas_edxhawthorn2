@@ -111,7 +111,7 @@ class VodeclicGenerator():
         courses_to_create=[]
         log.info('Importing course for language {}'.format(language))
         for vodeclic_course_params in vodeclic_courses :
-            if vodeclic_course_params.get('id') in vodeclic_id_list :
+            if vodeclic_course_params.get('id') in vodeclic_id_list.keys() :
                 log.info('Importing course {}'.format(vodeclic_course_params.get('title')))
                 vodeclic_language=vodeclic_course_params.get('language')
                 vodeclic_run="Vodeclic_"+vodeclic_language
@@ -119,6 +119,7 @@ class VodeclicGenerator():
                 vodeclic_user=self._get_course_creator()
                 vodeclic_id=vodeclic_course_params.get('id')
                 vodeclic_picture = vodeclic_course_params.get('large_image_png_url')
+                course_already_exist=False
 
                 #Build fields list
                 fields= {
@@ -133,6 +134,8 @@ class VodeclicGenerator():
                 except DuplicateCourseError:
                     vodeclic_course_key = SlashSeparatedCourseKey.from_deprecated_string('course-v1:'+org+'+'+vodeclic_number+'+'+vodeclic_run)
                     vodeclic_course = get_course_by_id(vodeclic_course_key)
+                    course_already_exist=True
+
 
                 #Set organization
                 self._set_org_info(org, vodeclic_course.id)
@@ -147,24 +150,29 @@ class VodeclicGenerator():
                 except:
                     pass
 
-                #Set other course details
-                additional_info = {
-                'display_name': vodeclic_course_params.get('title'),
-                'language': vodeclic_course_params.get('language'),
-                'short_description': vodeclic_course_params.get('description'),
-                'intro_video': None,
-                'course_image_name': vodeclic_image_name,
-                'course_image_asset_path': vodeclic_image_asset_path,
-                'start_date': vodeclic_course.start.replace(tzinfo=utc),
-                'end_date': vodeclic_course.end,
-                'enrollment_start': vodeclic_course.start.replace(tzinfo=utc),
-                'enrollment_end': vodeclic_course.end,
-                'effort':self.convert_seconds_to_edx_time(vodeclic_course_params.get('duration'))
-                }
+                if course_already_exist:
+                    additional_info={
+                    'course_image_name': vodeclic_image_name,
+                    'course_image_asset_path': vodeclic_image_asset_path,
+                    }
+                else :
+                    #Add other course info
+                    additional_info = {
+                    'display_name': vodeclic_course_params.get('title'),
+                    'language': vodeclic_course_params.get('language'),
+                    'short_description': vodeclic_course_params.get('description'),
+                    'intro_video': None,
+                    'course_image_name': vodeclic_image_name,
+                    'course_image_asset_path': vodeclic_image_asset_path,
+                    'start_date': vodeclic_course.start.replace(tzinfo=utc),
+                    'end_date': vodeclic_course.end,
+                    'enrollment_start': vodeclic_course.start.replace(tzinfo=utc),
+                    'enrollment_end': vodeclic_course.end,
+                    'effort':self.convert_seconds_to_edx_time(vodeclic_course_params.get('duration'))
+                    }
 
                 CourseDetails.update_from_json(vodeclic_course.id, additional_info, vodeclic_user)
-
                 #Get or create TmaCourseOverview
-                TmaCourseOverview.add_vodelic_course(SlashSeparatedCourseKey.from_deprecated_string(str(vodeclic_course.id)))
+                TmaCourseOverview.add_vodelic_course(SlashSeparatedCourseKey.from_deprecated_string(str(vodeclic_course.id)), vodeclic_id_list[vodeclic_id].get('tags'))
 
                 log.info('{} imported'.format(vodeclic_course_params.get('title')))
