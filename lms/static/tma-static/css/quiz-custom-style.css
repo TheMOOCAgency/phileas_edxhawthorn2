@@ -148,6 +148,10 @@ solution > .detailed-solution {
     background-color: white;
     font-size: 20px;
 }
+.feedback-hint-incorrect, .feedback-hint-correct {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
 .detailed-solution > p:first-of-type, .xmodule_display.xmodule_CapaModule .explanation-title {
     margin-bottom: 20px;
     text-transform: uppercase;
