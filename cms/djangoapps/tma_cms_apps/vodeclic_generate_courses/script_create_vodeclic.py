@@ -16,8 +16,8 @@ startup.run()
 from tma_cms_apps.vodeclic_generate_courses.generate_courses import VodeclicGenerator
 
 #Be sure to get all course pictures
-VodeclicGenerator().save_all_courses_pictures('fr')
-VodeclicGenerator().save_all_courses_pictures('en')
+#VodeclicGenerator().save_all_courses_pictures('fr')
+#VodeclicGenerator().save_all_courses_pictures('en')
 
 #Ids of courses to create
 courses_id_fr={
