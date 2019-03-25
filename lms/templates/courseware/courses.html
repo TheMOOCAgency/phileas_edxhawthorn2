@@ -223,6 +223,7 @@
   var coursesJson = ${json_courses | n, dump_js_escaped_json};
   var query = {tag: [], onboarding: [], language: [], org: [], is_new: false, input: ''};
   var results = [];
+
   const browseCatalogDisplay = function(results) {
     if (results.length > 0) {
         displayResults(results);
