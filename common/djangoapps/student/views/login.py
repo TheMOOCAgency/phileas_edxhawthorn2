@@ -554,8 +554,13 @@ def signin_user(request):
         'third_party_auth_error': third_party_auth_error
     }
 
-    return render_to_response('login.html', context)
+    # TMA redirect to SSO if no admin=True in URL
+    if request.GET.get('admin'):
+        return render_to_response('login.html', context)
+    else:
+        return redirect('/auth/login/amundi/?auth_entry=login&next='+ request.META['PATH_INFO'].replace('/', '%2F'))
 
+    #return render_to_response('login.html', context)
 
 def str2bool(s):
     s = str(s)

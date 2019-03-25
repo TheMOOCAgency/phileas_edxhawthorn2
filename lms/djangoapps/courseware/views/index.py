@@ -59,6 +59,7 @@ from ..module_render import get_module_for_descriptor, toc_for_course
 #TMA imports
 from openedx.features.course_experience.views.course_outline import CourseOutlineFragmentView
 from courseware.courses import get_course_by_id
+from django.shortcuts import redirect
 
 log = logging.getLogger("edx.courseware.views.index")
 
@@ -102,7 +103,12 @@ class CoursewareIndex(View):
         self.course_key = CourseKey.from_string(course_id)
 
         if not (request.user.is_authenticated or self.enable_anonymous_courseware_access):
-            return redirect_to_login(request.get_full_path())
+            # TMA - redirection to SSO URL instead of /login - unless admin=True
+            #return redirect_to_login(request.get_full_path())
+            if request.GET.get('admin'):
+                return redirect('/login?admin=True')
+            else:
+                return redirect('/auth/login/amundi/?auth_entry=login&next='+ request.META['PATH_INFO'].replace('/', '%2F'))
 
         self.original_chapter_url_name = chapter
         self.original_section_url_name = section
