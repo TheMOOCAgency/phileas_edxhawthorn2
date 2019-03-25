@@ -21,9 +21,9 @@ let change_social_attributes =  function(element, social_attribute){
   $('.'+ courseSelector + ' > .'+ social_attribute).each(function(){
     /*console.log('.'+ courseSelector + ' > .'+ social_attribute)*/
 
-    $(this).toggleClass(`${social_attribute}-on ${social_attribute}-off`);
+    $(this).toggleClass(social_attribute +'-on '+social_attribute+'-off');
   });
-  if (element.hasClass(`${social_attribute}-on`)){
+  if (element.hasClass(social_attribute+'-on')){
     status = true;
   } else {
     status = false;

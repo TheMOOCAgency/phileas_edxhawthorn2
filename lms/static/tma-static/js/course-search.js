@@ -61,7 +61,7 @@ const checkValueAsText = function(course, value) {
 const searchByFilter = function(coursesJson, queryObj) {
     const filterKeys = Object.keys(queryObj);
     // For each course
-    return coursesJson.filter((course) => {
+    return coursesJson.filter(function(course) {
         // for each key
         var tagIsValid = true
         var onboardingIsValid = true
@@ -70,7 +70,7 @@ const searchByFilter = function(coursesJson, queryObj) {
         var isNewIsValid = true
         var textIsValid = true
 
-        filterKeys.forEach((key) => {
+        filterKeys.forEach(function(key) {
             // Check is_new condition
             if (queryObj[key] && (key === 'is_new')) {
                 if (checkValueAsBool(course, key, queryObj[key])) {
