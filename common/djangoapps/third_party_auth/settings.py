@@ -54,7 +54,7 @@ def apply_settings(django_settings):
         'third_party_auth.pipeline.set_pipeline_timeout',
         'third_party_auth.pipeline.ensure_user_information',
         'social_core.pipeline.user.create_user',
-        'lms.tma_apps.sso_profile_creation.create_tma_user_profile'
+        'lms.tma_apps.sso_profile_creation.create_tma_user_profile',
         'social_core.pipeline.social_auth.associate_user',
         'social_core.pipeline.social_auth.load_extra_data',
         'social_core.pipeline.user.user_details',
