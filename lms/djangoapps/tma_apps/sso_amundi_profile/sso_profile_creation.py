@@ -16,7 +16,14 @@ def create_tma_user_profile(backend, user, response, *args, **kwargs):
         try :
             custom_field = json.loads(profile.custom_field)
         except:
-            custom_field={}    
+            custom_field={}
+        try:
+            if not profile.rpid:
+                profile.rpid=response.get('rpid','')
+            if not profile.iug:
+                profile.iug=response.get('iug','')
+        except:
+            pass
 
         if is_manager=="true":
             profile.is_manager = True

@@ -34,7 +34,7 @@ class VodeclicGenerator():
         self.encrypted_partenaire =hashlib.sha256(self.partenaire+self.api_key).hexdigest()
         self.url_base='https://lms.vodeclic.com/api'
         self.date_today=datetime.datetime.now()
-        self.vodeclic_img_path_base='/edx/app/edxapp/edx-platform/cms/static/tma-cms-static/vodeclic-course-images/images_'
+        self.vodeclic_img_path_base='/edx/app/edxapp/edx-platform/cms/static/tma-cms-static/vodeclic-basics-images/'
 
 
     def _get_vodeclic_courses(self,vodeclic_id_list,language):
@@ -122,10 +122,8 @@ class VodeclicGenerator():
                 self._set_org_info(org, vodeclic_course.id)
 
                 #Save Image
-                self._save_picture_from_url(vodeclic_picture, self.vodeclic_img_path_base+vodeclic_language+'/'+vodeclic_id+'.png')
                 vodeclic_image_name, vodeclic_image_asset_path = store_jacket_image(
-                    vodeclic_course.id, self.vodeclic_img_path_base+vodeclic_language+'/',
-                    vodeclic_id + ".png"
+                    vodeclic_course.id, self.vodeclic_img_path_base, vodeclic_id_list.get(vodeclic_id).get('pictos')+'.png'
                 )
 
                 additional_info = {
