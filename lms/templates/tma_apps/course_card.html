@@ -77,6 +77,14 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
               <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
                 ${_("Unenroll")}
               </a>
+            % elif is_vodeclic:
+              <p class="font-weight-bold">${_("What do you want to do?")}</p>
+              <a href="" class="continue-btn tma_markasdone">
+                ${_("Mark as complete")}
+              </a>
+              <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
+                ${_("Unenroll")}
+              </a>
             % else:
               <p>${_("Do you really want to unenroll?")}</p>
               <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
