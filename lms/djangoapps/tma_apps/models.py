@@ -217,8 +217,8 @@ class TmaCourseOverview(models.Model):
     @classmethod
     def add_vodelic_course(cls, course_key, tag):
         tma_course_overview=cls.get_tma_course_overview_by_course_id(course_key)
-        tma_course_overview.is_vodeclic=True,
-        tma_course_overview.tag=tag,
+        tma_course_overview.is_vodeclic=True
+        tma_course_overview.tag=tag
         tma_course_overview.save()
         return tma_course_overview
 
