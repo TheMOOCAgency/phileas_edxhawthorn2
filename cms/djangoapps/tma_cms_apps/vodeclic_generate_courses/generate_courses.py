@@ -127,29 +127,24 @@ class VodeclicGenerator():
                     vodeclic_course.id, self.vodeclic_img_path_base+vodeclic_language+'/',
                     vodeclic_id + ".png"
                 )
-                if course_exists :
-                    additional_info = {
-                    'course_image_name': vodeclic_image_name,
-                    'course_image_asset_path': vodeclic_image_asset_path,
-                    }
-                else :
-                    additional_info = {
-                    'display_name': vodeclic_course_params.get('title'),
-                    'language': vodeclic_course_params.get('language'),
-                    'short_description': vodeclic_course_params.get('description'),
-                    'intro_video': None,
-                    'course_image_name': vodeclic_image_name,
-                    'course_image_asset_path': vodeclic_image_asset_path,
-                    'start_date': vodeclic_course.start.replace(tzinfo=utc),
-                    'end_date': vodeclic_course.end,
-                    'enrollment_start': vodeclic_course.start.replace(tzinfo=utc),
-                    'enrollment_end': vodeclic_course.end,
-                    'effort':self.convert_seconds_to_edx_time(vodeclic_course_params.get('duration'))
-                    }
+
+                additional_info = {
+                'display_name': vodeclic_course_params.get('title'),
+                'language': vodeclic_course_params.get('language'),
+                'short_description': vodeclic_course_params.get('description'),
+                'intro_video': None,
+                'course_image_name': vodeclic_image_name,
+                'course_image_asset_path': vodeclic_image_asset_path,
+                'start_date': vodeclic_course.start,
+                'end_date': vodeclic_course.end,
+                'enrollment_start': vodeclic_course.start,
+                'enrollment_end': vodeclic_course.end,
+                'effort':self.convert_seconds_to_edx_time(vodeclic_course_params.get('duration'))
+                }
 
                 CourseDetails.update_from_json(vodeclic_course.id, additional_info, vodeclic_user)
 
                 #Get or create TmaCourseOverview
-                TmaCourseOverview.add_vodelic_course(SlashSeparatedCourseKey.from_deprecated_string(str(vodeclic_course.id)),vodeclic_id_list.get(vodeclic_id).get('tag'))
+                TmaCourseOverview.add_vodelic_course(SlashSeparatedCourseKey.from_deprecated_string(str(vodeclic_course.id)),vodeclic_id_list.get(vodeclic_id).get('tags'))
 
                 log.info('{} imported'.format(vodeclic_course_params.get('title')))
