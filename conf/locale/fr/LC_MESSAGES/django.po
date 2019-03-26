@@ -25318,14 +25318,17 @@ msgid "No downloads available for this course."
 msgstr "Aucun document disponible pour ce cours."
 
 #: lms/templates/courseware/course_about.html
+msgid "Hi,"
+msgstr "Bonjour,"
+
 msgid "on Phileas"
 msgstr "sur Phileas"
 
 msgid "I found this course:"
-msgstr "J'ai découvert ce cours :"
+msgstr "Je participe à ce cours :"
 
 msgid "and I thought you might like it"
-msgstr "et j'ai pensé qu'il pourrait vous plaire."
+msgstr "et il me semble qu'il pourrait vous plaire."
 
 msgid "Best!"
 msgstr "A bientôt !"
@@ -25394,7 +25397,7 @@ msgstr "Certificat"
 
 #: lms/templates/tma_apps/certificate.html
 msgid "Of appreciation"
-msgstr "De mérite"
+msgstr "De réussite"
 
 #: lms/templates/tma_apps/certificate.html
 msgid "This certificate is presented to"

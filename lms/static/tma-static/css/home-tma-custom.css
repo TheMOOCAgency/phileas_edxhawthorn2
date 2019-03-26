@@ -252,6 +252,9 @@ a.continue-btn:hover, a.enroll-btn:hover {
     border: 2px solid #0B1A4C;
     text-decoration: none;
 }
+.popup a.continue-btn {
+    width: 200px;
+}
 
 /* 3d ROW */
 .mandatory-box {

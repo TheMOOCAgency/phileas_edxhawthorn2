@@ -81,13 +81,15 @@ def mark_as_done(request, course_id):
     course_descriptor = get_course_by_id(course_key)
     response = {}
 
-    # Completion information
-    completion_info = Completion(request).get_course_completion(course_id)
+    # Completion information if course is not Vodeclic
+    if not request.POST.get('is_vodeclic'):
+        completion_info = Completion(request).get_course_completion(course_id)
+        # Update date_best_student_grade
+        date_update_status = TmaCourseEnrollment.update_not_graded_status(course_key, request.user, completion_info['completion_rate'])
+        response.update(date_update_status)
 
     marked_as_done = request.POST.get('marked_as_done')
-    # Update date_best_student_grade
-    date_update_status = TmaCourseEnrollment.update_not_graded_status(course_key, request.user, completion_info['completion_rate'])
-    response.update(date_update_status)
+
     # Update has_validated
     has_validated_status = TmaCourseEnrollment.update_course_validation(course_key, request.user, marked_as_done)
     response.update({'has_validated_status': has_validated_status})

@@ -77,6 +77,14 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
               <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
                 ${_("Unenroll")}
               </a>
+            % elif is_vodeclic:
+              <p class="font-weight-bold">${_("What do you want to do?")}</p>
+              <a href="" class="continue-btn tma_markasdone">
+                ${_("Mark as complete")}
+              </a>
+              <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
+                ${_("Unenroll")}
+              </a>
             % else:
               <p>${_("Do you really want to unenroll?")}</p>
               <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
@@ -125,7 +133,7 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
 base_url="https://"+static.get_value('site_domain', settings.SITE_NAME)
 course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/enrollment.course_id/about")
 %>
-          <a href='mailto:?subject=${_("{course_name} on Phileas&body=Hi,%0D%0A%0D%0AI found this course %0D%0A%0D%0A {course_url} %0D%0A%0D%0AI and thought you might like it%0D%0A%0D%0ABest!").format(course_name=enrollment.course_overview.display_name_with_default, course_url=course_url)}'class="w-100 text-right">
+          <a href='mailto:?subject=${enrollment.course_overview.display_name_with_default} ${_("on Phileas")} &body= ${_("Hi,")} %0D%0A%0D%0A ${_("I found this course")} %0D%0A%0D%0A ${course_url} %0D%0A%0D%0A ${_("and thought you might like it")} %0D%0A%0D%0A ${_("Best!")}' class="w-100 text-right">
           <p><img src="${static.url('tma-static/images/recommend.svg')}"/>${_("Recommend")}</p>
           </a>
         </div>

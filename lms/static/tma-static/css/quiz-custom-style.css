@@ -150,7 +150,10 @@ solution > .detailed-solution {
 }
 .feedback-hint-incorrect, .feedback-hint-correct {
     margin-top: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 60px;
+}
+.xmodule_display.xmodule_CapaModule .hint-label {
+    display: none;
 }
 .detailed-solution > p:first-of-type, .xmodule_display.xmodule_CapaModule .explanation-title {
     margin-bottom: 20px;

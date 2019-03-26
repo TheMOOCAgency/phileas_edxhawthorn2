@@ -5,6 +5,7 @@ $(document).ready(function(){
   styleAlreadyAnsweredQuestions();
   highlightChoices();
   checkAttemptsAllowed();
+  changeHintWording();
 
   $(document).ajaxSuccess(function(e, xhr, settings) {
     /* Each time a problem is submitted */
@@ -15,6 +16,7 @@ $(document).ready(function(){
       var data = JSON.parse(xhr.responseText);
       styleQuizOnSubmit(data, settings.url);
       highlightChoices();
+      changeHintWording();
     }
     /* When passing from unit to another (no reload) */
     if (settings.url.indexOf('goto_position') > -1) {
@@ -26,6 +28,7 @@ $(document).ready(function(){
       styleAlreadyAnsweredQuestions();
       highlightChoices();
       checkAttemptsAllowed();
+      changeHintWording();
     }
   });
 });
@@ -105,6 +108,15 @@ function checkAttemptsAllowed() {
     if ($(this).attr('data-attempts-total') > 0) {
     	canRetry = false;
   	}
+  });
+};
+
+function changeHintWording() {
+  $('.xmodule_display.xmodule_CapaModule .feedback-hint-incorrect .explanation-title').each(function(){
+    $(this).text('Incorrect')
+  });
+  $('.xmodule_display.xmodule_CapaModule .feedback-hint-correct .explanation-title').each(function(){
+    $(this).text('Correct')
   });
 };
 
