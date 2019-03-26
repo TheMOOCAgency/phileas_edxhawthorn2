@@ -458,6 +458,8 @@ class UserProfile(models.Model):
     is_manager = models.BooleanField(default=0)
     rpid = models.CharField(blank=True, max_length=255, db_index=False)
     iug = models.CharField(blank=True, max_length=255, db_index=False)
+    #TMA Custom Field
+    custom_field = models.TextField(default='')
 
     @property
     def has_profile_image(self):
