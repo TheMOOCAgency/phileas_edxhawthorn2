@@ -15,17 +15,6 @@ from openedx.core.djangolib.markup import HTML
 from openedx.features.course_experience import course_home_page_title, COURSE_OUTLINE_PAGE_FLAG
 from lms.djangoapps.tma_apps.models import TmaCourseOverview
 
-from lms.djangoapps.tma_apps.sso_amundi_profile.sso_profile_creation import create_tma_user_profile
-
-%>
-
-<%
-class backend():
-  def __init__(self):
-    self.name="amundi"
-
-response={"first_name":"Aaaaa","last_name":"bbbbbb","boo":"test"}
-create_tma_user_profile(backend(), request.user, response)
 %>
 
 <%
