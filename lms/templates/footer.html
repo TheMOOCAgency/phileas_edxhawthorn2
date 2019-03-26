@@ -28,7 +28,7 @@
     <div class="col-lg-3">
       <div class="stat-box">
         <div>
-          % if footer_counters["users_counter"]:
+          % if footer_counters.get("users_counter"):
             <span class="text-center numscroller" data-min='1' data-max='${footer_counters["users_counter"]}' data-delay='5' data-increment='${footer_counters["users_counter"]}/3'>${footer_counters["users_counter"]}</span>
           % endif
           <span class="text-center">${_("Users")}</span>
@@ -38,7 +38,7 @@
     <div class="col-lg-3">
       <div class="stat-box">
         <div>
-          % if footer_counters["courses_counter"]:
+          % if footer_counters.get("courses_counter"):
             <span class="text-center numscroller" data-min='1' data-max='${footer_counters["courses_counter"]}' data-delay='5' data-increment='${footer_counters["courses_counter"]}/3'>${footer_counters["courses_counter"]}</span>
           % endif
             <span class="text-center">${_("Courses")}</span>
@@ -48,7 +48,7 @@
     <div class="col-lg-3">
       <div class="stat-box">
         <div>
-          % if footer_counters["likes_counter"]:
+          % if footer_counters.get("likes_counter"):
             <span class="text-center numscroller" data-min='1' data-max='${footer_counters["likes_counter"]}' data-delay='5' data-increment='${footer_counters["likes_counter"]}/3'>${footer_counters["likes_counter"]}</span>
           % endif
           <span class="text-center">${_("Likes")}</span>
@@ -58,7 +58,7 @@
     <div class="col-lg-3">
       <div class="stat-box">
         <div>
-          % if footer_counters["hours_counter"]:
+          % if footer_counters.get("hours_counter"):
             <span class="text-center numscroller" data-min='1' data-max='${footer_counters["hours_counter"]}' data-delay='5' data-increment='${footer_counters["hours_counter"]}/3'>${footer_counters["hours_counter"]}</span>
           % endif
           <span class="text-center">${_("Training hours")}</span>
