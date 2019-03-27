@@ -25314,8 +25314,8 @@ msgid "Downloads"
 msgstr "Téléchargements"
 
 #: lms/templates/courseware/course_about.html
-msgid "No downloads available for this course."
-msgstr "Aucun document disponible pour ce cours."
+msgid "No downloads."
+msgstr "Aucun document."
 
 #: lms/templates/courseware/course_about.html
 msgid "on Phileas"
