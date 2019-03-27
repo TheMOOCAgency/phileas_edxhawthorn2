@@ -872,7 +872,10 @@ def _student_dashboard(request):
          current_organisation = org_whitelist[0]
     log.info(current_organisation)
     
-    frontpage_courses = configuration_helpers.get_value('frontpage_courses')
+    if request.LANGUAGE_CODE == 'fr':
+        frontpage_courses = configuration_helpers.get_value('frontpage_courses_fr')
+    else:
+        frontpage_courses = configuration_helpers.get_value('frontpage_courses_en')
     accepted_filters = ['likes', 'enrollments']
     filter = request.GET.get('filter')
 
