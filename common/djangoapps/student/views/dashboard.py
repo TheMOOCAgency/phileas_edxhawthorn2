@@ -889,7 +889,7 @@ def _student_dashboard(request):
 
     elif frontpage_courses:
         for course_id in frontpage_courses:
-            course_to_add = CourseOverview.objects.filter(org=current_organisation, id=CourseKey.from_string(str(course_id)))
+            course_to_add = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(course_id)))
             courses_to_display.append(course_to_add)
     else :
         courses_to_display = CourseOverview.objects.filter(org=current_organisation)[:9]
