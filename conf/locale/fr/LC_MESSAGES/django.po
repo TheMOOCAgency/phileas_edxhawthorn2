@@ -12434,7 +12434,7 @@ msgstr "Réinitialiser"
 
 #: cms/templates/widgets/footer.html lms/templates/footer.html
 #: themes/red-theme/lms/templates/footer.html
-msgid "Legal"
+msgid "Legal Notice"
 msgstr "Mentions légales"
 
 #: cms/templates/widgets/header.html lms/templates/header/header.html
