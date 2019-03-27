@@ -21,10 +21,11 @@ $('.xmodule_display.xmodule_SequenceModule .sequence-bottom .sequence-nav-button
 
 /*Prepare completion coursenav on pageload */
 $(document).ready(function(){
-  // Open menu when landing on page
-  $('#tma-completion-nav').removeClass('folded');
-  $('.open-courseware-nav').addClass('tma-visibility-hidden');
-  ;
+  // Open menu when landing on page if coming from course_about
+  if (document.referrer.indexOf('/about') > -1) {
+    $('#tma-completion-nav').removeClass('folded');
+    $('.open-courseware-nav').addClass('tma-visibility-hidden');
+  };
   mark_started_subsections();
   get_course_completion();
   // Check user completion status for popup bravo, for ungraded courses with no exercises
