@@ -251,7 +251,7 @@ import json
 base_url="https://"+static.get_value('site_domain', settings.SITE_NAME)
 course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(course.id)+"/about")
 %>
-          <a href='mailto:?subject=${course.display_name_with_default} ${_("on Phileas")} &body= ${_("Hi,")} %0D%0A%0D%0A ${_("I found this course")} %0D%0A%0D%0A ${course_url} %0D%0A%0D%0A ${_("and thought you might like it")} %0D%0A%0D%0A ${_("Best!")}'><img class="pr-4 mail" src="${static.url('tma-static/images/mail.svg')}" width="65px"></a>
+          <a href='mailto:?subject=${course.display_name_with_default}${_("on Phileas")}&body=${_("Hi, %0D%0A%0D%0A I found this course: {course_url} and I thought you might like it.").format(course_url=course_url)}%0D%0A%0D%0A${_("Best!")}'><img class="pr-4 mail" src="${static.url('tma-static/images/mail.svg')}" width="65px"></a>
         % if is_favourite:
           <span class="pin favorite favorite-on m-1 ml-4"></span>
         % else:
@@ -278,14 +278,14 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
     <!--DOWNLOADS-->
     <div class="col-lg-5 pr-0">
       <div class="downloads-box">
-        <h3 class="mb-4">${_("Downloads")}</h3>
+        <h3 class="mb-4">${_("Download")}</h3>
         % if 'downloads' in course_about.keys():
           % if len(course_about['downloads']) > 0:
             % for item in course_about['downloads']:
               <a href="${item['link']}" target="_blank" class="download-link"><p>${item['text']}</p></a>
             % endfor
           % else:
-            <p>${_("No downloads available for this course.")}</p>
+            <p>${_("No downloads.")}</p>
           % endif
         % endif
       </div>
