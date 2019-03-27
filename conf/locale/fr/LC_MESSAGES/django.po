@@ -25318,18 +25318,14 @@ msgid "No downloads available for this course."
 msgstr "Aucun document disponible pour ce cours."
 
 #: lms/templates/courseware/course_about.html
-msgid "Hi,"
-msgstr "Bonjour,"
-
 msgid "on Phileas"
 msgstr "sur Phileas"
 
-msgid "I found this course:"
-msgstr "Je participe à ce cours :"
+#: lms/templates/courseware/course_about.html
+msgid "Hi, %0D%0A%0D%0A I found this course: {course_url} and I thought you might like it."
+msgstr "Bonjour, %0D%0A%0D%0A Je participe à ce cours : {course_url} et il me semble qu'il pourrait vous plaire."
 
-msgid "and I thought you might like it"
-msgstr "et il me semble qu'il pourrait vous plaire."
-
+#: lms/templates/courseware/course_about.html
 msgid "Best!"
 msgstr "A bientôt !"
 
