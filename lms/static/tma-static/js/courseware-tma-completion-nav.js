@@ -34,7 +34,7 @@ $(document).ready(function(){
 
 /*Update completion coursenav between units*/
 $(document).ajaxSuccess(function(e, xhr, settings) {
-  if (settings.url.indexOf('publish_completion')>-1) {
+  if (settings.url.indexOf('publish_completion')>-1 || settings.url.indexOf('goto_position')>-1) {
     response=JSON.parse(xhr.responseText);
     mark_started_subsections();
     unit_id=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');

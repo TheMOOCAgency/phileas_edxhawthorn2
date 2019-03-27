@@ -27,6 +27,12 @@ h1,h2,h3,h4,h5,h6,p, div.vertical-title{
 h1,h2,h3,h4,h5,h6{
     color:#0C1C49!important;
 }
+.hd-2, .xblock .xblock h2 {
+  margin-bottom: 20px;
+}
+.xmodule_display.xmodule_HtmlModule li > h1, .xmodule_display.xmodule_HtmlModule li > h2, .xmodule_display.xmodule_HtmlModule li > h3, .xmodule_display.xmodule_HtmlModule li > h4 {
+  display: inline-table;
+}
 
 /* COMPLETION NAV STYLE */
 #tma-completion-nav{
