@@ -118,9 +118,12 @@ import json
 <link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
 <%
   course_about = TmaCourseOverview.get_tma_course_overview_by_course_id(course.id).course_about
+  course_json = {}
   if course_about:
     course_about = json.loads(unicode(course_about))
     course_json = json.dumps(course_about)
+  else:
+    course_about = {}
 %>
 <div id="cards-box" class="container-fluid">
   <!--FIRST ROW-->
@@ -134,7 +137,7 @@ import json
         <img src="${static.url('tma-static/images/cadenas.svg')}" width="36"/>
       %endif
       </h3>
-      % if 'description' in course_about.keys():
+      % if course_about.keys() and 'description' in course_about.keys():
         <p id="course-description">${course_about['description']}</p>
       % endif
       <div class="row">
