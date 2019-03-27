@@ -217,7 +217,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                                 % elif 95 >= int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) and int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 90:
                                     <img class="badge-cert" src="${static.url('tma-static/images/certificate-silver.svg')}">
                                 % elif 90 >= int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) and int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 80:
-                                    <img class="badge-cert" src="${static.url('tma-static/images/certificate-silver.svg')}">
+                                    <img class="badge-cert" src="${static.url('tma-static/images/certificate-bronze.svg')}">
                                 % endif
                             % endif
                         % endif
