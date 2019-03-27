@@ -6,8 +6,13 @@
   from branding.api import get_footer
   from openedx.core.djangoapps.lang_pref.api import footer_language_selector_is_enabled
   from student.views.dashboard import get_tma_footer_info
+  from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
-  footer_counters = get_tma_footer_info()
+  footer_counters = {}
+  if configuration_helpers.get_value('footer_information'):
+    footer_counters = configuration_helpers.get_value('footer_information')
+  else:
+    footer_counters = get_tma_footer_info()
 %>
 <% footer = get_footer(is_secure=is_secure) %>
 <%namespace name='static' file='static_content.html'/>
@@ -60,6 +65,8 @@
         <div>
           % if footer_counters.get("hours_counter"):
             <span class="text-center numscroller" data-min='1' data-max='${footer_counters["hours_counter"]}' data-delay='5' data-increment='${footer_counters["hours_counter"]}/3'>${footer_counters["hours_counter"]}</span>
+          % else:
+            <span class="text-center numscroller" data-min='1' data-max='${footer_counters["courses_counter"]*2.5}' data-delay='5' data-increment='${footer_counters["courses_counter"]*2.5}/3'>${footer_counters["courses_counter"]*2.5}</span>
           % endif
           <span class="text-center">${_("Training hours")}</span>
         </div>
