@@ -25334,8 +25334,8 @@ msgid "Back to description"
 msgstr "Retour vers description"
 
 #: lms/templates/courseware/courseware.html
-msgid "By clicking the "Mark as complete" button, I confirm I have read all the material, including Amundi Pioneer policies."
-msgstr "En cliquant sur le bouton "Marquer comme terminé", j’atteste avoir suivi la formation à son terme."
+msgid "By clicking the \"Mark as complete\" button, I confirm I have read all the material, including Amundi Pioneer policies."
+msgstr "En cliquant sur le bouton \"Marquer comme terminé\", j’atteste avoir suivi la formation à son terme."
 
 #: lms/templates/courseware/courses.html
 msgid "New"
