@@ -872,7 +872,7 @@ def _student_dashboard(request):
          current_organisation = org_whitelist[0]
     log.info(current_organisation)
     
-    frontpage_courses = configuration_helpers.get_value('frontpage_courses','')
+    frontpage_courses = configuration_helpers.get_value('frontpage_courses')
     accepted_filters = ['likes', 'enrollments']
     filter = request.GET.get('filter')
 
@@ -888,7 +888,9 @@ def _student_dashboard(request):
                 courses_to_display.append(course.course_overview_edx)
 
     elif frontpage_courses:
-        courses_to_display = CourseOverview.objects.filter(org=current_organisation, id__in=frontpage_courses)
+        for course_id in frontpage_courses:
+            course_to_add = CourseOverview.objects.filter(org=current_organisation, id=CourseKey.from_string(str(course_id)))
+            courses_to_display.append(course_to_add)
     else :
         courses_to_display = CourseOverview.objects.filter(org=current_organisation)[:9]
 
