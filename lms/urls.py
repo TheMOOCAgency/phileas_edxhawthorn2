@@ -56,6 +56,7 @@ from util import views as util_views
 
 #TMA imports
 import tma_apps
+from tma_apps.zones import views as zones_views
 
 if settings.DEBUG or settings.FEATURES.get('ENABLE_DJANGO_ADMIN_SITE'):
     django_autodiscover()
@@ -68,6 +69,9 @@ if settings.DEBUG or settings.FEATURES.get('ENABLE_DJANGO_ADMIN_SITE'):
 
 urlpatterns = [
     url(r'^$', branding_views.index, name='root'),   # Main marketing page, or redirect to courseware
+
+    # TMA global zones page
+    url(r'^global$', zones_views.global_zones_page),
 
     url(r'', include('student.urls')),
     # TODO: Move lms specific student views out of common code
