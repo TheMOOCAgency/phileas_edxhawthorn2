@@ -290,6 +290,8 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
           % else:
             <p>${_("No downloads.")}</p>
           % endif
+        % else:
+        <p>${_("No downloads.")}</p>
         % endif
       </div>
     </div>

@@ -343,6 +343,16 @@ nav.sequence-bottom .sequence-nav-button:hover .icon{
   font-size: 0.9rem;
 }
 
+.markasdone-box {
+  margin: 50px;
+}
+.markasdone-box .markasdone {
+  border: 2px solid #0C1C49!important;
+  border-radius: 28px!important;
+  color: #0C1C49;
+  margin: 15px;
+}
+
 #tma-completion-nav h4{
   font-size: 16px;
   font-weight: 500;
