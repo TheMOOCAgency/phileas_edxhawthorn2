@@ -25,7 +25,7 @@ def create_tma_user_profile(backend, user, response, *args, **kwargs):
         except:
             pass
 
-        if is_manager=="true":
+        if is_manager!="false" or is_manager:
             profile.is_manager = True
         else :
             profile.is_manager = False
