@@ -7,7 +7,6 @@ from .favourite import views as favourite_views
 from .like import views as like_views
 from .activity_dashboard import views as activity_dashboard_views
 
-
 urlpatterns = [
     #Certificates
     url(r'^{}/certificate/ensure$'.format(settings.COURSE_ID_PATTERN), certificates_views.ensure),
@@ -29,5 +28,7 @@ urlpatterns = [
     url(r'^{}/grade_tracking/get_user_grade$'.format(settings.COURSE_ID_PATTERN), grade_views.get_user_grade),
     url(r'^{}/grade_tracking/message_displayed$'.format(settings.COURSE_ID_PATTERN), grade_views.mark_displayed_message),
     url(r'^{}/grade_tracking/mark_as_done$'.format(settings.COURSE_ID_PATTERN), grade_views.mark_as_done),
-    url(r'^{}/grade_tracking/try_again$'.format(settings.COURSE_ID_PATTERN), grade_views.try_again)
-]
+    url(r'^{}/grade_tracking/try_again$'.format(settings.COURSE_ID_PATTERN), grade_views.try_again),
+]   
+
+

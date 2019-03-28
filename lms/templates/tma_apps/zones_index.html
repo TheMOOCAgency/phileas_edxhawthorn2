@@ -1,0 +1,38 @@
+<%page expression_filter="h"/>
+<%inherit file="../main.html" />
+<%def name="online_help_token()"><% return "learnerdashboard" %></%def>
+<%namespace name='static' file='../static_content.html'/>
+<%!
+from django.utils.translation import ugettext as _
+from openedx.features.course_experience import course_home_url_name
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
+%>
+
+<!-- TMA enable BOOTSTRAP-->
+<link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
+<script type="text/javascript" src="${static.url('common/js/vendor/bootstrap.bundle.js')}"></script>
+
+<!-- TMA GLOBAL STYLE -->
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
+<link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
+<link rel="stylesheet" href="${static.url('tma-static/css/zones-index.css')}">
+
+<div class="container-fluid zones-box">
+    <div class="row pt-5">
+        <div class="col">
+            <h1>${_("Select a continent")}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center m-4">
+            <a href="/" class="zone-btn">Americas</a>
+            <a href="/" class="zone-btn">Asia</a>
+            <a href="/" class="zone-btn">Europe</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col world-box mt-5">
+            <img src="${static.url('tma-static/images/global.jpg')}" alt="continents">
+        </div>
+    </div>
+</div>

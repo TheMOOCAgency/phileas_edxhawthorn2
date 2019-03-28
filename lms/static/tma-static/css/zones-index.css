@@ -1,0 +1,34 @@
+.zones-box {
+    height: 800px;
+    background-color: white;
+}
+
+.world-box {
+    height: 350px;
+    overflow: hidden;
+}
+.world-box > img {
+    width: 100%;
+    margin-top: -150px;
+}
+.zone-btn {
+    width: 200px;
+    padding: 10px;
+    border-radius: 28px;
+    background-color: white;
+    color: #0B1A4C !important;
+    border: 2px solid #0B1A4C;
+    font-weight: bold !important;
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    text-transform: uppercase;
+    box-shadow: 1px 5px 12px 5px rgba(0,0,0,0.09);
+}
+.zone-btn:hover {
+    background-color: #0B1A4C !important;
+    border: 2px solid white !important;
+    color: white !important;
+    text-decoration: none !important;
+}
