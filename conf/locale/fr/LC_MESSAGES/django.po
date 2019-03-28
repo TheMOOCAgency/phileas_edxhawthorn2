@@ -25366,6 +25366,10 @@ msgid "Business App."
 msgstr "App. Métier"
 
 #: lms/templates/courseware/courses.html
+msgid "New Starter."
+msgstr "Nouvel arrivant"
+
+#: lms/templates/courseware/courses.html
 msgid "No results were found matching your request."
 msgstr "Aucun résultat ne correspond à votre recherche."
 
