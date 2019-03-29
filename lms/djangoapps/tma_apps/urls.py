@@ -6,7 +6,6 @@ from .completion import views as completion_views
 from .favourite import views as favourite_views
 from .like import views as like_views
 from .activity_dashboard import views as activity_dashboard_views
-from .delete_cookies import views as delete_cookies_views
 
 urlpatterns = [
     #Certificates
