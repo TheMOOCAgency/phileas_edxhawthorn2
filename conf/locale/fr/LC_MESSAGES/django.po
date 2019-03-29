@@ -25314,8 +25314,8 @@ msgid "Downloads"
 msgstr "Téléchargements"
 
 #: lms/templates/courseware/course_about.html
-msgid "No downloads."
-msgstr "Aucun document."
+msgid "No download available for this course."
+msgstr "Aucun document disponible pour ce cours."
 
 #: lms/templates/courseware/course_about.html
 msgid "on Phileas"
@@ -25411,7 +25411,7 @@ msgid "Business App."
 msgstr "App. Métier"
 
 #: lms/templates/courseware/courses.html
-msgid "New Starter."
+msgid "New Starter"
 msgstr "Nouvel arrivant"
 
 #: lms/templates/courseware/courses.html
