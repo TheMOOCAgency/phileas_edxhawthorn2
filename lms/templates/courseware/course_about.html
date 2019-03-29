@@ -288,10 +288,10 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(c
               <a href="${item['link']}" target="_blank" class="download-link"><p>${item['text']}</p></a>
             % endfor
           % else:
-            <p>${_("No downloads.")}</p>
+            <p>${_("No download available for this course.")}</p>
           % endif
         % else:
-        <p>${_("No downloads.")}</p>
+        <p>${_("No download available for this course.")}</p>
         % endif
       </div>
     </div>
