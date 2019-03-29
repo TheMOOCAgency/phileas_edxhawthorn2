@@ -1,6 +1,7 @@
 .zones-box {
     height: 800px;
     background-color: white;
+    border-top: 1px solid #ddd;
 }
 
 .world-box {
