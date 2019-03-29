@@ -232,7 +232,7 @@ body.view-in-course .wrapper-course-material{
 }
 .open-courseware-nav{
   cursor: pointer;
-  position: relative;
+  position: sticky;
   top: 51px;
   background-color: white!important;
 }

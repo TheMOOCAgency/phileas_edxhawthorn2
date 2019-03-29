@@ -48,10 +48,10 @@ const checkValueAsArray = function(course, key, value) {
 
 const checkValueAsText = function(course, value) {
     var regexQuery = new RegExp(value, 'i');
-    if (course.display_name && (removeDiacritics(course.display_name).search(regexQuery) > -1)) {
+    if ((course.display_name && removeDiacritics(course.display_name).search(regexQuery) > -1) || (course.display_name && course.display_name.search(regexQuery) > -1)) {
             return true;
         } else {
-            if (course.short_description && (removeDiacritics(course.short_description).search(regexQuery) > -1)) {
+            if ((course.short_description && (removeDiacritics(course.short_description).search(regexQuery) > -1) || (course.short_description &&course.short_description.search(regexQuery) > -1))) {
                 return true;
             }
         }
