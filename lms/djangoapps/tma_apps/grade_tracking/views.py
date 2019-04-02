@@ -87,13 +87,20 @@ def mark_as_done(request, course_id):
         # Update date_best_student_grade
         date_update_status = TmaCourseEnrollment.update_not_graded_status(course_key, request.user, completion_info['completion_rate'])
         response.update(date_update_status)
-
-    marked_as_done = request.POST.get('marked_as_done')
-
+    # Completion 100% if course is Vodeclic
+    else:
+        completion_rate = 1
+        date_update_status = TmaCourseEnrollment.update_not_graded_status(course_key, request.user, completion_rate)
+        response.update(date_update_status)
+    
     # Update has_validated
-    has_validated_status = TmaCourseEnrollment.update_course_validation(course_key, request.user, marked_as_done)
-    response.update({'has_validated_status': has_validated_status})
-    response = {'status':'error' }
+    try:
+        marked_as_done = request.POST.get('marked_as_done')
+        has_validated_status = TmaCourseEnrollment.update_course_validation(course_key, request.user, marked_as_done)
+        response.update({'has_validated_status': has_validated_status})
+    except:
+        response.update({'status': 'error'})
+
     return JsonResponse(response)
 
 @login_required
