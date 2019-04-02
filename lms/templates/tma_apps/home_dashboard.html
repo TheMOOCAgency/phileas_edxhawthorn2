@@ -23,6 +23,7 @@ from lms.djangoapps.courseware.courses import (
 )
 from openedx.features.course_experience import course_home_url_name
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
+from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 %>
 
 <%
@@ -186,9 +187,15 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
         %for enrollment in done_course_enrollments:
             <div class="row finished">
                 %if enrollment.course_id in show_courseware_links_for:
-                    <div class="col-lg-3 title-20" style="cursor:pointer">
-                        <p class="mb-0" onclick="window.location.href='/courses/${enrollment.course_id}/courseware'">${enrollment.course_overview.display_name_with_default}</p>
-                    </div>
+                    % if 'Vodeclic' in str(enrollment.course_id):
+                        <div class="col-lg-3 title-20" style="cursor:pointer">
+                            <p class="mb-0" onclick="window.location.href='${get_vodeclic_href(request.user,enrollment.course_id)}'">${enrollment.course_overview.display_name_with_default}</p>
+                        </div>
+                    % else:
+                        <div class="col-lg-3 title-20" style="cursor:pointer">
+                            <p class="mb-0" onclick="window.location.href='/courses/${enrollment.course_id}/courseware'">${enrollment.course_overview.display_name_with_default}</p>
+                        </div>
+                    %endif
                 %else:
                     <div class="col-lg-3 title-20">
                         <p class="mb-0">${enrollment.course_overview.display_name_with_default}</p>
