@@ -105,14 +105,14 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
         %if not is_vodeclic:
           <p>${_("Start date")}: <span>${enrollment.course_overview.dashboard_start_display.strftime('%Y-%m-%d')}</span></p>
           %if enrollment.course_overview.end:
-          <p>${_("End date")}: <span>${enrollment.course_overview.end.strftime('%Y-%m-%d')}</span></p>
+            <p>${_("End date")}: <span>${enrollment.course_overview.end.strftime('%Y-%m-%d')}</span></p>
           %else:
-          <p>${_("End date")}: <span>${_("Permanent")}</span></p>
+            <p>${_("End date")}: <span>${_("Permanent")}</span></p>
           %endif
-          % else:
-          <p>${_("Start date")}: <span>${_("No start date")}</span></p>
+        % else:
+          <p>${_("Start date")}: <span>${_("Permanent")}</span></p>
           <p>${_("End date")}: <span>${_("Permanent")}</span></p>
-          %endif
+        %endif
         </div>
       </div>
       <div class="row pin-row mb-3">
