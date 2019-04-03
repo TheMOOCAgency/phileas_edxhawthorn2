@@ -171,7 +171,7 @@ const displayResults = function(results) {
             } else {
                 if (isVodeclic) {
                     if (isEnrolled) {
-                        buttonText = 'a href="'+item.vodeclic_link+'" target="_blank" class="enroll-btn">'+item.button_text+'</a>';
+                        buttonText = '<a href="'+item.vodeclic_link+'" target="_blank" class="enroll-btn">'+item.button_text+'</a>';
                     } else {
                         buttonText = '<a href="'+item.vodeclic_link+'" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="'+item.id+'">'+item.button_text+'</a>';
                     };
