@@ -148,6 +148,9 @@ solution > .detailed-solution {
     background-color: white;
     font-size: 20px;
 }
+.solution-span {
+    margin-bottom: 30px;
+}
 .feedback-hint-incorrect, .feedback-hint-correct {
     margin-top: 20px;
     margin-bottom: 60px;
