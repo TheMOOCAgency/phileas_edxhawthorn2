@@ -317,6 +317,18 @@ input::placeholder {
     box-shadow: 1px 5px 12px 0px rgba(0,0,0,0.09);
     overflow: hidden;
 }
+.static-div {
+    margin-bottom: 30px;
+    height: 400px;
+    width: 100%;
+    border: 1px solid rgba(0,0,0,0.09);
+    border-radius: 10px;
+    box-shadow: 1px 5px 12px 0px rgba(0,0,0,0.09);
+    overflow: hidden;
+}
+.static-div > img {
+    max-height: 100%;
+}
 
 /* Categories */
 .filter-grey {

@@ -260,9 +260,21 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         %endfor
       %endif
       <!-- First static double card -->
-      <div class="col-lg-6">
-          <a href="https://www.moncompteactivite.gouv.fr/cpa-public/mes-droits-formation/mon-cpf-compte-personnel-de-formation/decouvrir-le-cpf" target="_blank"><div class="static-card"></div></a>
-      </div>
+      % if static_card:
+        <div class="col-lg-6">
+            <a href="${static_card['link']}" target="_blank">
+              <div class="static-div">
+                  <img src="${static_card['image']}" alt="">
+              </div>
+            </a>
+        </div>
+      % else:
+        <div class="col-lg-6">
+            <a href="https://www.moncompteactivite.gouv.fr/cpa-public/mes-droits-formation/mon-cpf-compte-personnel-de-formation/decouvrir-le-cpf" target="_blank">
+              <div class="static-card"></div>
+            </a>
+        </div>
+      % endif
     </div>
 
     <!-- Second row -->
