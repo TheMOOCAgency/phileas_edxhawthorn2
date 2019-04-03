@@ -188,8 +188,8 @@ function showAnswers(url, id){
               $('#'+ id).find('input[value='+value[i]+']').parent('label').addClass('choicegroup_correct');
             }
           } else {
-            if (key.indexOf('solution') > 0){
-              $('#'+ id).find('.problem').after(value);
+            if (key.indexOf('solution') > -1){
+              $('#'+id).find('.solution-span').html(value);
             }
           }
         });
