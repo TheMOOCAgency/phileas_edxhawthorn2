@@ -10,13 +10,10 @@ def global_zones_page(request):
     next_param = request.GET.get('next', '')
     context = {}
 
-    # If user not logged in : buttons lead to SSO
-    if not request.user.is_authenticated:
-        context = {
-            'sso_europe': '/auth/login/amundi/?auth_entry=login&next=europe.'+ settings.SITE_NAME +'%2F'+ next_param,
-            'sso_americas': '/auth/login/amundi/?auth_entry=login&next=americas.'+ settings.SITE_NAME +'%2F'+ next_param,
-            'sso_asia': '/auth/login/amundi/?auth_entry=login&next=asia.'+ settings.SITE_NAME +'%2F'+ next_param
-        }
-        return render_to_response('tma_apps/zones_index.html', context)
-    else:
-        return redirect('/dashboard')
+    context = {
+        'sso_europe': 'europe.' + settings.SITE_NAME + '/auth/login/amundi/?auth_entry=login&next=europe.'+ settings.SITE_NAME + next_param,
+        'sso_americas': 'americas.' + settings.SITE_NAME + '/auth/login/amundi/?auth_entry=login&next=americas.'+ settings.SITE_NAME + next_param,
+        'sso_asia': 'asia.' + settings.SITE_NAME + '/auth/login/amundi/?auth_entry=login&next=asia.'+ settings.SITE_NAME + next_param
+    }
+    
+    return render_to_response('tma_apps/zones_index.html', context)
