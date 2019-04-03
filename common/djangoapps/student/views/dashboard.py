@@ -896,8 +896,9 @@ def _student_dashboard(request):
         for course_id in frontpage_courses['single']:
             course_to_add = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(course_id)))
             courses_to_display.append(course_to_add)
-        # Double card
-        double_course_to_add = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(frontpage_courses['double'])))
+        # Double card course_info
+        double_course = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(frontpage_courses['double'])))
+        double_course_to_add = get_tma_course_info(user, double_course.id, block_courses)
         double_card = double_course_to_add
         # Static card info
         static_card = frontpage_courses['static_double']
