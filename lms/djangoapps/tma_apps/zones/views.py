@@ -11,9 +11,9 @@ def global_zones_page(request):
     context = {}
 
     context = {
-        'sso_europe': 'https://europe.' + settings.SITE_NAME + '/auth/login/amundi/?auth_entry=login&next=europe.'+ settings.SITE_NAME + next_param,
-        'sso_americas': 'https://americas.' + settings.SITE_NAME + '/auth/login/amundi/?auth_entry=login&next=americas.'+ settings.SITE_NAME + next_param,
-        'sso_asia': 'https://asia.' + settings.SITE_NAME + '/auth/login/amundi/?auth_entry=login&next=asia.'+ settings.SITE_NAME + next_param
+        'sso_europe': 'https://europe.' + settings.SITE_NAME + '/auth/login/amundi/?auth_entry=login&next='+ next_param,
+        'sso_americas': 'https://americas.' + settings.SITE_NAME + '/auth/login/amundi/?auth_entry=login&next='+ next_param,
+        'sso_asia': 'https://asia.' + settings.SITE_NAME + '/auth/login/amundi/?auth_entry=login&next='+ next_param
     }
 
     return render_to_response('tma_apps/zones_index.html', context)
