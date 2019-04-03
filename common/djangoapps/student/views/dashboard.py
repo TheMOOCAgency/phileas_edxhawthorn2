@@ -891,9 +891,15 @@ def _student_dashboard(request):
                 courses_to_display.append(course.course_overview_edx)
 
     elif frontpage_courses:
-        for course_id in frontpage_courses:
+        # Single cards
+        for course_id in frontpage_courses['single']:
             course_to_add = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(course_id)))
             courses_to_display.append(course_to_add)
+        # Double card
+        double_course_to_add = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(frontpage_courses['double'])))
+        courses_to_display.append(double_course_to_add)
+        # Static card info
+        static_card = frontpage_courses['static_double']
     else :
         courses_to_display = CourseOverview.objects.filter(org=current_organisation)[:9]
 
@@ -930,7 +936,8 @@ def _student_dashboard(request):
         'ongoing_courses_count':ongoing_courses_count,
         'enrollment_course_list':enrollment_course_list,
         'last_enrollment': last_enrollment,
-        'courses_counter': courses_counter
+        'courses_counter': courses_counter,
+        'static_card': static_card
     })
 
 
