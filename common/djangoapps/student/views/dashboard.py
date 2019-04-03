@@ -878,6 +878,8 @@ def _student_dashboard(request):
         frontpage_courses = configuration_helpers.get_value('frontpage_courses_en')
     accepted_filters = ['likes', 'enrollments']
     filter = request.GET.get('filter')
+    static_card = {}
+    double_card = {}
 
     if filter and filter in accepted_filters :
         if filter=="likes":
@@ -889,7 +891,6 @@ def _student_dashboard(request):
             enrollments_ordered_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).order_by('-active_enrollments_total')[:9]
             for course in enrollments_ordered_courses :
                 courses_to_display.append(course.course_overview_edx)
-
     elif frontpage_courses:
         # Single cards
         for course_id in frontpage_courses['single']:
@@ -897,7 +898,7 @@ def _student_dashboard(request):
             courses_to_display.append(course_to_add)
         # Double card
         double_course_to_add = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(frontpage_courses['double'])))
-        courses_to_display.append(double_course_to_add)
+        double_card = double_course_to_add
         # Static card info
         static_card = frontpage_courses['static_double']
     else :
@@ -937,6 +938,7 @@ def _student_dashboard(request):
         'enrollment_course_list':enrollment_course_list,
         'last_enrollment': last_enrollment,
         'courses_counter': courses_counter,
+        'double_card': double_card,
         'static_card': static_card
     })
 
