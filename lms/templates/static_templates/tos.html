@@ -3,10 +3,11 @@
 
 from django.utils.translation import ugettext as _ 
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+import json
 
 legal_content = ''
 try:
-  legal_content = configuration_helpers.get_value('legal_content')
+  legal_content = json.loads(configuration_helpers.get_value('legal_content'))
 except:
   pass
 
