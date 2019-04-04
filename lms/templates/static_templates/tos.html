@@ -3,11 +3,10 @@
 
 from django.utils.translation import ugettext as _ 
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-import json
 
 legal_content = ''
 try:
-  legal_content = json.loads(configuration_helpers.get_current_site_configuration())
+  legal_content = configuration_helpers.get_value('legal_content')
 except:
   pass
 
@@ -17,6 +16,9 @@ except:
 <%block name="pagetitle">${_("Terms of Service")}</%block>
 
 <main id="main" aria-label="Content" tabindex="-1">
+  % if legal_content:
+    ${legal_content | n}
+  % else:
     <section class="container about">
         <h1>
             <%block name="pageheader">${page_header or _("Terms of Service")}</%block>
@@ -25,14 +27,6 @@ except:
             <%block name="pagecontent">${page_content or _("Waiting for content to implement")}</%block>
         </p>
     </section>
+  % endif
 </main>
-<script>
-$( document ).ready(function() {
-  var legalContent = ${legal_content}
-  console.log(legalContent)
-  if (legalContent != '') {
-    $('section.about').html(legalContent);
-  }
-});
-</script>
 
