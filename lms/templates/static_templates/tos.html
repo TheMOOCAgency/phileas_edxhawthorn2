@@ -1,5 +1,16 @@
 <%page expression_filter="h"/>
-<%! from django.utils.translation import ugettext as _ %>
+<%!
+
+from django.utils.translation import ugettext as _ 
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+
+legal_content = ''
+try:
+  legal_content = configuration_helpers.get_value('legal_content')
+except:
+  pass
+
+%>
 <%inherit file="../main.html" />
 
 <%block name="pagetitle">${_("Terms of Service")}</%block>
@@ -14,14 +25,12 @@
         </p>
     </section>
 </main>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.0.1/dist/sweetalert2.all.min.js"></script>
 <script>
 $( document ).ready(function() {
-  Swal.fire(
-    'Not yet implemented !',
-    'Thank you for your understanding',
-    'info'
-  )
+  var legalContent = ${legal_content}
+  if (legalContent != '') {
+    $('section.about').html(legalContent);
+  }
 });
 </script>
 
