@@ -137,3 +137,28 @@ button, button:hover, button:hover:not(:disabled), button:active:not(:disabled),
 #settings-language-value {
     display: none;
 }
+
+/* Reconnect Pop-up */
+#language-popup {
+    width: 100%;
+    left: 0;
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+}
+#language-popup .modal-footer > button {
+    width: 150px;
+    padding: 8px;
+    margin: auto;
+    border-radius: 28px;
+    background-color: white;
+    color: #0B1A4C !important;
+    border: 2px solid #0B1A4C;
+    font-weight: bold;
+    display: inline-block;
+    vertical-align: middle;
+}
+#language-popup .modal-footer > button:hover {
+    color: white !important;
+    background-color: #0B1A4C !important;
+    border: 2px solid white;
+}

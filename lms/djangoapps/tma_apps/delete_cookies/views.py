@@ -1,13 +1,14 @@
-from edxmako.shortcuts import render_to_response
-from django.shortcuts import redirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_GET
+from django.contrib.auth import logout
+from django.views.decorators.http import require_POST
 import logging
 
 log = logging.getLogger()
 
-@require_GET
+@require_POST
 @login_required
 def tma_delete_cookies(request):
-    response = redirect('/')
-    return response
+    logout(request)
+    response = {'logout': 'success'}
+    return JsonResponse(response)
