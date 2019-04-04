@@ -69,8 +69,58 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
     </ul>
   </div>
 </div>
+<!-- TMA MODAL RECONNECT -->
+<div id="language-popup" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-cookies">
+                <div class="modal-body">
+                    <p class="text-center message">Having trouble selecting your language ?<br>Vous avez des difficultés pour changer de langue ?</p>
+                    <p class="text-center message">Click to reconnect<br>Cliquez ici pour vous reconnecter</p>
+                    <p class="text-center message">You will leave the current page.<br>Vous allez quitter la page actuelle.</p>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="deleteCookies()" type="button">Reconnect</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    const deleteCookies = function() {
+        window.localStorage.setItem('switch-count', 0);
+        $.ajax({
+            url: '/tma_apps/delete_cookies',
+            type: 'POST',
+            dataType: 'json',
+            success : function(data){
+                console.log('success')
+                window.location.reload();
+            }
+        });
+    }
+
     $(document).ready(function(){
+        var count;
+        if (window.localStorage.getItem('switch-count')) {
+            count = window.localStorage.getItem('switch-count');
+        } else {
+            window.localStorage.setItem('switch-count', 0);
+            count = window.localStorage.getItem('switch-count');
+        }
+
+        if (count >= 3) {
+            $('#language-popup').modal('show');
+        } else {
+            count = parseInt(count) + 1
+            window.localStorage.setItem('switch-count', count)
+        }
+
         if ($('#settings-language-value > option[value="en"]').attr('selected')) {
             $('.switch').toggleClass('en')
         }
@@ -85,6 +135,10 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
                     $('#settings-language-value > option[value="en"]').removeAttr('selected').trigger("change");
                 }
             }
+        });
+
+        $('#language-popup .modal-header > .close').on('click', function(){
+            window.localStorage.setItem('switch-count', 0)
         });
     });
 </script>
