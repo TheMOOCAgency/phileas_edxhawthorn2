@@ -7,7 +7,7 @@ import json
 
 legal_content = ''
 try:
-  legal_content = json.loads(configuration_helpers.get_value('legal_content'))
+  legal_content = json.loads(configuration_helpers.get_current_site_configuration())
 except:
   pass
 
@@ -29,6 +29,7 @@ except:
 <script>
 $( document ).ready(function() {
   var legalContent = ${legal_content}
+  console.log(legalContent)
   if (legalContent != '') {
     $('section.about').html(legalContent);
   }
