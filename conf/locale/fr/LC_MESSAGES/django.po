@@ -25484,6 +25484,10 @@ msgstr "Vous n'avez pas atteint la note requise pour obtenir votre certificat."
 msgid "Welcome on Phileas training platform"
 msgstr "Bienvenue sur le site de formation Phileas"
 
+#: lms/templates/tma_apps/login_and_register.html
+msgid "Login to Phileas training platform"
+msgstr "Connectez-vous au site de formation Phileas"
+
 #: lms/templates/tma_apps/zones_index.html
 msgid "Select your geographical area"
 msgstr "Choisissez votre zone géographique"
