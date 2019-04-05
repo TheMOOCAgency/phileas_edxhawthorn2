@@ -53,3 +53,56 @@
         </div>
     </main>
 </div>
+<!-- TMA MODAL CONNECT -->
+<style>
+    #connect-popup {
+        width: 100%;
+        padding: 50px;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    #connect-popup .modal-body {
+        padding: 50px;
+    }
+    #connect-popup .modal-body h1 {
+        font-size: 20px;
+    }
+    #connect-popup .connect-btn {
+        margin: auto;
+        display: table;
+        padding: 15px;
+        border-radius: 28px;
+        background-color: white;
+        color: #0B1A4C !important;
+        border: 2px solid #0B1A4C;
+        font-weight: bold;
+        vertical-align: middle;
+    }
+    #connect-popup .connect-btn:hover {
+        color: white !important;
+        background-color: #0B1A4C !important;
+        border: 2px solid white;
+        text-decoration: none !important;
+    }
+</style>
+<div id="connect-popup" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-cookies">
+                <div class="modal-body">
+                    <h1 class="text-center message mb-4">Connect to Phileas training platform.</h1>
+                    <a href="/login" class="connect-btn">Connect to your account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('#connect-popup').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        $('#connect-popup').modal('show');
+    });
+</script>

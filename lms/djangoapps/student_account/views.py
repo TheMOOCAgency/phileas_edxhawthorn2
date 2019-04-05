@@ -172,7 +172,7 @@ def login_and_registration_form(request, initial_mode="login"):
     update_logistration_context_for_enterprise(request, context, enterprise_customer)
 
     # TMA redirect to SSO if no admin=True in URL
-    if request.GET.get('admin'):
+    if request.GET.get('admin') or initial_mode == 'register':
         response = render_to_response('student_account/login_and_register.html', context)
     else:
         return redirect('/auth/login/amundi/?auth_entry=login&next='+ request.META['PATH_INFO'].replace('/', '%2F'))
