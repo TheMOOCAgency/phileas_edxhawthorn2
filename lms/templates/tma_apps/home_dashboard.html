@@ -24,6 +24,7 @@ from lms.djangoapps.courseware.courses import (
 from openedx.features.course_experience import course_home_url_name
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
 from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
+from lms.djangoapps.tma_apps.certificates.certificate import certificate
 %>
 
 <%
@@ -239,7 +240,11 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                     % if 'Vodeclic' in str(enrollment.course_id):
                         <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
                     % elif not get_course(enrollment.course_id).no_grade:
-                        <div class="col-lg-2"><a href="/tma_apps/${enrollment._course_id}/certificate/render">${_("Download")}</a></div>
+                        % if certificate(request.user).get_certificate_status(enrollment.course_id):
+                            <div class="col-lg-2"><a href="/tma_apps/${enrollment._course_id}/certificate/render">${_("Download")}</a></div>
+                        % else:
+                            <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
+                        % endif
                     % else:
                         <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
                     % endif
@@ -264,6 +269,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
 <!-- TMA Home Dashboard Script -->
 <script>
     let user_email="${request.user.email}"
+    console.log('${enrollment.__dict__}')
 </script>
 <script src="${static.url('tma-static/js/home-dashboard-actions.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>

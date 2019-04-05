@@ -25289,9 +25289,25 @@ msgstr "Vous n'êtes inscrit(e) à aucune formation obligatoire"
 msgid "You have no favorite courses yet"
 msgstr "Vous n'avez aucune formation favorite"
 
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "Course not graded"
+msgstr "Cours non noté"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "No certificate available"
+msgstr "Pas de certificat"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "Grade not available"
+msgstr "Note indisponible"
+
+#: lms/templates/tma_apps/home_dashboard.html
+msgid "Grade not available"
+msgstr "Note indisponible"
+
 #: lms/templates/courseware/course_about.html
-msgid "Back to courses"
-msgstr "Retour aux formations"
+msgid "You have no finished course yet"
+msgstr "Vous n'avez terminé aucun cours"
 
 #: lms/templates/courseware/course_about.html
 msgid "Not graded"
@@ -25467,6 +25483,10 @@ msgstr "Vous n'avez pas atteint la note requise pour obtenir votre certificat."
 #: lms/templates/tma_apps/zones_index.html
 msgid "Welcome on Phileas training platform"
 msgstr "Bienvenue sur le site de formation Phileas"
+
+#: lms/templates/tma_apps/login_and_register.html
+msgid "Login to Phileas training platform"
+msgstr "Connectez-vous au site de formation Phileas"
 
 #: lms/templates/tma_apps/zones_index.html
 msgid "Select your geographical area"
