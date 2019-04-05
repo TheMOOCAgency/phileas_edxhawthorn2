@@ -107,6 +107,11 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
 
     $(document).ready(function(){
         var count;
+        // Mandatory closing by clicking so that counter is reset to zero
+        $('#language-popup').modal({
+            keyboard: false
+        });
+        
         if (window.localStorage.getItem('switch-count')) {
             count = window.localStorage.getItem('switch-count');
         } else {
