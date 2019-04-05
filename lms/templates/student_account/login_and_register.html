@@ -59,24 +59,28 @@
         width: 100%;
         padding: 50px;
         left: 0;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: white;
     }
     #connect-popup .modal-body {
         padding: 50px;
+    }
+    #connect-popup .modal-content {
+        border: none;
     }
     #connect-popup .modal-body h1 {
         font-size: 20px;
     }
     #connect-popup .connect-btn {
+        width: 200px;
         margin: auto;
         display: table;
-        padding: 15px;
+        padding: 10px;
         border-radius: 28px;
         background-color: white;
         color: #0B1A4C !important;
         border: 2px solid #0B1A4C;
-        font-weight: bold;
         vertical-align: middle;
+        text-align: center;
     }
     #connect-popup .connect-btn:hover {
         color: white !important;
@@ -90,8 +94,8 @@
         <div class="modal-content">
             <div class="modal-cookies">
                 <div class="modal-body">
-                    <h1 class="text-center message mb-4">Connect to Phileas training platform.</h1>
-                    <a href="/login" class="connect-btn">Connect to your account</a>
+                    <h1 class="text-center message mb-4">${_("Login to Phileas training platform")}</h1>
+                    <a href="/auth/login/amundi/?auth_entry=register&next=%2Fdashboard" class="connect-btn">${_("Login")}</a>
                 </div>
             </div>
         </div>
@@ -99,10 +103,12 @@
 </div>
 <script>
     $(document).ready(function(){
-        $('#connect-popup').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-        $('#connect-popup').modal('show');
+        if (window.location.search.indexOf('admin=True') == -1) {
+            $('#connect-popup').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            $('#connect-popup').modal('show');
+        }
     });
 </script>
