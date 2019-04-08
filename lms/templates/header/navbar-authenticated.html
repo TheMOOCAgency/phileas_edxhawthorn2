@@ -104,33 +104,41 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
             }
         });
     }
-
+    const checkCount = function(){
+      if (count >= 3) {
+          $('#language-popup').modal('show');
+          window.localStorage.setItem('switch-count', 0);
+      } else {
+          window.localStorage.setItem('switch-count', count)
+      }
+    }
     $(document).ready(function(){
         var count;
         // Mandatory closing by clicking so that counter is reset to zero
+        /* Beware makes popup appear each time
         $('#language-popup').modal({
             backdrop: 'static',
             keyboard: false
         });
-        
+        */
         if (window.localStorage.getItem('switch-count')) {
-            count = window.localStorage.getItem('switch-count');
-        } else {
-            window.localStorage.setItem('switch-count', 0);
-            count = window.localStorage.getItem('switch-count');
+          count = window.localStorage.getItem('switch-count');
         }
-
-        if (count >= 3) {
-            $('#language-popup').modal('show');
-        } else {
-            count = parseInt(count) + 1
-            window.localStorage.setItem('switch-count', count)
+        else {
+          count =0
+          window.localStorage.setItem('switch-count', count);
         }
-
+        if(count>=3){
+          $('#language-popup').modal('show');
+          window.localStorage.setItem('switch-count', 0);
+          count=0;
+        }
         if ($('#settings-language-value > option[value="en"]').attr('selected')) {
             $('.switch').toggleClass('en')
         }
         $('.switch').on('click', function(){
+            count = parseInt(count) + 1;
+            window.localStorage.setItem('switch-count', count);
             $(this).toggleClass('en fr');
             if ($(this).hasClass('en')) {
                 $('#settings-language-value > option[value="en"]').attr('selected','selected');
@@ -142,10 +150,8 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
                 }
             }
         });
-
         $('#language-popup .modal-header > .close').on('click', function(){
             window.localStorage.setItem('switch-count', 0)
         });
     });
-</script>
 </script>
