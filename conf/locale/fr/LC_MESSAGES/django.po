@@ -25303,7 +25303,7 @@ msgstr "Note indisponible"
 
 #: lms/templates/courseware/course_about.html
 msgid "You have no finished course yet"
-msgstr "Vous n'avez terminé aucun cours"
+msgstr "Vous n'avez terminé aucune formation"
 
 #: lms/templates/courseware/course_about.html
 msgid "Not graded"
