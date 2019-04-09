@@ -88,14 +88,19 @@
         border: 2px solid white;
         text-decoration: none !important;
     }
+    #connect-message{
+        display: none;
+    }
 </style>
 <div id="connect-popup" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-cookies">
                 <div class="modal-body">
-                    <h1 class="text-center message mb-4">${_("Login to Phileas training platform")}</h1>
-                    <a href="/auth/login/amundi/?auth_entry=register&next=%2Fdashboard" class="connect-btn">${_("Login")}</a>
+                    <div id="connect-message">
+                        <h1 class="text-center message mb-4">${_("Login to Phileas training platform")}</h1>
+                        <a href="/auth/login/amundi/?auth_entry=register&next=%2Fdashboard" class="connect-btn">${_("Login")}</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,12 +108,15 @@
 </div>
 <script>
     $(document).ready(function(){
-        if (window.location.search.indexOf('admin=True') == -1) {
+        if (window.location.search.toLowerCase().indexOf('admin=true') == -1) {
             $('#connect-popup').modal({
                 backdrop: 'static',
                 keyboard: false
             });
             $('#connect-popup').modal('show');
+        }
+        if(window.location.href.indexOf('login')>-1){
+            $('#connect-message').css('display','block');
         }
     });
 </script>

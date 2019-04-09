@@ -18,7 +18,7 @@ def get_vodeclic_href(user, course_id):
     if user.is_authenticated():
         vodeclic_id_arg = 'vodeclic_id='+str(course_id).split('+')[1]
         partenaire_arg='&partenaire='+partenaire
-        encrypted_user_arg='&encrypted_id='+hashlib.sha256(str(user.id)+api_key).hexdigest()
+        encrypted_user_arg='&encrypted_id='+hashlib.sha256(str(user.profile.rpid)+api_key).hexdigest()
         user_id_arg='&id='+str(user.profile.rpid)
         prenom_arg='&prenom='+user.first_name
         nom_arg='&nom='+user.last_name
