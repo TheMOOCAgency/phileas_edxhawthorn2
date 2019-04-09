@@ -25301,10 +25301,6 @@ msgstr "Pas de certificat"
 msgid "Grade not available"
 msgstr "Note indisponible"
 
-#: lms/templates/tma_apps/home_dashboard.html
-msgid "Grade not available"
-msgstr "Note indisponible"
-
 #: lms/templates/courseware/course_about.html
 msgid "You have no finished course yet"
 msgstr "Vous n'avez terminé aucun cours"
@@ -25392,7 +25388,6 @@ msgstr "Vous avez terminé la formation."
 #: lms/templates/courseware/courseware.html
 msgid "You can now mark this course as completed."
 msgstr "Vous pouvez maintenant marquer ce cours comme terminé."
-
 
 #: lms/templates/courseware/courseware.html
 msgid "By clicking the \"Mark as complete\" button, I confirm I have read all the material, including Amundi Pioneer policies."
