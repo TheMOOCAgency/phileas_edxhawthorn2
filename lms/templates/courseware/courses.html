@@ -211,7 +211,6 @@
     </div>
   </div>
 </div>
-
 <script src="${static.url('tma-static/js/dashboard-tma-actions.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/course-search.js')}" charset="utf-8"></script>
@@ -255,7 +254,14 @@
             }
           }
           query['tag'].push(urlParam);
-        } else {
+        } 
+        //Filter by onboarding tag
+        else if(window.location.search.split('=')[0].indexOf('onboarding')>-1){
+          if(urlParam.toLowerCase().indexOf('newstarter')>-1){
+            query['onboarding'].push('New Starter')
+          }
+        }
+        else {
           // Input case
           query['input'] = urlParam;
         }
@@ -282,13 +288,11 @@
         query[key] = true;
       } else {
           if (query[key].indexOf(value) > -1) {
-          console.log('ALREADY IN');
+          //console.log('ALREADY IN');
         } else {
           query[key].push(value);
         }
       };
-
-      console.log(query)
 
       // Change facet style
       $(this).addClass('filter-selected');
