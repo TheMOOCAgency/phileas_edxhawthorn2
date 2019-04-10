@@ -3,7 +3,6 @@
 <%!
   from django.urls import reverse
   from django.utils.translation import ugettext as _
-  from branding.api import get_footer
   from openedx.core.djangoapps.lang_pref.api import footer_language_selector_is_enabled
   from student.views.dashboard import get_tma_footer_info
   from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
@@ -14,7 +13,6 @@
   else:
     footer_counters = get_tma_footer_info()
 %>
-<% footer = get_footer(is_secure=is_secure) %>
 <%namespace name='static' file='static_content.html'/>
 
 <!-- TMA GLOBAL STYLE -->
