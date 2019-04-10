@@ -16956,13 +16956,9 @@ msgstr ""
 
 #: lms/templates/emails/enroll_email_allowedmessage.txt
 msgid ""
-"To finish your registration, please visit {registration_url} and fill out "
-"the registration form making sure to use {email_address} in the E-mail "
-"field."
+"To finish your registration, please visit {registration_url} ."
 msgstr ""
-"Pour terminer votre inscription, rendez-vous sur {registration_url} et "
-"complétez le formulaire d'inscription. Soyez vigilant d'utiliser "
-"{email_address} dans le champ E-mail. "
+"Pour terminer votre inscription, rendez-vous sur {registration_url} ."
 
 #: lms/templates/emails/enroll_email_allowedmessage.txt
 msgid ""

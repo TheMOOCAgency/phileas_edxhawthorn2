@@ -371,12 +371,12 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     )
     # TODO: Use request.build_absolute_uri rather than '{proto}://{site}{path}'.format
     # and check with the Services team that this works well with microsites
-    registration_url = u'{proto}://{site}{path}'.format(
+    registration_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}'.format(
         proto=protocol,
         site=stripped_site_name,
-        path=reverse('register_user')
+        path=reverse('home_dashboard')
     )
-    course_url = u'{proto}://{site}{path}'.format(
+    course_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}'.format(
         proto=protocol,
         site=stripped_site_name,
         path=reverse('course_root', kwargs={'course_id': course_key})
