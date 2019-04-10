@@ -124,7 +124,8 @@ def get_lms_link_for_item(location, preview=False):
             settings.FEATURES.get('PREVIEW_LMS_BASE')
         )
 
-    return u"//{lms_base}/courses/{course_key}/jump_to/{location}".format(
+    return u"//{org}.{lms_base}/courses/{course_key}/jump_to/{location}".format(
+        org=location.org,
         lms_base=lms_base,
         course_key=text_type(location.course_key),
         location=text_type(location),
