@@ -13,7 +13,9 @@ def legal_notice_page(request):
             legal_content = configuration_helpers.get_value('legal_content_fr')
         else:
             legal_content = configuration_helpers.get_value('legal_content_en')
-        context.update(legal_content)
+        context = {
+            "legal_content": legal_content
+        }
     except:
         pass
     return render_to_response('tma_apps/legal.html', context)
