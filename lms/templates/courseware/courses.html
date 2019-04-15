@@ -220,6 +220,7 @@
   $('.flip-container').removeClass('col-lg-3').addClass('col-lg-4');
 
   var coursesJson = ${json_courses | n, dump_js_escaped_json};
+  var currentLanguage = "${LANGUAGE_CODE}"
   var query = {tag: [], onboarding: [], language: [], org: [], is_new: false, input: ''};
   var results = [];
 
@@ -254,14 +255,18 @@
             }
           }
           query['tag'].push(urlParam);
-        } 
         //Filter by onboarding tag
-        else if(window.location.search.split('=')[0].indexOf('onboarding')>-1){
-          if(urlParam.toLowerCase().indexOf('newstarter')>-1){
-            query['onboarding'].push('New Starter')
+        } else if (window.location.search.split('=')[0].indexOf('onboarding') >-1 ) {
+          console.log(urlParam)
+          if (urlParam.toLowerCase().indexOf('newstarter') >-1 ) {
+            query['onboarding'].push('New Starter');
+            urlParam = 'New Starter'
           }
-        }
-        else {
+          // Language filter according to current language
+          query['language'].push(currentLanguage);
+          $('p.facet-option[data-tag="'+currentLanguage+'"]').addClass('filter-selected');
+          $('p.facet-option[data-tag="'+currentLanguage+'"]').parent().parent().parent().children('.col-2').children('.close-filter').show();
+        } else {
           // Input case
           query['input'] = urlParam;
         }
