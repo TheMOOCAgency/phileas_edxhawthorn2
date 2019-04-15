@@ -22,7 +22,7 @@ $('.xmodule_display.xmodule_SequenceModule .sequence-bottom .sequence-nav-button
 /*Prepare completion coursenav on pageload */
 $(document).ready(function(){
   // Open menu when landing on page if coming from course_about
-  if (document.referrer.indexOf('/about') > -1) {
+  if ((document.referrer.indexOf('/about') > -1) && hasMenu == 'True') {
     $('#tma-completion-nav').removeClass('folded');
     $('.open-courseware-nav').addClass('tma-visibility-hidden');
   };

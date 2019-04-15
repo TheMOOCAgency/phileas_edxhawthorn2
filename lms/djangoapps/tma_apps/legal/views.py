@@ -7,6 +7,7 @@ log = logging.getLogger()
 
 def legal_notice_page(request):
     context = {}
+    legal_content = ''
     try:
         if request.LANGUAGE_CODE == 'fr':
             legal_content = configuration_helpers.get_value('legal_content_fr')

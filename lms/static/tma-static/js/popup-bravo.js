@@ -89,4 +89,3 @@ function mark_as_done() {
     }
   });
 }
-
