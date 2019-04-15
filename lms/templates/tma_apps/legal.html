@@ -1,0 +1,32 @@
+<%page expression_filter="h"/>
+<%inherit file="../main.html" />
+<%namespace name='static' file='../static_content.html'/>
+<%!
+from django.utils.translation import ugettext as _
+%>
+
+<!-- TMA enable BOOTSTRAP-->
+<link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
+<script type="text/javascript" src="${static.url('common/js/vendor/bootstrap.bundle.js')}"></script>
+
+<!-- TMA GLOBAL STYLE -->
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
+<link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
+<link rel="stylesheet" href="${static.url('tma-static/css/legal-notice.css')}">
+
+<div class="container-fluid content-box">
+    <div class="row">
+        <div class="col m-5">
+            % if legal_content:
+                ${legal_content | n}
+            % else:
+                <h1>
+                    ${_("Terms of Service")}
+                </h1>
+                <p>
+                    ${_("Waiting for content to implement")}
+                </p>
+            % endif
+        </div>
+    </div>
+</div>

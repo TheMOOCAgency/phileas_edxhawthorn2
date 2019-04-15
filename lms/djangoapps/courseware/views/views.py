@@ -368,7 +368,8 @@ def courses(request):
             'onboarding_counters': onboarding_counters,
             'language_counters': language_counters,
             'org_counters': org_counters,
-            'new_counter': new_counter
+            'new_counter': new_counter,
+            'language': request.LANGUAGE_CODE
         }
     )
 

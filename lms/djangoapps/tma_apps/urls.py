@@ -7,6 +7,7 @@ from .favourite import views as favourite_views
 from .like import views as like_views
 from .activity_dashboard import views as activity_dashboard_views
 from .delete_cookies import views as delete_cookies_views
+from .legal import views as legal_views
 
 urlpatterns = [
     #Certificates
@@ -32,5 +33,7 @@ urlpatterns = [
     url(r'^{}/grade_tracking/try_again$'.format(settings.COURSE_ID_PATTERN), grade_views.try_again),
 
     #Logout
-    url(r'^delete_cookies$', delete_cookies_views.tma_delete_cookies)
+    url(r'^delete_cookies$', delete_cookies_views.tma_delete_cookies),
+    # Legal
+    url(r'^legal$', legal_views.legal_notice_page)
 ]
