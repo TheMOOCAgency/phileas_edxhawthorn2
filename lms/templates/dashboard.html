@@ -24,13 +24,6 @@ from lms.djangoapps.courseware.courses import (
 )
 from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from lms.djangoapps.tma_apps.models import TmaCourseOverview
-
-n_courses = 0
-try:
-  footer_info = configuration_helpers.get_values('footer_information')
-  n_courses = footer_info["courses_counter"]
-except:
-  n_courses = courses_counter
 %>
 
 <%
@@ -140,6 +133,15 @@ except:
       </div>
     %endif
 </div>
+
+<%
+  n_courses = 0
+  try:
+    footer_info = configuration_helpers.get_values('footer_information')
+    n_courses = footer_info["courses_counter"]
+  except:
+    n_courses = courses_counter
+%>
 
 <div class="container-fluid bg-grey-light">
   <!--PRESENTATION ROW-->
