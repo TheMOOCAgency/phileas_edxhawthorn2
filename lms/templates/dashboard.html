@@ -24,6 +24,13 @@ from lms.djangoapps.courseware.courses import (
 )
 from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from lms.djangoapps.tma_apps.models import TmaCourseOverview
+
+n_courses = 0
+try:
+  footer_info = configuration_helpers.get_values('footer_information')
+  n_courses = footer_info["courses_counter"]
+except:
+  n_courses = courses_counter
 %>
 
 <%
@@ -139,7 +146,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   <div class="row bg-white">
       <form method="get" action="/courses" class="gif-box">
         <p class="title-36">${_("Find your course")} <br>${_("among")}
-          <span class="numscroller" data-min='1' data-max='${courses_counter}' data-delay='5' data-increment='${courses_counter}/3'>${courses_counter}</span>
+          <span class="numscroller" data-min='1' data-max='${n_courses}' data-delay='5' data-increment='${n_courses}/3'>${n_courses}</span>
            ${_("available")}
         </p>
         <div class="search-field-wrapper">
