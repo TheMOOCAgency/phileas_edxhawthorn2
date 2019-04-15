@@ -130,8 +130,8 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
         </div>
         <div class="col-8 pl-4">
 <%
-base_url="https://"+static.get_value('site_domain', settings.SITE_NAME)
-course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/enrollment.course_id/about")
+base_url = "https://"+ static.get_value('site_domain', settings.SITE_NAME)
+course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(enrollment.course_id)+"/about")
 %>
           <a href='mailto:?subject=${enrollment.course_overview.display_name_with_default}${_("on Phileas")}&body=${_("Hi, %0D%0A%0D%0A I found this course: {course_url} and I thought you might like it.").format(course_url=course_url)}%0D%0A%0D%0A${_("Best!")}' class="w-100 text-right">
           <p><img src="${static.url('tma-static/images/recommend.svg')}"/>${_("Recommend")}</p>
@@ -162,6 +162,3 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/enrollm
     </div>
   </div>
 </div>
-<script>
-  console.log('${is_favorite}')
-</script>
