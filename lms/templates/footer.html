@@ -8,10 +8,7 @@
   from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
   footer_counters = {}
-  if configuration_helpers.get_value('footer_information'):
-    footer_counters = configuration_helpers.get_value('footer_information')
-  else:
-    footer_counters = get_tma_footer_info()
+  footer_counters = get_tma_footer_info()
 %>
 <%namespace name='static' file='static_content.html'/>
 
@@ -32,7 +29,7 @@
       <div class="stat-box">
         <div>
           % if footer_counters.get("users_counter"):
-            <span class="text-center numscroller" data-min='1' data-max='${footer_counters["users_counter"]}' data-delay='5' data-increment='${footer_counters["users_counter"]}/3'>${footer_counters["users_counter"]}</span>
+            <span id="users_counter" class="text-center numscroller" data-min='1' data-max='${footer_counters["users_counter"]}' data-delay='5' data-increment='${footer_counters["users_counter"]}/3'>${footer_counters["users_counter"]}</span>
           % endif
           <span class="text-center">${_("Users")}</span>
         </div>
@@ -42,7 +39,7 @@
       <div class="stat-box">
         <div>
           % if footer_counters.get("courses_counter"):
-            <span class="text-center numscroller" data-min='1' data-max='${footer_counters["courses_counter"]}' data-delay='5' data-increment='${footer_counters["courses_counter"]}/3'>${footer_counters["courses_counter"]}</span>
+            <span id="courses_counter" class="text-center numscroller" data-min='1' data-max='${footer_counters["courses_counter"]}' data-delay='5' data-increment='${footer_counters["courses_counter"]}/3'>${footer_counters["courses_counter"]}</span>
           % endif
             <span class="text-center">${_("Courses")}</span>
         </div>
@@ -52,7 +49,7 @@
       <div class="stat-box">
         <div>
           % if footer_counters.get("likes_counter"):
-            <span class="text-center numscroller" data-min='1' data-max='${footer_counters["likes_counter"]}' data-delay='5' data-increment='${footer_counters["likes_counter"]}/3'>${footer_counters["likes_counter"]}</span>
+            <span id="likes_counter" class="text-center numscroller" data-min='1' data-max='${footer_counters["likes_counter"]}' data-delay='5' data-increment='${footer_counters["likes_counter"]}/3'>${footer_counters["likes_counter"]}</span>
           % endif
           <span class="text-center">${_("Likes")}</span>
         </div>
@@ -62,9 +59,9 @@
       <div class="stat-box">
         <div>
           % if footer_counters.get("hours_counter"):
-            <span class="text-center numscroller" data-min='1' data-max='${footer_counters["hours_counter"]}' data-delay='5' data-increment='${footer_counters["hours_counter"]}/3'>${footer_counters["hours_counter"]}</span>
+            <span id="hours_counter" class="text-center numscroller" data-min='1' data-max='${footer_counters["hours_counter"]}' data-delay='5' data-increment='${footer_counters["hours_counter"]}/3'>${footer_counters["hours_counter"]}</span>
           % else:
-            <span class="text-center numscroller" data-min='1' data-max='${footer_counters["courses_counter"]*2.5}' data-delay='5' data-increment='${footer_counters["courses_counter"]*2.5}/3'>${footer_counters["courses_counter"]*2.5}</span>
+            <span id="hours_counter" class="text-center numscroller" data-min='1' data-max='${footer_counters["courses_counter"]*2.5}' data-delay='5' data-increment='${footer_counters["courses_counter"]*2.5}/3'>${footer_counters["courses_counter"]*2.5}</span>
           % endif
           <span class="text-center">${_("Training hours")}</span>
         </div>
@@ -83,3 +80,19 @@
     </div>
   </div>
 </div>
+<script>
+$(document).ready(function(){
+  $("#users_counter").html(users_counter);
+  $("#users_counter").attr('data-max',users_counter);
+  $("#users_counter").attr('data-increment',users_counter/3);
+  $("#courses_counter").html(courses_counter);
+  $("#courses_counter").attr('data-max',courses_counter);
+  $("#courses_counter").attr('data-increment',courses_counter/3);
+  $("#likes_counter").html(likes_counter);
+  $("#likes_counter").attr('data-max',likes_counter);
+  $("#likes_counter").attr('data-increment',likes_counter/3);
+  $("#hours_counter").html(hours_counter);
+  $("#hours_counter").attr('data-max',hours_counter);
+  $("#hours_counter").attr('data-increment',hours_counter/3);
+});
+</script>

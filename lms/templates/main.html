@@ -23,6 +23,7 @@ from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_str
 from openedx.core.release import RELEASE_LINE
 from pipeline_mako import render_require_js_path_overrides
 
+from student.views.dashboard import get_tma_footer_info
 %>
 <!DOCTYPE html>
 <!--[if lte IE 9]><html class="ie ie9 lte9" lang="${LANGUAGE_CODE}"><![endif]-->
@@ -170,6 +171,16 @@ from pipeline_mako import render_require_js_path_overrides
 % endif
 
   <!-- TMA GLOBAL STYLE -->
+<%
+  footer_counters = {}
+  footer_counters = get_tma_footer_info()
+%>
+<script type="text/javascript">
+var courses_counter = parseInt(${footer_counters["courses_counter"]});
+var users_counter = parseInt(${footer_counters["users_counter"]});
+var likes_counter = parseInt(${footer_counters["likes_counter"]});
+var hours_counter = parseInt(${footer_counters["hours_counter"]});
+</script>
   <link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
   <!--<link rel="stylesheet" href="/media/dev/tma-static/css/global-tma-custom.css">-->
 </head>
