@@ -176,10 +176,10 @@ from student.views.dashboard import get_tma_footer_info
   footer_counters = get_tma_footer_info()
 %>
 <script type="text/javascript">
-var courses_counter = parseInt(${footer_counters["courses_counter"]});
-var users_counter = parseInt(${footer_counters["users_counter"]});
-var likes_counter = parseInt(${footer_counters["likes_counter"]});
-var hours_counter = parseInt(${footer_counters["hours_counter"]});
+var courses_counter = parseInt('${footer_counters["courses_counter"]}');
+var users_counter = parseInt('${footer_counters["users_counter"]}');
+var likes_counter = parseInt('${footer_counters["likes_counter"]}');
+var hours_counter = parseInt('${footer_counters["hours_counter"]}');
 </script>
   <link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
   <!--<link rel="stylesheet" href="/media/dev/tma-static/css/global-tma-custom.css">-->

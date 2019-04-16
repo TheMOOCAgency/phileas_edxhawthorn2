@@ -1090,5 +1090,7 @@ def get_tma_footer_info():
         footer['hours_counter'] = int(footer['courses_counter'] * 2.5)
     except:
         pass
+    
+    log.info(footer)
 
     return footer
