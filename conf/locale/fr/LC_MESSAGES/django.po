@@ -14337,7 +14337,7 @@ msgstr ""
 
 #: lms/templates/api_admin/terms_of_service.html
 msgid "Compliance"
-msgstr "Réglementaire"
+msgstr "réglementaire"
 
 #: lms/templates/api_admin/terms_of_service.html
 msgid ""
@@ -25147,7 +25147,7 @@ msgstr "Que voulez-vous apprendre ?"
 
 #: lms/templates/dashboard.html
 msgid "Regulatory"
-msgstr "Réglementaires"
+msgstr "Réglementaire"
 
 #: lms/templates/dashboard.html
 msgid "Last course"
