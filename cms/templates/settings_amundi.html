@@ -1,0 +1,211 @@
+<%page expression_filter="h"/>
+<%inherit file="base.html" />
+<%namespace name='static' file='./static_content.html'/>
+<%!
+from django.utils.translation import ugettext as _
+from contentstore import utils
+from openedx.core.djangolib.js_utils import (
+dump_js_escaped_json, js_escaped_string
+)
+from openedx.core.djangolib.markup import HTML, Text
+%>
+
+<%block name="title">${_("Customize Settings")}</%block>
+<%block name="bodyclass">is-signedin course view-settings</%block>
+
+<%
+i = 0;
+grade = 100;
+%>
+<%block name="requirejs">
+    require(["${static.url('tma-cms-static/js/tma_advanced_settings.js')}"], function (settings_customize) {});
+</%block>
+
+<%block name="content">
+<!-- TMA STYLE -->
+<link rel="stylesheet" href="${static.url('tma-cms-static/css/amundi-settings.css')}">
+
+<div class="wrapper-mast wrapper">
+    <header class="mast has-subtitle">
+        <h1 class="page-header">
+        <small class="subtitle">${_("Settings")}</small>
+        <span class="sr">&gt; </span>${_("Customize Settings")}
+        </h1>
+    </header>
+</div>
+<div class="wrapper-content wrapper">
+    <section class="content">
+        <article class="content-primary" role="main">
+            <form id="settings">
+            <!--<input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="${csrf_token}">-->
+            <!-- IS NEW -->
+            <section class="group-settings">
+                <header>
+                    <h2 class="title-2">${_("Course is new")}</h2>
+                </header>
+                <ol class="list-input">
+                    <li class="field">
+                        <label for="True">
+                            <input type="radio" name="is_new" value="True" ${"checked" if is_new or is_new == None else ""}>
+                            ${_("True")}
+                        </label><br>
+                        <label for="False">
+                            <input type="radio" name="is_new" value="False" ${"checked" if not is_new and is_new != None else ""}>
+                            ${_("False")}
+                        </label>
+                        <span class="tip tip-stacked">${_("Select True if you want the course to appear in the New section.")}</span>
+                    </li>
+                </ol>
+            </section>
+            <!-- IS ON INVITATION ONLY -->
+            <section class="group-settings">
+                <header>
+                    <h2 class="title-2">${_("Course is on invitation only")}</h2>
+                </header>
+                <ol class="list-input">
+                    <li class="field">
+                        <label for="True">
+                            <input type="radio" name="invitation_only" value="True" ${"checked" if invitation_only else ""}>
+                            ${_("True")}
+                        </label><br>
+                        <label for="False">
+                            <input type="radio" name="invitation_only" value="False" ${"checked" if not invitation_only else ""}>
+                            ${_("False")}
+                        </label>
+                        <span class="tip tip-stacked">${_("Select True if you want this course to be on invitation only.")}</span>
+                    </li>
+                </ol>
+            </section>
+            <!-- IS FOR MANAGERS ONLY -->
+            <section class="group-settings">
+                <header>
+                    <h2 class="title-2">${_("Course is only for Managers")}</h2>
+                </header>
+                <ol class="list-input">
+                    <li class="field">
+                        <label for="True">
+                            <input type="radio" name="manager_only" value="True" ${"checked" if  manager_only else ""}>
+                            ${_("True")}
+                        </label><br>
+                        <label for="False">
+                            <input type="radio" name="manager_only" value="False" ${"checked" if not manager_only else ""}>
+                            ${_("False")}
+                        </label>
+                        <span class="tip tip-stacked">${_("Select True if you want this course to be available only for Managers.")}</span>
+                    </li>
+                </ol>
+            </section>
+            <!-- IS COURSE GRADED -->
+            <section class="group-settings">
+                    <header>
+                        <h2 class="title-2">${_("Course is Graded")}</h2>
+                    </header>
+                    <ol class="list-input">
+                        <li class="field">
+                            <label for="True">
+                                <input type="radio" name="is_graded" value="True" ${"checked" if  is_graded else ""}>
+                                ${_("True")}
+                            </label><br>
+                            <label for="False">
+                                <input type="radio" name="is_graded" value="False" ${"checked" if not is_graded else ""}>
+                                ${_("False")}
+                            </label>
+                            <span class="tip tip-stacked">${_("Check True if you want this course to be graded, then go to the Grading section to choose the grading policy for this course.")}</span>
+                        </li>
+                    </ol>
+                </section>
+            <!-- COURSE SCORE -->
+            <section class="group-settings">
+                <header>
+                    <h2 class="title-2">${_("Course Score")}</h2>
+                </header>
+                <ol class="list-input">
+                    <li class="field">
+                        <select name="grade_badge">
+                                % for i in range(101):
+                                % if i == grade_badge:
+                                <option value="${i}" selected>${i}</option>
+                                % else:
+                                <option value="${i}">${i}</option>
+                                % endif
+                            % endfor
+                            </select>
+                                <span class="tip tip-stacked">${_("Grade value")}</span>
+                        </li>
+                    </ol>
+                </section>
+                <!-- IS MANDATORY -->
+                <section class="group-settings">
+                <header>
+                    <h2 class="title-2">${_("Course is Mandatory")}</h2>
+                </header>
+                <ol class="list-input">
+                    <li class="field">
+                        <label for="True">
+                            <input type="radio" name="is_mandatory" value="True" ${"checked" if  is_mandatory else ""}>
+                            ${_("True")}
+                        </label><br>
+                        <label for="False">
+                            <input type="radio" name="is_mandatory" value="False" ${"checked" if not is_mandatory else ""}>
+                            ${_("False")}
+                        </label>
+                        <span class="tip tip-stacked">${_("Check True if you want this course to be Mandatory for all students.")}</span>
+                    </li>
+                </ol>
+            </section>
+            <!-- HAS MENU -->
+            <section class="group-settings">
+                <header>
+                    <h2 class="title-2">${_("Course has Menu")}</h2>
+                </header>
+                <ol class="list-input">
+                    <li class="field">
+                        <label for="True">
+                            <input type="radio" name="has_menu" value="True" ${"checked" if has_menu else ""}>
+                            ${_("True")}
+                        </label><br>
+                        <label for="False">
+                            <input type="radio" name="has_menu" value="False" ${"checked" if not has_menu else ""}>
+                            ${_("False")}
+                        </label>
+                        <span class="tip tip-stacked">${_("Check True if you want this course to display a navigation menu.")}</span>
+                    </li>
+                </ol>
+            </section>
+            <!-- TAGS -->
+            <section class="group-settings">
+                <header>
+                    <h2 class="title-2">${_("Course Tags")}</h2>
+                </header>
+                <ol class="list-input">
+                    <li class="field">
+                        <input type="text" name="tags" value="${course_tag}">
+                        <span class="tip tip-stacked">${_("Enter here one or several Tags for your course. They should only be in English, consist in one or two words max, starting with a capital and be separated with comas without spaces.")}<br>${_("Example: Fundamentals,Office Tools")}</span>
+                    </li>
+                </ol>
+            </section>
+            <!-- ONBOARDING -->
+            <section class="group-settings">
+                <header>
+                    <h2 class="title-2">${_("Course Onboarding tags")}</h2>
+                </header>
+                <ol class="list-input">
+                    <li class="field">
+                        <input type="text" name="onboarding" value="${onboarding_tag if onboarding_tag!='False' else ''}">
+                        <span class="tip tip-stacked">${_("Enter here one or several Onboarding tags for your course. They should only be in English, consist in one or two words max, starting with a capital and be separated with comas without spaces.")}<br>${_("Example: New Starter")}</span>
+                    </li>
+                </ol>
+            </section>
+        </form>
+            <button id="submit-settings" style="float:right;border: 1px solid #007fb8;border-radius: 3px;background-color: #009fe6;color:white;padding:5px 10px;font-weight:600;">${_("Save")}</button>
+        </article>
+    </section>
+</div>
+
+<script>
+
+
+
+</script>
+</%block>
+    
