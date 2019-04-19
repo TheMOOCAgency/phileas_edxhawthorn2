@@ -58,31 +58,36 @@ def amundi_settings_handler(request, course_key_string):
                 return JsonResponse(CourseMetadata.fetch(course_module))
             else:
                 #try:
-                new_data = {
+                # Update Course MetaData info
+                new_course_metadata = {
                     'is_new': request.POST['is_new'],
                     'invitation_only': request.POST['invitation_only'],
                     'no_grade': request.POST['is_graded'],
                 }
-                log.info(new_data)
                 result = CourseMetadata.update_from_dict(
-                    new_data,
+                    new_course_metadata,
                     course_module,
                     request.user
                 )
 
+                # Update TMA Course Overview
+                new_tma_course_overview = {
+                    'us_manager_only': request.POST['manager_only'],
+                    'is_mandatory': request.POST['is_mandatory'],
+                    'has_menu': request.POST['has_menu'],
+                    'tag': request.POST['tag'],
+                    'onboarding': request.POST['onboarding'],
+                    'course_about': request.POST['course_about']
+                }
+
+                tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
+                for key, value in new_tma_course_overview.iteritems():
+                    if 'tag' or 'onboarding' in key and value == '':
+                        setattr(tma_course_overview, key, 'False')
+
+                    setattr(tma_course_overview, key, value)
+                    tma_course_overview.save()
+
+                log.info(tma_course_overview)
+
                 return JsonResponse(result)
-
-
-def customize_settings(request,course_key_string):
-
-    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_key_string)
-    with modulestore().bulk_operations(course_key):
-        course_module = get_course_and_check_access(course_key, request.user)
-        additional_info = {
-        'is_new': request.POST.get('is_new', False),
-        'invitation_only': request.POST.get('invitation_only', False),
-        'manager_only': request.POST.get('manager_only', False),
-        'grade_badge': request.POST.get('grade_badge', 100)
-        }
-        CourseMetadata.update_from_dict(additional_info, course_module, request.user)
-        return JsonResponse({'data':'data'})

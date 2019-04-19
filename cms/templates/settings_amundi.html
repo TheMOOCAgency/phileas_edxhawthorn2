@@ -179,7 +179,7 @@ grade = 100;
                 </header>
                 <ol class="list-input">
                     <li class="field">
-                        <input type="text" name="tags" value="${course_tag}">
+                        <input type="text" name="tag" value="${course_tag}">
                         <span class="tip tip-stacked">${_("Enter here one or several Tags for your course. They should only be in English, consist in one or two words max, starting with a capital and be separated with comas without spaces.")}<br>${_("Example: Fundamentals,Office Tools")}</span>
                     </li>
                 </ol>
@@ -196,16 +196,23 @@ grade = 100;
                     </li>
                 </ol>
             </section>
+            <!-- COURSE ABOUT -->
+            <section class="group-settings">
+                <header>
+                    <h2 class="title-2">${_("Course About content")}</h2>
+                </header>
+                <ol class="list-input">
+                    <li class="field">
+                        <textarea name="course_about" cols="30" rows="10">${course_about}</textarea>
+                        <span class="tip tip-stacked">${_("Enter here the textual content of the Course Map section in Course About page. This should be a valid JSON.")}</span>
+                        <p id="error-json" style="color:red"></p>
+                    </li>
+                </ol>
+            </section>
         </form>
             <button id="submit-settings" style="float:right;border: 1px solid #007fb8;border-radius: 3px;background-color: #009fe6;color:white;padding:5px 10px;font-weight:600;">${_("Save")}</button>
         </article>
     </section>
 </div>
-
-<script>
-
-
-
-</script>
 </%block>
     
