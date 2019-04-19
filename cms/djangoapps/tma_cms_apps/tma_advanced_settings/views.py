@@ -59,16 +59,23 @@ def amundi_settings_handler(request, course_key_string):
             else:
                 #try:
                 # Update Course MetaData info
+                response = {}
                 new_course_metadata = {
                     'is_new': request.POST['is_new'],
                     'invitation_only': request.POST['invitation_only'],
                     'no_grade': request.POST['is_graded'],
                 }
-                result = CourseMetadata.update_from_dict(
-                    new_course_metadata,
-                    course_module,
-                    request.user
-                )
+
+                try:
+                    result = CourseMetadata.update_from_dict(
+                        new_course_metadata,
+                        course_module,
+                        request.user
+                    )
+                    log.info(result)
+                    response['course_metadata'] = "Successfully updated"
+                except:
+                    response['course_metadata'] = "Error when updating"
 
                 # Update TMA Course Overview
                 new_tma_course_overview = {
@@ -80,14 +87,16 @@ def amundi_settings_handler(request, course_key_string):
                     'course_about': request.POST['course_about']
                 }
 
-                tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
-                for key, value in new_tma_course_overview.iteritems():
-                    if 'tag' or 'onboarding' in key and value == '':
-                        setattr(tma_course_overview, key, 'False')
+                try: 
+                    tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
+                    for key, value in new_tma_course_overview.iteritems():
+                        if 'tag' or 'onboarding' in key and value == '':
+                            setattr(tma_course_overview, key, 'False')
 
-                    setattr(tma_course_overview, key, value)
-                    tma_course_overview.save()
+                        setattr(tma_course_overview, key, value)
+                        tma_course_overview.save()
+                    response['tma_course_overview'] = "Successfully updated"
+                except:
+                    response['tma_course_overview'] = "Error when updating"
 
-                log.info(tma_course_overview)
-
-                return JsonResponse(result)
+                return JsonResponse(response)

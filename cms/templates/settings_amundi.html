@@ -29,7 +29,7 @@ grade = 100;
     <header class="mast has-subtitle">
         <h1 class="page-header">
         <small class="subtitle">${_("Settings")}</small>
-        <span class="sr">&gt; </span>${_("Customize Settings")}
+        <span class="sr">&gt; </span>${_("Amundi Settings")}
         </h1>
     </header>
 </div>
@@ -115,15 +115,15 @@ grade = 100;
                     </ol>
                 </section>
             <!-- COURSE SCORE -->
-            <section class="group-settings">
+            <!--<section class="group-settings">
                 <header>
                     <h2 class="title-2">${_("Course Score")}</h2>
                 </header>
                 <ol class="list-input">
                     <li class="field">
-                        <select name="grade_badge">
-                                % for i in range(101):
-                                % if i == grade_badge:
+                        <select name="grade_range">
+                            % for i in range(101):
+                                % if i == grade_range:
                                 <option value="${i}" selected>${i}</option>
                                 % else:
                                 <option value="${i}">${i}</option>
@@ -133,7 +133,7 @@ grade = 100;
                                 <span class="tip tip-stacked">${_("Grade value")}</span>
                         </li>
                     </ol>
-                </section>
+                </section>-->
                 <!-- IS MANDATORY -->
                 <section class="group-settings">
                 <header>
