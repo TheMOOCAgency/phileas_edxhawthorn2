@@ -16,6 +16,9 @@ from openedx.core.djangoapps.password_policy.forms import PasswordPolicyAwareAdm
 
 from ratelimitbackend import admin
 
+# TMA IMPORTS
+from cms.djangoapps.tma_cms_apps.tma_advanced_settings.views import amundi_settings_handler
+
 django_autodiscover()
 admin.site.site_header = _('Studio Administration')
 admin.site.site_title = admin.site.site_header
@@ -138,6 +141,8 @@ urlpatterns = [
         contentstore.views.grading_handler, name='grading_handler'),
     url(r'^settings/advanced/{}$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.advanced_settings_handler,
         name='advanced_settings_handler'),
+    url(r'^settings/amundi/{}$'.format(settings.COURSE_KEY_PATTERN), amundi_settings_handler,
+        name='amundi_settings_handler'),
     url(r'^textbooks/{}$'.format(settings.COURSE_KEY_PATTERN), contentstore.views.textbooks_list_handler,
         name='textbooks_list_handler'),
     url(r'^textbooks/{}/(?P<textbook_id>\d[^/]*)$'.format(settings.COURSE_KEY_PATTERN),

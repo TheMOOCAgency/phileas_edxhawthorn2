@@ -1,0 +1,11 @@
+.group-settings input[type=radio] {
+    display: inline-block !important;
+    vertical-align: middle !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.group-settings label {
+    display: inline-block !important;
+    vertical-align: middle !important;
+}
