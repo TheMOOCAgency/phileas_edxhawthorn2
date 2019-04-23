@@ -70,9 +70,9 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
     liked_total[edx_associated_enrollment.course_id]= TmaCourseOverview.get_tma_course_overview_by_course_id(edx_associated_enrollment.course_id).liked_total
   except:
     pass
-
 %>
 
+<%block name="pagetitle">${_("My Activity")}</%block>
 
 <!-- TMA enable BOOTSTRAP-->
 <link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">

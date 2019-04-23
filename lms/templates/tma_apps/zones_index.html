@@ -8,6 +8,8 @@ from openedx.features.course_experience import course_home_url_name
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
 %>
 
+<%block name="pagetitle">${_("Global")}</%block>
+
 <!-- TMA enable BOOTSTRAP-->
 <link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
 <script type="text/javascript" src="${static.url('common/js/vendor/bootstrap.bundle.js')}"></script>
