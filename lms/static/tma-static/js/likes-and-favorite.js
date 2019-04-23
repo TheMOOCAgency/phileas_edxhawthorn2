@@ -14,7 +14,8 @@ $('#cards-box').on('click', '.pin.like', function(){
   update_counter(like_counter, update_info['status']);
 });
 
-let change_social_attributes =  function(element, social_attribute){
+let change_social_attributes = function(element, social_attribute){
+  var status;
   let courseId = element.parent().data('course-id');
   let courseSelector = courseId.split('+').join('').split(':').join('');
 
@@ -23,6 +24,7 @@ let change_social_attributes =  function(element, social_attribute){
 
     $(this).toggleClass(social_attribute +'-on '+social_attribute+'-off');
   });
+
   if (element.hasClass(social_attribute+'-on')){
     status = true;
   } else {
@@ -43,7 +45,7 @@ let change_social_attributes =  function(element, social_attribute){
     status: status,
     courseSelector: courseSelector
   };
-}
+};
 
 let update_counter = function(counter, status){
   let current_count=parseInt(counter.html());
