@@ -81,7 +81,7 @@ from student.views.dashboard import get_tma_footer_info
   <script type="text/javascript" src="${static.url(jsi18n_path)}"></script>
   <script type="text/javascript" src="${static.url(ie11_fix_path)}"></script>
 
-  <link rel="icon" type="image/x-icon" href="${static.url(static.get_value('favicon_path', settings.FAVICON_PATH))}" />
+  <link rel="icon" type="image/x-icon" href="${static.url('tma-static/images/favicon.png')}" />
 
   <%static:css group='style-vendor'/>
   % if '/' in self.attr.main_css:
