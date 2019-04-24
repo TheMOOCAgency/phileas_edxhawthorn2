@@ -49,7 +49,7 @@ let change_social_attributes = function(element, social_attribute){
 
 let update_counter = function(counter, status){
   let current_count=parseInt(counter.html());
-  if (status=="true") {
+  if (status == true) {
     let new_count= current_count+1
     counter.html(new_count);
   } else {
