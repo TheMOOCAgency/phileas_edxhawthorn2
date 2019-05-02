@@ -23,13 +23,6 @@
   <meta name="path_prefix" content="{{EDX_ROOT_URL}}">
 </head>
 
-<!--<link rel="icon" type="image/x-icon" href="{% static '/tma-static/images/favicon.png' %}" />
-<link rel="stylesheet" type="text/css" href="{% static '/css/bootstrap/lms-main.css' %}">
-<script type="text/javascript" src="{% static '/common/js/vendor/bootstrap.bundle.js' %}"></script>
-<link rel="stylesheet" type="text/css" href="{% static 'tma-static/css/main-tma-custom.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'tma-static/css/figures-tma.css' %}">
-<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500" rel="stylesheet">-->
-
 <body class="{% block bodyclass %}{% endblock %} lang_{{LANGUAGE_CODE}}">
     {% load render_bundle from webpack_loader %}
     {% render_bundle "commons" %}
