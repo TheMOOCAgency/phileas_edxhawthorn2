@@ -57,9 +57,11 @@ from util.milestones_helpers import get_pre_requisite_courses_not_completed
 from xmodule.modulestore.django import modulestore
 
 #TMA IMPORTS
+import json
 from django.core import serializers
 from courseware.courses import get_courses
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from lms.djangoapps.tma_apps.models import TmaCourseOverview, TmaCourseEnrollment
 from lms.djangoapps.tma_apps.sspeaking.sspeaking import get_sspeaking_href
 from lms.djangoapps.courseware.courses import get_course_by_id
@@ -1060,22 +1062,25 @@ def get_tma_footer_info(user, is_global):
 def update_microsite_users_counter(user):
     # Get current org
     org_whitelist,org_blacklist = get_org_black_and_whitelist_for_site()
-    current_organisation = None
+    current_organisation = "phileas"
     if org_whitelist:
         current_organisation = org_whitelist[0]
     
     user_profile = UserProfile.objects.get(user=user)
     custom_field = json.loads(user_profile.custom_field)
 
-    if not custom_field['microsite']:
+    if 'microsite' not in custom_field.keys():
         # Save origin microsite
         custom_field['microsite'] = current_organisation
-        user_profile.custom_field = json.loads(custom_field)
+        user_profile.custom_field = json.dumps(custom_field)
         user_profile.save()
 
         # increment users counters on site config
-        microsite_config = SiteConfiguration.objects.filter(site__startswith=current_organisation)
-        microsite_values_json = json.loads(microsite_config.values)
-        microsite_values_json["users"] = microsite_values_json["users"] + 1
-        microsite_config.values = json.dumps(microsite_values_json["users"])
-        microsite.config.save()
+        try:
+            microsite_config = SiteConfiguration.objects.filter(site__startswith=current_organisation)
+            microsite_values_json = json.loads(microsite_config.values)
+            microsite_values_json["users"] = microsite_values_json["users"] + 1
+            microsite_config.values = json.dumps(microsite_values_json["users"])
+            microsite.config.save()
+        except:
+            pass

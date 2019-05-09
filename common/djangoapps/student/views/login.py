@@ -72,6 +72,10 @@ from student.helpers import authenticate_new_user, do_create_account
 from third_party_auth import pipeline, provider
 from util.json_request import JsonResponse
 
+#TMA
+from student.views.dashboard import update_microsite_users_counter
+import json
+
 log = logging.getLogger("edx.student")
 AUDIT_LOG = logging.getLogger("audit")
 
@@ -474,6 +478,9 @@ def login_user(request):
         if was_authenticated_third_party:
             running_pipeline = pipeline.get(request)
             redirect_url = pipeline.get_complete_url(backend_name=running_pipeline['backend'])
+
+        # TMA update microsite field + counter
+        update_microsite_users_counter(request.user)
 
         response = JsonResponse({
             'success': True,
