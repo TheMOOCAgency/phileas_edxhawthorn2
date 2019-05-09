@@ -1062,7 +1062,7 @@ def get_tma_footer_info(user, is_global):
 def update_microsite_users_counter(user):
     # Get current org
     org_whitelist,org_blacklist = get_org_black_and_whitelist_for_site()
-    current_organisation = "phileas"
+    current_organisation = None
     if org_whitelist:
         current_organisation = org_whitelist[0]
     
@@ -1072,7 +1072,7 @@ def update_microsite_users_counter(user):
         custom_field = json.loads(user_profile.custom_field)
     except:
         custom_field = {}
-        
+
     if 'microsite' not in custom_field.keys():
         # Save origin microsite
         custom_field['microsite'] = current_organisation
