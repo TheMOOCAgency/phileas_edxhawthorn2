@@ -1081,10 +1081,12 @@ def update_microsite_users_counter(user):
 
         # increment users counters on site config
         try:
-            microsite_config = SiteConfiguration.objects.filter(site__startswith=current_organisation)
-            microsite_values_json = json.loads(microsite_config.values)
-            microsite_values_json["users"] = microsite_values_json["users"] + 1
-            microsite_config.values = json.dumps(microsite_values_json["users"])
-            microsite.config.save()
+            microsites_config = SiteConfiguration.objects.filter(site__startswith=current_organisation)
+            for site in microsites_config:
+                site_values_json = json.loads(site.values)
+                if current_organisation in site_values_json.course_org_filter:
+                    site_values_json["users"] = site_values_json["users"] + 1
+                    site.values = json.dumps(site_values_json)
+                    site.save()
         except:
             pass
