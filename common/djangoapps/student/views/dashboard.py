@@ -1069,9 +1069,11 @@ def get_tma_course_json(user, course_id, block_courses):
 
     return course_json
 
-def get_tma_footer_info():
+def get_tma_footer_info(is_global):
     """
-    Gets indicators to be displayed in the footer
+    Gets indicators to be displayed in the footer according to org.
+
+    If user is on global page, get info for all sites.
     """
     footer = {}
     org_whitelist,org_blacklist = get_org_black_and_whitelist_for_site()
@@ -1080,12 +1082,21 @@ def get_tma_footer_info():
         current_organisation = org_whitelist[0]
 
     try:
-        footer['courses_counter'] = len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation))
+        if is_global:
+            footer['courses_counter'] = len(TmaCourseOverview.objects.all())
+        else:
+            footer['courses_counter'] = len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation))
         footer['users_counter'] = len(UserProfile.objects.all())
 
         likes_counter = 0
-        for course in TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation):
-            likes_counter = likes_counter + course.liked_total
+
+        if is_global:
+            for course in TmaCourseOverview.objects.all():
+                likes_counter = likes_counter + course.liked_total
+        else:
+            for course in TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation):
+                likes_counter = likes_counter + course.liked_total
+
         footer['likes_counter'] = likes_counter
         footer['hours_counter'] = int(footer['courses_counter'] * 2.5)
     except:
