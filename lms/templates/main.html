@@ -172,8 +172,11 @@ from student.views.dashboard import get_tma_footer_info
 
 
 <%
+  is_global = False
+  if 'global' in str(request.META['PATH_INFO']):
+    is_global = True
   footer_counters = {}
-  footer_counters = get_tma_footer_info()
+  footer_counters = get_tma_footer_info(is_global)
 %>
 <script type="text/javascript">
   // TMA footer values
