@@ -57,6 +57,7 @@ from util.milestones_helpers import get_pre_requisite_courses_not_completed
 from xmodule.modulestore.django import modulestore
 
 #TMA IMPORTS
+from django.core import serializers
 from courseware.courses import get_courses
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from lms.djangoapps.tma_apps.models import TmaCourseOverview, TmaCourseEnrollment
@@ -943,58 +944,6 @@ def _student_dashboard(request):
         'static_card': static_card
     })
 
-
-    """
-    # TMA - Get all course overviews
-    course_overviews = list(CourseOverview.objects.filter(org="phileas"))
-
-    # TMA - Get TMA tables info
-    tma_course_overviews = list(TmaCourseOverview.objects.filter(course_overview_edx__org="phileas"))
-    tma_course_enrollments = list(TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user))
-
-    # TMA - Ongoing courses
-    ongoing_courses = TmaCourseEnrollment.count_ongoing_courses(user=user,org=current_organisation)
-
-    # TMA - Mandatory courses
-    mandatory_courses = []
-    mandatory_course_enrollments = 0
-    for enrollment in CourseEnrollment.objects.filter(user=user):
-        if TmaCourseOverview.objects.filter(course_overview_edx__id=enrollment.course_id).exists():
-            if TmaCourseOverview.objects.get(course_overview_edx__id=enrollment.course_id).is_mandatory:
-                mandatory_course_enrollments += 1
-
-    if CourseOverview.objects.filter(org="phileas").exists():
-        for overview in CourseOverview.objects.filter(org="phileas"):
-            if TmaCourseOverview.get_tma_course_overview_by_course_id(overview.id).is_mandatory:
-                mandatory_courses.append(str(overview.id))
-
-    # TMA - 7 Speaking
-    sspeaking_url = get_sspeaking_href(user)
-    context.update({
-        'sspeaking_url': sspeaking_url
-    })
-
-    # TMA - Favorite courses
-    favorite_courses = len(list(TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=user, is_favourite=True)))
-    favorite_course_enrollments = []
-    for enrollment in CourseEnrollment.objects.filter(user=user):
-        if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
-            if TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).is_favourite:
-                favorite_course_enrollments.append(str(enrollment.course_id))
-
-    context.update({
-        'course_overviews': course_overviews,
-        'ongoing_courses': ongoing_courses,
-        'mandatory_courses': mandatory_courses,
-        'mandatory_course_enrollments': mandatory_course_enrollments,
-        'favorite_courses': favorite_courses,
-        'favorite_course_enrollments': favorite_course_enrollments,
-        'tma_course_enrollments': tma_course_enrollments,
-        'tma_course_overviews': tma_course_overviews,
-        'final_course_list':final_course_list
-    })
-    """
-
     return context
 
 def get_tma_course_info(user, course_id, block_courses):
@@ -1069,39 +1018,64 @@ def get_tma_course_json(user, course_id, block_courses):
 
     return course_json
 
-def get_tma_footer_info(is_global):
+def get_tma_footer_info(user, is_global):
     """
     Gets indicators to be displayed in the footer according to org.
 
     If user is on global page, get info for all sites.
     """
     footer = {}
+    likes_counter = None
     org_whitelist,org_blacklist = get_org_black_and_whitelist_for_site()
     current_organisation = "phileas"
     if org_whitelist:
         current_organisation = org_whitelist[0]
 
-    try:
-        if is_global:
-            footer['courses_counter'] = len(TmaCourseOverview.objects.all())
-        else:
-            footer['courses_counter'] = len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation))
-        footer['users_counter'] = len(UserProfile.objects.all())
-
-        likes_counter = 0
-
-        if is_global:
+    if is_global:
+        try:
+            # All not Vodeclic courses + all Vodeclic courses only once
+            footer['courses_counter'] = len(TmaCourseOverview.objects.filter(is_vodeclic=False)) + len(TmaCourseOverview.objects.filter(is_vodeclic=True, course_overview_edx__org='europe'))
+            footer['users_counter'] = len(UserProfile.objects.all())
+            likes_counter = 0
             for course in TmaCourseOverview.objects.all():
                 likes_counter = likes_counter + course.liked_total
-        else:
+        except:
+            pass
+    else:
+        try:
+            footer['courses_counter'] = len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation))
+            footer['users_counter'] = configuration_helpers.get_value('users')
             for course in TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation):
                 likes_counter = likes_counter + course.liked_total
+        except:
+            pass
 
-        footer['likes_counter'] = likes_counter
-        footer['hours_counter'] = int(footer['courses_counter'] * 2.5)
-    except:
-        pass
+    footer['likes_counter'] = likes_counter
+    footer['hours_counter'] = int(footer['courses_counter'] * 2.5)
     
     log.info(footer)
 
     return footer
+
+def update_microsite_users_counter(user):
+    # Get current org
+    org_whitelist,org_blacklist = get_org_black_and_whitelist_for_site()
+    current_organisation = None
+    if org_whitelist:
+        current_organisation = org_whitelist[0]
+    
+    user_profile = UserProfile.objects.get(user=user)
+    custom_field = json.loads(user_profile.custom_field)
+
+    if not custom_field['microsite']:
+        # Save origin microsite
+        custom_field['microsite'] = current_organisation
+        user_profile.custom_field = json.loads(custom_field)
+        user_profile.save()
+
+        # increment users counters on site config
+        microsite_config = SiteConfiguration.objects.filter(site__startswith=current_organisation)
+        microsite_values_json = json.loads(microsite_config.values)
+        microsite_values_json["users"] = microsite_values_json["users"] + 1
+        microsite_config.values = json.dumps(microsite_values_json["users"])
+        microsite.config.save()

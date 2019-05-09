@@ -1,5 +1,7 @@
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from student.models import UserProfile
+from student.views.dashboard import update_microsite_users_counter
 import json
 """
 SOCIAL_AUTH_PIPELINE Additional Step for Amundi
@@ -7,15 +9,6 @@ SOCIAL_AUTH_PIPELINE Additional Step for Amundi
 
 def create_tma_user_profile(backend, user, response, *args, **kwargs):
     if backend.name =='amundi':
-        # Which microsite
-        current_organisation = None
-        org_blacklist = None
-        org_whitelist = configuration_helpers.get_current_site_orgs()
-        if not org_whitelist:
-            org_blacklist = configuration_helpers.get_all_orgs()
-        else:
-            current_organisation = org_whitelist[0]
-
         is_manager=response.get('is_manager')
 
         if UserProfile.objects.filter(user=user).exists():
@@ -26,7 +19,8 @@ def create_tma_user_profile(backend, user, response, *args, **kwargs):
         try :
             custom_field = json.loads(profile.custom_field)
         except:
-            custom_field={"microsite": current_organisation}
+            custom_field = {}
+            update_microsite_users_counter(user)
         try:
             if not profile.rpid:
                 profile.rpid=response.get('rpid','')
