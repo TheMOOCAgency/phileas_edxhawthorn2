@@ -1067,8 +1067,12 @@ def update_microsite_users_counter(user):
         current_organisation = org_whitelist[0]
     
     user_profile = UserProfile.objects.get(user=user)
-    custom_field = json.loads(user_profile.custom_field)
 
+    try:
+        custom_field = json.loads(user_profile.custom_field)
+    except:
+        custom_field = {}
+        
     if 'microsite' not in custom_field.keys():
         # Save origin microsite
         custom_field['microsite'] = current_organisation
