@@ -1081,7 +1081,7 @@ def update_microsite_users_counter(user):
 
         # increment users counters on site config
         try:
-            microsites_config = SiteConfiguration.objects.filter(site__startswith=current_organisation)
+            microsites_config = SiteConfiguration.objects.all()
             for site in microsites_config:
                 site_values_json = json.loads(site.values)
                 if current_organisation in site_values_json.course_org_filter:
