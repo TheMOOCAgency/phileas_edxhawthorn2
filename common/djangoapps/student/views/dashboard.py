@@ -1027,7 +1027,7 @@ def get_tma_footer_info(user, is_global):
     If user is on global page, get info for all sites.
     """
     footer = {}
-    likes_counter = None
+    likes_counter = 0
     org_whitelist,org_blacklist = get_org_black_and_whitelist_for_site()
     current_organisation = "phileas"
     if org_whitelist:
