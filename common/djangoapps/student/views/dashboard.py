@@ -1083,10 +1083,8 @@ def update_microsite_users_counter(user):
         try:
             microsites_config = SiteConfiguration.objects.all()
             for site in microsites_config:
-                site_values_json = json.loads(site.values)
-                if current_organisation in site_values_json.course_org_filter:
-                    site_values_json["users"] = site_values_json["users"] + 1
-                    site.values = json.dumps(site_values_json)
+                if current_organisation in site.values["course_org_filter"]:
+                    site.values["users"] = site.values["users"] + 1
                     site.save()
         except:
             pass
