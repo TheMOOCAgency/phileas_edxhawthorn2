@@ -1,7 +1,5 @@
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from student.models import UserProfile
-from student.views.dashboard import update_microsite_users_counter
 import json
 """
 SOCIAL_AUTH_PIPELINE Additional Step for Amundi
@@ -20,7 +18,6 @@ def create_tma_user_profile(backend, user, response, *args, **kwargs):
             custom_field = json.loads(profile.custom_field)
         except:
             custom_field = {}
-            update_microsite_users_counter(user)
         try:
             if not profile.rpid:
                 profile.rpid=response.get('rpid','')
