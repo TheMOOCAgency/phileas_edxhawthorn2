@@ -25337,6 +25337,10 @@ msgstr "Bonjour, %0D%0A%0D%0A Je participe à ce cours : {course_url} et il me s
 msgid "Best!"
 msgstr "A bientôt !"
 
+#: lms/templates/courseware/course_about.html
+msgid "Back to courses"
+msgstr "Retour aux cours"
+
 #: lms/templates/courseware/courseware.html
 msgid "Back to description"
 msgstr "Retour vers description"
