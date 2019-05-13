@@ -8,6 +8,8 @@ from django.urls import reverse
 from openedx.core.djangolib.markup import HTML, Text
 %>
 
+<%block name="pagetitle">${_("Home Page")}</%block>
+
 <!-- TMA GLOBAL STYLE -->
 <link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
 <link rel="stylesheet" href="${static.url('tma-static/css/index-tma-custom.css')}">

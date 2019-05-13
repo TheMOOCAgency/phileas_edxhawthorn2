@@ -25074,6 +25074,10 @@ msgstr ""
 "révision #%(r2)d"
 
 #: lms/templates/index.html
+msgid "Home Page"
+msgstr "Page d'accueil"
+
+#: lms/templates/index.html
 msgid "Develop your skills and explore new horizons"
 msgstr "Développez vos compétences et découvrez de nouveaux horizons"
 
@@ -25486,3 +25490,7 @@ msgstr "Connectez-vous au site de formation Phileas"
 #: lms/templates/tma_apps/zones_index.html
 msgid "Select your geographical area"
 msgstr "Choisissez votre zone géographique"
+
+#: lms/templates/tma_apps/legal.html
+msgid "Legal"
+msgstr "Mentions Légales"
