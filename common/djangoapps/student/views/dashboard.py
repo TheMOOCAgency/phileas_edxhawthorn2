@@ -976,8 +976,8 @@ def get_tma_course_info(user, course_id, block_courses):
     course['is_manager_only'] = TmaOverviewInfo.is_manager_only
     course['is_vodeclic'] = TmaOverviewInfo.is_vodeclic
     course['liked_total'] = TmaOverviewInfo.liked_total
-    course['tag'] = TmaOverviewInfo.tag
-    course['onboarding'] = TmaOverviewInfo.onboarding
+    course['tag'] = str(TmaOverviewInfo.tag)
+    course['onboarding'] = str(TmaOverviewInfo.onboarding)
     course['active_enrollments_total'] = TmaOverviewInfo.active_enrollments_total
 
     #TmaCourseEnrollment Info
