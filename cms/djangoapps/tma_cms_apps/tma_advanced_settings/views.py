@@ -82,8 +82,8 @@ def amundi_settings_handler(request, course_key_string):
                     'us_manager_only': request.POST['manager_only'],
                     'is_mandatory': request.POST['is_mandatory'],
                     'has_menu': request.POST['has_menu'],
-                    'tag': request.POST['tag'],
-                    'onboarding': request.POST['onboarding'],
+                    'tag': str(request.POST['tag']),
+                    'onboarding': str(request.POST['onboarding']),
                     'course_about': request.POST['course_about']
                 }
 
