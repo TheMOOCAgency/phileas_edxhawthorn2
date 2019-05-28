@@ -962,13 +962,8 @@ def get_tma_course_info(user, course_id, block_courses):
     #Edx CourseOverview Info
     EdxCourseOverview = CourseOverview.objects.get(id=course_id)
     course.update(EdxCourseOverview.__dict__)
-
-    #course obj info
-    course_key= CourseKey.from_string(str(course_id))
-    course_obj = get_course_by_id(course['id'])
-    course['is_new'] = course_obj.is_new
-    course['language'] = course_obj.language
-    course['display_name_with_default'] = course_obj.display_name_with_default
+    course['language'] = EdxCourseOverview.language
+    course['display_name_with_default'] = EdxCourseOverview.display_name_with_default
 
     #TmaCourseOverview Info
     TmaOverviewInfo = TmaCourseOverview.get_tma_course_overview_by_course_id(course_id)
@@ -977,10 +972,12 @@ def get_tma_course_info(user, course_id, block_courses):
     course['is_vodeclic'] = TmaOverviewInfo.is_vodeclic
     course['liked_total'] = TmaOverviewInfo.liked_total
     course['tag'] = str(TmaOverviewInfo.tag)
+    course['is_new'] = TmaOverviewInfo.is_new
     course['onboarding'] = str(TmaOverviewInfo.onboarding)
     course['active_enrollments_total'] = TmaOverviewInfo.active_enrollments_total
 
     #TmaCourseEnrollment Info
+    course_key= CourseKey.from_string(str(course_id))
     if TmaCourseEnrollment.objects.filter(course_enrollment_edx__course_id=course_key, course_enrollment_edx__user=user).exists():
         TmaEnrollmentInfo = TmaCourseEnrollment.objects.get(course_enrollment_edx__course_id=course_key, course_enrollment_edx__user=user)
         course['is_favorite'] = TmaEnrollmentInfo.is_favourite
@@ -1044,6 +1041,7 @@ def get_tma_footer_info(user, is_global):
         except:
             pass
     else:
+        log.info(len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation)))
         try:
             footer['courses_counter'] = len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation))
             footer['users_counter'] = configuration_helpers.get_value('users')

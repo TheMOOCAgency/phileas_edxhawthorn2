@@ -199,6 +199,7 @@ class TmaCourseOverview(models.Model):
     liked_total = models.IntegerField(default=0)
     active_enrollments_total = models.IntegerField(default=0)
     is_course_graded = models.BooleanField(default=True)
+    is_new = models.BooleanField(default=False)
     tag = models.CharField(db_index=True, max_length=50, default=False)
     onboarding = models.CharField(db_index=True, max_length=50, default=False)
     course_about = models.TextField(blank=True)
