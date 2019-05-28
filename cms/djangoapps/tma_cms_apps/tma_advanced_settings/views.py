@@ -61,7 +61,6 @@ def amundi_settings_handler(request, course_key_string):
                 # Update Course MetaData info
                 response = {}
                 new_course_metadata = {
-                    'is_new': request.POST['is_new'],
                     'invitation_only': request.POST['invitation_only'],
                     'no_grade': request.POST['is_graded'],
                 }
@@ -81,6 +80,7 @@ def amundi_settings_handler(request, course_key_string):
                 new_tma_course_overview = {
                     'us_manager_only': request.POST['manager_only'],
                     'is_mandatory': request.POST['is_mandatory'],
+                    'is_new': request.POST['is_new'],
                     'has_menu': request.POST['has_menu'],
                     'tag': str(request.POST['tag']),
                     'onboarding': str(request.POST['onboarding']),
