@@ -38,6 +38,10 @@ from xmodule.split_test_module import get_split_user_partitions
 from .runner import TaskProgress
 from .utils import upload_csv_to_report_store
 
+### TMA IMPORTS ###
+from student.models import UserProfile
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
+
 TASK_LOG = logging.getLogger('edx.celery.task')
 
 ENROLLED_IN_COURSE = 'enrolled'
@@ -473,11 +477,14 @@ class ProblemGradeReport(object):
         # as the keys.  It is structured in this way to keep the values related.
         header_row = OrderedDict([('id', 'Student ID'), ('email', 'Email'), ('username', 'Username')])
 
+        ### TMA profile rows ###
+        header_profile_row = OrderedDict([('rpid', 'RPID'), ('iug', 'IUG'), ('is_manager', 'Is manager'), ('custom_field', 'Zone Info')])
+
         course = get_course_by_id(course_id)
         graded_scorable_blocks = cls._graded_scorable_blocks_to_header(course)
 
         # Just generate the static fields for now.
-        rows = [list(header_row.values()) + ['Enrollment Status', 'Grade'] + _flatten(graded_scorable_blocks.values())]
+        rows = [list(header_profile_row.values()) + list(header_row.values()) + ['Enrollment Status', 'Grade', 'Best Grade', 'Passed', 'Completion Rate'] + _flatten(graded_scorable_blocks.values())]
         error_rows = [list(header_row.values()) + ['error_msg']]
         current_step = {'step': 'Calculating Grades'}
 
@@ -487,6 +494,24 @@ class ProblemGradeReport(object):
 
         for student, course_grade, error in CourseGradeFactory().iter(enrolled_students, course):
             student_fields = [getattr(student, field_name) for field_name in header_row]
+            
+            ### TMA additional fields ###
+            has_passed = course_grade.passed
+            student_profile_fields = []
+            for profile in UserProfile.objects.filter(user_id=student.id):
+                student_profile_fields = [getattr(profile, field_name) for field_name in header_profile_row]
+
+            completion_rate = 0
+            best_grade = 0
+            try:
+                tma_course_enrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__user_id=student.id, course_enrollment_edx__course_id=course_id)
+                for enrollment in tma_course_enrollment:
+                    best_grade = enrollment.best_student_grade
+                    completion_rate = enrollment.completion_rate
+            except:
+                pass
+            ### END ###
+
             task_progress.attempted += 1
 
             if not course_grade:
@@ -512,7 +537,7 @@ class ProblemGradeReport(object):
                     else:
                         earned_possible_values.append([u'Not Attempted', problem_score.possible])
 
-            rows.append(student_fields + [enrollment_status, course_grade.percent] + _flatten(earned_possible_values))
+            rows.append(student_profile_fields + student_fields + [enrollment_status, course_grade.percent, best_grade, has_passed, completion_rate] + _flatten(earned_possible_values))
 
             task_progress.succeeded += 1
             if task_progress.attempted % status_interval == 0:
