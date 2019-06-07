@@ -18,6 +18,7 @@ from ratelimitbackend import admin
 
 # TMA IMPORTS
 from cms.djangoapps.tma_cms_apps.tma_advanced_settings.views import amundi_settings_handler
+from cms.djangoapps.tma_cms_apps.quick_start.views import quick_start
 
 django_autodiscover()
 admin.site.site_header = _('Studio Administration')
@@ -173,6 +174,12 @@ urlpatterns = [
     url(r'^accessibility$', contentstore.views.accessibility, name='accessibility'),
 ]
 
+
+#TMA
+urlpatterns += [
+    url(r'^tma_apps/quickstart?$',quick_start , name='quick_start')
+]
+
 JS_INFO_DICT = {
     'domain': 'djangojs',
     # We need to explicitly include external Django apps that are not in LOCALE_PATHS.
@@ -280,3 +287,4 @@ if settings.FEATURES.get('ENABLE_API_DOCS'):
 
 from openedx.core.djangoapps.plugins import constants as plugin_constants, plugin_urls
 urlpatterns.extend(plugin_urls.get_patterns(plugin_constants.ProjectType.CMS))
+
