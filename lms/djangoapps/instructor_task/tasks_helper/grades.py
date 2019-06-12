@@ -515,7 +515,11 @@ class ProblemGradeReport(object):
                 pass
 
             # Custom_field info
-            user_profile_customfields = json.loads(UserProfile.objects.get(user_id=student.id).custom_field)
+            user_profile_customfields = {}
+            try:
+                user_profile_customfields = json.loads(UserProfile.objects.get(user_id=student.id).custom_field)
+            except:
+                pass
             custom_fields = [user_profile_customfields[field_name] if field_name in user_profile_customfields.keys() else "n/a" for field_name in header_customfield_row]
 
             ### END ###
