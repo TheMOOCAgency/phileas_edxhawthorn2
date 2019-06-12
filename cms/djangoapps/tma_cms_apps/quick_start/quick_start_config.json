@@ -1,25 +1,28 @@
 {
-    "colors":{
-        "mainColor":"#009FE5",
-        "secondColor":"#000080",
-        "configureColor":"#FF4500",
-        "statisticsColor":"#3CB371"
-    },
-    "filters":[
-        {
-            "name":"status",
-            "options":["all","open","self_paced","closed"],
-            "type":"checkbox"
-        },
-        {
-            "name":"tag",
-            "options":["computer science","design","desktop","finance","management","all"],
-            "type":"checkbox"
-        },
-        {
-            "name":"settings",
-            "options":["all","manager_only", "mandatory"],
-            "type":"checkbox"
-        }
-    ]
+  "colors":{
+       "mainColor":"#009FE5",
+       "secondColor":"#000080",
+       "configureColor":"#FF4500",
+       "statisticsColor":"#3CB371"
+   },
+   "api":{
+       "courseCreationUrl":"/tma_apps/quickstart/create-course/"
+   },
+   "filters":[
+       {
+           "name":"status",
+           "options":["all","open","self_paced","closed"],
+           "type":"checkbox"
+       },
+       {
+           "name":"tag",
+           "options":["computer science","design","desktop","finance","management","all"],
+           "type":"checkbox"
+       },
+       {
+           "name":"settings",
+           "options":["all","manager_only", "mandatory"],
+           "type":"checkbox"
+       }
+   ]
 }
