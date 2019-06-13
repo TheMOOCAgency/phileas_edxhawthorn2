@@ -43,6 +43,11 @@ from track.event_transaction_utils import (
 from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.exceptions import ItemNotFoundError
 
+# TMA IMPORTS #
+from django.utils.translation import ugettext as _
+from lms.djangoapps.tma_apps.models import TmaCourseOverview
+from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+
 log = logging.getLogger(__name__)
 
 
@@ -404,6 +409,20 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
         'course_about_url': course_about_url,
         'is_shib_course': is_shib_course,
     }
+
+    # TMA additional params
+    tma_params = {}
+
+    effort = CourseOverview.objects.get(id=course.id).effort
+    tma_params["effort"] = effort
+
+    if TmaCourseOverview.objects.get(course_overview_edx__id=course.id).is_mandatory:
+        tma_params["mandatory_text"] = _("Please remind that this training is mandatory and have to be passed as soon as possible and by no means after XXXXX.")
+    else:
+        tma_params["mandatory_text"] = ""
+
+    email_params.update(tma_params)
+
     return email_params
 
 
@@ -496,7 +515,6 @@ def send_mail_to_student(student, param_dict, language=None):
             'email_from_address',
             settings.DEFAULT_FROM_EMAIL
         )
-
         send_mail(subject, message, from_address, [student], fail_silently=False)
 
 

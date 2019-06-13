@@ -640,6 +640,7 @@ def students_update_enrollment(request, course_id):
         ]
     }
     """
+    
     course_id = CourseKey.from_string(course_id)
     action = request.POST.get('action')
     identifiers_raw = request.POST.get('identifiers')
