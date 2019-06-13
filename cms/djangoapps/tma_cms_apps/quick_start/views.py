@@ -53,7 +53,7 @@ def quick_start(request):
 
         courseInfos={
             "type": 'vodeclic' if course.is_vodeclic else 'phileas',
-            "course_organisation":course.course_overview_edx.org,
+            "org":course.course_overview_edx.org,
             "course_name":course.course_overview_edx.display_name,
             "course_id": course_id,
             "configure_url":"/course/"+course_id,

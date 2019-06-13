@@ -14,7 +14,7 @@ class CourseSerializer(serializers.Serializer):
     course_session = serializers.CharField(required=True)
     org = serializers.CharField(required=True)
     language = serializers.CharField(required=True)
-    short_description = serializers.CharField(required=True)
+    short_description = serializers.CharField(required=True, allow_blank=True)
     start_date = serializers.DateTimeField(required=False)
     end_date = serializers.DateTimeField(required=False)
     effort = serializers.IntegerField(required=True)
@@ -23,8 +23,8 @@ class CourseSerializer(serializers.Serializer):
     is_mandatory=serializers.BooleanField(required=True)
     has_menu=serializers.BooleanField(required=True)
     is_course_graded=serializers.BooleanField(required=True)
-    tag=serializers.CharField(required=True)
-    onboarding=serializers.CharField(required=True)
+    tag=serializers.CharField(required=True, allow_blank=True)
+    onboarding=serializers.CharField(required=True, allow_blank=True)
 
 
     def validate (self, data):
