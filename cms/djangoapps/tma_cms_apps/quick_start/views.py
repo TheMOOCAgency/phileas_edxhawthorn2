@@ -73,6 +73,21 @@ def quick_start(request):
     return render_to_response('/tma_cms_apps/quick_start.html', {"props":context})
 
 
+@require_http_methods(["GET"])
+@csrf_exempt
+def quick_start_checkid_exists(request):
+    course_id = request.GET.course_id
+    try :
+        course=get_course_by_id(course_key)
+    except:
+        course=None
+    if course :
+        response="invalid_new_id"
+    else :
+        response="valid_new_id"
+    return JsonResponse(response)
+
+@require_http_methods(["POST"])
 @csrf_exempt
 def quick_start_create(request):
     data = json.loads(request.body)
@@ -86,6 +101,6 @@ def quick_start_create(request):
             status=200    
         return JsonResponse(response, status=status)
     else :
-        return JsonResponse({"details":serializer.errors}, status=400)
+        return JsonResponse({"details":serializer.errors, "status":"error"}, status=400)
 
 
