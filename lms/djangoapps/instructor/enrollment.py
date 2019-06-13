@@ -44,6 +44,7 @@ from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.exceptions import ItemNotFoundError
 
 # TMA IMPORTS #
+from django.template import loader
 from django.utils.translation import ugettext as _
 from lms.djangoapps.tma_apps.models import TmaCourseOverview
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
@@ -413,11 +414,11 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     # TMA additional params
     tma_params = {}
 
-    effort = CourseOverview.objects.get(id=course.id).effort
-    tma_params["effort"] = effort
+    tma_params["effort"] = CourseOverview.objects.get(id=course.id).effort
+    tma_params["end"] = CourseOverview.objects.get(id=course.id).end
 
     if TmaCourseOverview.objects.get(course_overview_edx__id=course.id).is_mandatory:
-        tma_params["mandatory_text"] = _("Please remind that this training is mandatory and have to be passed as soon as possible and by no means after XXXXX.")
+        tma_params["mandatory_text"] = _("Please remind that this training is mandatory and have to be passed as soon as possible and by no means after {end_date}.").format(end_date=tma_params["end"])
     else:
         tma_params["mandatory_text"] = ""
 
@@ -499,6 +500,24 @@ def send_mail_to_student(student, param_dict, language=None):
         ),
     }
 
+    ### TMA HTML TEMPLATE ###
+    tma_email_template_dict = {
+        'allowed_enroll': (
+            'emails/phileas-email.html'
+        ),
+        'enrolled_enroll': (
+            'emails/phileas-email.html'
+        )
+    }
+
+    html_message = None
+    if "allowed_enroll" or "enrolled_enroll" in message_type:
+        html_message = loader.render_to_string(
+            tma_email_template_dict.get(message_type, None),
+            param_dict
+        )
+    ### END
+
     subject_template, message_template = email_template_dict.get(message_type, (None, None))
     if subject_template is not None and message_template is not None:
         subject, message = render_message_to_string(
@@ -515,7 +534,13 @@ def send_mail_to_student(student, param_dict, language=None):
             'email_from_address',
             settings.DEFAULT_FROM_EMAIL
         )
-        send_mail(subject, message, from_address, [student], fail_silently=False)
+
+        ### TMA SEND MAIL
+        if "allowed_enroll" or "enrolled_enroll" in message_type:
+            send_mail(subject, message, from_address, [student],fail_silently=False, html_message=html_message)
+        else:
+            send_mail(subject, message, from_address, [student], fail_silently=False)
+        ### END
 
 
 def render_message_to_string(subject_template, message_template, param_dict, language=None):

@@ -151,23 +151,7 @@
                                                                         <td valign='top'
                                                                             class='mcnCaptionLeftContentInner'
                                                                             style='padding: 0 9px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
-                                                                            <table align='right' border='0'
-                                                                                cellpadding='0' cellspacing='0'
-                                                                                class='mcnCaptionLeftImageContentContainer'
-                                                                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
-                                                                                <tbody>
-                                                                                    <tr>
-                                                                                        <td class='mcnCaptionLeftImageContent'
-                                                                                            valign='top'
-                                                                                            style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
-                                                                                            <img alt=''
-                                                                                                src='{course_image_url}'
-                                                                                                width='564.0000152587891'
-                                                                                                style='max-width: 600px;display: inline !important;vertical-align: bottom;border: 0;line-height: 100%;outline: none;text-decoration: none;height: auto !important;padding-bottom: 60px'
-                                                                                                class='mcnImage'> </td>
-                                                                                    </tr>
-                                                                                </tbody>
-                                                                            </table>
+
                                                                             <table
                                                                                 class='mcnCaptionLeftTextContentContainer'
                                                                                 align='left' border='0' cellpadding='0'
@@ -185,7 +169,7 @@
                                                                                             </h3>
                                                                                             <h3 class='null'
                                                                                                 style='display: block;font-family: Helvetica;font-size: 18px;font-style: normal;font-weight: bold;letter-spacing: -.5px;margin: 0;text-align: left;color: #00a1e9 !important;padding-bottom: 5px;'><strong
-                                                                                                    style='font-size: 22px;color:#39b3b4'><br>{course_title}</strong><br>
+                                                                                                    style='font-size: 22px;color:#39b3b4'><br>{{ display_name }}</strong><br>
                                                                                             </h3><br>
                                                                                         </td>
                                                                                     </tr>
@@ -215,15 +199,15 @@
                                                                         <td valign='top' class='mcnTextContent'
                                                                             style='padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #606060;font-family: Helvetica;font-size: 14px;line-height: 150%;text-align: left;'>
                                                                             Hello,<br>
-                                                                            You are invited to follow the training {display_name}.
-                                                                            Estimated time to complete this training is {effort}.
-                                                                            {mandatory_text}<br>
+                                                                            You are invited to follow the training {{ display_name }}.<br>
+                                                                            Estimated time to complete this training is {{ effort }}.<br>
+                                                                            {{ mandatory_text }}<br>
 
-                                                                            You can access training course by clicking on the following link : {course_url}<br>
+                                                                            You can access training course by clicking on the following link : {{ course_url }}<br>
 
                                                                             We wish you a nice training time.<br>
                                                                             - <br>
-                                                                            Ce message est généré automatiquement par la plateforme. Veuillez ne pas y répondre. </td>
+                                                                            This email was automatically sent from {{ site_name }} to {{ email_address }}</td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
