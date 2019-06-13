@@ -18,7 +18,7 @@ from ratelimitbackend import admin
 
 # TMA IMPORTS
 from cms.djangoapps.tma_cms_apps.tma_advanced_settings.views import amundi_settings_handler
-from cms.djangoapps.tma_cms_apps.quick_start.views import quick_start
+from cms.djangoapps.tma_cms_apps.quick_start.views import quick_start, quick_start_create
 
 django_autodiscover()
 admin.site.site_header = _('Studio Administration')
@@ -177,7 +177,8 @@ urlpatterns = [
 
 #TMA
 urlpatterns += [
-    url(r'^tma_apps/quickstart?$',quick_start , name='quick_start')
+    url(r'^tma_apps/quickstart?$',quick_start , name='quick_start'),
+    url(r'^tma_apps/quickstart/create-course/?$',quick_start_create , name='quick_start_create')
 ]
 
 JS_INFO_DICT = {
