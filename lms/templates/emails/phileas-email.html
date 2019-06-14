@@ -86,7 +86,8 @@
                                                         <td valign='top'
                                                             style='padding: 9px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'
                                                             class='mcnImageBlockInner'>
-                                                            {% if "fr" in language %}
+                                                            {% get_current_language as LANGUAGE_CODE %}
+                                                            {% if "fr" in LANGUAGE_CODE %}
                                                                 <img align="left" alt="edX"
                                                                     src="{{ site_url }}/static/tma-static/images/header-email-fr.png"
                                                                     width="564.0000152587891"
