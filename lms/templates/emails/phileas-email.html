@@ -86,8 +86,7 @@
                                                         <td valign='top'
                                                             style='padding: 9px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'
                                                             class='mcnImageBlockInner'>
-                                                            {% get_language_info for LANGUAGE_CODE as lang %}
-                                                            {% if "fr" in lang.code %}
+                                                            {% if "fr" in language %}
                                                                 <img align="left" alt="edX"
                                                                     src="{{ site_url }}/static/tma-static/images/header-email-fr.png"
                                                                     width="564.0000152587891"
@@ -290,7 +289,7 @@
                                                                                                 class="mcnTextContent"
                                                                                                 style="padding-top: 9px;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #f2f2f2;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;">
                                                                                                 <img align="left" alt="edX"
-                                                                                                src="https://qualif-phileas.themoocagency.com/static/tma-static/images/footer-email.png"
+                                                                                                src="{{ site_url }}/static/tma-static/images/footer-email.png"
                                                                                                 width="564.0000152587891"
                                                                                                 style="max-width: 600px;padding-bottom: 0;display: inline !important;vertical-align: bottom;border: 0;line-height: 100%;outline: none;text-decoration: none;height: auto !important;"
                                                                                                 class="mcnImage"></td>

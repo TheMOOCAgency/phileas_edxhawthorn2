@@ -413,6 +413,7 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
 
     # TMA additional params
     tma_params = {}
+    tma_params["language"] = language or settings.LANGUAGE_CODE
     tma_params["effort"] = CourseOverview.objects.get(id=course.id).effort
     tma_params["end"] = CourseOverview.objects.get(id=course.id).end
     tma_params["site_url"] = u'{proto}://{site}'.format(
