@@ -208,18 +208,18 @@
                                                                         <td valign='top' class='mcnTextContent'
                                                                             style='padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #606060;font-family: Helvetica;font-size: 14px;line-height: 150%;text-align: left;'>
                                                                             {% trans "Hello" %},<br/><br/>
-                                                                            
-                                                                            {{ content["name_text"] }}<br/><br/>
 
-                                                                            {{ content["effort_text"] }}<br/><br/>
+                                                                            {{ content.name_text }}<br/><br/>
+
+                                                                            {{ content.effort_text }}<br/><br/>
 
                                                                             {% if mandatory_text %}
                                                                                 {{ mandatory_text }}<br/><br/>
                                                                             {% endif %}
 
-                                                                            {{ content["link_text"] }}<br/><br/>
+                                                                            {{ content.link_text }}<br/><br/>
 
-                                                                            {{ content["last_text"] }}<br/><br/>
+                                                                            {{ content.last_text }}<br/><br/>
                                                                             - <br>
                                                                             {% trans "This email was automatically sent. Please do not respond." %}
                                                                         </td>
