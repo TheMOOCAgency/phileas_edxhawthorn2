@@ -25514,3 +25514,7 @@ msgstr "Vous pouvez accéder à la formation en cliquant sur le lien suivant :"
 #: lms/templates/emails/phileas-email.html
 msgid "This email was automatically sent. Please do not respond."
 msgstr "Ce message est généré automatiquement par la plateforme. Veuillez ne pas y répondre."
+
+#: lms/templates/emails/phileas-email.html
+msgid "We wish you a nice training time."
+msgstr "Nous vous souhaitons une bonne formation."
