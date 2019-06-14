@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html
     PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
 <html>
@@ -161,11 +162,11 @@
                                                                                     <tr>
                                                                                         <td valign='top'
                                                                                             class='mcnTextContent'
-                                                                                            style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #00a1e9;font-family: Helvetica;font-size: 14px;line-height: 100%;text-align: left;'>
+                                                                                            style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #00a1e9;font-family: Helvetica;font-size: 14px;line-height: 100%;text-align: left;padding-bottom: 20px;'>
                                                                                             <h3 class='null'
                                                                                                 style='display: block;font-family: Helvetica;font-size: 18px;font-style: normal;font-weight: bold;letter-spacing: -.5px;margin: 0;text-align: left;color: #00a1e9 !important;padding-bottom: 5px;'>
                                                                                                 <strong
-                                                                                                    style='font-size: 22px;color:#39b3b4'>Training Course</strong><br>
+                                                                                                    style='font-size: 22px;color:#39b3b4'>{% trans "Training Course" %}</strong><br>
                                                                                             </h3>
                                                                                             <h3 class='null'
                                                                                                 style='display: block;font-family: Helvetica;font-size: 18px;font-style: normal;font-weight: bold;letter-spacing: -.5px;margin: 0;text-align: left;color: #00a1e9 !important;padding-bottom: 5px;'><strong
@@ -198,16 +199,28 @@
                                                                     <tr>
                                                                         <td valign='top' class='mcnTextContent'
                                                                             style='padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #606060;font-family: Helvetica;font-size: 14px;line-height: 150%;text-align: left;'>
-                                                                            Hello,<br>
-                                                                            You are invited to follow the training {{ display_name }}.<br>
-                                                                            Estimated time to complete this training is {{ effort }}.<br>
-                                                                            {{ mandatory_text }}<br>
+                                                                            {% trans "Hello" %},<br/><br/>
+                                                                            
+                                                                            {% blocktrans with display_name=display_name %}
+                                                                            You are invited to follow the training {{ display_name }}.
+                                                                            {% endblocktrans %}<br/><br/>
 
-                                                                            You can access training course by clicking on the following link : {{ course_url }}<br>
+                                                                            {% blocktrans with effort=effort %}
+                                                                            Estimated time to complete this training is {{ effort }} minutes.
+                                                                            {% endblocktrans %}<br/><br/>
 
-                                                                            We wish you a nice training time.<br>
+                                                                            {% if mandatory_text %}
+                                                                                {{ mandatory_text }}<br/><br/>
+                                                                            {% endif %}
+
+                                                                            {% blocktrans with course_url=course_url %}
+                                                                            You can access training course by clicking on the following link : {{ course_url }}
+                                                                            {% endblocktrans %}<br/><br/>
+
+                                                                            {% trans "We wish you a nice training time." %}<br/><br/>
                                                                             - <br>
-                                                                            This email was automatically sent from {{ site_name }} to {{ email_address }}</td>
+                                                                            {% trans "This email was automatically sent. Please do not respond." %}
+                                                                        </td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
