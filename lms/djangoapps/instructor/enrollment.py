@@ -413,9 +413,12 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
 
     # TMA additional params
     tma_params = {}
-
     tma_params["effort"] = CourseOverview.objects.get(id=course.id).effort
     tma_params["end"] = CourseOverview.objects.get(id=course.id).end
+    tma_params["site_url"] = u'{proto}://{site}'.format(
+        proto=protocol,
+        site=stripped_site_name
+    )
 
     if TmaCourseOverview.objects.get(course_overview_edx__id=course.id).is_mandatory:
         tma_params["mandatory_text"] = _("Please remind that this training is mandatory and have to be passed as soon as possible and by no means after {end_date}.").format(end_date=tma_params["end"])
