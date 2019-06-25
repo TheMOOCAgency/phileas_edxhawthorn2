@@ -6,8 +6,44 @@
        "statisticsColor":"#3CB371"
    },
    "api":{
-       "courseCreationUrl":"/tma_apps/quickstart/create-course/"
+       "courseCreationUrl":"/tma_apps/quickstart/create-course/",
+       "courseidChecking":"/tma_apps/quickstart/checkid/"
    },
+    "courseBasis":{
+        "course_grade":50,
+        "course_pacing":"instructor_paced",
+        "is_course_graded":true,
+        "is_manager_only":false,
+        "is_mandatory":false,
+        "is_invitation_only":false,
+        "has_menu":true,
+        "short_description":"",
+        "onboarding":"False",
+        "tag":"False",
+        "effort":[0,0],
+        "language":"en",
+        "validCourseId":true,
+        "course_image":null,
+        "teacher_image":null,
+        "teacher_email":null,
+        "teacher_name":null,
+        "course_map":[
+            {
+                "title":"section 1",
+                "subsections":[
+                    "subsection 1.1",
+                    "subsection 1.2"
+                ]
+            },
+            {
+                "title":"section 2",
+                "subsections":[
+                    "subsection 2.1",
+                    "subsection 2.2"
+                ]
+            }
+        ]
+    },
    "filters":[
        {
            "name":"status",

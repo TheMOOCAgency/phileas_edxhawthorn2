@@ -177,9 +177,10 @@ urlpatterns = [
 
 #TMA
 urlpatterns += [
-    url(r'^tma_apps/quickstart?$',quick_start , name='quick_start'),
-    url(r'^tma_apps/quickstart/create-course/?$',quick_start_create , name='quick_start_create'),
-    url(r'^tma_apps/quickstart/checkid/?$',quick_start_checkid_exists , name='quick_start_checkid')
+    url(r'^tma_apps/quickstart/$',quick_start , name='quick_start'),
+    url(r'^tma_apps/quickstart/create-course/$',quick_start_create , name='quick_start_create'),
+    url(r'^tma_apps/quickstart/checkid/{}$'.format(
+        settings.COURSE_KEY_PATTERN), quick_start_checkid_exists , name='quick_start_checkid')
 ]
 
 JS_INFO_DICT = {

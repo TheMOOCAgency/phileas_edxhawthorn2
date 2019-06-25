@@ -5,7 +5,6 @@ from rest_framework import serializers
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from lms.djangoapps.courseware.courses import get_course_by_id
 from lms.djangoapps.tma_apps.models import TmaCourseOverview
-from tma_cms_apps.quick_start.helpers import TmaCourseCreator
 
 
 class CourseSerializer(serializers.Serializer):
@@ -18,14 +17,16 @@ class CourseSerializer(serializers.Serializer):
     start_date = serializers.DateTimeField(required=False)
     end_date = serializers.DateTimeField(required=False)
     effort = serializers.IntegerField(required=True)
+    course_grade = serializers.IntegerField(required=True)
     is_course_graded=serializers.BooleanField(required=True)
     is_manager_only=serializers.BooleanField(required=True)
     is_mandatory=serializers.BooleanField(required=True)
     has_menu=serializers.BooleanField(required=True)
-    is_course_graded=serializers.BooleanField(required=True)
     tag=serializers.CharField(required=True, allow_blank=True)
     onboarding=serializers.CharField(required=True, allow_blank=True)
-
+    course_map=serializers.CharField(required=True, allow_blank=True)
+    teacher_email=serializers.CharField(required=True, allow_blank=True)
+    teacher_name=serializers.CharField(required=True, allow_blank=True)
 
     def validate (self, data):
         """
@@ -46,5 +47,5 @@ class CourseSerializer(serializers.Serializer):
         """
         Launch course creation
         """
-        return TmaCourseCreator().createCourse(validated_data)    
+        return 
 
