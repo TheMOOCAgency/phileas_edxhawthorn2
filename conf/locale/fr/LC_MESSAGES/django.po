@@ -25518,3 +25518,7 @@ msgstr "Ce message est généré automatiquement par la plateforme. Veuillez ne 
 #: lms/templates/emails/phileas-email.html
 msgid "We wish you a nice training time."
 msgstr "Nous vous souhaitons une bonne formation."
+
+#: lms/templates/emails/phileas-email.html
+msgid "The training team"
+msgstr "L'équipe formation"
