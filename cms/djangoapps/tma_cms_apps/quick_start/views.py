@@ -17,6 +17,11 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from lms.djangoapps.courseware.courses import get_course_by_id
+from opaque_keys.edx.locations import SlashSeparatedCourseKey
+from tma_cms_apps.quick_start.helpers import TmaCourseCreator
+from datetime import datetime  
+from dateutil.relativedelta import relativedelta
+
 
 @login_required
 @ensure_csrf_cookie
@@ -24,11 +29,18 @@ def quick_start(request):
     context={}
     #TRANSLATIONS
     translations = json.load(open("/edx/app/edxapp/edx-platform/cms/djangoapps/tma_cms_apps/quick_start/quick_start_trads.json"))
-    context["translations"]=translations['fr']
+    language = request.LANGUAGE_CODE
+    if not language in translations:
+        language="en"
+    context["translations"]=translations[language]
 
     #CONFIG
     config = json.load(open("/edx/app/edxapp/edx-platform/cms/djangoapps/tma_cms_apps/quick_start/quick_start_config.json"))
     context.update(config)
+    context["courseBasis"].update({
+        "start_date":datetime.now(),
+        "end_date":datetime.today() + relativedelta(months=+6)
+    })
 
     #COURSES
     courses = TmaCourseOverview.objects.all()
@@ -75,30 +87,31 @@ def quick_start(request):
 
 @require_http_methods(["GET"])
 @csrf_exempt
-def quick_start_checkid_exists(request):
-    course_id = request.GET.course_id
+def quick_start_checkid_exists(request, course_key_string):
     try :
+        course_key=SlashSeparatedCourseKey.from_deprecated_string(course_key_string)
         course=get_course_by_id(course_key)
-    except:
-        course=None
-    if course :
-        response="invalid_new_id"
-    else :
-        response="valid_new_id"
+        response={"details":"invalid_new_id"}
+    except :
+        response={"details":"valid_new_id"}          
     return JsonResponse(response)
 
 @require_http_methods(["POST"])
 @csrf_exempt
 def quick_start_create(request):
-    data = json.loads(request.body)
+    data = request.POST
     serializer = CourseSerializer(data=data)
+    course_image=request.FILES.get('course_image')
+    teacher_image=request.FILES.get('teacher_image')
     
     if serializer.is_valid():
-        response=serializer.create(serializer.validated_data)
+        response=TmaCourseCreator(request).createCourse(serializer.validated_data, course_image, teacher_image)    
         if response['status']=="error":
             status=400
         else :
-            status=200    
+            status=200
+
+                
         return JsonResponse(response, status=status)
     else :
         return JsonResponse({"details":serializer.errors, "status":"error"}, status=400)

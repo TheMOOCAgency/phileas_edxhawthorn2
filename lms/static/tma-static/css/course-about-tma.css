@@ -135,6 +135,11 @@ a, a:hover {
     overflow: hidden;
 }
 
+.teacher-img img{
+    height: 100%;
+    width:auto;
+}
+
 .name-box p:first-of-type {
     font-size: 20px;
 }
