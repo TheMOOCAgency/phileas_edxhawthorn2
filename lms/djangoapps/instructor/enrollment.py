@@ -423,7 +423,8 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
         "name_text": _("You are invited to follow the training {course_name}.").format(course_name=display_name),
         "effort_text": _("Estimated time to complete this training is {effort} minutes.").format(effort=effort),
         "link_text": _("You can access training course by clicking on the following link : {course_url}").format(course_url=course_url),
-        "last_text": _("We wish you a nice training time.")
+        "last_text": _("We wish you a nice training time."),
+        "signature": _("The training team")
     }
 
     if TmaCourseOverview.objects.get(course_overview_edx__id=course.id).is_mandatory:
