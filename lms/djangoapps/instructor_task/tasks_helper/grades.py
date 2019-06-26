@@ -41,7 +41,7 @@ from .utils import upload_csv_to_report_store
 ### TMA IMPORTS ###
 import json
 from student.models import UserProfile
-from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
 
 TASK_LOG = logging.getLogger('edx.celery.task')
 
@@ -478,15 +478,33 @@ class ProblemGradeReport(object):
         # as the keys.  It is structured in this way to keep the values related.
         header_row = OrderedDict([('id', 'Student ID'), ('email', 'Email'), ('username', 'Username')])
 
-        ### TMA profile rows ###
-        header_profile_row = OrderedDict([('rpid', 'RPID'), ('iug', 'IUG'), ('is_manager', 'Is manager')])
-        header_customfield_row = OrderedDict([('zoneinfo', 'Zone Info'), ('societe.id', 'ID Society'), ('societe.name', 'Society Name'), ('societe.description', 'Society Description'), ('service', 'Service')])
-
         course = get_course_by_id(course_id)
         graded_scorable_blocks = cls._graded_scorable_blocks_to_header(course)
 
+        ### TMA profile rows ###
+        # Course header row 
+        course_header_row = []
+        course_date = []
+        course_header_row.append(course.display_name)
+        if course.self_paced:
+            course_date.append('self-paced')
+        else:
+            end_date = ''
+            if course.end:
+                end_date = course.end.strftime('%d-%m-%Y')
+            else:
+                end_date = 'no end date'
+            course_date.extend(['start : ' + course.start.strftime('%d-%m-%Y'), 'end : ' + end_date])
+        course_header_row.extend(course_date)
+        course_header_row.append(start_date.strftime('%d-%m-%Y'))
+
+        header_profile_row = OrderedDict([('rpid', 'RPID'), ('iug', 'IUG'), ('is_manager', 'Is manager')])
+        header_customfield_row = OrderedDict([('zoneinfo', 'Zone Info'), ('societe.id', 'ID Society'), ('societe.name', 'Society Name'), ('societe.description', 'Society Description'), ('service', 'Service')])
+        ### END ###
+
         # Just generate the static fields for now.
-        rows = [list(header_profile_row.values()) + list(header_customfield_row.values()) + list(header_row.values()) + ['Enrollment Status', 'Grade', 'Best Grade', 'Passed', 'Completion Rate'] + _flatten(graded_scorable_blocks.values())]
+        rows = [course_header_row]
+        rows.append(list(header_profile_row.values()) + list(header_customfield_row.values()) + list(header_row.values()) + ['Enrollment Status', 'Grade', 'Best Grade', 'Passed', 'Completion Rate'] + _flatten(graded_scorable_blocks.values()))
         error_rows = [list(header_row.values()) + ['error_msg']]
         current_step = {'step': 'Calculating Grades'}
 
