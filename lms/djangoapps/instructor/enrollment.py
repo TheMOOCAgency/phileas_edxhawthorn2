@@ -1,3 +1,4 @@
+# coding: utf8
 """
 Enrollment operations for use by instructor APIs.
 
