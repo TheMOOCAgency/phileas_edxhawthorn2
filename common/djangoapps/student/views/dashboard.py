@@ -881,7 +881,12 @@ def _student_dashboard(request):
         frontpage_courses = configuration_helpers.get_value('frontpage_courses_en')
     accepted_filters = ['likes', 'enrollments']
     filter = request.GET.get('filter')
+    # Static card info (always the same for now)
     static_card = {}
+    try:
+        static_card = frontpage_courses['static_double']
+    except:
+        pass
     double_card = {}
 
     if filter and filter in accepted_filters :
@@ -903,8 +908,6 @@ def _student_dashboard(request):
         double_course = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(frontpage_courses['double'])))
         double_course_to_add = get_tma_course_info(user, double_course.id, block_courses)
         double_card = double_course_to_add
-        # Static card info
-        static_card = frontpage_courses['static_double']
     else :
         courses_to_display = CourseOverview.objects.filter(org=current_organisation)[:9]
 
