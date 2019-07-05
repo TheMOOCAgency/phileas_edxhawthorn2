@@ -1051,7 +1051,7 @@ def get_tma_footer_info(user, is_global):
             footer['courses_counter'] = len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation))
 
             # Users counter
-            ce = CourseEnrollment.objects.filter(course__org__contains=org, course__tmacourseoverview__is_vodeclic=False).values_list('user_id', flat=True)
+            ce = CourseEnrollment.objects.filter(course__org__contains=current_organisation, course__tmacourseoverview__is_vodeclic=False).values_list('user_id', flat=True)
             users = get_user_model().objects.filter(id__in=ce)
             footer['users_counter'] = users.count()
 
