@@ -84,7 +84,7 @@ def amundi_settings_handler(request, course_key_string):
                     'tag': str(request.POST['tag']),
                     'onboarding': str(request.POST['onboarding']),
                     'course_about': request.POST['course_about'],
-                    'is_course_graded': request.POST['is_course_graded'],
+                    'is_course_graded': request.POST['is_graded'],
                 }
 
                 try: 
