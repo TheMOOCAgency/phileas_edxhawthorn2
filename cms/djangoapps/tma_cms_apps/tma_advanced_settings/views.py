@@ -46,7 +46,7 @@ def amundi_settings_handler(request, course_key_string):
                 'is_new':course_module.is_new,
                 'invitation_only': course_module.invitation_only,
                 'is_manager_only': tma_course_overview.is_manager_only,
-                'is_graded': not CourseMetadata.fetch(course_module).get('no_grade')['value'],
+                'is_graded': tma_course_overview.is_course_graded,
                 'is_mandatory': tma_course_overview.is_mandatory,
                 'has_menu': tma_course_overview.has_menu,
                 'course_tag': tma_course_overview.tag,
@@ -62,7 +62,7 @@ def amundi_settings_handler(request, course_key_string):
                 response = {}
                 new_course_metadata = {
                     'invitation_only': request.POST['invitation_only'],
-                    'no_grade': request.POST['is_graded'],
+                    'no_grade': not request.POST['is_graded'],
                 }
 
                 try:
@@ -71,7 +71,6 @@ def amundi_settings_handler(request, course_key_string):
                         course_module,
                         request.user
                     )
-                    log.info(result)
                     response['course_metadata'] = "Successfully updated"
                 except:
                     response['course_metadata'] = "Error when updating"
@@ -84,7 +83,8 @@ def amundi_settings_handler(request, course_key_string):
                     'has_menu': request.POST['has_menu'],
                     'tag': str(request.POST['tag']),
                     'onboarding': str(request.POST['onboarding']),
-                    'course_about': request.POST['course_about']
+                    'course_about': request.POST['course_about'],
+                    'is_course_graded': request.POST['is_course_graded'],
                 }
 
                 try: 

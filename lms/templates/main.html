@@ -22,8 +22,6 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string
 from openedx.core.release import RELEASE_LINE
 from pipeline_mako import render_require_js_path_overrides
-
-from student.views.dashboard import get_tma_footer_info
 %>
 <!DOCTYPE html>
 <!--[if lte IE 9]><html class="ie ie9 lte9" lang="${LANGUAGE_CODE}"><![endif]-->
@@ -169,22 +167,6 @@ from student.views.dashboard import get_tma_footer_info
         branch.init('${branch_key | n, js_escaped_string}');
     </script>
 % endif
-
-
-<%
-  is_global = False
-  if 'global' in str(request.META['PATH_INFO']):
-    is_global = True
-  footer_counters = {}
-  footer_counters = get_tma_footer_info(request.user, is_global)
-%>
-<script type="text/javascript">
-  // TMA footer values
-  var courses_counter = parseInt('${footer_counters["courses_counter"]}');
-  var users_counter = parseInt('${footer_counters["users_counter"]}');
-  var likes_counter = parseInt('${footer_counters["likes_counter"]}');
-  var hours_counter = parseInt('${footer_counters["hours_counter"]}');
-</script>
 
   <!-- TMA GLOBAL STYLE -->
   <link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
