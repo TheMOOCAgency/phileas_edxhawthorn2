@@ -79,14 +79,14 @@ def amundi_settings_handler(request, course_key_string):
 
                 # Update TMA Course Overview
                 new_tma_course_overview = {
-                    'us_manager_only': True if request.POST['manager_only'] else False,
-                    'is_mandatory': True if request.POST['is_mandatory'] else False,
-                    'is_new': True if request.POST['is_new'] else False,
-                    'has_menu': True if request.POST['has_menu'] else False,
+                    'us_manager_only': True if request.POST['manager_only'] == "True" else False,
+                    'is_mandatory': True if request.POST['is_mandatory']  == "True" else False,
+                    'is_new': True if request.POST['is_new']  == "True" else False,
+                    'has_menu': True if request.POST['has_menu']  == "True" else False,
                     'tag': str(request.POST['tag']),
                     'onboarding': str(request.POST['onboarding']),
                     'course_about': request.POST['course_about'],
-                    'is_course_graded': True if request.POST['is_graded'] else False,
+                    'is_course_graded': True if request.POST['is_graded']  == "True" else False,
                 }
 
                 try: 
