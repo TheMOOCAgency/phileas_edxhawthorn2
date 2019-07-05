@@ -47,7 +47,7 @@ def amundi_settings_handler(request, course_key_string):
                 'is_new':course_module.is_new,
                 'invitation_only': course_module.invitation_only,
                 'is_manager_only': tma_course_overview.is_manager_only,
-                'is_graded': tma_course_overview.is_course_graded,
+                'is_graded': not CourseMetadata.fetch(course_module).get('no_grade')['value'],
                 'is_mandatory': tma_course_overview.is_mandatory,
                 'has_menu': tma_course_overview.has_menu,
                 'course_tag': tma_course_overview.tag,
