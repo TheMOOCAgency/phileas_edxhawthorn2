@@ -239,6 +239,10 @@ def instructor_dashboard_2(request, course_id):
         'generate_bulk_certificate_exceptions_url': generate_bulk_certificate_exceptions_url,
         'certificate_exception_view_url': certificate_exception_view_url,
         'certificate_invalidation_view_url': certificate_invalidation_view_url,
+        # TMA access info for conditional rendering
+        'is_admin': access['admin'],
+        'is_staff': access['staff'],
+        'is_instructor': access['instructor']
     }
 
     return render_to_response('instructor/instructor_dashboard_2/instructor_dashboard_2.html', context)
@@ -450,6 +454,8 @@ def _section_course_info(course, access):
         'end_date': course.end,
         'num_sections': len(course.children),
         'list_instructor_tasks_url': reverse('list_instructor_tasks', kwargs={'course_id': unicode(course_key)}),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
 
     if settings.FEATURES.get('DISPLAY_ANALYTICS_ENROLLMENTS'):
@@ -523,6 +529,8 @@ def _section_cohort_management(course, access):
         'verified_track_cohorting_url': reverse(
             'verified_track_cohorting', kwargs={'course_key_string': unicode(course_key)}
         ),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -583,6 +591,8 @@ def _section_student_admin(course, access):
         'list_entrace_exam_instructor_tasks_url': reverse('list_entrance_exam_instructor_tasks',
                                                           kwargs={'course_id': unicode(course_key)}),
         'spoc_gradebook_url': reverse('spoc_gradebook', kwargs={'course_id': unicode(course_key)}),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -634,6 +644,8 @@ def _section_data_download(course, access):
         'course_has_survey': True if course.course_survey_name else False,
         'course_survey_results_url': reverse('get_course_survey_results', kwargs={'course_id': unicode(course_key)}),
         'export_ora2_data_url': reverse('export_ora2_data', kwargs={'course_id': unicode(course_key)}),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 

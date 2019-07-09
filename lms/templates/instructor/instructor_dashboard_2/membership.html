@@ -273,3 +273,8 @@ from openedx.core.djangolib.markup import HTML, Text
     ></div>
   %endif
 </div>
+<script>
+  $(document).ready(function(){
+    $('.role, .enroll-option, .enrollment-button[data-action="unenroll"], .batch-beta-testers, .member-lists-management').hide();
+  });
+</script>

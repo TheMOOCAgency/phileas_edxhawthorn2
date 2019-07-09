@@ -4,11 +4,14 @@
 }
 
 /*Fonts*/
-*{
+*:not(.mce-ico){
   font-family: 'Montserrat', sans-serif!important;
 }
-*::before,*::after{
+*::before:not(.mce-i-image:before),*::after{
   font-family: FontAwesome!important;
+}
+.fa {
+  font: normal normal normal 14px/1 FontAwesome !important;
 }
 
 /* Usefull classes */
