@@ -2,9 +2,9 @@
 
 const getLightDashboard = function() {
     window.location.hash = '#view-membership';
-    $('#course_info, #cohort_management, #discussions_management, #student_admin, #data_download').removeClass('active-section');
+    $('#course_info, #cohort_management, #discussions_management, #student_admin, #data_download, #instructor_analytics').removeClass('active-section');
     $('#membership').addClass('active-section');
-    $('.course_info, .cohort_management, .discussions_management, .student_admin, .data_download').hide();
+    $('.course_info, .cohort_management, .discussions_management, .student_admin, .data_download, .instructor_analytics').hide();
     $('.role, .enroll-option, .enrollment-button[data-action="unenroll"], .batch-beta-testers, .member-lists-management').hide();
 };
 
@@ -21,7 +21,7 @@ $(document).ready(function(){
         if ($('.switch-instructor > input[type="checkbox"]').prop('checked')) {
         getLightDashboard();
         } else {
-        $('.course_info, .cohort_management, .discussions_management, .student_admin, .data_download').show();
+        $('.course_info, .cohort_management, .discussions_management, .student_admin, .data_download, .instructor_analytics').show();
         $('.role, .enroll-option, .enrollment-button[data-action="unenroll"], .batch-beta-testers, .member-lists-management').show();
         }
     });

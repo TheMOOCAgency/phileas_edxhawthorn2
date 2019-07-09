@@ -608,6 +608,8 @@ def _section_extensions(course):
         'reset_due_date_url': reverse('reset_due_date', kwargs={'course_id': unicode(course.id)}),
         'show_unit_extensions_url': reverse('show_unit_extensions', kwargs={'course_id': unicode(course.id)}),
         'show_student_extensions_url': reverse('show_student_extensions', kwargs={'course_id': unicode(course.id)}),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -725,6 +727,8 @@ def _section_analytics(course, access):
         'section_display_name': _('Analytics'),
         'access': access,
         'course_id': unicode(course.id),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -742,6 +746,8 @@ def _section_metrics(course, access):
         'get_students_opened_subsection_url': reverse('get_students_opened_subsection'),
         'get_students_problem_grades_url': reverse('get_students_problem_grades'),
         'post_metrics_data_csv_url': reverse('post_metrics_data_csv'),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -784,6 +790,8 @@ def _section_open_response_assessment(request, course, openassessment_blocks, ac
         'section_display_name': _('Open Responses'),
         'access': access,
         'course_id': unicode(course_key),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
