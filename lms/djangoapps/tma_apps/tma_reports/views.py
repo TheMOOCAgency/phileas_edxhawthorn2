@@ -1,4 +1,5 @@
 import xlwt
+import json
 import datetime
 from collections import OrderedDict
 
@@ -67,13 +68,13 @@ def download_invited_report(request, course_id):
             for profile in UserProfile.objects.filter(user__email=invited_user.enrolled_email):
                 student_user_fields = student_user_fields + [getattr(profile, field_name) if getattr(profile, field_name) else "n/a" for field_name in headers_profile]
 
-            # Get custom field info 
-            student_json_customfields = {}       
-            try:
-                student_json_customfields = json.loads(UserProfile.objects.get(user__email=invited_user.enrolled_email).custom_field)
-            except:
-                pass
-            student_customfields = [student_json_customfields[field_name] if field_name in student_json_customfields.keys() else "n/a" for field_name in header_customfield]
+                # Get custom field info 
+                student_json_customfields = {} 
+                try:      
+                    student_json_customfields = json.loads(profile.custom_field)
+                except:
+                    pass
+                student_customfields = [student_json_customfields[field_name] if field_name in student_json_customfields.keys() else "n/a" for field_name in header_customfield]
 
             invited_or_enrolled = 'started'
 
