@@ -4,7 +4,7 @@ import datetime
 from collections import OrderedDict
 
 from opaque_keys.edx.keys import CourseKey
-from student.models import User, UserProfile, ManualEnrollmentAudit
+from student.models import User, UserProfile, ManualEnrollmentAudit, CourseEnrollmentAllowed, CourseEnrollment
 
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET
@@ -44,49 +44,60 @@ def download_invited_report(request, course_id):
     j=0
     # Generate rows
     for invited_user in invited_users:
-        j+=1
-        student_allowed_fields = []
-        student_user_fields = []
-        student_customfields = []
-        invited_or_enrolled = ''
-        fields = []
 
-        # Get email
-        student_allowed_fields = [getattr(invited_user, field_name) if getattr(invited_user, field_name) else "n/a" for field_name in headers_allowed_user]
+        # Check only users related to this course_id, whether they exists or not:
+        if CourseEnrollmentAllowed.objects.filter(email=invited_user.enrolled_email, course_id=course_key).exists() or CourseEnrollment.objects.filter(user__email=invited_user.enrolled_email, course_id=course_key).exists() and (invited_user.state_transition in state_transitions):
 
-        # If user is not registered yet
-        if invited_user.state_transition == 'from unenrolled to allowed to enroll':
-            # N/A for all fields and "invited" flag
-            student_user_fields = ["n/a" for field_name in headers_user] + ["n/a" for field_name in headers_profile] + ["n/a" for field_name in header_customfield]
-            invited_or_enrolled = 'invited'
-        else:
-            # If user already exists and enrolled : get user info
-            for user in User.objects.filter(email=invited_user.enrolled_email):
-                student_user_fields = [getattr(user, field_name) if getattr(user, field_name) else "n/a" for field_name in headers_user]
+            log.info(invited_user.enrolled_email)
 
-            # Get profile info
-            for profile in UserProfile.objects.filter(user__email=invited_user.enrolled_email):
-                student_user_fields = student_user_fields + [getattr(profile, field_name) if getattr(profile, field_name) else "n/a" for field_name in headers_profile]
+            j+=1
+            student_allowed_fields = []
+            student_user_fields = []
+            student_customfields = []
+            invited_or_enrolled = ''
+            fields = []
 
-                # Get custom field info 
-                student_json_customfields = {} 
-                try:      
-                    student_json_customfields = json.loads(profile.custom_field)
-                except:
-                    pass
-                student_customfields = [student_json_customfields[field_name] if field_name in student_json_customfields.keys() else "n/a" for field_name in header_customfield]
+            # If user is not registered yet and was invited to this course
+            if invited_user.state_transition == 'from unenrolled to allowed to enroll':
+                # Get email
+                student_allowed_fields = [getattr(invited_user, field_name) if getattr(invited_user, field_name) else "n/a" for field_name in headers_allowed_user]
 
-            invited_or_enrolled = 'started'
+                # N/A for all fields and "invited" flag
+                student_user_fields = ["n/a" for field_name in headers_user] + ["n/a" for field_name in headers_profile] + ["n/a" for field_name in header_customfield]
+                invited_or_enrolled = 'invited'
 
-        # Combine fields in one list
-        fields = student_allowed_fields + student_user_fields + student_customfields + [invited_or_enrolled]
+            # If user registered
+            if invited_user.state_transition == 'from allowed to enroll to enrolled':
+                # Get email
+                student_allowed_fields = [getattr(invited_user, field_name) if getattr(invited_user, field_name) else "n/a" for field_name in headers_allowed_user]
 
-        # Write fields in sheet
-        for i, field in enumerate(fields):
-            if isinstance(field, datetime.date):
-                ws.write(j, i, field.strftime("%d-%m-%Y"))
-            else:
-                ws.write(j, i, field)
+                # If user already exists and enrolled : get user info
+                for user in User.objects.filter(email=invited_user.enrolled_email):
+                    student_user_fields = [getattr(user, field_name) if getattr(user, field_name) else "n/a" for field_name in headers_user]
+
+                # Get profile info
+                for profile in UserProfile.objects.filter(user__email=invited_user.enrolled_email):
+                    student_user_fields = student_user_fields + [getattr(profile, field_name) if getattr(profile, field_name) else "n/a" for field_name in headers_profile]
+
+                    # Get custom field info 
+                    student_json_customfields = {} 
+                    try:      
+                        student_json_customfields = json.loads(profile.custom_field)
+                    except:
+                        pass
+                    student_customfields = [student_json_customfields[field_name] if field_name in student_json_customfields.keys() else "n/a" for field_name in header_customfield]
+
+                invited_or_enrolled = 'started'
+
+            # Combine fields in one list
+            fields = student_allowed_fields + student_user_fields + student_customfields + [invited_or_enrolled]
+        
+            # Write fields in sheet
+            for i, field in enumerate(fields):
+                if isinstance(field, datetime.date):
+                    ws.write(j, i, field.strftime("%d-%m-%Y"))
+                else:
+                    ws.write(j, i, field)
 
     wb.save(response)
     return response
