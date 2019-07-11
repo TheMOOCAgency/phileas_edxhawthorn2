@@ -304,7 +304,9 @@ def _section_e_commerce(course, access, paid_mode, coupons_enabled, reports_enab
         'reports_enabled': reports_enabled,
         'course_price': course_price,
         'total_amount': total_amount,
-        'is_ecommerce_course': is_ecommerce_course(course_key)
+        'is_ecommerce_course': is_ecommerce_course(course_key),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -317,7 +319,9 @@ def _section_special_exams(course, access):
         'section_key': 'special_exams',
         'section_display_name': _('Special Exams'),
         'access': access,
-        'course_id': unicode(course_key)
+        'course_id': unicode(course_key),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
