@@ -205,7 +205,7 @@
                                                                             style='padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #606060;font-family: Helvetica;font-size: 14px;line-height: 150%;text-align: left;'>
                                                                             {% trans "Hello" %},<br/><br/>
 
-                                                                            {{ content.name_text }}<br/><br/>
+                                                                            {{ content.name_text }} <strong>{{ display_name }}</strong><br/><br/>
 
                                                                             {{ content.effort_text }}<br/><br/>
 
@@ -213,7 +213,7 @@
                                                                                 {{ mandatory_text }}<br/><br/>
                                                                             {% endif %}
 
-                                                                            <a href="{{ content.link_text }}">{{ display_name }}</a><br/><br/>
+                                                                            {{ content.link_text }<a href="{{ course_url }}"> {{ display_name }}</a><br/><br/>
 
                                                                             {{ content.last_text }}<br/>
 
