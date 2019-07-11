@@ -25500,16 +25500,16 @@ msgid "Training Course"
 msgstr "Formation"
 
 #: lms/templates/emails/phileas-email.html
-msgid "You are invited to follow the training {course_name}."
-msgstr "Vous êtes invité à suivre la formation {course_name}."
+msgid "You are invited to follow the training"
+msgstr "Vous êtes invité à suivre la formation"
 
 #: lms/templates/emails/phileas-email.html
 msgid "Estimated time to complete this training is {effort} minutes."
 msgstr "Le temps nécessaire pour faire cette formation est estimé à {effort} minutes."
 
 #: lms/templates/emails/phileas-email.html
-msgid "You can access training course by clicking on the following link : {course_url}"
-msgstr "Vous pouvez accéder à la formation en cliquant sur le lien suivant : {course_url}"
+msgid "You can access training course by clicking on the following link : "
+msgstr "Vous pouvez accéder à la formation en cliquant sur le lien suivant : "
 
 #: lms/templates/emails/phileas-email.html
 msgid "This email was automatically sent. Please do not respond."
