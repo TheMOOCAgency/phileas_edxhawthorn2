@@ -9,6 +9,8 @@ from django.utils.translation import ugettext as _
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 
 split_tags = course['tag'].split(',')
+
+is_apoc = str(course['id'])=="course-v1:europe+APOC+APOC" or str(course['id'])=="course-v1:americas+APOC+APOC" or str(course['id'])=="course-v1:asia+APOC+APOC"
 %>
 
 
@@ -146,7 +148,21 @@ split_tags = course['tag'].split(',')
                 %if course['is_enrolled'] :
                   <a href="${get_vodeclic_href(user,course['id'])}" target="_blank" class="enroll-btn">${_("Continue")}</a>
                 %else :
-                  <a href="${get_vodeclic_href(user,course['id'])}" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="${course['id']}">${_("Join")}</a>
+                  <a href="${get_vodeclic_href(user,course['id'])}" target="_blank" class="enroll-btn nocourseabout_register" data-nocourseaboutcourse-id="${course['id']}">${_("Join")}</a>
+                %endif
+              %elif is_apoc:
+                  <form name="apocform" target="_blank" action="https://apoc.themoocagency.com/autologreg" style="display:none">
+                    <input type='text' name='PID' value='${user.profile.rpid}' />
+                    <input type='text' name='firstname' value='${user.first_name}' />
+                    <input type='text' name='lastname' value='${user.last_name}' />
+                    <input type='text' name='email' value='${user.email}' />
+                    <input type='text' name='entity_id' value='amundi' />
+                    <button>Submit</button>
+                  </form>
+                %if course['is_enrolled'] :
+                  <a target="_blank" class="enroll-btn" onclick="document.querySelector('form[name=&quot;apocform&quot;]').submit();">${_("Continue")}</a>
+                %else :
+                  <a data-nocourseaboutcourse-id="${course['id']}" target="_blank" class="enroll-btn nocourseabout_register" onclick="document.querySelector('form[name=&quot;apocform&quot;]').submit();">${_("Join")}</a>
                 %endif
               %else :
                 %if course['is_enrolled'] :
