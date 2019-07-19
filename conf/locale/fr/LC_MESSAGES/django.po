@@ -25527,3 +25527,7 @@ msgstr "L'équipe formation"
 msgid "Statistics"
 msgstr "Statistiques"
 
+#: cms/templates/index.html
+msgid "Quick Course Creation"
+msgstr "Création rapide de cours"
+

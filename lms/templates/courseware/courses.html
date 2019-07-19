@@ -39,6 +39,16 @@
 <link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
 <link rel="stylesheet" href="${static.url('tma-static/css/catalog-course-card.css')}">
 
+<!--APOC FORM-->
+<form name="apocform" target="_blank" action="https://apoc.themoocagency.com/autologreg" style="display:none" method="POST">
+  <input type='text' name='PID' value='${user.profile.rpid}' />
+  <input type='text' name='firstname' value='${user.first_name}' />
+  <input type='text' name='lastname' value='${user.last_name}' />
+  <input type='text' name='email' value='${user.email}' />
+  <input type='text' name='entity_id' value='amundi' />
+  <button>Submit</button>
+</form>
+
 <div class="container-fluid" style="padding-bottom: 150px;">
   <div class="row p-5">
     <div class="col">

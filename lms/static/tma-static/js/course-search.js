@@ -163,7 +163,7 @@ const displayResults = function(results) {
         var isBlocked = item.is_blocked;
         var courseId = item.id.split('+').join('').split(':').join('');
         var subjectTag = item.tag_text;
-        var isApoc = item.id.indexOf("course-v1:americas+APOC+APOC") > -1 || item.id.indexOf("course-v1:asia+APOC+APOC") > -1 || item.id.indexOf("course-v1:europe+APOC+APOC") > -1 );
+        var isApoc = item.id.indexOf("course-v1:americas+APOC+APOC") > -1 || item.id.indexOf("course-v1:asia+APOC+APOC") > -1 || item.id.indexOf("course-v1:europe+APOC+APOC") > -1;
 
         var buttonText = function(){
             var buttonText;

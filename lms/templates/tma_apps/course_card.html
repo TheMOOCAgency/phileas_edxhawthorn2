@@ -37,7 +37,7 @@ completion_rate=int(100*TmaCourseEnrollment.objects.get(course_enrollment_edx__i
 progress_bar_size = ceil(ceil(completion_rate)/10)*10
 
 is_vodeclic = "Vodeclic" in str(enrollment.course_id).split('+')[2]
-is_apoc = str(enrollment.course_id)=="course-v1:europe+APOC+APOC" or str(enrollment.course_id)=="course-v1:americas+APOC+APOC" or str(enrollment.course_id)=="course-v1:asia+APOC+APOC"
+is_apoc = "APOC+APOC" in str(enrollment.course_id)
 course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
 %>
 
@@ -148,7 +148,7 @@ course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(e
           <a href="${get_vodeclic_href(request.user,enrollment._course_id)}" target="_blank" class="continue-btn nocourseabout_register" data-nocourseaboutcourse-id="${enrollment._course_id}" >${_("Join")}</a>
           %endif
         %elif is_apoc:
-                  <form name="apocform" target="_blank" action="https://apoc.themoocagency.com/autologreg" style="display:none">
+                  <form name="apocform" target="_blank" action="https://apoc.themoocagency.com/autologreg" style="display:none" method="POST">
                     <input type='text' name='PID' value='${user.profile.rpid}' />
                     <input type='text' name='firstname' value='${user.first_name}' />
                     <input type='text' name='lastname' value='${user.last_name}' />

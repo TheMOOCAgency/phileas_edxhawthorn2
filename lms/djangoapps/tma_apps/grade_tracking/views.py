@@ -74,6 +74,7 @@ def mark_displayed_message(request, course_id):
         response = {'status':_('error while registering status')}
     return JsonResponse(response)
 
+#: TODO : this is used by APOC too, which is not Vodeclic strictly speaking so the code should be renamed to show it
 @login_required
 @require_POST
 def mark_as_done(request, course_id):
