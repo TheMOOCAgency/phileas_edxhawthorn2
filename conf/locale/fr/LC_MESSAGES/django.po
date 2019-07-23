@@ -25504,7 +25504,7 @@ msgid "You are invited to follow the training"
 msgstr "Vous êtes invité à suivre la formation"
 
 #: lms/templates/emails/phileas-email.html
-msgid "Estimated time to complete this training is {effort} minutes."
+msgid "Estimated time to complete this training is {effort}."
 msgstr "Le temps nécessaire pour faire cette formation est estimé à {effort}."
 
 #: lms/templates/emails/phileas-email.html
