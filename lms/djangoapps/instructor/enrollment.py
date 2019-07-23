@@ -392,7 +392,7 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     # We can't get the url to the course's About page if the marketing site is enabled.
     course_about_url = None
     if not settings.FEATURES.get('ENABLE_MKTG_SITE', False):
-        course_about_url = u'{proto}://{site}{path}'.format(
+        course_about_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}'.format(
             proto=protocol,
             site=stripped_site_name,
             path=reverse('about_course', kwargs={'course_id': course_key})
