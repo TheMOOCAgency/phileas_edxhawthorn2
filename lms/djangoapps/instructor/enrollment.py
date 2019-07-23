@@ -383,7 +383,7 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
         site=stripped_site_name,
         path=reverse('home_dashboard')
     )
-    course_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}/about'.format(
+    course_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}about'.format(
         proto=protocol,
         site=stripped_site_name,
         path=reverse('course_root', kwargs={'course_id': course_key})
@@ -422,7 +422,7 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     )
     tma_params["content"] = {
         "name_text": _("You are invited to follow the training"),
-        "effort_text": _("Estimated time to complete this training is {effort} minutes.").format(effort=effort),
+        "effort_text": _("Estimated time to complete this training is {effort}.").format(effort=effort),
         "link_text": _("You can access training course by clicking on the following link : "),
         "last_text": _("We wish you a nice training time."),
         "signature": _("The training team")
