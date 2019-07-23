@@ -67,6 +67,9 @@
 .stat-box > span {
     text-align: left;
 }
+.footer-stats > .col-lg-3 > .text-center {
+    line-height: 1.5;
+}
 .footer-stats > .col-lg-3:nth-child(-n+3) > .text-center {
     border-right: solid 1px #7777778f;
 }
