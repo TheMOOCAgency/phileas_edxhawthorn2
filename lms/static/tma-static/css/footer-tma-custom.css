@@ -55,32 +55,31 @@
     text-align: center;
 }
 
-.footer-stats > .col-lg-3 > div > p:first-child {
+.footer-stats > .col-lg-3 > .stat-box > p:first-child {
     font-size: 36px;
     color: #00A0E3;
     font-weight: bold;
 }
 
-.footer-stats > .col-lg-3:nth-child(-n+3) > .stat-box {
+.stat-box {
+    display: inline-grid;
+}
+.stat-box > span {
+    text-align: left;
+}
+.footer-stats > .col-lg-3:nth-child(-n+3) > .text-center {
     border-right: solid 1px #7777778f;
 }
-.stat-box > div > span:last-of-type {
+.stat-box > span:last-of-type {
     margin-top: 0px;
     margin-bottom: 0px;
     line-height: 10px;
 }
-.stat-box > div > span:first-of-type {
+.stat-box > span:first-of-type {
     margin-bottom: 0px;
     font-size: 36px;
     color: #00A0E3;
     font-weight: bold;
-}
-.stat-box > div {
-    display: inline-block;
-    text-align: left;
-}
-.stat-box > div > span:last-child {
-    display: flex;
 }
 
 .footer-links {
