@@ -30,6 +30,10 @@ from six import text_type
 
 from openedx.core.storage import get_storage
 
+# TMA imports
+import xlwt
+from io import BytesIO
+
 logger = logging.getLogger(__name__)
 
 # define custom states used by InstructorTask
@@ -277,6 +281,27 @@ class DjangoStorageReportStore(ReportStore):
         csvwriter.writerows(self._get_utf8_encoded_rows(rows))
         output_buffer.seek(0)
         self.store(course_id, filename, output_buffer)
+
+
+    def store_rows_xls(self, course_id, filename, rows):
+        """
+        TMA specific function :
+        Given a course_id, filename, and rows (each row is an iterable of
+        strings), write the rows to the storage backend in xls format.
+        """
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('Problem grade report')
+
+        for i, row in enumerate(self._get_utf8_encoded_rows(rows)):
+            for j, value in enumerate(row):
+                ws.write(i, j, value)
+
+        output_buffer = BytesIO()
+        wb.save(output_buffer)
+
+        output_buffer.seek(0)
+        self.store(course_id, filename, output_buffer)
+
 
     def links_for(self, course_id):
         """

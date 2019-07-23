@@ -36,7 +36,7 @@ from xmodule.partitions.partitions_service import PartitionService
 from xmodule.split_test_module import get_split_user_partitions
 
 from .runner import TaskProgress
-from .utils import upload_csv_to_report_store
+from .utils import upload_csv_to_report_store, upload_xls_to_report_store
 
 ### TMA IMPORTS ###
 import json
@@ -592,10 +592,10 @@ class ProblemGradeReport(object):
 
         # Perform the upload if any students have been successfully graded
         if len(rows) > 1:
-            upload_csv_to_report_store(rows, 'problem_grade_report', course_id, start_date)
+            upload_xls_to_report_store(rows, 'problem_grade_report', course_id, start_date)
         # If there are any error rows, write them out as well
         if len(error_rows) > 1:
-            upload_csv_to_report_store(error_rows, 'problem_grade_report_err', course_id, start_date)
+            upload_xls_to_report_store(error_rows, 'problem_grade_report_err', course_id, start_date)
 
         return task_progress.update_task_state(extra_meta={'step': 'Uploading CSV'})
 
