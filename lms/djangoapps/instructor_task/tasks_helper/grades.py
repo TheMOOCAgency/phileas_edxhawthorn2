@@ -36,7 +36,7 @@ from xmodule.partitions.partitions_service import PartitionService
 from xmodule.split_test_module import get_split_user_partitions
 
 from .runner import TaskProgress
-from .utils import upload_csv_to_report_store
+from .utils import upload_csv_to_report_store, upload_xls_to_report_store
 
 ### TMA IMPORTS ###
 import json
@@ -575,12 +575,14 @@ class ProblemGradeReport(object):
                 try:
                     problem_score = course_grade.problem_scores[block_location]
                 except KeyError:
-                    earned_possible_values.append([u'Not Available', u'Not Available'])
+                    earned_possible_values.append([u'Not Available'])
                 else:
+                    # TMA change score for exam : calculating ratio instead of writing Earned/Possible
                     if problem_score.first_attempted:
-                        earned_possible_values.append([problem_score.earned, problem_score.possible])
+                        value = round(float(problem_score.earned)/problem_score.possible, 2)
+                        earned_possible_values.append([value])
                     else:
-                        earned_possible_values.append([u'Not Attempted', problem_score.possible])
+                        earned_possible_values.append([u'Not Attempted'])
 
             rows.append(student_profile_fields_1 + student_user_fields + student_fields + custom_fields + student_profile_fields_2 + [enrollment_status, course_grade.percent, best_grade, completion_rate, registration_date, has_passed,] + _flatten(earned_possible_values))
 
@@ -590,10 +592,10 @@ class ProblemGradeReport(object):
 
         # Perform the upload if any students have been successfully graded
         if len(rows) > 1:
-            upload_csv_to_report_store(rows, 'problem_grade_report', course_id, start_date)
+            upload_xls_to_report_store(rows, 'problem_grade_report', course_id, start_date)
         # If there are any error rows, write them out as well
         if len(error_rows) > 1:
-            upload_csv_to_report_store(error_rows, 'problem_grade_report_err', course_id, start_date)
+            upload_xls_to_report_store(error_rows, 'problem_grade_report_err', course_id, start_date)
 
         return task_progress.update_task_state(extra_meta={'step': 'Uploading CSV'})
 
@@ -617,8 +619,8 @@ class ProblemGradeReport(object):
                         subsection_index=subsection_index,
                         subsection_name=subsection_info['subsection_block'].display_name,
                     )
-                    scorable_blocks_map[scorable_block.location] = [header_name + " (Earned)",
-                                                                    header_name + " (Possible)"]
+                    # TMA change header to get only name of scorable block
+                    scorable_blocks_map[scorable_block.location] = [header_name]
         return scorable_blocks_map
 
 

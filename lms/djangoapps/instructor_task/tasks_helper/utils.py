@@ -42,6 +42,22 @@ def upload_csv_to_report_store(rows, csv_name, course_id, timestamp, config_name
     return report_name
 
 
+def upload_xls_to_report_store(rows, xls_name, course_id, timestamp, config_name='GRADES_DOWNLOAD'):
+    """
+    TMA specific function : upload data as a XLS using ReportStore.
+    """
+    report_store = ReportStore.from_config(config_name)
+    report_name = u"{course_prefix}_{xls_name}_{timestamp_str}.xls".format(
+        course_prefix=course_filename_prefix_generator(course_id),
+        xls_name=xls_name,
+        timestamp_str=timestamp.strftime("%Y-%m-%d-%H%M")
+    )
+
+    report_store.store_rows_xls(course_id, report_name, rows)
+    tracker_emit(xls_name)
+    return report_name
+
+
 def tracker_emit(report_name):
     """
     Emits a 'report.requested' event for the given report.
