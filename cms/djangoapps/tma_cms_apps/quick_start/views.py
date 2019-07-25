@@ -69,15 +69,19 @@ def quick_start(request):
             "course_name":course.course_overview_edx.display_name,
             "course_id": course_id,
             "configure_url":"/course/"+course_id,
-            "stats_url":lmsOrgBase+"/course/"+course_id,
-            "preview_url": lmsOrgBase+"/courses/"+course_id+"/courseware",
+            "stats_url":"https://"+lmsOrgBase+"/figures/course/"+course_id,
+            "preview_url": "https://"+lmsOrgBase+"/courses/"+course_id+"/courseware",
+            "invite_url":"https://"+lmsOrgBase+"/courses/"+course_id+"/instructor#view-membership",
+            "send_email_url":"https://"+lmsOrgBase+"/courses/"+course_id+"/instructor#view-send_email",
             "tag":course.tag,
             "onBoarding":course.onboarding,
             "is_new":course.is_new,
             "has_menu":course.has_menu,
             "is_course_graded":course.is_course_graded,
+            "is_manager_only":course.is_manager_only,
+            "is_mandatory":course.is_mandatory,
             "settings":courseSettings,
-            "self_paced":self_paced
+            "self_paced":self_paced,
         }
         coursesList.append(courseInfos)
 

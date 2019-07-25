@@ -25,10 +25,10 @@
       "is_manager_only_helper":"Instructor-paced courses progress at the pace that the course autour sets. You can configure release dates for course content and due dates for assignments.",
       "is_mandatory_title":"Mandatory",
       "is_mandatory_helper":"Instructor-paced courses progress at the pace that the course autour sets. You can configure release dates for course content and due dates for assignments",
-      "course_tag_title":"Course tag",
-      "course_tag_helper":"Tag for the course",
-      "course_onboarding_tag_title":"Course onboarding tag",
-      "course_onboarding_tag_helper":"Onboarding tag for the course",
+      "tag_title":"Course tag",
+      "tag_helper":"Tag for the course",
+      "onboarding_title":"Course onboarding tag",
+      "onboarding_helper":"Onboarding tag for the course",
       "course_about_title":"Course Description",
       "course_about_helper":"A short text to present your course on course cards",
       "course_settings_title":"Course Settings",    
@@ -57,10 +57,12 @@
       "course_map_title":"Course Map",
       "teacher_image_title":"Teacher Profile Picture",
       "teacher_image_helper":"Add a profile picture for course's teacher",
-      "teacher_name_title":"Teacher's name",
+      "teacher_name_title":"Teacher",
       "teacher_name_helper":"Name of your course's teacher",
       "teacher_email_title":"Teacher's email",
-      "teacher_email_helper":"Email of your course's teacher"
+      "teacher_email_helper":"Email of your course's teacher",
+      "course_downloads_title":"Course Downloads",
+      "course_downloads_helper":"Add files that will be available for download from your course about page"
   },
   "next":"Next",
   "back":"Back",
@@ -89,7 +91,9 @@
   "backToCourse":"Back to course",
   "no_course_map":"No course map provided",
   "new_section":"New Section",
-  "new_subsection":"New subsection"
-
+  "new_subsection":"New subsection",
+  "reset":"Reset",
+  "addFilter":"Add Filter",
+  "selectSearchFilters":"Select filters you want for your search"
 }
 }
