@@ -468,6 +468,7 @@ XQUEUE_INTERFACE = {
 ################################# Middleware ###################################
 
 MIDDLEWARE_CLASSES = [
+    'corsheaders.middleware.CorsMiddleware',
     'crum.CurrentRequestUserMiddleware',
     'openedx.core.djangoapps.request_cache.middleware.RequestCache',
 
@@ -1161,7 +1162,7 @@ INSTALLED_APPS = [
     'lms.djangoapps.tma_apps',
 
     #cms tma APPS
-    'cms.djangoapps.tma_cms_apps'
+    'cms.djangoapps.tma_cms_apps',
 ]
 
 
@@ -1547,3 +1548,6 @@ plugin_settings.add_plugins(__name__, plugin_constants.ProjectType.CMS, plugin_c
 # setting for the FileWrapper class used to iterate over the export file data.
 # See: https://docs.python.org/2/library/wsgiref.html#wsgiref.util.FileWrapper
 COURSE_EXPORT_DOWNLOAD_CHUNK_SIZE = 8192
+
+
+
