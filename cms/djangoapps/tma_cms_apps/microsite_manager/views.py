@@ -9,7 +9,10 @@ from rest_framework import serializers
 from rest_framework import generics
 from rest_framework.response import Response
 
+from edxmako.shortcuts import render_to_response
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
+from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+from student.models import CourseEnrollment
 
 log = logging.getLogger(__name__)
 
@@ -17,8 +20,15 @@ log = logging.getLogger(__name__)
 @ensure_csrf_cookie
 @login_required
 def admin_homepage(request):
-    log.info('TOTOOTO')
-    return render(request, '/tma_cms_apps/admin_hp.html')
+    context = {}
+    """
+    if CourseEnrollment.objects.filter(user=request.user).exists():
+        org = CourseOverview.objects.filter(courseenrollment__user=request.user)[0].org
+
+    if SiteConfiguration.objects.filter(site__contains=org).exists():
+        context['site_id'] = 2 #SiteConfiguration.objects.filter(site__contains=org).id
+    """
+    return render(request, '/tma_cms_apps/admin_hp.html', context)
 
 
 class SiteConfigurationDetailSerializer(serializers.ModelSerializer):
