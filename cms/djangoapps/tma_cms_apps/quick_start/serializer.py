@@ -21,6 +21,7 @@ class CourseSerializer(serializers.Serializer):
     is_course_graded=serializers.BooleanField(required=True)
     is_manager_only=serializers.BooleanField(required=True)
     is_mandatory=serializers.BooleanField(required=True)
+    is_invitation_only=serializers.BooleanField(required=True)
     has_menu=serializers.BooleanField(required=True)
     tag=serializers.CharField(required=True, allow_blank=True)
     onboarding=serializers.CharField(required=True, allow_blank=True)
@@ -43,9 +44,5 @@ class CourseSerializer(serializers.Serializer):
             raise serializers.ValidationError("TmaCourseOverview already exists")
         return data
     
-    def create(self, validated_data):
-        """
-        Launch course creation
-        """
-        return 
+
 

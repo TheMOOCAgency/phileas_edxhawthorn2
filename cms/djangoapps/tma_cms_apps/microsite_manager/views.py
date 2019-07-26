@@ -11,7 +11,6 @@ from rest_framework.response import Response
 
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 
-
 log = logging.getLogger(__name__)
 
 
