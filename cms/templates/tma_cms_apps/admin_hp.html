@@ -93,8 +93,12 @@ from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_str
             a()
         }([])
     </script>
-    <script src="${static.url('tma-cms-static/admin-homepage/js/2.2dd60e6b.chunk.js')}"></script>
-    <script src="${static.url('tma-cms-static/admin-homepage/js/main.2833b792.chunk.js')}"></script>
+    <script>
+        window.csrf = "${js_escaped_string(csrf_token) | n, decode.utf8}"
+        window.props = {siteID: "${js_escaped_string(site_id) | n, decode.utf8}"}
+    </script>
+    <script src="${static.url('tma-cms-static/admin-homepage/js/2.1b168837.chunk.js')}"></script>
+    <script src="${static.url('tma-cms-static/admin-homepage/js/main.3888c625.chunk.js')}"></script>
     <script
         src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
