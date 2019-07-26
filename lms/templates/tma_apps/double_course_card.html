@@ -117,7 +117,7 @@ is_apoc = "APOC+APOC" in str(course['id'])
               %if course['is_enrolled'] :
                   <a target="_blank" class="enroll-btn" onclick="document.querySelector('form[name=&quot;apocform&quot;]').submit();">${_("Continue")}</a>
               %else :
-                  <a data-nocourseaboutcourse-id="${course['id']}" onclick="document.querySelector('form[name=&quot;apocform&quot;]').submit();" target="_blank" class="enroll-btn nocourseabout_register">${_("Join")}</a>
+                  <a href="${'/courses/'+str(course['id'])+'/about'}" class="enroll-btn">${_("Join")}</a>
               %endif
             %else :
               %if course['is_enrolled'] :
