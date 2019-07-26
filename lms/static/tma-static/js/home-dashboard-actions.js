@@ -76,9 +76,9 @@ $(document).ready(function () {
         });
     });
 
-    //Enroll when click on vodeclic courses join because no course about page -> USEFUL FOR FAVORITES which are not always active enrollments
-    $('.vodeclick_register').on('click', function(){
-      let course_id=$(this).data('vodeclic-id')
+    //Enroll when click on no course about page courses join because no course about page -> USEFUL FOR FAVORITES which are not always active enrollments
+    $('.nocourseabout_register').on('click', function(){
+      let course_id=$(this).data('nocourseaboutcourse-id')
       $.post("/change_enrollment", {"enrollment_action": "enroll","course_id":course_id})
     })
 });

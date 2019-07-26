@@ -151,6 +151,11 @@ ${HTML(fragment.foot_html())}
           </div>
         </div>
         <div class="col-md-6 text-center">
+          %if staff_access:
+          <a href="/figures/course/${course.id}">
+            <button class="phileas-button"">${_('Statistics')}</button>
+          </a>
+          %endif
           <a href="/courses/${course.id}/about">
             <button class="phileas-button" style="margin-top:25px;">${_('Back to description')}</button>
           </a>

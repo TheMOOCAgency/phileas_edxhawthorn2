@@ -25522,3 +25522,12 @@ msgstr "Nous vous souhaitons une bonne formation."
 #: lms/templates/emails/phileas-email.html
 msgid "The training team"
 msgstr "L'équipe formation"
+
+#: lms/templates/courseware.html
+msgid "Statistics"
+msgstr "Statistiques"
+
+#: cms/templates/index.html
+msgid "Quick Course Creation"
+msgstr "Création rapide de cours"
+

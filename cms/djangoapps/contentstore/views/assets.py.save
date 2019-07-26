@@ -1,3 +1,4 @@
+
 import json
 import logging
 import math
@@ -39,7 +40,6 @@ REQUEST_DEFAULTS = {
     'text_search': '',
 }
 
-log = logging.getLogger()
 
 @login_required
 @ensure_csrf_cookie
@@ -381,6 +381,7 @@ def update_course_run_asset(course_key, upload_file):
 
     contentstore().save(content)
     del_cached_content(content.location)
+
     return content
 
 
@@ -496,7 +497,7 @@ def _get_thumbnail_asset_key(asset, course_key):
         thumbnail_asset_key = course_key.make_asset_key('thumbnail', thumbnail_path)
     return thumbnail_asset_key
 
- 
+
 @require_http_methods(('DELETE', 'POST', 'PUT'))
 @login_required
 @ensure_csrf_cookie

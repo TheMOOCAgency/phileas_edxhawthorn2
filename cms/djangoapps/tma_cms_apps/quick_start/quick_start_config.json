@@ -1,25 +1,200 @@
 {
-    "colors":{
-        "mainColor":"#009FE5",
-        "secondColor":"#000080",
-        "configureColor":"#FF4500",
-        "statisticsColor":"#3CB371"
+  "colors":{
+       "mainColor":"#009FE5",
+       "secondColor":"#000080",
+       "configureColor":"#FF4500",
+       "statisticsColor":"#3CB371"
+   },
+   "api":{
+       "courseCreationUrl":"/tma_apps/quickstart/create-course/",
+       "courseidChecking":"/tma_apps/quickstart/checkid/"
+   },
+    "courseBasis":{
+        "course_grade":50,
+        "course_pacing":"instructor_paced",
+        "is_course_graded":true,
+        "is_manager_only":false,
+        "is_mandatory":false,
+        "is_invitation_only":false,
+        "has_menu":true,
+        "short_description":"",
+        "onboarding":"False",
+        "tag":"False",
+        "effort":[0,0],
+        "language":"en",
+        "validCourseId":true,
+        "course_image":null,
+        "teacher_image":null,
+        "teacher_email":null,
+        "teacher_name":null,
+        "course_map":[
+            {
+                "title":"section 1",
+                "subsections":[
+                    "subsection 1.1",
+                    "subsection 1.2"
+                ]
+            },
+            {
+                "title":"section 2",
+                "subsections":[
+                    "subsection 2.1",
+                    "subsection 2.2"
+                ]
+            }
+        ]
     },
-    "filters":[
+   "filters":[
+       {
+           "name":"status",
+           "options":["all","open","self_paced","closed"],
+           "checked":["all"],
+           "type":"checkbox"
+       },
+       {
+           "name":"hometag",
+           "options":["office-tools","fundamentals","design","communication","management","business-app","compliance","internet"],
+           "type":"checkbox"
+       },
+       {
+        "name":"tag",
+        "options":["office-tools","fundamentals","design","communication","management","business-app","compliance","internet"],
+        "type":"select"
+        },
+       {
+           "name":"settings",
+           "options":["all","manager_only", "mandatory"],
+           "type":"checkbox"
+       },
+       {
+            "name":"course_name",
+            "required":true,
+            "type":"text"
+        },
         {
-            "name":"status",
-            "options":["all","open","self_paced","closed"],
-            "type":"checkbox"
+            "name":"org",
+            "required":true,
+            "type":"select",
+            "options":["asia","americas","europe"]
+        },
+        {
+            "name":"course_number",
+            "required":true,
+            "type":"text"
+        },
+        {
+            "name":"course_session",
+            "required":true,
+            "type":"text"
+        },
+        {
+            "name":"course_pacing",
+            "type":"radio",
+            "options":[
+                "instructor_paced",
+                "self_paced"
+            ]
+        },
+        {
+            "name":"effort",
+            "type":"time"
+        },
+        {
+            "name":"course_dates",
+            "type":"date"
+
+        },
+        {
+            "name":"language",
+            "type":"select",
+            "options":[
+                "fr",
+                "en",
+                "de",
+                "es",
+                "it"
+            ]
+        },
+        {
+            "name":"course_type",
+            "type":"checkBox",
+            "options":[
+                "is_invitation_only",
+                "is_manager_only",
+                "is_mandatory"
+            ]
         },
         {
             "name":"tag",
-            "options":["computer science","design","desktop","finance","management","all"],
-            "type":"checkbox"
+            "type":"select",
+            "options":[
+                "computer science",
+                "finance",
+                "management",
+                "desktop",
+                "design"
+            ]
         },
         {
-            "name":"settings",
-            "options":["all","manager_only", "mandatory"],
-            "type":"checkbox"
+            "name":"onboarding",
+            "type":"select",
+            "options":[
+                "onboarding_1",
+                "onboarding_2",
+                "onboarding_3"
+            ]
+        },
+        {
+            "name":"course_image",
+            "type":"imageUpload"
+        },
+        {
+            "name":"course_about",
+            "type":"textField"
+        },
+        {
+            "name":"course_map",
+            "type":"jsonEditor"
+        },
+        {
+            "name":"teacher_name",
+            "required":false,
+            "type":"text"
+        },
+        {
+            "name":"teacher_image",
+            "hideTitle":true,
+            "type":"imageUpload"
+        },
+        {
+            "name":"teacher_email",
+            "required":false,
+            "hideTitle":true,
+            "type":"text"
+        },
+        {
+            "name":"course_settings",
+            "type":"checkBox",
+            "options":[
+                "is_course_graded",
+                "has_menu"
+            ]
+        },
+        {
+            "name":"course_grade",
+            "type":"grade"
+        },
+        {
+            "name":"course_downloads",
+            "type":"multipleUploads"
         }
-    ]
+   ],
+   "orgs":["asia","americas","europe"],
+   "homeFilters":["status","hometag","settings"],
+   "createSteps":[
+    ["course_name","org","course_number","course_session"],
+    ["course_pacing","effort","course_dates","language","course_type"],
+    ["tag","onboarding","course_image","course_about","course_map","teacher_name","teacher_image","teacher_email"],
+    ["course_settings","course_grade"]
+   ]
 }
