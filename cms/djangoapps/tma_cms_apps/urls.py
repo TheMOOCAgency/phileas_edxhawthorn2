@@ -20,7 +20,7 @@ urlpatterns = [
 
     url(r'^api/v1/$', include(router.urls, namespace='api')),
     url(
-        r'^api/v1/microsite_manager/(?P<pk>[0-9]+)/(?P<section>.+)/(?P<lang>.+)/$',
+        r'^api/v1/microsite_manager/(?P<pk>[0-9]+)/(?P<section>.+)/$',
         views.SiteConfigurationAPIView.as_view(),
         name='site-configuration'
     )

@@ -58,8 +58,8 @@ class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
         data = {}
         log.info(kwargs)
 
-        if kwargs['section'] and kwargs['lang']:
-            data = self.serializer_class(site_config).data['values'][kwargs.get('section')][kwargs.get('lang')]
+        if kwargs['section']:
+            data = self.serializer_class(site_config).data['values'][kwargs.get('section')]
             
         return Response(data)
 
@@ -68,8 +68,8 @@ class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
 
         data = self.serializer_class(site_config).data['values']
 
-        if kwargs['section'] and kwargs['lang']:
-            data[kwargs.get('section')][kwargs.get('lang')] = request.data
+        if kwargs['section']:
+            data[kwargs.get('section')] = request.data
             log.info(data)
 
         serializer = self.serializer_class(site_config, data=data, partial=True)
