@@ -17,12 +17,41 @@ from django.core.urlresolvers import reverse
 from models.settings.course_grading import CourseGradingModel
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from cms.djangoapps.contentstore.views.assets import update_course_run_asset
+from courseware.courses import get_course_by_id
+from opaque_keys.edx.keys import CourseKey
 
 
 class TmaCourseCreator():
-    def __init__(self, request):
-        #self.creator = self._get_course_creator()
-        self.creator = request.user
+    def __init__(self, user, data, course_image=None, teacher_image=None,download_files=None):
+        self.creator = self._get_course_creator()
+        self.data=data
+        self.course_id=data["course_id"] if data['editMode']=="configure" else self._create_course_id()
+        self.course_key =SlashSeparatedCourseKey.from_deprecated_string(self.course_id)
+        #self.creator = user
+        self.course_image_upload=self._upload_image(course_image)
+        self.teacher_image_upload=self._upload_image(teacher_image)
+        self.download_files_upload=self._upload_multiple_files(download_files)
+        self.tmaOverviewFields=['is_manager_only', 'is_course_graded', 'is_mandatory', 'has_menu', 'tag', 'onboarding', 'course_about']
+
+    def _create_course_id(self):
+        fields= {
+            "display_name": self.data.get('course_name'),
+            "start": self.data.get('start_date', CourseFields.start.default),
+            "enrollment_start": self.data.get('start_date', CourseFields.start.default),
+        }
+        new_course = create_new_course(
+            user=self.creator, 
+            org=self.data.get('org'), 
+            number=self.data.get('course_number'), 
+            run=self.data.get('course_session'),fields=fields
+        )
+        return str(new_course.id)
+
+    def _convert_seconds_to_time(self, seconds):
+        minutes = int(seconds) // 60
+        hours = minutes // 60
+        rest_minutes = minutes % 60
+        return str(hours)+":"+str(rest_minutes)
 
     def _get_course_creator(self):
         try:
@@ -40,73 +69,67 @@ class TmaCourseCreator():
             creator_user.save()
         return creator_user
 
-    def _convert_seconds_to_time(self, seconds):
-        minutes = int(seconds) // 60
-        hours = minutes // 60
-        rest_minutes = minutes % 60
-        return str(hours)+":"+str(rest_minutes)
-
-
-    def createCourse(self, data, course_image, teacher_image):
-        #CREATE COURSE
-        fields= {
-        "display_name": data.get('course_name'),
-        "start": data.get('start_date', CourseFields.start.default),
-        "enrollment_start": data.get('start_date', CourseFields.start.default),
-        }
-        new_course = create_new_course(user=self.creator, org=data.get('org'), number=data.get('course_number'), run=data.get('course_session'),fields=fields)
-        new_course_key=SlashSeparatedCourseKey.from_deprecated_string(str(new_course.id))
-
-        course_image_upload=None
-        if course_image:
-            course_image_upload = update_course_run_asset(new_course_key, course_image)
-
-        teacher_image_upload=None
-        if teacher_image:
-            teacher_image_upload = update_course_run_asset(new_course_key, teacher_image)
-
-
-        #COURSE OVERVIEW
+    def _update_course_overview(self):
         additional_info = {
-        'display_name': data.get('course_name'),
-        'language': data.get('language'),
-        'short_description': data.get('short_description'),
-        'start_date':data.get('start_date', CourseFields.start.default),
-        'end_date': data.get('end_date', CourseFields.end.default),
-        'enrollment_start': data.get('start_date', CourseFields.start.default),
-        'enrollment_end': data.get('end_date', CourseFields.end.default),
-        'effort':self._convert_seconds_to_time(data.get('effort',0)),
-        'intro_video': None,
-        'course_image_name': course_image_upload.name if course_image_upload else None,
-        'course_image_asset_path': course_image_upload.location if course_image_upload else None,
-        'invitation_only':data.get('is_invitation_only')
+            'display_name': self.data.get('course_name'),
+            'language': self.data.get('language'),
+            'short_description': self.data.get('short_description'),
+            'start_date':self.data.get('start_date', CourseFields.start.default),
+            'end_date': self.data.get('end_date', CourseFields.end.default),
+            'enrollment_start': self.data.get('start_date', CourseFields.start.default),
+            'enrollment_end': self.data.get('end_date', CourseFields.end.default),
+            'effort':self._convert_seconds_to_time(self.data.get('effort',0)),
+            'intro_video': None,
+            'course_image_name': self.course_image_upload.name if self.course_image_upload else None,
+            'course_image_asset_path': self.course_image_upload.location if self.course_image_upload else None,
+            'invitation_only':self.data.get('is_invitation_only')
         }
-        log.info("INVITATION ONLY")
-        log.info(data.get('is_invitation_only'))
-        CourseDetails.update_from_json(new_course.id, additional_info, self.creator)
+        CourseDetails.update_from_json(self.course_key, additional_info, self.creator)
 
-        #SET GRADE
-        grade = data.get('course_grade')/100.0
-        CourseGradingModel.update_cutoffs_from_json(new_course_key, {"Pass":grade} ,self.creator)
+    def _update_tma_course_overview(self):
+        tmaOverview = TmaCourseOverview.objects.filter(course_overview_edx__id=self.course_key)
 
-
-        #TMA COURSEOVERVIEW
-        if data.get('course_map'):
-            course_map = json.loads(data.get('course_map'))
+        if self.data.get('course_map'):
+            course_map = json.loads(self.data.get('course_map'))
         else :
             course_map = ""
-        data['course_about']=json.dumps({
-            "description":data.get('short_description', ""),
-            "course_map":json.loads(data.get('course_map', "")),
-            "teacher_image":"/"+str(teacher_image_upload.location) if teacher_image_upload else "",
-            "teacher_name":data.get('teacher_name', "") if data.get('teacher_name')!="null" else "",
-            "teacher_email":data.get('teacher_email', "") if data.get('teacher_email')!="null" else "",
+
+        self.data['course_about']=json.dumps({
+            "description":self.data.get('short_description', ""),
+            "course_map":json.loads(self.data.get('course_map', "")),
+            "teacher_image":"/"+str(self.teacher_image_upload.location) if self.teacher_image_upload else "",
+            "teacher_name":self.data.get('teacher_name', "") if self.data.get('teacher_name')!="null" else "",
+            "teacher_email":self.data.get('teacher_email', "") if self.data.get('teacher_email')!="null" else "",
+            "downloads": self.download_files_upload if self.download_files_upload else ""
         })
+        tmaOverview.update(**{field:self.data.get(field) for field in self.tmaOverviewFields})
+    
+    def _upload_image(self, imageFile):
+        fileUpload=update_course_run_asset(self.course_key, imageFile) if imageFile else None
+        return fileUpload
 
-        tmaOverviewFields=['is_manager_only', 'is_course_graded', 'is_mandatory', 'has_menu', 'tag', 'onboarding', 'course_about']
-        tmaOverview = TmaCourseOverview.objects.filter(course_overview_edx__id=new_course.id).update(**{field:data.get(field) for field in tmaOverviewFields})
-        
-        return{"status":"success", "edit_link":reverse('course_handler', args=[str(new_course.id)]), "course_id":str(new_course.id)}
+    def _upload_multiple_files(self, uploadFiles):
+        fileUploads = None
+        if uploadFiles :
+            fileUploads = [
+                {
+                    "text":download_file['title'],
+                    "link":"/"+str(update_course_run_asset(self.course_key, download_file['file']).location)
+                }
+                for download_file in self.download_files
+            ]
+        return fileUploads
 
+
+
+
+    def createUpdateCourse(self):
+        #try:
+        self._update_course_overview()
+        CourseGradingModel.update_cutoffs_from_json(self.course_key, {"Pass":(self.data.get('course_grade')/100.0)} ,self.creator)
+        self._update_tma_course_overview()
+        return{"status":"success", "edit_link":reverse('course_handler', args=[str(self.course_id)]), "course_id":str(self.course_id)}
+        #except:
+        #return{"status":"error"}
 
         

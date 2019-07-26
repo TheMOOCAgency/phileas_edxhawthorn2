@@ -28,6 +28,7 @@ class CourseSerializer(serializers.Serializer):
     course_map=serializers.CharField(required=True, allow_blank=True)
     teacher_email=serializers.CharField(required=True, allow_blank=True)
     teacher_name=serializers.CharField(required=True, allow_blank=True)
+    editMode=serializers.CharField(required=True, allow_blank=True)
 
     def validate (self, data):
         """

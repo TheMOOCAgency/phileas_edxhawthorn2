@@ -23,7 +23,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 
-@login_required
+#@login_required
 @ensure_csrf_cookie
 def quick_start(request):
     context={}
@@ -62,6 +62,10 @@ def quick_start(request):
 
         self_paced=True if course.course_overview_edx.self_paced else False
         course_id=str(course.course_overview_edx)
+        try :
+            course_about = json.loads(unicode(course.course_about)) if course.course_about else {}
+        except:
+            course_about={}
 
         courseInfos={
             "type": 'vodeclic' if course.is_vodeclic else 'phileas',
@@ -82,6 +86,10 @@ def quick_start(request):
             "is_mandatory":course.is_mandatory,
             "settings":courseSettings,
             "self_paced":self_paced,
+            "course_about":course_about.get('description',''),
+            "course_map":course_about.get('course_map',' '),
+            "teacher_email":course_about.get('teacher_email',' '),
+            "teacher_name":course_about.get('teacher_name',' ')
         }
         coursesList.append(courseInfos)
 
@@ -107,15 +115,27 @@ def quick_start_create(request):
     serializer = CourseSerializer(data=data)
     course_image=request.FILES.get('course_image')
     teacher_image=request.FILES.get('teacher_image')
-    
+
+    #COURSE DOWNLOADS
+    download_files=None
+    download_files_titles=None
+
+    downloads_files_keys=[key for key in request.FILES.keys() if (key.find('course_downloads')>-1) ]
+    if request.POST.get('download_files_titles') :
+        download_files_titles=json.loads(request.POST.get('download_files_titles'))
+    if downloads_files_keys and download_files_titles:
+        download_files=[{
+            "title":download_files_titles[index],
+            "file":request.FILES.get(value)
+            } for index,value in enumerate(downloads_files_keys)]
+
     if serializer.is_valid():
-        response=TmaCourseCreator(request).createCourse(serializer.validated_data, course_image, teacher_image)    
+        tmaCourseCreator = TmaCourseCreator(request.user ,serializer.validated_data, course_image, teacher_image, download_files)
+        response=tmaCourseCreator.createUpdateCourse()
         if response['status']=="error":
             status=400
         else :
             status=200
-
-                
         return JsonResponse(response, status=status)
     else :
         return JsonResponse({"details":serializer.errors, "status":"error"}, status=400)
