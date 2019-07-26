@@ -20,6 +20,7 @@ from ratelimitbackend import admin
 from cms.djangoapps.tma_cms_apps.tma_advanced_settings.views import amundi_settings_handler
 import cms.djangoapps.tma_cms_apps
 from cms.djangoapps.tma_cms_apps.quick_start.views import quick_start, quick_start_create, quick_start_checkid_exists
+import cms.djangoapps.tma_cms_apps
 
 django_autodiscover()
 admin.site.site_header = _('Studio Administration')
@@ -186,7 +187,7 @@ urlpatterns += [
 
 # Microsite Manager API
 urlpatterns += [
-    url(r'tma_cms_apps/', include('tma_cms_apps.urls')),
+    url(r'^tma_cms_apps/', include('tma_cms_apps.urls')),
 ]
 
 JS_INFO_DICT = {

@@ -9,11 +9,19 @@ log = logging.getLogger(__name__)
 router = routers.DefaultRouter()
 
 router.register(
-    r'microsite_manager',
-    views.HomepageDetailViewSet,
-    base_name='homepage-detail'
+    r'^microsite_manager/$',
+    views.SiteConfigurationDetailViewSet,
+    base_name='site-configuration-detail'
 )
 
 urlpatterns = [
-    url(r'^api/v1/', include(router.urls, namespace='api')),
+    # UI Templates
+    url(r'^manager/pages/homepage/$', views.admin_homepage, name='admin-homepage'),
+
+    url(r'^api/v1/$', include(router.urls, namespace='api')),
+    url(
+        r'^api/v1/microsite_manager/(?P<pk>[0-9]+)/(?P<section>.+)/$',
+        views.SiteConfigurationAPIView.as_view(),
+        name='site-configuration'
+    )
 ]
