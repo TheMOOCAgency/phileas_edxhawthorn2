@@ -32,7 +32,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 %>
 
 
-<%block name="pagetitle">${_("Dashboard")}</%block>
+<%block name="pagetitle">${_("Home Page")}</%block>
 <%block name="bodyclass">view-dashboard is-authenticated</%block>
 
 <%block name="header_extras">
@@ -199,6 +199,16 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
               % if last_enrollment:
                 %if "Vodeclic" in str(last_enrollment.course_id).split('+')[2]:
                   <p class="last-course-title" onclick="window.open('${get_vodeclic_href(request.user,last_enrollment.course_id)}','_blank');">${last_enrollment.course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
+                %elif "APOC+APOC" in str(last_enrollment.course_id):
+                  <form name="apocform" target="_blank" action="https://apoc.themoocagency.com/autologreg" method="POST" style="display:none">
+                    <input type='text' name='PID' value='${user.profile.rpid}' />
+                    <input type='text' name='firstname' value='${user.first_name}' />
+                    <input type='text' name='lastname' value='${user.last_name}' />
+                    <input type='text' name='email' value='${user.email}' />
+                    <input type='text' name='entity_id' value='amundi' />
+                    <button>Submit</button>
+                  </form>
+                  <p class="last-course-title" onclick="document.querySelector('form[name=&quot;apocform&quot;]').submit();">${last_enrollment.course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
                 %else:
                   <p class="last-course-title" onclick="window.location.href = '/courses/${last_enrollment.course_id}/courseware';">${last_enrollment.course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
                 %endif

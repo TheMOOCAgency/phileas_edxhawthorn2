@@ -18,6 +18,7 @@ from ratelimitbackend import admin
 
 # TMA IMPORTS
 from cms.djangoapps.tma_cms_apps.tma_advanced_settings.views import amundi_settings_handler
+import cms.djangoapps.tma_cms_apps
 from cms.djangoapps.tma_cms_apps.quick_start.views import quick_start, quick_start_create, quick_start_checkid_exists, quick_start_get_course_info
 
 django_autodiscover()
@@ -183,6 +184,11 @@ urlpatterns += [
         settings.COURSE_KEY_PATTERN), quick_start_checkid_exists , name='quick_start_checkid'),
     url(r'^tma_apps/quickstart/getCourseInfo/{}$'.format(
         settings.COURSE_KEY_PATTERN), quick_start_get_course_info , name='quick_start_getInfo')
+]
+
+# Microsite Manager API
+urlpatterns += [
+    url(r'^tma_cms_apps/', include('tma_cms_apps.urls')),
 ]
 
 JS_INFO_DICT = {

@@ -6,6 +6,7 @@
 from django.utils.translation import ugettext as _
 from django.urls import reverse
 from openedx.core.djangolib.markup import HTML
+from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string
 %>
 <%block name="bodyclass">view-in-course view-instructordash</%block>
 
@@ -96,13 +97,25 @@ from openedx.core.djangolib.markup import HTML
 
 <style type="text/css"></style>
 
+<link rel="stylesheet" href="${static.url('tma-static/css/instructor-tma.css')}">
+
 <script language="JavaScript" type="text/javascript"></script>
 
 <div class="container">
   <div class="instructor-dashboard-wrapper-2">
         <main id="main" aria-label="Content" tabindex="-1">
         <section class="instructor-dashboard-content-2" id="instructor-dashboard-content">
-          <h2 class="hd hd-2 instructor-dashboard-title">${_("Instructor Dashboard")}</h2>
+          <h2 class="hd hd-2 instructor-dashboard-title">${_("Instructor Dashboard")}</h2><br/>
+          % if is_admin:
+            <div class="toggle-dashboard">
+              <span>${_("Full dashboard")}</span>
+              <label class="switch-instructor">
+                  <input type="checkbox">
+                  <span class="slider round"></span>
+              </label>
+              <span>${_("Light dashboard")}</span>
+            </div>
+          % endif
           <div class="wrap-instructor-info studio-view">
             %if studio_url:
             <a class="instructor-info-action" href="${studio_url}">${_("View Course in Studio")}</a>
@@ -141,3 +154,5 @@ from openedx.core.djangolib.markup import HTML
 <%static:require_module_async module_name="js/dateutil_factory" class_name="DateUtilFactory">
     DateUtilFactory.transform(iterationKey=".localized-datetime");
 </%static:require_module_async>
+
+<script type="text/javascript" src="${static.url('tma-static/js/instructor-dashboard-custom.js')}"></script>

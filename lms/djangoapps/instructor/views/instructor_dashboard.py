@@ -239,6 +239,10 @@ def instructor_dashboard_2(request, course_id):
         'generate_bulk_certificate_exceptions_url': generate_bulk_certificate_exceptions_url,
         'certificate_exception_view_url': certificate_exception_view_url,
         'certificate_invalidation_view_url': certificate_invalidation_view_url,
+        # TMA access info for conditional rendering
+        'is_admin': access['admin'],
+        'is_staff': access['staff'],
+        'is_instructor': access['instructor']
     }
 
     return render_to_response('instructor/instructor_dashboard_2/instructor_dashboard_2.html', context)
@@ -300,7 +304,9 @@ def _section_e_commerce(course, access, paid_mode, coupons_enabled, reports_enab
         'reports_enabled': reports_enabled,
         'course_price': course_price,
         'total_amount': total_amount,
-        'is_ecommerce_course': is_ecommerce_course(course_key)
+        'is_ecommerce_course': is_ecommerce_course(course_key),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -313,7 +319,9 @@ def _section_special_exams(course, access):
         'section_key': 'special_exams',
         'section_display_name': _('Special Exams'),
         'access': access,
-        'course_id': unicode(course_key)
+        'course_id': unicode(course_key),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -450,6 +458,8 @@ def _section_course_info(course, access):
         'end_date': course.end,
         'num_sections': len(course.children),
         'list_instructor_tasks_url': reverse('list_instructor_tasks', kwargs={'course_id': unicode(course_key)}),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
 
     if settings.FEATURES.get('DISPLAY_ANALYTICS_ENROLLMENTS'):
@@ -500,8 +510,10 @@ def _section_membership(course, access):
         'modify_access_url': reverse('modify_access', kwargs={'course_id': unicode(course_key)}),
         'list_forum_members_url': reverse('list_forum_members', kwargs={'course_id': unicode(course_key)}),
         'update_forum_role_membership_url': reverse('update_forum_role_membership', kwargs={'course_id': unicode(course_key)}),
-        'enrollment_role_choices': enrollment_role_choices
+        'enrollment_role_choices': enrollment_role_choices,
+        'tma_export_invited_url': reverse('export_invited', kwargs={'course_id': unicode(course_key)}),
     }
+
     return section_data
 
 
@@ -523,6 +535,8 @@ def _section_cohort_management(course, access):
         'verified_track_cohorting_url': reverse(
             'verified_track_cohorting', kwargs={'course_key_string': unicode(course_key)}
         ),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -583,6 +597,8 @@ def _section_student_admin(course, access):
         'list_entrace_exam_instructor_tasks_url': reverse('list_entrance_exam_instructor_tasks',
                                                           kwargs={'course_id': unicode(course_key)}),
         'spoc_gradebook_url': reverse('spoc_gradebook', kwargs={'course_id': unicode(course_key)}),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -598,6 +614,8 @@ def _section_extensions(course):
         'reset_due_date_url': reverse('reset_due_date', kwargs={'course_id': unicode(course.id)}),
         'show_unit_extensions_url': reverse('show_unit_extensions', kwargs={'course_id': unicode(course.id)}),
         'show_student_extensions_url': reverse('show_student_extensions', kwargs={'course_id': unicode(course.id)}),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -634,6 +652,8 @@ def _section_data_download(course, access):
         'course_has_survey': True if course.course_survey_name else False,
         'course_survey_results_url': reverse('get_course_survey_results', kwargs={'course_id': unicode(course_key)}),
         'export_ora2_data_url': reverse('export_ora2_data', kwargs={'course_id': unicode(course_key)}),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -713,6 +733,8 @@ def _section_analytics(course, access):
         'section_display_name': _('Analytics'),
         'access': access,
         'course_id': unicode(course.id),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -730,6 +752,8 @@ def _section_metrics(course, access):
         'get_students_opened_subsection_url': reverse('get_students_opened_subsection'),
         'get_students_problem_grades_url': reverse('get_students_problem_grades'),
         'post_metrics_data_csv_url': reverse('post_metrics_data_csv'),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 
@@ -772,6 +796,8 @@ def _section_open_response_assessment(request, course, openassessment_blocks, ac
         'section_display_name': _('Open Responses'),
         'access': access,
         'course_id': unicode(course_key),
+        # TMA remove access if course staff or instructor
+        'is_hidden': not access['admin']
     }
     return section_data
 

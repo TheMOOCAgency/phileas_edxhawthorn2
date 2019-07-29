@@ -8,6 +8,7 @@ from .like import views as like_views
 from .activity_dashboard import views as activity_dashboard_views
 from .delete_cookies import views as delete_cookies_views
 from .legal import views as legal_views
+from .tma_reports import views as tma_reports_views
 
 urlpatterns = [
     #Certificates
@@ -34,6 +35,10 @@ urlpatterns = [
 
     #Logout
     url(r'^delete_cookies$', delete_cookies_views.tma_delete_cookies),
+
     # Legal
-    url(r'^legal$', legal_views.legal_notice_page)
+    url(r'^legal$', legal_views.legal_notice_page),
+
+    #TTMA specific reports
+    url(r'^{}/export_invited$'.format(settings.COURSE_ID_PATTERN), tma_reports_views.download_invited_report, name="export_invited"),
 ]

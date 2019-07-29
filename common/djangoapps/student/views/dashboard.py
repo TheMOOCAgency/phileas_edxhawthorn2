@@ -60,6 +60,7 @@ from xmodule.modulestore.django import modulestore
 import json
 from django.core import serializers
 from courseware.courses import get_courses
+from django.contrib.auth import get_user_model
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from lms.djangoapps.tma_apps.models import TmaCourseOverview, TmaCourseEnrollment
@@ -881,7 +882,12 @@ def _student_dashboard(request):
         frontpage_courses = configuration_helpers.get_value('frontpage_courses_en')
     accepted_filters = ['likes', 'enrollments']
     filter = request.GET.get('filter')
+    # Static card info (always the same for now)
     static_card = {}
+    try:
+        static_card = frontpage_courses['static_double']
+    except:
+        pass
     double_card = {}
 
     if filter and filter in accepted_filters :
@@ -903,8 +909,6 @@ def _student_dashboard(request):
         double_course = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(frontpage_courses['double'])))
         double_course_to_add = get_tma_course_info(user, double_course.id, block_courses)
         double_card = double_course_to_add
-        # Static card info
-        static_card = frontpage_courses['static_double']
     else :
         courses_to_display = CourseOverview.objects.filter(org=current_organisation)[:9]
 
@@ -1043,8 +1047,15 @@ def get_tma_footer_info(user, is_global):
     else:
         log.info(len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation)))
         try:
+            # Courses counter
             footer['courses_counter'] = len(TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation))
-            footer['users_counter'] = configuration_helpers.get_value('users')
+
+            # Users counter
+            ce = CourseEnrollment.objects.filter(course__org__contains=current_organisation, course__tmacourseoverview__is_vodeclic=False).values_list('user_id', flat=True)
+            users = get_user_model().objects.filter(id__in=ce)
+            footer['users_counter'] = users.count()
+
+            # Likes counter
             for course in TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation):
                 likes_counter = likes_counter + course.liked_total
         except:

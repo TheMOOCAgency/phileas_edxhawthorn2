@@ -1,3 +1,4 @@
+# coding: utf8
 """
 Enrollment operations for use by instructor APIs.
 
@@ -42,6 +43,12 @@ from track.event_transaction_utils import (
 )
 from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.exceptions import ItemNotFoundError
+
+# TMA IMPORTS #
+from django.template import loader
+from django.utils.translation import ugettext as _
+from lms.djangoapps.tma_apps.models import TmaCourseOverview
+from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 
 log = logging.getLogger(__name__)
 
@@ -385,7 +392,7 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     # We can't get the url to the course's About page if the marketing site is enabled.
     course_about_url = None
     if not settings.FEATURES.get('ENABLE_MKTG_SITE', False):
-        course_about_url = u'{proto}://{site}{path}'.format(
+        course_about_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}'.format(
             proto=protocol,
             site=stripped_site_name,
             path=reverse('about_course', kwargs={'course_id': course_key})
@@ -404,6 +411,30 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
         'course_about_url': course_about_url,
         'is_shib_course': is_shib_course,
     }
+
+    # TMA additional params
+    effort = CourseOverview.objects.get(id=course.id).effort
+    tma_params = {}
+    tma_params["language"] = settings.LANGUAGE_CODE
+    tma_params["site_url"] = u'{proto}://{site}'.format(
+        proto=protocol,
+        site=stripped_site_name
+    )
+    tma_params["content"] = {
+        "name_text": _("You are invited to follow the training"),
+        "effort_text": _("Estimated time to complete this training is {effort}.").format(effort=effort),
+        "link_text": _("You can access training course by clicking on the following link : "),
+        "last_text": _("We wish you a nice training time."),
+        "signature": _("The training team")
+    }
+
+    if TmaCourseOverview.objects.get(course_overview_edx__id=course.id).is_mandatory:
+        tma_params["content"]["mandatory_text"] = _("Please remind that this training is mandatory and have to be passed as soon as possible and by no means after {end_date}.").format(end_date=CourseOverview.objects.get(id=course.id).end)
+    else:
+        tma_params["content"]["mandatory_text"] = ""
+
+    email_params.update(tma_params)
+
     return email_params
 
 
@@ -480,6 +511,24 @@ def send_mail_to_student(student, param_dict, language=None):
         ),
     }
 
+    ### TMA HTML TEMPLATE ###
+    tma_email_template_dict = {
+        'allowed_enroll': (
+            'emails/phileas-email.html'
+        ),
+        'enrolled_enroll': (
+            'emails/phileas-email.html'
+        )
+    }
+
+    html_message = None
+    if "allowed_enroll" or "enrolled_enroll" in message_type:
+        html_message = loader.render_to_string(
+            tma_email_template_dict.get(message_type, None),
+            param_dict
+        )
+    ### END
+
     subject_template, message_template = email_template_dict.get(message_type, (None, None))
     if subject_template is not None and message_template is not None:
         subject, message = render_message_to_string(
@@ -497,7 +546,12 @@ def send_mail_to_student(student, param_dict, language=None):
             settings.DEFAULT_FROM_EMAIL
         )
 
-        send_mail(subject, message, from_address, [student], fail_silently=False)
+        ### TMA SEND MAIL
+        if "allowed_enroll" or "enrolled_enroll" in message_type:
+            send_mail(subject, message, from_address, [student],fail_silently=False, html_message=html_message)
+        else:
+            send_mail(subject, message, from_address, [student], fail_silently=False)
+        ### END
 
 
 def render_message_to_string(subject_template, message_template, param_dict, language=None):

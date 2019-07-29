@@ -36,12 +36,12 @@ from xmodule.partitions.partitions_service import PartitionService
 from xmodule.split_test_module import get_split_user_partitions
 
 from .runner import TaskProgress
-from .utils import upload_csv_to_report_store
+from .utils import upload_csv_to_report_store, upload_xls_to_report_store
 
 ### TMA IMPORTS ###
 import json
-from student.models import UserProfile
-from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
+from student.models import User, UserProfile
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
 
 TASK_LOG = logging.getLogger('edx.celery.task')
 
@@ -476,17 +476,38 @@ class ProblemGradeReport(object):
         # This struct encapsulates both the display names of each static item in the
         # header row as values as well as the django User field names of those items
         # as the keys.  It is structured in this way to keep the values related.
-        header_row = OrderedDict([('id', 'Student ID'), ('email', 'Email'), ('username', 'Username')])
-
-        ### TMA profile rows ###
-        header_profile_row = OrderedDict([('rpid', 'RPID'), ('iug', 'IUG'), ('is_manager', 'Is manager')])
-        header_customfield_row = OrderedDict([('zoneinfo', 'Zone Info'), ('societe.id', 'ID Society'), ('societe.name', 'Society Name'), ('societe.description', 'Society Description'), ('service', 'Service')])
 
         course = get_course_by_id(course_id)
         graded_scorable_blocks = cls._graded_scorable_blocks_to_header(course)
 
+        ### TMA profile rows ###
+        # Course header row 
+        course_header_row = []
+        course_date = []
+        course_header_row.append(course.display_name)
+        if course.self_paced:
+            course_date.append('self-paced')
+        else:
+            end_date = ''
+            if course.end:
+                end_date = course.end.strftime('%d-%m-%Y')
+            else:
+                end_date = 'no end date'
+            course_date.extend(['start : ' + course.start.strftime('%d-%m-%Y'), 'end : ' + end_date])
+        course_header_row.extend(course_date)
+        course_header_row.append('Export done : ' + start_date.strftime('%d-%m-%Y'))
+
+        # Deconstruct header for specific col order
+        header_profile_row_1 = OrderedDict([('rpid', 'RPID'), ('iug', 'IUG')])
+        header_user_row = OrderedDict([('first_name', 'First Name'), ('last_name', 'Last Name')])
+        header_row = OrderedDict([('email', 'Email')])
+        header_customfield_row = OrderedDict([('zoneinfo', 'Zone Info'), ('societe.id', 'ID Society'), ('societe.name', 'Society Name'), ('societe.description', 'Society Description'), ('service', 'Service')])
+        header_profile_row_2 = OrderedDict([('is_manager', 'Is manager')])
+        ### END ###
+
         # Just generate the static fields for now.
-        rows = [list(header_profile_row.values()) + list(header_customfield_row.values()) + list(header_row.values()) + ['Enrollment Status', 'Grade', 'Best Grade', 'Passed', 'Completion Rate'] + _flatten(graded_scorable_blocks.values())]
+        rows = [course_header_row]
+        rows.append(list(header_profile_row_1.values()) + list(header_user_row.values()) + list(header_row.values()) + list(header_customfield_row.values()) + list(header_profile_row_2.values()) + ['Enrollment Status', 'Grade', 'Best Grade', 'Completion Rate', 'Registration Date', 'Passed'] + _flatten(graded_scorable_blocks.values()))
         error_rows = [list(header_row.values()) + ['error_msg']]
         current_step = {'step': 'Calculating Grades'}
 
@@ -494,15 +515,33 @@ class ProblemGradeReport(object):
         # whether each user is currently enrolled in the course.
         CourseEnrollment.bulk_fetch_enrollment_states(enrolled_students, course_id)
 
-        for student, course_grade, error in CourseGradeFactory().iter(enrolled_students, course):
-            student_fields = [getattr(student, field_name) for field_name in header_row]
-            
-            ### TMA additional fields ###
-            # UserProfile info
-            has_passed = course_grade.passed
-            student_profile_fields = []
+        for student, course_grade, error in CourseGradeFactory().iter(enrolled_students, course):            
+            ### TMA change order and add fields ###
+            # UserProfile info 1 : RPID - IUG
+            student_profile_fields_1 = []
             for profile in UserProfile.objects.filter(user_id=student.id):
-                student_profile_fields = [getattr(profile, field_name) for field_name in header_profile_row]
+                student_profile_fields_1 = [getattr(profile, field_name) if getattr(profile, field_name) else "n/a" for field_name in header_profile_row_1]          
+
+            # User info : FIRST NAME + LAST NAME
+            student_user_fields = []
+            for user in User.objects.filter(id=student.id):
+                student_user_fields = [getattr(user, field_name) if getattr(user, field_name) else "n/a" for field_name in header_user_row]
+
+            # Header row : EMAIl
+            student_fields = [getattr(student, field_name) for field_name in header_row]
+
+            # Header CUSTOM FIELDS
+            user_profile_customfields = {}
+            try:
+                user_profile_customfields = json.loads(UserProfile.objects.get(user_id=student.id).custom_field)
+            except:
+                pass
+            custom_fields = [user_profile_customfields[field_name] if field_name in user_profile_customfields.keys() else "n/a" for field_name in header_customfield_row]
+
+            # UserProfile info 2 : IS MANAGER
+            student_profile_fields_2 = []
+            for profile in UserProfile.objects.filter(user_id=student.id):
+                student_profile_fields_2 = [getattr(profile, field_name) for field_name in header_profile_row_2]
 
             # TmaCourseEnrollment info
             completion_rate = 0
@@ -514,14 +553,8 @@ class ProblemGradeReport(object):
             except:
                 pass
 
-            # Custom_field info
-            user_profile_customfields = {}
-            try:
-                user_profile_customfields = json.loads(UserProfile.objects.get(user_id=student.id).custom_field)
-            except:
-                pass
-            custom_fields = [user_profile_customfields[field_name] if field_name in user_profile_customfields.keys() else "n/a" for field_name in header_customfield_row]
-
+            registration_date = CourseEnrollment.objects.get(user_id=student.id, course_id=course_id).created.strftime('%d-%m-%Y')
+            has_passed = course_grade.passed
             ### END ###
 
             task_progress.attempted += 1
@@ -542,14 +575,16 @@ class ProblemGradeReport(object):
                 try:
                     problem_score = course_grade.problem_scores[block_location]
                 except KeyError:
-                    earned_possible_values.append([u'Not Available', u'Not Available'])
+                    earned_possible_values.append([u'Not Available'])
                 else:
+                    # TMA change score for exam : calculating ratio instead of writing Earned/Possible
                     if problem_score.first_attempted:
-                        earned_possible_values.append([problem_score.earned, problem_score.possible])
+                        value = round(float(problem_score.earned)/problem_score.possible, 2)
+                        earned_possible_values.append([value])
                     else:
-                        earned_possible_values.append([u'Not Attempted', problem_score.possible])
+                        earned_possible_values.append([u'Not Attempted'])
 
-            rows.append(student_profile_fields + custom_fields + student_fields + [enrollment_status, course_grade.percent, best_grade, has_passed, completion_rate] + _flatten(earned_possible_values))
+            rows.append(student_profile_fields_1 + student_user_fields + student_fields + custom_fields + student_profile_fields_2 + [enrollment_status, course_grade.percent, best_grade, completion_rate, registration_date, has_passed,] + _flatten(earned_possible_values))
 
             task_progress.succeeded += 1
             if task_progress.attempted % status_interval == 0:
@@ -557,10 +592,10 @@ class ProblemGradeReport(object):
 
         # Perform the upload if any students have been successfully graded
         if len(rows) > 1:
-            upload_csv_to_report_store(rows, 'problem_grade_report', course_id, start_date)
+            upload_xls_to_report_store(rows, 'problem_grade_report', course_id, start_date)
         # If there are any error rows, write them out as well
         if len(error_rows) > 1:
-            upload_csv_to_report_store(error_rows, 'problem_grade_report_err', course_id, start_date)
+            upload_xls_to_report_store(error_rows, 'problem_grade_report_err', course_id, start_date)
 
         return task_progress.update_task_state(extra_meta={'step': 'Uploading CSV'})
 
@@ -584,8 +619,8 @@ class ProblemGradeReport(object):
                         subsection_index=subsection_index,
                         subsection_name=subsection_info['subsection_block'].display_name,
                     )
-                    scorable_blocks_map[scorable_block.location] = [header_name + " (Earned)",
-                                                                    header_name + " (Possible)"]
+                    # TMA change header to get only name of scorable block
+                    scorable_blocks_map[scorable_block.location] = [header_name]
         return scorable_blocks_map
 
 

@@ -16,15 +16,32 @@ button, button:hover, button:hover:not(:disabled), button:active:not(:disabled),
     padding: 0px !important;
 }
 
+.navbar-nav {
+    align-items: center;
+    justify-content: center;
+}
+
 .nav-item a {
-    height: 100%;
+    height: 3rem;
 }
 
 .nav-link {
     font-size: 14px !important;
     display: flex !important;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
+}
+
+.btn-admin {
+    width: 100px;
+    border-radius: 28px;
+    border: 2px solid #0B1A4C;
+    text-align: center;
+}
+.btn-admin:hover {
+    background-color:#0B1A4C;
+    color: white !important;
 }
 
 .navbar-light .navbar-nav a.nav-link, .navbar-light .navbar-nav a.nav-link:visited, .navbar-light .navbar-nav a.nav-link:focus {
@@ -32,15 +49,14 @@ button, button:hover, button:hover:not(:disabled), button:active:not(:disabled),
     text-decoration: none;
     transition: all 0.1s linear 0s;
 }
-.navbar-light .navbar-nav .nav-link:hover {
+.navbar-light .navbar-nav .nav-link:hover:not(.btn-admin) {
     color: #003063 !important;
     text-decoration: none;
 }
 
 @media (min-width: 992px) {
     .navbar-expand-lg .navbar-nav .nav-link {
-        padding-right: 3rem !important;
-        padding-left: 3rem !important;
+        margin: 0.5rem 3rem 0.5rem 3rem !important;
     }
 }
 

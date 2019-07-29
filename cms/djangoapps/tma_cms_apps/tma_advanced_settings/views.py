@@ -2,6 +2,7 @@ import json
 import logging
 log = logging.getLogger()
 
+from django.db import IntegrityError, transaction
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 from django.utils.html import escape
@@ -61,42 +62,44 @@ def amundi_settings_handler(request, course_key_string):
                 # Update Course MetaData info
                 response = {}
                 new_course_metadata = {
-                    'invitation_only': request.POST['invitation_only'],
-                    'no_grade': request.POST['is_graded'],
+                    'invitation_only': True if request.POST['invitation_only'] == "True" else False,
+                    'no_grade': False if request.POST['is_graded'] == "True" else True,
                 }
 
                 try:
-                    result = CourseMetadata.update_from_dict(
-                        new_course_metadata,
-                        course_module,
-                        request.user
-                    )
-                    log.info(result)
-                    response['course_metadata'] = "Successfully updated"
-                except:
+                    with transaction.atomic():
+                        result = CourseMetadata.update_from_dict(
+                            new_course_metadata,
+                            course_module,
+                            request.user
+                        )
+                        response['course_metadata'] = "Successfully updated"
+                except IntegrityError:
                     response['course_metadata'] = "Error when updating"
 
                 # Update TMA Course Overview
                 new_tma_course_overview = {
-                    'us_manager_only': request.POST['manager_only'],
-                    'is_mandatory': request.POST['is_mandatory'],
-                    'is_new': request.POST['is_new'],
-                    'has_menu': request.POST['has_menu'],
+                    'us_manager_only': True if request.POST['manager_only'] == "True" else False,
+                    'is_mandatory': True if request.POST['is_mandatory']  == "True" else False,
+                    'is_new': True if request.POST['is_new']  == "True" else False,
+                    'has_menu': True if request.POST['has_menu']  == "True" else False,
                     'tag': str(request.POST['tag']),
                     'onboarding': str(request.POST['onboarding']),
-                    'course_about': request.POST['course_about']
+                    'course_about': request.POST['course_about'],
+                    'is_course_graded': True if request.POST['is_graded']  == "True" else False,
                 }
 
                 try: 
-                    tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
-                    for key, value in new_tma_course_overview.iteritems():
-                        if 'tag' or 'onboarding' in key and value == '':
-                            setattr(tma_course_overview, key, 'False')
+                    with transaction.atomic():
+                        tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
+                        for key, value in new_tma_course_overview.iteritems():
+                            if 'tag' or 'onboarding' in key and value == '':
+                                setattr(tma_course_overview, key, 'False')
 
-                        setattr(tma_course_overview, key, value)
-                        tma_course_overview.save()
-                    response['tma_course_overview'] = "Successfully updated"
-                except:
+                            setattr(tma_course_overview, key, value)
+                            tma_course_overview.save()
+                        response['tma_course_overview'] = "Successfully updated"
+                except IntegrityError:
                     response['tma_course_overview'] = "Error when updating"
 
                 return JsonResponse(response)

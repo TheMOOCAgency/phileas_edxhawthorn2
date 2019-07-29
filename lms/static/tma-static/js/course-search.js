@@ -163,6 +163,7 @@ const displayResults = function(results) {
         var isBlocked = item.is_blocked;
         var courseId = item.id.split('+').join('').split(':').join('');
         var subjectTag = item.tag_text;
+        var isApoc = item.id.indexOf("course-v1:americas+APOC+APOC") > -1 || item.id.indexOf("course-v1:asia+APOC+APOC") > -1 || item.id.indexOf("course-v1:europe+APOC+APOC") > -1;
 
         var buttonText = function(){
             var buttonText;
@@ -173,7 +174,13 @@ const displayResults = function(results) {
                     if (isEnrolled) {
                         buttonText = '<a href="'+item.vodeclic_link+'" target="_blank" class="enroll-btn">'+item.button_text+'</a>';
                     } else {
-                        buttonText = '<a href="'+item.vodeclic_link+'" target="_blank" class="enroll-btn vodeclick_register" data-vodeclic-id="'+item.id+'">'+item.button_text+'</a>';
+                        buttonText = '<a href="'+item.vodeclic_link+'" target="_blank" class="enroll-btn nocourseabout_register" data-nocourseaboutcourse-id="'+item.id+'">'+item.button_text+'</a>';
+                    };
+                } else if (isApoc) {
+                    if (isEnrolled) {
+                        buttonText = '<a onclick="document.querySelector(\'form[name=&quot;apocform&quot;]\').submit();" target="_blank" class="enroll-btn">'+item.button_text+'</a>';
+                    } else {
+                        buttonText = '<a onclick="document.querySelector(\'form[name=&quot;apocform&quot;]\').submit();" target="_blank" class="enroll-btn nocourseabout_register" data-nocourseaboutcourse-id="'+item.id+'">'+item.button_text+'</a>';
                     };
                 } else {
                     if (isEnrolled) {
