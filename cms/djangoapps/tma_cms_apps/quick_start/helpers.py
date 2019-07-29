@@ -19,15 +19,19 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from cms.djangoapps.contentstore.views.assets import update_course_run_asset
 from courseware.courses import get_course_by_id
 from opaque_keys.edx.keys import CourseKey
+from models.settings.course_metadata import CourseMetadata
+from contentstore.views.course import _refresh_course_tabs
+
 
 
 class TmaCourseCreator():
-    def __init__(self, user, data, course_image=None, teacher_image=None,download_files=None):
-        self.creator = self._get_course_creator()
+    def __init__(self, request, user, data, course_image=None, teacher_image=None,download_files=None):
+        self.request=request
+        #self.creator = self._get_course_creator()
+        self.creator = user
         self.data=data
         self.course_id=data["course_id"] if data['editMode']=="configure" else self._create_course_id()
         self.course_key =SlashSeparatedCourseKey.from_deprecated_string(self.course_id)
-        #self.creator = user
         self.course_image_upload=self._upload_image(course_image)
         self.teacher_image_upload=self._upload_image(teacher_image)
         self.download_files_upload=self._upload_multiple_files(download_files)
@@ -82,9 +86,24 @@ class TmaCourseCreator():
             'intro_video': None,
             'course_image_name': self.course_image_upload.name if self.course_image_upload else None,
             'course_image_asset_path': self.course_image_upload.location if self.course_image_upload else None,
-            'invitation_only':self.data.get('is_invitation_only')
+            'invitation_only':self.data.get('invitation_only'),
+            'self_paced':self.data.get('course_pacing')=="self_paced"
         }
         CourseDetails.update_from_json(self.course_key, additional_info, self.creator)
+
+    def _update_course_metadata(self):
+        course_module=get_course_by_id(self.course_key)
+        advanced_details=CourseMetadata.fetch_all(course_module)
+        advanced_details["invitation_only"]["value"]=self.data["invitation_only"]
+
+        is_valid, errors, updated_data = CourseMetadata.validate_and_update_from_json(
+            course_module,
+            advanced_details,
+            self.creator,
+        )
+        if is_valid:
+            _refresh_course_tabs(self.request, course_module)
+
 
     def _update_tma_course_overview(self):
         tmaOverview = TmaCourseOverview.objects.filter(course_overview_edx__id=self.course_key)
@@ -128,6 +147,7 @@ class TmaCourseCreator():
         self._update_course_overview()
         CourseGradingModel.update_cutoffs_from_json(self.course_key, {"Pass":(self.data.get('course_grade')/100.0)} ,self.creator)
         self._update_tma_course_overview()
+        self._update_course_metadata()
         return{"status":"success", "edit_link":reverse('course_handler', args=[str(self.course_id)]), "course_id":str(self.course_id)}
         #except:
         #return{"status":"error"}

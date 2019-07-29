@@ -11,6 +11,7 @@ class CourseSerializer(serializers.Serializer):
     course_name = serializers.CharField(required=True)
     course_number = serializers.CharField(required=True)
     course_session = serializers.CharField(required=True)
+    course_pacing = serializers.CharField(required=True)
     org = serializers.CharField(required=True)
     language = serializers.CharField(required=True)
     short_description = serializers.CharField(required=True, allow_blank=True)
@@ -21,7 +22,7 @@ class CourseSerializer(serializers.Serializer):
     is_course_graded=serializers.BooleanField(required=True)
     is_manager_only=serializers.BooleanField(required=True)
     is_mandatory=serializers.BooleanField(required=True)
-    is_invitation_only=serializers.BooleanField(required=True)
+    invitation_only=serializers.BooleanField(required=True)
     has_menu=serializers.BooleanField(required=True)
     tag=serializers.CharField(required=True, allow_blank=True)
     onboarding=serializers.CharField(required=True, allow_blank=True)
@@ -29,6 +30,7 @@ class CourseSerializer(serializers.Serializer):
     teacher_email=serializers.CharField(required=True, allow_blank=True)
     teacher_name=serializers.CharField(required=True, allow_blank=True)
     editMode=serializers.CharField(required=True, allow_blank=True)
+    course_id=serializers.CharField(required=False, allow_blank=True)
 
     def validate (self, data):
         """
@@ -39,9 +41,9 @@ class CourseSerializer(serializers.Serializer):
             course=get_course_by_id(course_key)
         except:
             course=None
-        if course :
+        if course and not data['editMode']=="configure" :
             raise serializers.ValidationError("course_id already exists")
-        if TmaCourseOverview.objects.filter(course_overview_edx=course_key).exists():
+        if TmaCourseOverview.objects.filter(course_overview_edx=course_key).exists() and not data['editMode']=="configure" :
             raise serializers.ValidationError("TmaCourseOverview already exists")
         return data
     

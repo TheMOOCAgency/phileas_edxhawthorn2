@@ -9,7 +9,6 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from django.conf import settings
 from datetime import datetime
-from django.conf import settings
 from django.views.decorators.http import require_http_methods
 from tma_cms_apps.quick_start.serializer import CourseSerializer 
 from django.http import HttpResponse, JsonResponse
@@ -21,9 +20,11 @@ from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from tma_cms_apps.quick_start.helpers import TmaCourseCreator
 from datetime import datetime  
 from dateutil.relativedelta import relativedelta
+from django.urls import reverse
+from models.settings.course_metadata import CourseMetadata
 
 
-#@login_required
+@login_required
 @ensure_csrf_cookie
 def quick_start(request):
     context={}
@@ -72,24 +73,12 @@ def quick_start(request):
             "org":course.course_overview_edx.org,
             "course_name":course.course_overview_edx.display_name,
             "course_id": course_id,
-            "configure_url":"/course/"+course_id,
-            "stats_url":"https://"+lmsOrgBase+"/figures/course/"+course_id,
+            "configure_url":"#/configure/"+course_id,
+            "statistics_url":"https://"+lmsOrgBase+"/figures/course/"+course_id,
             "preview_url": "https://"+lmsOrgBase+"/courses/"+course_id+"/courseware",
-            "invite_url":"https://"+lmsOrgBase+"/courses/"+course_id+"/instructor#view-membership",
-            "send_email_url":"https://"+lmsOrgBase+"/courses/"+course_id+"/instructor#view-send_email",
-            "tag":course.tag,
-            "onBoarding":course.onboarding,
-            "is_new":course.is_new,
-            "has_menu":course.has_menu,
-            "is_course_graded":course.is_course_graded,
-            "is_manager_only":course.is_manager_only,
-            "is_mandatory":course.is_mandatory,
-            "settings":courseSettings,
-            "self_paced":self_paced,
-            "course_about":course_about.get('description',''),
-            "course_map":course_about.get('course_map',' '),
-            "teacher_email":course_about.get('teacher_email',' '),
-            "teacher_name":course_about.get('teacher_name',' ')
+            "email_url":"https://"+lmsOrgBase+"/courses/"+course_id+"/instructor",
+            "rerun_url":"#/create/"+course_id,
+            "contribute_url":reverse('course_handler', args=[course_id]),
         }
         coursesList.append(courseInfos)
 
@@ -97,6 +86,7 @@ def quick_start(request):
     return render_to_response('/tma_cms_apps/quick_start.html', {"props":context})
 
 
+@login_required
 @require_http_methods(["GET"])
 @csrf_exempt
 def quick_start_checkid_exists(request, course_key_string):
@@ -108,6 +98,40 @@ def quick_start_checkid_exists(request, course_key_string):
         response={"details":"valid_new_id"}          
     return JsonResponse(response)
 
+@login_required
+@require_http_methods(["GET"])
+@csrf_exempt
+def quick_start_get_course_info(request, course_key_string):
+    course_key=SlashSeparatedCourseKey.from_deprecated_string(course_key_string)
+    course=get_course_by_id(course_key)
+    tmaOverview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
+    edxOverview = tmaOverview.course_overview_edx
+    course_about = json.loads(unicode(tmaOverview.course_about )) if tmaOverview.course_about else {}
+    course_metadata = CourseMetadata.fetch(course) 
+
+    courseInfos={
+        "short_description":course_about.get('description',''),
+        "course_map":course_about.get('course_map',[{"subsections":[" "],"title":" "}]),
+        "has_menu":tmaOverview.has_menu,
+        "invitation_only":course_metadata['invitation_only']['value'],
+        "is_new":tmaOverview.is_new,
+        "is_course_graded":tmaOverview.is_course_graded,
+        "is_manager_only":tmaOverview.is_manager_only,
+        "is_mandatory":tmaOverview.is_mandatory,
+        "onboarding":tmaOverview.onboarding,
+        "teacher_email":course_about.get('teacher_email',' '),
+        "teacher_name":course_about.get('teacher_name',' '),
+        "course_pacing":"self_paced" if edxOverview.self_paced else "instructor_paced",
+        "tag":tmaOverview.tag,
+        "effort":edxOverview.effort.split(':'),
+        "course_id":str(course.id),
+        "course_grade":course.grade_cutoffs.get('Pass',0.5)*100,
+        "language":course.language
+    }
+
+    return JsonResponse(courseInfos)
+
+@login_required
 @require_http_methods(["POST"])
 @csrf_exempt
 def quick_start_create(request):
@@ -130,7 +154,7 @@ def quick_start_create(request):
             } for index,value in enumerate(downloads_files_keys)]
 
     if serializer.is_valid():
-        tmaCourseCreator = TmaCourseCreator(request.user ,serializer.validated_data, course_image, teacher_image, download_files)
+        tmaCourseCreator = TmaCourseCreator(request, request.user ,serializer.validated_data, course_image, teacher_image, download_files)
         response=tmaCourseCreator.createUpdateCourse()
         if response['status']=="error":
             status=400
