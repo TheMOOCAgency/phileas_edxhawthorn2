@@ -6,14 +6,28 @@
   from django.utils.translation import ugettext as _
   from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_enabled, released_languages
   from cms.djangoapps.contentstore.config.waffle_utils import should_show_checklists_page
+
+  from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+  from student.models import CourseEnrollment
 %>
+
+<%
+  org = ''
+  if context_course or context_library:
+    if CourseEnrollment.objects.filter(user=request.user).exists():
+      org = CourseOverview.objects.filter(courseenrollment__user=request.user)[0].org
+%>
+
+<!-- TMA GLOBAL STYLE -->
+<link rel="stylesheet" href="${static.url('tma-cms-static/css/navigation-cms-custom.css')}">
+
 <div class="wrapper-header wrapper" id="view-top">
   <header class="primary" role="banner">
 
     <div class="wrapper wrapper-l">
       <h1 class="branding">
         <a class="brand-link" href="/">
-          <img class="brand-image" src="${static.url('images/studio-logo.png')}" alt="${settings.STUDIO_NAME}" />
+          <img class="brand-image" src="${static.url('tma-cms-static/images/amundi-phileas-logo.png')}" alt="${settings.STUDIO_NAME}" />
         </a>
       </h1>
 
@@ -194,7 +208,22 @@
       % endif
     </div>
 
-    <div class="wrapper wrapper-r">
+    % if request.user.is_authenticated:
+      <div class="wrapper wrapper-r">
+        <ul class="tma-nav">
+          <li>
+            <a href="//${org}.${settings.LMS_BASE}">${_("Student View")}</a>
+          </li>
+          <li>
+            <a href="//${settings.CMS_BASE}">${_("Course Management")}</a>
+          </li>
+          <li>
+            <a href="//${settings.CMS_BASE}/tma_cms_apps/manager/pages/homepage/">${_("Microsite Management")}</a>
+          </li>
+        </ul>
+      </div>
+    % endif
+      <!--
       % if header_language_selector_is_enabled():
         <% languages = released_languages() %>
         % if len(languages) > 1:
@@ -252,6 +281,6 @@
         </ol>
       </nav>
     % endif
-    </div>
+    </div>-->
   </header>
 </div>

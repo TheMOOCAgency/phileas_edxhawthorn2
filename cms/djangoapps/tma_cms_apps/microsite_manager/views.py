@@ -22,7 +22,8 @@ log = logging.getLogger(__name__)
 @login_required
 def admin_homepage(request):
     context = {}
-
+    org = ''
+    
     if CourseEnrollment.objects.filter(user=request.user).exists():
         org = CourseOverview.objects.filter(courseenrollment__user=request.user)[0].org
 

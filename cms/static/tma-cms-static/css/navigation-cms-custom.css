@@ -1,0 +1,37 @@
+.is-signedin.course .wrapper-header .wrapper-l {
+    width: 50% !important
+}
+.is-signedin.course .wrapper-header .wrapper-r {
+    width: 50% !important;
+}
+.is-signedin.course .wrapper-header .info-course {
+    width: 50%;
+}
+
+.wrapper-header .info-course {
+    border: none !important;
+}
+
+.tma-nav {
+    height: 76px;
+    display: flex;
+    align-items: center;
+    float: right;
+}
+
+.tma-nav > li {
+    min-width: 160px;
+    margin: 0.5rem 1rem 0.5rem 1rem !important;
+}
+
+.tma-nav > li > a {
+    font-size: 14px !important;
+    color: #666;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.tma-nav > li > a:hover {
+    color: #0075b4;
+}
