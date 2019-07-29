@@ -67,3 +67,18 @@ html {
     display: block;
     line-height: normal;
 }
+
+/* INSTRUCTOR PREVIEW MENU */
+nav.wrapper-preview-menu > .preview-menu > .instructor-links {
+    list-style-type: none;
+    display: inline-flex;
+    float: right;
+}
+  
+.instructor-btn {
+    padding: 0rem 1rem 0rem 1rem;
+    color: white !important;
+}
+.instructor-btn:hover {
+    text-decoration: none;
+}
