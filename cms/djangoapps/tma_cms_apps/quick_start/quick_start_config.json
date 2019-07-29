@@ -119,7 +119,7 @@
             "name":"course_type",
             "type":"checkBox",
             "options":[
-                "is_invitation_only",
+                "invitation_only",
                 "is_manager_only",
                 "is_mandatory"
             ]
@@ -149,7 +149,7 @@
             "type":"imageUpload"
         },
         {
-            "name":"course_about",
+            "name":"short_description",
             "type":"textField"
         },
         {
@@ -194,7 +194,7 @@
    "createSteps":[
     ["course_name","org","course_number","course_session"],
     ["course_pacing","effort","course_dates","language","course_type"],
-    ["tag","onboarding","course_image","course_about","course_map","teacher_name","teacher_image","teacher_email"],
-    ["course_settings","course_grade"]
+    ["tag","onboarding","course_image","short_description","course_map","teacher_name","teacher_image","teacher_email"],
+    ["course_settings","course_grade","course_downloads"]
    ]
 }

@@ -19,8 +19,8 @@
       "course_dates_helper":"",
       "course_type_title":"Course type",
       "course_type_helper":"Choose a type of course from these followings",
-      "is_invitation_only_title":"Invitation Only",
-      "is_invitation_only_helper":"Instructor-paced courses progress at the pace that the course autour sets. You can configure release dates for course content and due dates for assignments",
+      "invitation_only_title":"Invitation Only",
+      "invitation_only_helper":"Instructor-paced courses progress at the pace that the course autour sets. You can configure release dates for course content and due dates for assignments",
       "is_manager_only_title":"Only for managers",
       "is_manager_only_helper":"Instructor-paced courses progress at the pace that the course autour sets. You can configure release dates for course content and due dates for assignments.",
       "is_mandatory_title":"Mandatory",
@@ -94,6 +94,8 @@
   "new_subsection":"New subsection",
   "reset":"Reset",
   "addFilter":"Add Filter",
-  "selectSearchFilters":"Select filters you want for your search"
+  "selectSearchFilters":"Select filters you want for your search",
+  "rerun":"re-run course",
+  "preview":"live preview"
 }
 }
