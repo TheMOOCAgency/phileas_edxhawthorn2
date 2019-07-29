@@ -86,23 +86,16 @@ class TmaCourseCreator():
             'intro_video': None,
             'course_image_name': self.course_image_upload.name if self.course_image_upload else None,
             'course_image_asset_path': self.course_image_upload.location if self.course_image_upload else None,
-            'invitation_only':self.data.get('invitation_only'),
             'self_paced':self.data.get('course_pacing')=="self_paced"
         }
         CourseDetails.update_from_json(self.course_key, additional_info, self.creator)
 
     def _update_course_metadata(self):
-        course_module=get_course_by_id(self.course_key)
-        advanced_details=CourseMetadata.fetch_all(course_module)
-        advanced_details["invitation_only"]["value"]=self.data["invitation_only"]
-
-        is_valid, errors, updated_data = CourseMetadata.validate_and_update_from_json(
-            course_module,
-            advanced_details,
-            self.creator,
-        )
-        if is_valid:
-            _refresh_course_tabs(self.request, course_module)
+        course=get_course_by_id(self.course_key)
+        metadata={
+            'invitation_only':self.data.get('invitation_only')
+        }
+        CourseMetadata.update_from_dict(metadata,course, self.creator)
 
 
     def _update_tma_course_overview(self):
