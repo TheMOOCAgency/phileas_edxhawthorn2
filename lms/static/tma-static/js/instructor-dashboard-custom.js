@@ -17,8 +17,11 @@ $(document).ready(function(){
     // Autofill reason field for membership section
     $('#reason-field-id').text('User enrolled - '+ date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear())
 
-    // Light dashboard by default
-    window.location.hash = '#view-membership';
+    // Light dashboard by default on invitations, except if coming from preview-menu emails button
+    if (window.location.hash !== '#view-send_email') {
+        window.location.hash = '#view-membership';
+    }
+    
     $('.switch-instructor > input[type="checkbox"]').prop('checked', true);
     getLightDashboard();
 
