@@ -3,6 +3,27 @@
 from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string
 %>
 
+
+<%include file="../widgets/header.html" args="online_help_token=None" />
+<style>
+    header{
+        display:flex;
+        background-color:white;
+        justify-content:space-between;
+        padding:0px 10px
+    }
+    header ul{
+        padding:0;
+        margin:0;
+    }
+    .tma-nav{
+        list-style:none
+    }
+    .tma-nav li{
+        margin:0px 10px!important
+    }
+</style>
+
 <!doctype html>
 <html lang="en">
 
