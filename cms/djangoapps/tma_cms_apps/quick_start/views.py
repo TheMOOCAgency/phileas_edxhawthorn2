@@ -107,7 +107,10 @@ def quick_start_get_course_info(request, course_key_string):
     tmaOverview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
     edxOverview = tmaOverview.course_overview_edx
     course_about = json.loads(unicode(tmaOverview.course_about )) if tmaOverview.course_about else {}
-    course_metadata = CourseMetadata.fetch(course) 
+    course_metadata = CourseMetadata.fetch_all(course) 
+
+    log.info('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa')
+    log.info(course_metadata)
 
     courseInfos={
         "short_description":course_about.get('description',''),
