@@ -39,13 +39,17 @@ button, button:hover, button:hover:not(:disabled), button:active:not(:disabled),
     border: 2px solid #0B1A4C;
     text-align: center;
 }
+.btn-admin:hover {
+    background-color:#0B1A4C;
+    color: white !important;
+}
 
 .navbar-light .navbar-nav a.nav-link, .navbar-light .navbar-nav a.nav-link:visited, .navbar-light .navbar-nav a.nav-link:focus {
     color: black;
     text-decoration: none;
     transition: all 0.1s linear 0s;
 }
-.navbar-light .navbar-nav .nav-link:hover {
+.navbar-light .navbar-nav .nav-link:hover:not(.btn-admin) {
     color: #003063 !important;
     text-decoration: none;
 }

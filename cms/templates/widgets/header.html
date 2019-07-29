@@ -14,11 +14,10 @@
 <%
   org = ''
   if request.user.is_authenticated:
-    if context_course or context_library:
-      if CourseEnrollment.objects.filter(user=request.user).exists():
-        org = CourseOverview.objects.filter(courseenrollment__user=request.user)[0].org
-        if 'edx' or 'phileas' in org:
-          org = 'europe'
+    if CourseEnrollment.objects.filter(user=request.user).exists():
+      org = CourseOverview.objects.filter(courseenrollment__user=request.user)[0].org
+      if 'edx' or 'phileas' in org:
+        org = 'europe'
 %>
 
 <!-- TMA GLOBAL STYLE -->
@@ -218,7 +217,7 @@
             <a href="//${org}.${settings.LMS_BASE}">${_("Student View")}</a>
           </li>
           <li>
-            <a href="//${settings.SITE_NAME}">${_("Course Management")}</a>
+            <a href="//${settings.SITE_NAME}/home/">${_("Course Management")}</a>
           </li>
           <li>
             <a href="//${settings.SITE_NAME}/tma_cms_apps/manager/pages/homepage/">${_("Microsite Management")}</a>
