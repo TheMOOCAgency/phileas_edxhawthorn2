@@ -52,7 +52,7 @@
       "language_helper":"Identify the course language here. This is used to assist users find courses that are taught in a specific language. It is also used to localize the 'From:' field in bulk emails.",
       "course_image_title":"Course image",
       "course_image_helper":"The image that will appear on course about page and course card (jpeg or png only)",
-      "short_description_title":"Course Description",
+      "description_title":"Course Description",
       "course_map_helper":"Define your course map",
       "course_map_title":"Course Map",
       "teacher_image_title":"Teacher Profile Picture",

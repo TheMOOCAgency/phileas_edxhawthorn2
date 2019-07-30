@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from edxmako.shortcuts import render_to_response
 from lms.djangoapps.tma_apps.models import TmaCourseOverview
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
-from django.conf import settings
 from datetime import datetime
 from django.views.decorators.http import require_http_methods
 from tma_cms_apps.quick_start.serializer import CourseSerializer 
@@ -16,12 +15,11 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 from lms.djangoapps.courseware.courses import get_course_by_id
-from opaque_keys.edx.locations import SlashSeparatedCourseKey
-from tma_cms_apps.quick_start.helpers import TmaCourseCreator
+from opaque_keys.edx.keys import CourseKey
+from tma_cms_apps.quick_start.helpers import TmaCourseManager, TmaCourseInfo
 from datetime import datetime  
 from dateutil.relativedelta import relativedelta
-from django.urls import reverse
-from models.settings.course_metadata import CourseMetadata
+
 
 
 @login_required
@@ -44,43 +42,9 @@ def quick_start(request):
     })
 
     #COURSES
-    courses = TmaCourseOverview.objects.all()
     coursesList=[]
-    courseInfos={}
-
-    for course in courses :
-        lmsOrgBase = SiteConfiguration.get_value_for_org(
-            course.course_overview_edx.org,
-            "LMS_BASE",
-            settings.LMS_BASE
-        )
-
-        courseSettings=[]
-        if course.is_mandatory:
-            courseSettings.append('mandatory')
-        if course.is_manager_only:
-            courseSettings.append('manager_only')
-
-        self_paced=True if course.course_overview_edx.self_paced else False
-        course_id=str(course.course_overview_edx)
-        try :
-            course_about = json.loads(unicode(course.course_about)) if course.course_about else {}
-        except:
-            course_about={}
-
-        courseInfos={
-            "type": 'vodeclic' if course.is_vodeclic else 'phileas',
-            "org":course.course_overview_edx.org,
-            "course_name":course.course_overview_edx.display_name,
-            "course_id": course_id,
-            "configure_url":"#/configure/"+course_id,
-            "statistics_url":"https://"+lmsOrgBase+"/figures/course/"+course_id,
-            "preview_url": "https://"+lmsOrgBase+"/courses/"+course_id+"/courseware",
-            "email_url":"https://"+lmsOrgBase+"/courses/"+course_id+"/instructor",
-            "rerun_url":"#/create/"+course_id,
-            "contribute_url":reverse('course_handler', args=[course_id]),
-        }
-        coursesList.append(courseInfos)
+    for tmaOverview in TmaCourseOverview.objects.all() :
+        coursesList.append(TmaCourseInfo(tmaOverview=tmaOverview).getShortInfo())
 
     context['courses']=coursesList
     return render_to_response('/tma_cms_apps/quick_start.html', {"props":context})
@@ -102,37 +66,11 @@ def quick_start_checkid_exists(request, course_key_string):
 @require_http_methods(["GET"])
 @csrf_exempt
 def quick_start_get_course_info(request, course_key_string):
-    course_key=SlashSeparatedCourseKey.from_deprecated_string(course_key_string)
-    course=get_course_by_id(course_key)
-    tmaOverview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_key)
-    edxOverview = tmaOverview.course_overview_edx
-    course_about = json.loads(unicode(tmaOverview.course_about )) if tmaOverview.course_about else {}
-    course_metadata = CourseMetadata.fetch_all(course) 
-
-    log.info('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa')
-    log.info(course_metadata)
-
-    courseInfos={
-        "short_description":course_about.get('description',''),
-        "course_map":course_about.get('course_map',[{"subsections":[" "],"title":" "}]),
-        "has_menu":tmaOverview.has_menu,
-        "invitation_only":course_metadata['invitation_only']['value'],
-        "is_new":tmaOverview.is_new,
-        "is_course_graded":tmaOverview.is_course_graded,
-        "is_manager_only":tmaOverview.is_manager_only,
-        "is_mandatory":tmaOverview.is_mandatory,
-        "onboarding":tmaOverview.onboarding,
-        "teacher_email":course_about.get('teacher_email',' '),
-        "teacher_name":course_about.get('teacher_name',' '),
-        "course_pacing":"self_paced" if edxOverview.self_paced else "instructor_paced",
-        "tag":tmaOverview.tag,
-        "effort":edxOverview.effort.split(':'),
-        "course_id":str(course.id),
-        "course_grade":course.grade_cutoffs.get('Pass',0.5)*100,
-        "language":course.language
-    }
-
-    return JsonResponse(courseInfos)
+    response={}
+    tmaOverview = TmaCourseOverview.get_tma_course_overview_by_course_id(CourseKey.from_string(course_key_string))
+    if tmaOverview:
+        response= TmaCourseInfo(tmaOverview=tmaOverview).getDetailedInfo()
+    return JsonResponse(response)
 
 @login_required
 @require_http_methods(["POST"])
@@ -157,7 +95,7 @@ def quick_start_create(request):
             } for index,value in enumerate(downloads_files_keys)]
 
     if serializer.is_valid():
-        tmaCourseCreator = TmaCourseCreator(request, request.user ,serializer.validated_data, course_image, teacher_image, download_files)
+        tmaCourseCreator = TmaCourseManager(request,serializer.validated_data, course_image, teacher_image, download_files)
         response=tmaCourseCreator.createUpdateCourse()
         if response['status']=="error":
             status=400

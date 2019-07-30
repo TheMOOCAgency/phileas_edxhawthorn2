@@ -14,7 +14,7 @@ class CourseSerializer(serializers.Serializer):
     course_pacing = serializers.CharField(required=True)
     org = serializers.CharField(required=True)
     language = serializers.CharField(required=True)
-    short_description = serializers.CharField(required=True, allow_blank=True)
+    description = serializers.CharField(required=True, allow_blank=True)
     start_date = serializers.DateTimeField(required=False)
     end_date = serializers.DateTimeField(required=False)
     effort = serializers.IntegerField(required=True)
