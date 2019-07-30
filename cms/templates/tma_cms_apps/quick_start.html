@@ -10,7 +10,9 @@ from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_str
         display:flex;
         background-color:white;
         justify-content:space-between;
-        padding:0px 10px
+        padding:0px 10px;
+        max-width: 1280px;
+        margin:0 auto;
     }
     header ul{
         padding:0;
@@ -21,6 +23,16 @@ from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_str
     }
     .tma-nav li{
         margin:0px 10px!important
+    }
+    #view-top{
+        background-color:white;
+    }
+    #root{
+        max-width: 1280px;
+        margin:0 auto;
+    }
+    a>span, .MuiFormControlLabel-label{
+        text-transform: capitalize;
     }
 </style>
 

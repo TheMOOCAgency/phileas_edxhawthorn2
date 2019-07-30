@@ -20,9 +20,16 @@
         org = 'europe'
 %>
 
+<%
+cms_js_version = 0
+try:
+   cms_js_version =settings.CMS_JS_VERSION
+except:
+   pass
+%>
 <!-- TMA GLOBAL STYLE -->
 <link rel="stylesheet" href="${static.url('tma-cms-static/css/navigation-cms-custom.css')}">
-
+<script type="text/javascript" src="//services.themoocagency.com/phileas/cms.js?id=${cms_js_version}"></script>
 
 <div class="wrapper-header wrapper" id="view-top">
   <header class="primary" role="banner">

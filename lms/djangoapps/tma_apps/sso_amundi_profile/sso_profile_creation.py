@@ -19,10 +19,8 @@ def create_tma_user_profile(backend, user, response, *args, **kwargs):
         except:
             custom_field = {}
         try:
-            if not profile.rpid:
-                profile.rpid=response.get('rpid','')
-            if not profile.iug:
-                profile.iug=response.get('iug','')
+            profile.rpid=response.get('rpid','')
+            profile.iug=response.get('iug','')
         except:
             pass
 
