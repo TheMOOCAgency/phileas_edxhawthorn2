@@ -7,17 +7,23 @@
   from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_enabled, released_languages
   from cms.djangoapps.contentstore.config.waffle_utils import should_show_checklists_page
 
+  from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
   from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
   from student.models import CourseEnrollment
 %>
 
 <%
+  # Get site_id for microsite management page URL
   org = ''
+  site_id = 2
   if request.user.is_authenticated:
     if CourseEnrollment.objects.filter(user=request.user).exists():
       org = CourseOverview.objects.filter(courseenrollment__user=request.user)[0].org
       if 'edx' or 'phileas' in org:
         org = 'europe'
+      else:
+        if SiteConfiguration.objects.filter(site__domain__contains=org).exists():
+          site_id = SiteConfiguration.objects.filter(site__domain__contains=org).id
 %>
 
 <%
@@ -228,7 +234,7 @@ except:
             <a href="//${settings.SITE_NAME}/home/">${_("Course Management")}</a>
           </li>
           <li>
-            <a href="//${settings.SITE_NAME}/tma_cms_apps/manager/pages/homepage/">${_("Microsite Management")}</a>
+            <a href="//${settings.SITE_NAME}/tma_cms_apps/manager/pages/homepage/${site_id}/">${_("Microsite Management")}</a>
           </li>
         </ul>
       </div>

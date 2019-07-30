@@ -16,7 +16,7 @@ router.register(
 
 urlpatterns = [
     # UI Templates
-    url(r'^manager/pages/homepage/$', views.admin_homepage, name='admin-homepage'),
+    url(r'^manager/pages/homepage/(?P<id>.+)/$', views.admin_homepage, name='admin-homepage'),
 
     url(r'^api/v1/$', include(router.urls, namespace='api')),
     url(

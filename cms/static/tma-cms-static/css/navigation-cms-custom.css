@@ -1,4 +1,4 @@
-.is-signedin.course .wrapper-header .wrapper-l {
+.is-signedin.course .wrapper-header .wrapper-l, .is-signedin.course .wrapper-header .nav-course {
     width: 50% !important
 }
 .is-signedin.course .wrapper-header .wrapper-r {
