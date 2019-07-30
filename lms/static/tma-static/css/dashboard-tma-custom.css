@@ -101,26 +101,29 @@ input::placeholder {
     font-weight: 500 !important;
 }
 
-.img-bw-1, .img-bw-2, .img-bw-3 {
-    min-height: 120px;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+.img-bw {
+    width: inherit;
 }
 
-.img-bw-1 a, .img-bw-2 a, .img-bw-3 a {
+.static-top {
+    height: 120px;
+    padding: 0px;
+    overflow: hidden;
+}
+.static-top a {
+    position: absolute;
+    top: 40px;
+    left: 0;
     width: 100%;
     font-size: 18px;
     color: #0B1A4C !important;
 }
-.img-bw-1 a:hover, .img-bw-2 a:hover, .img-bw-3 a:hover {
+.static-top a:hover {
     color: #0B1A4C !important;
     text-decoration: none;
 }
 
+/*
 .img-bw-1 {
     background-image: url('/static/tma-static/images/elearning.jpg');
 }
@@ -132,6 +135,7 @@ input::placeholder {
 .img-bw-3 {
     background-image: url('/static/tma-static/images/gettogether.jpg');
 }
+*/
 
 .user-box {
     height: 308px;

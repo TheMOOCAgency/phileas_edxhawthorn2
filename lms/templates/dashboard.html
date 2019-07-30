@@ -169,26 +169,35 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   </div>
   <div class="row">
     <!--Black & White img-->
-    <div class="zoomEffect col-lg-3 text-center img-bw-1">
-      <a id="7speaking" class="ext-links">
-      % if language == 'fr':
-          Apprenez une<br>langue étrangère
-      %else:      
-          Language <br>skills
-      %endif
+    <div class="zoomEffect col-lg-3 text-center static-top">
+      <img class="img-bw" src="${static_double_top[0]['image']}" alt="image">
+      <a id="7speaking" class="ext-links" target='${"_blank" if static_double_top[0]["target_blank"] else "" }'>
+        % if language == 'fr':
+            Apprenez une<br>langue étrangère
+        %else:      
+            Language <br>skills
+            ${static_double_top[0]['target_blank']}
+        %endif
       </a>
     </div>
-    <div class="zoomEffect col-lg-3 text-center img-bw-2">
-        <a href="https://amundi.elearning.ca-ifcam.fr/Directory/Login/Login.aspx?ReturnUrl=%2fDirectory%2fHome.aspx%3fidMenu%3dMenu.Home%26idPageData%3d2853339136&idMenu=Menu.Home&idPageData=2853339136" class="ext-links" target="_blank">${_("Regulatory")}<br> (eCampus)</a>
+    <div class="zoomEffect col-lg-3 text-center static-top">
+      <img class="img-bw" src="${static_double_top[1]['image']}" alt="image">
+      <a 
+        href="${static_double_top[1]['link']}" 
+        class="ext-links" 
+        target='${"_blank" if static_double_top[1]["target_blank"] else "" }'
+        >${_("Regulatory")}<br> (eCampus)</a>
     </div>
     % if language == 'fr':
-    <div class="zoomEffect col-lg-3 text-center img-bw-3">
-        <a href="https://www.e-exercises.com/speakingtime/07cdfd23373b17c6b337251c22b7ea57" class="ext-links" target="_blank">Get<br>together</a>
-    </div>
+      <div class="zoomEffect col-lg-3 text-center static-top">
+          <img class="img-bw" src="${static_double_top[2]['image']}" alt="image">
+          <a href="${static_double_top[2]['link']}" class="ext-links" target='${"_blank" if static_double_top[2]["target_blank"] else "" }'>Get<br>together</a>
+      </div>
     %else:
-    <div class="zoomEffect col-lg-3 text-center img-bw-3">
-        <a href="/courses?filter=Compliance" class="ext-links">US <br>regulatory courses</a>
-    </div>
+      <div class="zoomEffect col-lg-3 text-center static-top">
+          <img class="img-bw" src="${static_double_top[2]['image']}" alt="image">
+          <a href="" class="ext-links" target='${"_blank" if static_double_top[2]["target_blank"] else "" }'>US <br>regulatory courses</a>
+      </div>
     %endif
     <!--User dark blue box-->
     <div class="col-lg-3 bg-blue-dark user-box text-white">
