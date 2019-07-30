@@ -18472,17 +18472,17 @@ msgstr ""
 #: lms/templates/instructor/instructor_dashboard_2/membership.html
 msgid ""
 "Enter the reason why the students are to be manually enrolled or unenrolled."
-msgstr ""
+msgstr "Entrez la raison pour laquelle les participants sont inscrits"
 
 #: lms/templates/instructor/instructor_dashboard_2/membership.html
 msgid ""
 "This cannot be left blank and will be recorded and presented in Enrollment "
 "Reports."
-msgstr ""
+msgstr "The champ ne peut pas être laissé vide"
 
 #: lms/templates/instructor/instructor_dashboard_2/membership.html
 msgid "Therefore, please give enough detail to account for this action."
-msgstr ""
+msgstr "Merci de compléter la contribution par défaut si besoin"
 
 #: lms/templates/instructor/instructor_dashboard_2/membership.html
 msgid "Reason"
@@ -18838,6 +18838,9 @@ msgid ""
 "yourself first, so that you can preview the formatting and make sure "
 "embedded images and links work correctly."
 msgstr ""
+"Nous recommandons de ne pas envoyer plus d'un message par semaine."
+"Avant d'envoyer votre messsage vérifiez-le avec attention."
+"Vous pouvez vous envoyer le message à vous même pour vérification."
 
 #: lms/templates/instructor/instructor_dashboard_2/send_email.html
 msgid "CAUTION!"
@@ -18883,7 +18886,8 @@ msgstr "Pour lire un e-mail envoyé, cliquez sur son sujet."
 msgid ""
 "To see the status for all email tasks submitted for this course, click this "
 "button:"
-msgstr ""
+msgstr "Pour voir le status des tâches d'envoi d'email pour ce cours,"
+"cliquez sur ce bouton : "
 
 #: lms/templates/instructor/instructor_dashboard_2/send_email.html
 msgid "Show Email Task History"
