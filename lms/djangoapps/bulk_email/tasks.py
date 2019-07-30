@@ -141,6 +141,7 @@ def perform_delegate_email_batches(entry_id, course_id, task_input, action_name)
 
     # Fetch the CourseEmail.
     email_id = task_input['email_id']
+
     try:
         email_obj = CourseEmail.objects.get(id=email_id)
     except CourseEmail.DoesNotExist:

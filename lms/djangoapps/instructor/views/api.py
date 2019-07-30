@@ -2595,12 +2595,19 @@ def send_email(request, course_id):
         from_addr = from_addr.get(course_overview.display_org_with_default)
 
     template_name = configuration_helpers.get_value('course_email_template_name')
-    if isinstance(template_name, dict):
+
+    #COURSE EMAIL IS NO LONGER ORG DEPENDANT
+    #if isinstance(template_name, dict):
         # If course_email_template_name is a dict, we are customizing
         # the email template for each organization that has courses
         # on the site. The dict maps template names by org allowing
         # us to find the correct template to use here.
-        template_name = template_name.get(course_overview.display_org_with_default)
+        #template_name = template_name.get(course_overview.display_org_with_default)
+
+    if isinstance(template_name, dict):
+        # If course_email_template_name is still a dict,
+        # we customize the email template by lang
+        template_name = template_name.get(request.LANGUAGE_CODE)
 
     # Create the CourseEmail object.  This is saved immediately, so that
     # any transaction that has been pending up to this point will also be
