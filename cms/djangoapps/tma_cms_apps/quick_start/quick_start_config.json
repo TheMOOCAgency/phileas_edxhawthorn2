@@ -17,7 +17,7 @@
         "is_mandatory":false,
         "is_invitation_only":false,
         "has_menu":true,
-        "short_description":"",
+        "description":"",
         "onboarding":"False",
         "tag":"False",
         "effort":[0,0],
@@ -46,26 +46,10 @@
     },
    "filters":[
        {
-           "name":"status",
-           "options":["all","open","self_paced","closed"],
-           "checked":["all"],
-           "type":"checkbox"
-       },
-       {
-           "name":"hometag",
-           "options":["office-tools","fundamentals","design","communication","management","business-app","compliance","internet"],
-           "type":"checkbox"
-       },
-       {
         "name":"tag",
         "options":["office-tools","fundamentals","design","communication","management","business-app","compliance","internet"],
         "type":"select"
         },
-       {
-           "name":"settings",
-           "options":["all","manager_only", "mandatory"],
-           "type":"checkbox"
-       },
        {
             "name":"course_name",
             "required":true,
@@ -149,7 +133,7 @@
             "type":"imageUpload"
         },
         {
-            "name":"short_description",
+            "name":"description",
             "type":"textField"
         },
         {
@@ -189,12 +173,30 @@
             "type":"multipleUploads"
         }
    ],
+   "homeFiltersDetail":[
+    {
+        "name":"tag",
+        "options":["office-tools","fundamentals","design","communication","management","business-app","compliance","internet"],
+        "type":"checkbox"
+    },
+    {
+        "name":"status",
+        "options":["all","open","self_paced","closed"],
+        "checked":["all"],
+        "type":"checkbox"
+    },
+    {
+        "name":"settings",
+        "options":["all","manager_only", "mandatory"],
+        "type":"checkbox"
+    }
+   ],
    "orgs":["asia","americas","europe"],
-   "homeFilters":["status","hometag","settings"],
+   "homeFilters":["status","tag","settings"],
    "createSteps":[
     ["course_name","org","course_number","course_session"],
     ["course_pacing","effort","course_dates","language","course_type"],
-    ["tag","onboarding","course_image","short_description","course_map","teacher_name","teacher_image","teacher_email"],
+    ["tag","onboarding","course_image","description","course_map","teacher_name","teacher_image","teacher_email"],
     ["course_settings","course_grade","course_downloads"]
    ]
 }
