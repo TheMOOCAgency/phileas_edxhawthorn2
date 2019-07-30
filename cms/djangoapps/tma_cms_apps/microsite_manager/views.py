@@ -20,17 +20,11 @@ log = logging.getLogger(__name__)
 
 
 @login_required
-def admin_homepage(request):
+def admin_homepage(request, *args, **kwargs):
     context = {}
-    org = ''
     
-    if CourseEnrollment.objects.filter(user=request.user).exists():
-        org = CourseOverview.objects.filter(courseenrollment__user=request.user)[0].org
-
-    if SiteConfiguration.objects.filter(site__domain__contains=org).exists():
-        context['site_id'] = SiteConfiguration.objects.filter(site__domain__contains=org).id
-    else:
-        context['site_id'] = 2
+    site_id = kwargs.get('id')    
+    context['site_id'] = site_id
 
     return render(request, '/tma_cms_apps/admin_hp.html', context)
 

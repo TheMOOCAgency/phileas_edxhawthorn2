@@ -10,7 +10,7 @@
     width: 0;
     height: 0;
 }
-.slider {
+.slider-instructor-instructor {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -21,7 +21,7 @@
     -webkit-transition: .4s;
     transition: .4s;
 }
-.slider:before {
+.slider-instructor-instructor:before {
     position: absolute;
     content: "";
     height: 26px;
@@ -32,16 +32,16 @@
     -webkit-transition: .4s;
     transition: .4s;
 }
-.slider.round {
+.slider-instructor.round {
     border-radius: 34px;
 }
-input:checked + .slider {
+input:checked + .slider-instructor {
     background-color: #2196F3;
 }
-input:focus + .slider {
+input:focus + .slider-instructor {
     box-shadow: 0 0 1px #2196F3;
 }
-input:checked + .slider:before {
+input:checked + .slider-instructor:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
