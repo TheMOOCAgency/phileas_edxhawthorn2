@@ -866,7 +866,6 @@ def _student_dashboard(request):
         'resume_button_urls': resume_button_urls
     })
 
-
     #TMA - Get List of courses to display
     courses_to_display = []
     # Get current org
@@ -874,22 +873,25 @@ def _student_dashboard(request):
     current_organisation = "phileas"
     if org_whitelist:
          current_organisation = org_whitelist[0]
-    log.info(current_organisation)
     
+    #homepage courses
+    homepage_json = configuration_helpers.get_value('homepage')
+
+    frontpage_courses = {}
     if request.LANGUAGE_CODE == 'fr':
-        frontpage_courses = configuration_helpers.get_value('frontpage_courses_fr')
+        frontpage_courses = homepage_json['fr']
     else:
-        frontpage_courses = configuration_helpers.get_value('frontpage_courses_en')
-    accepted_filters = ['likes', 'enrollments']
-    filter = request.GET.get('filter')
-    # Static card info (always the same for now)
+        frontpage_courses = homepage_json['en']
+
+    double_card = {}
     static_card = {}
     try:
         static_card = frontpage_courses['static_double']
     except:
         pass
-    double_card = {}
 
+    accepted_filters = ['likes', 'enrollments']
+    filter = request.GET.get('filter')
     if filter and filter in accepted_filters :
         if filter=="likes":
             likes_ordered_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).order_by('-liked_total')[:9]
@@ -903,12 +905,18 @@ def _student_dashboard(request):
     elif frontpage_courses:
         # Single cards
         for course_id in frontpage_courses['single']:
-            course_to_add = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(course_id)))
-            courses_to_display.append(course_to_add)
+            try:
+                course_to_add = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(course_id)))
+                courses_to_display.append(course_to_add)
+            except:
+                pass
         # Double card course_info
-        double_course = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(frontpage_courses['double'])))
-        double_course_to_add = get_tma_course_info(user, double_course.id, block_courses)
-        double_card = double_course_to_add
+        try:
+            double_course = CourseOverview.objects.get(org=current_organisation, id=CourseKey.from_string(str(frontpage_courses['double'])))
+            double_course_to_add = get_tma_course_info(user, double_course.id, block_courses)
+            double_card = double_course_to_add
+        except:
+            pass
     else :
         courses_to_display = CourseOverview.objects.filter(org=current_organisation)[:9]
 
@@ -947,7 +955,8 @@ def _student_dashboard(request):
         'last_enrollment': last_enrollment,
         'courses_counter': courses_counter,
         'double_card': double_card,
-        'static_card': static_card
+        'static_card': static_card,
+        'static_double_top': frontpage_courses['static_double_top']
     })
 
     return context
@@ -991,7 +1000,7 @@ def get_tma_course_info(user, course_id, block_courses):
     #Edx Enrollment Info
     if CourseEnrollment.objects.filter(user=user, course_id=course_id, is_active=True).exists():
         course['is_enrolled'] = True
-
+        
     return course
 
 
@@ -1063,8 +1072,6 @@ def get_tma_footer_info(user, is_global):
 
     footer['likes_counter'] = likes_counter
     footer['hours_counter'] = int(footer['courses_counter'] * 2.5)
-    
-    log.info(footer)
 
     return footer
 
