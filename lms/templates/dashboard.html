@@ -3,6 +3,7 @@
 <%def name="online_help_token()"><% return "learnerdashboard" %></%def>
 <%namespace name='static' file='static_content.html'/>
 <%!
+import markupsafe
 import pytz
 import re
 from datetime import datetime, timedelta
@@ -171,12 +172,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     <!--Black & White img-->
     <div class="zoomEffect col-lg-3 text-center static-top" style="background-image:url('${static_double_top[0]['image']}')">
       <a id="7speaking" class="ext-links" target='${"_blank" if static_double_top[0]["target_blank"] else "" }'>
-        % if language == 'fr':
-            Apprenez une<br>langue étrangère
-        %else:      
-            Language <br>skills
-            ${static_double_top[0]['target_blank']}
-        %endif
+        ${static_double_top[0]['text'] | n}
       </a>
     </div>
     <div class="zoomEffect col-lg-3 text-center static-top" style="background-image:url('${static_double_top[1]['image']}')">
@@ -184,17 +180,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         href="${static_double_top[1]['link']}" 
         class="ext-links" 
         target='${"_blank" if static_double_top[1]["target_blank"] else "" }'
-        >${_("Regulatory")}<br> (eCampus)</a>
+        > ${static_double_top[1]['text'] | n}</a>
     </div>
-    % if language == 'fr':
       <div class="zoomEffect col-lg-3 text-center static-top" style="background-image:url('${static_double_top[2]['image']}')">
-          <a href="${static_double_top[2]['link']}" class="ext-links" target='${"_blank" if static_double_top[2]["target_blank"] else "" }'>Get<br>together</a>
+          <a href="${static_double_top[2]['link']}" class="ext-links" target='${"_blank" if static_double_top[2]["target_blank"] else "" }'>${static_double_top[2]['text'] | n}</a>
       </div>
-    %else:
-      <div class="zoomEffect col-lg-3 text-center static-top" style="background-image:url('${static_double_top[2]['image']}')">
-          <a href="" class="ext-links" target='${"_blank" if static_double_top[2]["target_blank"] else "" }'>US <br>regulatory courses</a>
-      </div>
-    %endif
     <!--User dark blue box-->
     <div class="col-lg-3 bg-blue-dark user-box text-white">
       <div class="container-fluid">

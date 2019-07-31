@@ -876,6 +876,7 @@ def _student_dashboard(request):
     
     #homepage courses
     homepage_json = configuration_helpers.get_value('homepage')
+
     frontpage_courses = {}
     if request.LANGUAGE_CODE == 'fr':
         frontpage_courses = homepage_json['fr']
