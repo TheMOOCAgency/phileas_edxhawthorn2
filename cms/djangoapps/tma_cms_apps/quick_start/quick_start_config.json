@@ -123,9 +123,7 @@
             "name":"onboarding",
             "type":"select",
             "options":[
-                "onboarding_1",
-                "onboarding_2",
-                "onboarding_3"
+                "new starter"
             ]
         },
         {

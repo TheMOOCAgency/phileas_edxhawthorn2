@@ -22,6 +22,8 @@ from models.settings.course_metadata import CourseMetadata
 from contentstore.views.course import _refresh_course_tabs
 from django.conf import settings
 from django.urls import reverse
+import urllib
+from lms.djangoapps.courseware.courses import course_open_for_self_enrollment 
 
 
 
@@ -88,7 +90,6 @@ class TmaCourseManager():
             'intro_video': None,
             'course_image_name': self.course_image_upload.name if self.course_image_upload else None,
             'course_image_asset_path': self.course_image_upload.location if self.course_image_upload else None,
-            'self_paced':self.data.get('course_pacing')=="self_paced"
         }
         CourseDetails.update_from_json(self.course_key, additional_info, self.creator)
 
@@ -96,7 +97,8 @@ class TmaCourseManager():
         course=get_course_by_id(self.course_key)
         metadata={
             'invitation_only':self.data.get('invitation_only'),
-            'display_name':self.data.get('course_name')
+            'display_name':self.data.get('course_name'),
+            'self_paced':self.data.get('course_pacing')=="self_paced"
         }
         CourseMetadata.update_from_dict(metadata,course, self.creator)
 
@@ -112,7 +114,7 @@ class TmaCourseManager():
         self.data['course_about']=json.dumps({
             "description":self.data.get('description', ""),
             "course_map":course_map,
-            "teacher_image":"/"+str(self.teacher_image_upload.location) if self.teacher_image_upload else "",
+            "teacher_image":"/"+str(self.teacher_image_upload.location) if self.teacher_image_upload else "hello",
             "teacher_name":self.data.get('teacher_name', "") if self.data.get('teacher_name')!="null" else "",
             "teacher_email":self.data.get('teacher_email', "") if self.data.get('teacher_email')!="null" else "",
             "downloads": self.download_files_upload if self.download_files_upload else ""
@@ -131,7 +133,7 @@ class TmaCourseManager():
                     "text":download_file['title'],
                     "link":"/"+str(update_course_run_asset(self.course_key, download_file['file']).location)
                 }
-                for download_file in self.download_files
+                for download_file in uploadFiles
             ]
         return fileUploads
 
@@ -139,14 +141,14 @@ class TmaCourseManager():
 
 
     def createUpdateCourse(self):
-        try:
-            self._update_course_overview()
-            CourseGradingModel.update_cutoffs_from_json(self.course_key, {"Pass":(self.data.get('course_grade')/100.0)} ,self.creator)
-            self._update_tma_course_overview()
-            self._update_course_metadata()
-            return{"status":"success", "edit_link":reverse('course_handler', args=[str(self.course_id)]), "course_id":str(self.course_id)}
-        except:
-            return{"status":"error"}
+        #try:
+        self._update_course_overview()
+        CourseGradingModel.update_cutoffs_from_json(self.course_key, {"Pass":(self.data.get('course_grade')/100.0)} ,self.creator)
+        self._update_tma_course_overview()
+        self._update_course_metadata()
+        return{"status":"success", "edit_link":reverse('course_handler', args=[str(self.course_id)]), "course_id":str(self.course_id)}
+        #except:
+        #    return{"status":"error"}
 
 
 
@@ -168,7 +170,7 @@ class TmaCourseInfo():
             "configure_url":"#/configure/"+self.course_id,
             "statistics_url":self.lmsBase+"/figures/course/"+self.course_id,
             "preview_url": self.lmsBase+"/courses/"+self.course_id+"/courseware",
-            "email_url":self.lmsBase+"/courses/"+self.course_id+"/instructor",
+            "email_url":self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/instructor"),
             "rerun_url":"#/create/"+self.course_id,
             "contribute_url":reverse('course_handler', args=[self.course_id]),
         }
@@ -221,6 +223,7 @@ class TmaCourseInfo():
             "course_id":self.course_id,
             "course_name":self.edxOverview.display_name,
             "course_pacing":"self_paced" if self.edxOverview.self_paced else "instructor_paced",
+            "status":"self_paced" if self.edxOverview.self_paced else ("open" if course_open_for_self_enrollment(self.course_key) else "closed"),
             "effort":self.edxOverview.effort.split(':') if self.edxOverview.effort else ['0','0'] ,
             "org":self.org,
             "description":self.edxOverview.short_description   
