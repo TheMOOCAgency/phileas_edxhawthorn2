@@ -23,13 +23,11 @@ from contentstore.views.course import _refresh_course_tabs
 from django.conf import settings
 from django.urls import reverse
 import urllib
-from lms.djangoapps.courseware.courses import course_open_for_self_enrollment 
-
-
+from lms.djangoapps.courseware.courses import course_open_for_self_enrollment
 
 
 class TmaCourseManager():
-    def __init__(self, request, data, course_image=None, teacher_image=None,download_files=None):
+    def __init__(self, request, data, course_image=None, teacher_image=None,download_files=None,):
         self.request=request
         self.creator = self._get_course_creator()
         #self.creator = self.request.user
@@ -88,9 +86,15 @@ class TmaCourseManager():
             'enrollment_end': self.data.get('end_date', CourseFields.end.default),
             'effort':self._convert_seconds_to_time(self.data.get('effort',0)),
             'intro_video': None,
-            'course_image_name': self.course_image_upload.name if self.course_image_upload else None,
-            'course_image_asset_path': self.course_image_upload.location if self.course_image_upload else None,
         }
+
+        if self.course_image_upload and not isinstance(self.course_image_upload, basestring):
+            additional_info['course_image_name'] = self.course_image_upload.name
+            additional_info['course_image_asset_path']= self.course_image_upload.location
+        elif self.course_image_upload is None:
+            additional_info['course_image_name'] = ""
+            additional_info['course_image_asset_path']= ""
+
         CourseDetails.update_from_json(self.course_key, additional_info, self.creator)
 
     def _update_course_metadata(self):
@@ -104,7 +108,10 @@ class TmaCourseManager():
 
 
     def _update_tma_course_overview(self):
-        tmaOverview = TmaCourseOverview.objects.filter(course_overview_edx__id=self.course_key)
+        
+        previous_course_about = TmaCourseOverview.get_tma_course_overview_by_course_id(self.course_key).course_about
+        previous_course_about = json.loads(unicode(previous_course_about)) if previous_course_about else {}
+
 
         if self.data.get('course_map'):
             course_map = json.loads(self.data.get('course_map'))
@@ -114,15 +121,21 @@ class TmaCourseManager():
         self.data['course_about']=json.dumps({
             "description":self.data.get('description', ""),
             "course_map":course_map,
-            "teacher_image":"/"+str(self.teacher_image_upload.location) if self.teacher_image_upload else "hello",
+            "teacher_image":"/"+str(self.teacher_image_upload.location) if (self.teacher_image_upload and not isinstance(self.teacher_image_upload, basestring)) else (self.teacher_image_upload if self.teacher_image_upload is not None else ""),
             "teacher_name":self.data.get('teacher_name', "") if self.data.get('teacher_name')!="null" else "",
             "teacher_email":self.data.get('teacher_email', "") if self.data.get('teacher_email')!="null" else "",
-            "downloads": self.download_files_upload if self.download_files_upload else ""
-        })
+            "downloads": self.download_files_upload if self.download_files_upload else previous_course_about.get('downloads','')
+            })
+        tmaOverview = TmaCourseOverview.objects.filter(course_overview_edx__id=self.course_key)
         tmaOverview.update(**{field:self.data.get(field) for field in self.tmaOverviewFields})
     
     def _upload_image(self, imageFile):
-        fileUpload=update_course_run_asset(self.course_key, imageFile) if imageFile else None
+        if imageFile and not isinstance(imageFile, basestring):
+            fileUpload=update_course_run_asset(self.course_key, imageFile)
+        elif isinstance(imageFile, basestring) and imageFile!="undefined":
+            fileUpload=imageFile
+        else:
+            fileUpload=None
         return fileUpload
 
     def _upload_multiple_files(self, uploadFiles):
@@ -170,7 +183,7 @@ class TmaCourseInfo():
             "configure_url":"#/configure/"+self.course_id,
             "statistics_url":self.lmsBase+"/figures/course/"+self.course_id,
             "preview_url": self.lmsBase+"/courses/"+self.course_id+"/courseware",
-            "email_url":self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/instructor"),
+            "email_url":self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/instructor",''),
             "rerun_url":"#/create/"+self.course_id,
             "contribute_url":reverse('course_handler', args=[self.course_id]),
         }
@@ -192,6 +205,7 @@ class TmaCourseInfo():
         course_about.setdefault("course_map",[{"title":"","subsections":[""]}])
         course_about.setdefault("teacher_email","")
         course_about.setdefault("teacher_name","")
+        course_about.setdefault("teacher_image","")
         return course_about
 
     def get_course_info(self):
@@ -201,6 +215,7 @@ class TmaCourseInfo():
             "course_grade":course.grade_cutoffs.get('Pass',0.5)*100,
             "language":course.language,
             "invitation_only":course_metadata['invitation_only']['value'],
+            "course_image":self.edxOverview.image_urls['large'] if not "static" in self.edxOverview.image_urls['large'] else ""
         }
         return course_info
     
@@ -218,12 +233,17 @@ class TmaCourseInfo():
         }
         return tmaOverviewInfo
 
+    def get_detailed_status(self):
+        status="open"
+        if not self.tmaOverview.is_vodeclic and not course_open_for_self_enrollment(self.course_key):
+            status="closed"
+
     def getBaseInfos(self):
         baseInfo={
             "course_id":self.course_id,
             "course_name":self.edxOverview.display_name,
             "course_pacing":"self_paced" if self.edxOverview.self_paced else "instructor_paced",
-            "status":"self_paced" if self.edxOverview.self_paced else ("open" if course_open_for_self_enrollment(self.course_key) else "closed"),
+            "status":"self_paced" if self.edxOverview.self_paced else self.get_detailed_status(),
             "effort":self.edxOverview.effort.split(':') if self.edxOverview.effort else ['0','0'] ,
             "org":self.org,
             "description":self.edxOverview.short_description   

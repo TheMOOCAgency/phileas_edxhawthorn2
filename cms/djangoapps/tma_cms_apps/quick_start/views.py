@@ -19,7 +19,7 @@ from opaque_keys.edx.keys import CourseKey
 from tma_cms_apps.quick_start.helpers import TmaCourseManager, TmaCourseInfo
 from datetime import datetime  
 from dateutil.relativedelta import relativedelta
-
+from django.conf import settings
 
 
 @login_required
@@ -46,6 +46,7 @@ def quick_start(request):
     for tmaOverview in TmaCourseOverview.objects.all() :
         coursesList.append(TmaCourseInfo(tmaOverview=tmaOverview).getShortInfo())
 
+    context['lmsBase']= str("https://"+settings.LMS_BASE)
     context['courses']=coursesList
     return render_to_response('/tma_cms_apps/quick_start.html', {"props":context})
 
@@ -78,8 +79,8 @@ def quick_start_get_course_info(request, course_key_string):
 def quick_start_create(request):
     data = request.POST
     serializer = CourseSerializer(data=data)
-    course_image=request.FILES.get('course_image')
-    teacher_image=request.FILES.get('teacher_image')
+    course_image=request.FILES.get('course_image') if request.FILES.get('course_image')  else data['course_image']
+    teacher_image=request.FILES.get('teacher_image') if request.FILES.get('teacher_image')  else data['teacher_image']
 
     #COURSE DOWNLOADS
     download_files=None
