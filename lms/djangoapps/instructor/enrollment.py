@@ -49,6 +49,7 @@ from django.template import loader
 from django.utils.translation import ugettext as _
 from lms.djangoapps.tma_apps.models import TmaCourseOverview
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+import urllib
 
 log = logging.getLogger(__name__)
 
@@ -381,12 +382,12 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     registration_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}'.format(
         proto=protocol,
         site=stripped_site_name,
-        path=reverse('home_dashboard')
+        path=urllib.quote(reverse('home_dashboard'))
     )
     course_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}'.format(
         proto=protocol,
         site=stripped_site_name,
-        path=reverse('course_root', kwargs={'course_id': course_key})
+        path=urllib.quote(reverse('course_root', kwargs={'course_id': course_key}))
     )
 
     # We can't get the url to the course's About page if the marketing site is enabled.
@@ -395,7 +396,7 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
         course_about_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}'.format(
             proto=protocol,
             site=stripped_site_name,
-            path=reverse('about_course', kwargs={'course_id': course_key})
+            path=urllib.quote(reverse('about_course', kwargs={'course_id': course_key}))
         )
 
     is_shib_course = uses_shib(course)
