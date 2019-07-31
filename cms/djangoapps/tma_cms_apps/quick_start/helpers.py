@@ -154,14 +154,14 @@ class TmaCourseManager():
 
 
     def createUpdateCourse(self):
-        #try:
-        self._update_course_overview()
-        CourseGradingModel.update_cutoffs_from_json(self.course_key, {"Pass":(self.data.get('course_grade')/100.0)} ,self.creator)
-        self._update_tma_course_overview()
-        self._update_course_metadata()
-        return{"status":"success", "edit_link":reverse('course_handler', args=[str(self.course_id)]), "course_id":str(self.course_id)}
-        #except:
-        #    return{"status":"error"}
+        try:
+            self._update_course_overview()
+            CourseGradingModel.update_cutoffs_from_json(self.course_key, {"Pass":(self.data.get('course_grade')/100.0)} ,self.creator)
+            self._update_tma_course_overview()
+            self._update_course_metadata()
+            return{"status":"success", "edit_link":reverse('course_handler', args=[str(self.course_id)]), "course_id":str(self.course_id)}
+        except:
+            return{"status":"error"}
 
 
 
