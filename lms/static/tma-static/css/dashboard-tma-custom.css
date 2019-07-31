@@ -108,7 +108,8 @@ input::placeholder {
 .static-top {
     height: 120px;
     padding: 0px;
-    overflow: hidden;
+    background-position: center;
+    background-size: cover;
 }
 .static-top a {
     position: absolute;

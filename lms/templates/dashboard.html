@@ -169,8 +169,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
   </div>
   <div class="row">
     <!--Black & White img-->
-    <div class="zoomEffect col-lg-3 text-center static-top">
-      <img class="img-bw" src="${static_double_top[0]['image']}" alt="image">
+    <div class="zoomEffect col-lg-3 text-center static-top" style="background-image:url('${static_double_top[0]['image']}')">
       <a id="7speaking" class="ext-links" target='${"_blank" if static_double_top[0]["target_blank"] else "" }'>
         % if language == 'fr':
             Apprenez une<br>langue étrangère
@@ -180,8 +179,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         %endif
       </a>
     </div>
-    <div class="zoomEffect col-lg-3 text-center static-top">
-      <img class="img-bw" src="${static_double_top[1]['image']}" alt="image">
+    <div class="zoomEffect col-lg-3 text-center static-top" style="background-image:url('${static_double_top[1]['image']}')">
       <a 
         href="${static_double_top[1]['link']}" 
         class="ext-links" 
@@ -189,13 +187,11 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
         >${_("Regulatory")}<br> (eCampus)</a>
     </div>
     % if language == 'fr':
-      <div class="zoomEffect col-lg-3 text-center static-top">
-          <img class="img-bw" src="${static_double_top[2]['image']}" alt="image">
+      <div class="zoomEffect col-lg-3 text-center static-top" style="background-image:url('${static_double_top[2]['image']}')">
           <a href="${static_double_top[2]['link']}" class="ext-links" target='${"_blank" if static_double_top[2]["target_blank"] else "" }'>Get<br>together</a>
       </div>
     %else:
-      <div class="zoomEffect col-lg-3 text-center static-top">
-          <img class="img-bw" src="${static_double_top[2]['image']}" alt="image">
+      <div class="zoomEffect col-lg-3 text-center static-top" style="background-image:url('${static_double_top[2]['image']}')">
           <a href="" class="ext-links" target='${"_blank" if static_double_top[2]["target_blank"] else "" }'>US <br>regulatory courses</a>
       </div>
     %endif
