@@ -180,7 +180,7 @@ const displayResults = function(results) {
                     if (isEnrolled) {
                         buttonText = '<a onclick="document.querySelector(\'form[name=&quot;apocform&quot;]\').submit();" target="_blank" class="enroll-btn">'+item.button_text+'</a>';
                     } else {
-                        buttonText = '<a onclick="document.querySelector(\'form[name=&quot;apocform&quot;]\').submit();" target="_blank" class="enroll-btn nocourseabout_register" data-nocourseaboutcourse-id="'+item.id+'">'+item.button_text+'</a>';
+                        buttonText = '<a href="/courses/'+item.id+'/about" target="_blank" class="enroll-btn">'+item.button_text+'</a>';
                     };
                 } else {
                     if (isEnrolled) {
