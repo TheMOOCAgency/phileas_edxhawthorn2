@@ -20,9 +20,10 @@ from tma_cms_apps.quick_start.helpers import TmaCourseManager, TmaCourseInfo
 from datetime import datetime  
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
+from contentstore.views.course import get_courses_accessible_to_user, _process_courses_list
 
 
-@login_required
+#@login_required
 @ensure_csrf_cookie
 def quick_start(request):
     context={}
@@ -42,16 +43,21 @@ def quick_start(request):
     })
 
     #COURSES
+    courses_iter, in_process_course_actions = get_courses_accessible_to_user(request, org=None)
+    active_courses, archived_courses = _process_courses_list(courses_iter, in_process_course_actions, split_archived=False)
+
     coursesList=[]
-    for tmaOverview in TmaCourseOverview.objects.all() :
-        coursesList.append(TmaCourseInfo(tmaOverview=tmaOverview).getShortInfo())
+    for course in active_courses:
+        tmaOverview = TmaCourseOverview.get_tma_course_overview_by_course_id(SlashSeparatedCourseKey.from_deprecated_string(course['course_key']))
+        if tmaOverview:
+            coursesList.append(TmaCourseInfo(tmaOverview=tmaOverview).getShortInfo())
 
     context['lmsBase']= str("https://"+settings.LMS_BASE)
     context['courses']=coursesList
     return render_to_response('/tma_cms_apps/quick_start.html', {"props":context})
 
 
-@login_required
+#@login_required
 @require_http_methods(["GET"])
 @csrf_exempt
 def quick_start_checkid_exists(request, course_key_string):
@@ -63,7 +69,7 @@ def quick_start_checkid_exists(request, course_key_string):
         response={"details":"valid_new_id"}          
     return JsonResponse(response)
 
-@login_required
+#@login_required
 @require_http_methods(["GET"])
 @csrf_exempt
 def quick_start_get_course_info(request, course_key_string):
@@ -73,7 +79,7 @@ def quick_start_get_course_info(request, course_key_string):
         response= TmaCourseInfo(tmaOverview=tmaOverview).getDetailedInfo()
     return JsonResponse(response)
 
-@login_required
+#@login_required
 @require_http_methods(["POST"])
 @csrf_exempt
 def quick_start_create(request):
