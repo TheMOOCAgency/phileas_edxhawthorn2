@@ -31,6 +31,7 @@ class CourseSerializer(serializers.Serializer):
     teacher_name=serializers.CharField(required=True, allow_blank=True)
     editMode=serializers.CharField(required=True, allow_blank=True)
     course_id=serializers.CharField(required=False, allow_blank=True)
+    actual_course_downloads=serializers.CharField(required=False, allow_blank=True)
 
     def validate (self, data):
         """

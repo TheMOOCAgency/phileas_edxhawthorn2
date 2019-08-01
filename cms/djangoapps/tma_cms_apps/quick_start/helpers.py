@@ -124,7 +124,7 @@ class TmaCourseManager():
             "teacher_image":"/"+str(self.teacher_image_upload.location) if (self.teacher_image_upload and not isinstance(self.teacher_image_upload, basestring)) else (self.teacher_image_upload if self.teacher_image_upload is not None else ""),
             "teacher_name":self.data.get('teacher_name', "") if self.data.get('teacher_name')!="null" else "",
             "teacher_email":self.data.get('teacher_email', "") if self.data.get('teacher_email')!="null" else "",
-            "downloads": self.download_files_upload if self.download_files_upload else previous_course_about.get('downloads','')
+            "downloads": self.download_files_upload
             })
         tmaOverview = TmaCourseOverview.objects.filter(course_overview_edx__id=self.course_key)
         tmaOverview.update(**{field:self.data.get(field) for field in self.tmaOverviewFields})
@@ -139,7 +139,7 @@ class TmaCourseManager():
         return fileUpload
 
     def _upload_multiple_files(self, uploadFiles):
-        fileUploads = None
+        fileUploads = []
         if uploadFiles :
             fileUploads = [
                 {
@@ -148,6 +148,14 @@ class TmaCourseManager():
                 }
                 for download_file in uploadFiles
             ]
+
+        if self.data['actual_course_downloads']:
+            actual_course_downloads = json.loads(unicode(self.data['actual_course_downloads']))
+            if actual_course_downloads and len(actual_course_downloads)>0:
+                fileUploads+=actual_course_downloads
+
+        log.info('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
+        log.info(fileUploads)
         return fileUploads
 
 
@@ -206,6 +214,7 @@ class TmaCourseInfo():
         course_about.setdefault("teacher_email","")
         course_about.setdefault("teacher_name","")
         course_about.setdefault("teacher_image","")
+        course_about['actual_course_downloads']=course_about.get('downloads')
         return course_about
 
     def get_course_info(self):
