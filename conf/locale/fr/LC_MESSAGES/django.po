@@ -25535,3 +25535,6 @@ msgstr "Statistiques"
 msgid "Quick Course Creation"
 msgstr "Création rapide de cours"
 
+#: lms/templates/student_account/login_and_register.html
+msgid "Having troubles login in ? Please empty your browser cache before contacting support."
+msgstr "Vous avez des difficultés à vous connecter ? Veuillez effacer le cache de votre navigateur avant de contacter le support."
