@@ -23,7 +23,7 @@ from django.conf import settings
 from contentstore.views.course import get_courses_accessible_to_user, _process_courses_list
 
 
-#@login_required
+@login_required
 @ensure_csrf_cookie
 def quick_start(request):
     context={}
@@ -57,7 +57,7 @@ def quick_start(request):
     return render_to_response('/tma_cms_apps/quick_start.html', {"props":context})
 
 
-#@login_required
+@login_required
 @require_http_methods(["GET"])
 @csrf_exempt
 def quick_start_checkid_exists(request, course_key_string):
@@ -69,7 +69,7 @@ def quick_start_checkid_exists(request, course_key_string):
         response={"details":"valid_new_id"}          
     return JsonResponse(response)
 
-#@login_required
+@login_required
 @require_http_methods(["GET"])
 @csrf_exempt
 def quick_start_get_course_info(request, course_key_string):
@@ -79,7 +79,7 @@ def quick_start_get_course_info(request, course_key_string):
         response= TmaCourseInfo(tmaOverview=tmaOverview).getDetailedInfo()
     return JsonResponse(response)
 
-#@login_required
+@login_required
 @require_http_methods(["POST"])
 @csrf_exempt
 def quick_start_create(request):
