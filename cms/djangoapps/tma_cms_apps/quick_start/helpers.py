@@ -189,8 +189,8 @@ class TmaCourseInfo():
     def get_course_links(self):
         links={
             "configure_url":"#/configure/"+self.course_id,
-            "statistics_url":self.lmsBase+"/figures/course/"+self.course_id,
-            "preview_url": self.lmsBase+"/courses/"+self.course_id+"/courseware",
+            "statistics_url": self.lmsBase+"/login?next="+urllib.quote("/figures/course/"+self.course_id,''),
+            "preview_url": self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/courseware",''),
             "email_url":self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/instructor",''),
             "rerun_url":"#/create/"+self.course_id,
             "contribute_url":reverse('course_handler', args=[self.course_id]),
