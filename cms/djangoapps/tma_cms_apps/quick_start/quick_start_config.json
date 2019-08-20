@@ -89,17 +89,6 @@
 
         },
         {
-            "name":"language",
-            "type":"select",
-            "options":[
-                "fr",
-                "en",
-                "de",
-                "es",
-                "it"
-            ]
-        },
-        {
             "name":"course_type",
             "type":"checkBox",
             "options":[
@@ -190,7 +179,7 @@
     }
    ],
    "orgs":["asia","americas","europe"],
-   "homeFilters":["status","tag","settings"],
+   "homeFilters":["status","tag","settings","org"],
    "createSteps":[
     ["course_name","org","course_number","course_session"],
     ["course_pacing","effort","course_dates","language","course_type"],

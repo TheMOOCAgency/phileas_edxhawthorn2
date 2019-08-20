@@ -51,7 +51,7 @@
       "language_title":"Course Language",
       "language_helper":"Identify the course language here. This is used to assist users find courses that are taught in a specific language. It is also used to localize the 'From:' field in bulk emails.",
       "course_image_title":"Course image",
-      "course_image_helper":"The image that will appear on course about page and course card (jpeg or png only)",
+      "course_image_helper":"The image that will appear on course about page and course card (jpeg or png only - 700px x 500px)",
       "description_title":"Course Description",
       "course_map_helper":"Define your course map",
       "course_map_title":"Course Map",
@@ -96,6 +96,7 @@
   "addFilter":"Add Filter",
   "selectSearchFilters":"Select filters you want for your search",
   "rerun":"re-run course",
-  "preview":"live preview"
+  "preview":"live preview",
+  "org_title":"Organization"
 }
 }

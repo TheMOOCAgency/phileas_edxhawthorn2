@@ -21,12 +21,15 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from contentstore.views.course import get_courses_accessible_to_user, _process_courses_list
+from openedx.core.djangoapps.lang_pref.api import released_languages
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
 
-@login_required
+#@login_required
 @ensure_csrf_cookie
 def quick_start(request):
     context={}
+    organizations_options = list(configuration_helpers.get_all_orgs())
     #TRANSLATIONS
     translations = json.load(open("/edx/app/edxapp/edx-platform/cms/djangoapps/tma_cms_apps/quick_start/quick_start_trads.json"))
     language = request.LANGUAGE_CODE
@@ -49,15 +52,34 @@ def quick_start(request):
     coursesList=[]
     for course in active_courses:
         tmaOverview = TmaCourseOverview.get_tma_course_overview_by_course_id(SlashSeparatedCourseKey.from_deprecated_string(course['course_key']))
-        if tmaOverview:
+        if tmaOverview and tmaOverview.course_overview_edx.org in organizations_options:
             coursesList.append(TmaCourseInfo(tmaOverview=tmaOverview).getShortInfo())
 
     context['lmsBase']= str("https://"+settings.LMS_BASE)
     context['courses']=coursesList
+
+    #LANGUAGES
+    language_options = [language.code for language in released_languages()]
+    context['filters'].append({
+        "name":"language",
+        "type":"select",
+        "options": language_options
+    })
+
+    #ORGANIZATIONS
+    if "phileas" in organizations_options: 
+        organizations_options.remove("phileas")
+    context["homeFiltersDetail"].append({
+        "name":"org",
+        "options":organizations_options,
+        "checked":[next(course['org'] for course in coursesList if course['org'] in organizations_options)],
+        "type":"checkbox"        
+    })
+
     return render_to_response('/tma_cms_apps/quick_start.html', {"props":context})
 
 
-@login_required
+#@login_required
 @require_http_methods(["GET"])
 @csrf_exempt
 def quick_start_checkid_exists(request, course_key_string):
@@ -69,7 +91,7 @@ def quick_start_checkid_exists(request, course_key_string):
         response={"details":"valid_new_id"}          
     return JsonResponse(response)
 
-@login_required
+#@login_required
 @require_http_methods(["GET"])
 @csrf_exempt
 def quick_start_get_course_info(request, course_key_string):
@@ -79,7 +101,7 @@ def quick_start_get_course_info(request, course_key_string):
         response= TmaCourseInfo(tmaOverview=tmaOverview).getDetailedInfo()
     return JsonResponse(response)
 
-@login_required
+#@login_required
 @require_http_methods(["POST"])
 @csrf_exempt
 def quick_start_create(request):
