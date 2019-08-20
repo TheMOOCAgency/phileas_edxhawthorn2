@@ -62,6 +62,7 @@
 }
 
 .stat-box {
+    display: -ms-inline-grid;
     display: inline-grid;
 }
 .stat-box > span {
@@ -74,6 +75,7 @@
     border-right: solid 1px #7777778f;
 }
 .stat-box > span:last-of-type {
+    display: table-caption;
     margin-top: 0px;
     margin-bottom: 0px;
     line-height: 10px;
