@@ -250,8 +250,8 @@
   $(document).ready(function(){
     // When coming from HP - query from URL
     if (window.location.search) {
-      // Get filter from URL
-      urlParam = window.location.search.split('=')[1];
+      // Get filter from URL (utf-8 for accents)
+      urlParam = decodeURIComponent(window.location.search.split('=')[1]);
       // Prevent interfering with filter dropdown
       if (urlParam != 'likes' && urlParam != 'enrollments') {
         // Filter case
@@ -267,7 +267,6 @@
           query['tag'].push(urlParam);
         //Filter by onboarding tag
         } else if (window.location.search.split('=')[0].indexOf('onboarding') >-1 ) {
-          console.log(urlParam)
           if (urlParam.toLowerCase().indexOf('newstarter') >-1 ) {
             query['onboarding'].push('New Starter');
             urlParam = 'New Starter'
@@ -286,6 +285,7 @@
         $('p.facet-option[data-tag="'+urlParam+'"]').parent().parent().parent().children('.col-2').children('.close-filter').show();
 
         // Display results
+        console.log(query)
         results = searchByFilter(coursesJson, query);
         browseCatalogDisplay(results);
       };
