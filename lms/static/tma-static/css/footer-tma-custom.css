@@ -93,3 +93,39 @@
     height: 65px;
     overflow: hidden;
 }
+
+
+@media only screen and (max-device-width: 480px){
+  .stat-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .footer-stats{
+    padding-bottom: 40px
+  }
+  .footer-links{
+    position: initial;
+    top:0;
+    height:auto;
+  }
+  .logo-part{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .brand-logo-size{
+    padding: 0!important;
+  }
+  .links-part{
+    padding:20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .links-part a{
+    padding: 0!important;
+  }
+}

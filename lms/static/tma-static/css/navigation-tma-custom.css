@@ -178,3 +178,9 @@ button, button:hover, button:hover:not(:disabled), button:active:not(:disabled),
     background-color: #0B1A4C !important;
     border: 2px solid white;
 }
+
+@media only screen and (max-device-width: 480px){
+  .navbar{
+    padding:10px!important
+  }
+}

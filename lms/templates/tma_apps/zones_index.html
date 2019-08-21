@@ -19,7 +19,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOvervie
 <link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
 <link rel="stylesheet" href="${static.url('tma-static/css/zones-index.css')}">
 
-<div class="container-fluid zones-box">
+<div class="container-fluid zones-box command-wrap">
     <div class="row pt-5">
         <div class="col text-center">
             <h1>${_("Welcome on Phileas training platform")}</h1>
@@ -37,7 +37,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOvervie
             <a href="${sso_europe}" class="zone-btn">Europe</a>
         </div>
     </div>
-    <div class="row">
+    <div class="row" id="globeCarte">
         <div class="col world-box mt-5">
             <img src="${static.url('tma-static/images/global.jpg')}" alt="continents">
         </div>
