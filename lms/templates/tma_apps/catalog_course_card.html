@@ -4,7 +4,6 @@
 
 
 <%
-from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from django.utils.translation import ugettext as _
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 
@@ -132,7 +131,7 @@ is_apoc = "APOC+APOC" in str(course['id'])
             </div>
           </div>
           <div class="row">
-            <div class="">
+            <div>
               %if course['short_description'] :
                 <p style='padding:15px;'>${course['short_description'][:125]}...</p>
               %else :
@@ -144,12 +143,6 @@ is_apoc = "APOC+APOC" in str(course['id'])
             <div class="text-center course-btn">
               %if (course['is_manager_only'] and not request.user.profile.is_manager) or course['is_blocked'] :
                 <a class="enroll-btn no-enroll">${_("Not authorized")}</a>
-              %elif course['is_vodeclic'] :
-                %if course['is_enrolled'] :
-                  <a href="${get_vodeclic_href(user,course['id'])}" target="_blank" class="enroll-btn">${_("Continue")}</a>
-                %else :
-                  <a href="${get_vodeclic_href(user,course['id'])}" target="_blank" class="enroll-btn nocourseabout_register" data-nocourseaboutcourse-id="${course['id']}">${_("Join")}</a>
-                %endif
               %elif is_apoc:
                   <form name="apocform" target="_blank" action="https://apoc.themoocagency.com/autologreg" style="display:none" method="POST">
                     <input type='text' name='PID' value='${user.profile.rpid}' />

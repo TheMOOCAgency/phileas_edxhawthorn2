@@ -985,17 +985,20 @@ def course_about(request, course_id):
         # Embed the course reviews tool
         reviews_fragment_view = CourseReviewsModuleFragmentView().render_to_fragment(request, course=course)
 
+        # TMA info
         is_favourite = False
         is_liked = False
-        enrollment=CourseEnrollment.get_enrollment(request.user,course.id)
+        enrollment = CourseEnrollment.get_enrollment(request.user,course.id)
         if enrollment:
             tma_enrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
             is_favourite = tma_enrollment.is_favourite
             is_liked = tma_enrollment.is_liked
+            
         tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course.id)
         liked_total = tma_course_overview.liked_total
         favourite_total = tma_course_overview.favourite_total
         tag = tma_course_overview.tag
+
         context = {
             'course': course,
             'course_details': course_details,
@@ -1033,7 +1036,11 @@ def course_about(request, course_id):
             'tag': tag
         }
 
-        return render_to_response('courseware/course_about.html', context)
+        if tma_course_overview.is_vodeclic:
+            vodeclic_url = get_vodeclic_href(request.user, course.id)
+            return redirect(vodeclic_url)
+        else:
+            return render_to_response('courseware/course_about.html', context)
 
 
 @ensure_csrf_cookie
