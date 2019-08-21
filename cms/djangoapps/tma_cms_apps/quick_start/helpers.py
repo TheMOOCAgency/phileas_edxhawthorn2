@@ -29,8 +29,8 @@ from lms.djangoapps.courseware.courses import course_open_for_self_enrollment
 class TmaCourseManager():
     def __init__(self, request, data, course_image=None, teacher_image=None,download_files=None,):
         self.request=request
-        self.creator = self._get_course_creator()
-        #self.creator = self.request.user
+        #self.creator = self._get_course_creator()
+        self.creator = self.request.user
         self.data=data
         self.course_id=data["course_id"] if data['editMode']=="configure" else self._create_course_id()
         self.course_key =SlashSeparatedCourseKey.from_deprecated_string(self.course_id)
@@ -154,8 +154,6 @@ class TmaCourseManager():
             if actual_course_downloads and len(actual_course_downloads)>0:
                 fileUploads+=actual_course_downloads
 
-        log.info('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
-        log.info(fileUploads)
         return fileUploads
 
 
