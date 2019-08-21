@@ -6,6 +6,7 @@
 <%
 from django.utils.translation import ugettext as _
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
+from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 
 split_tags = course['tag'].split(',')
 
