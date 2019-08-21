@@ -152,13 +152,14 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 <div id="localisation-warning">
   <h3>${_('The website you are currently logged in does not match your geographical area.')}</h3>
   <p>${_('Please click on the link below to be redirected to your local website :')}</p>
-  <a href="https://${user_zone}.${settings.LMS_BASE}">
+  <a href="https://${user_zone}.${settings.SITE_NAME}">
     <button>
       ${user_zone}
     </button>
   </a>
 </div>
 %endif
+
 
 <%
   n_courses = 0
