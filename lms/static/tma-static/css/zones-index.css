@@ -33,3 +33,15 @@
     color: white !important;
     text-decoration: none !important;
 }
+
+@media only screen and (max-device-width: 480px){
+  #globeCarte{
+    display: none
+  }
+  .zones-box{
+    height: auto
+  }
+  .command-wrap{
+    padding-bottom:40px
+  }
+}

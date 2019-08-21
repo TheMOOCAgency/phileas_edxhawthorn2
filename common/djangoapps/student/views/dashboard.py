@@ -68,7 +68,7 @@ from lms.djangoapps.tma_apps.sspeaking.sspeaking import get_sspeaking_href
 from lms.djangoapps.courseware.courses import get_course_by_id
 from operator import itemgetter
 from student.signals import ENROLL_STATUS_CHANGE
-
+from openedx.core.djangoapps.theming.helpers import get_current_site
 
 log = logging.getLogger("edx.student")
 
@@ -802,6 +802,17 @@ def _student_dashboard(request):
             enr for enr in course_enrollments if entitlement.enrollment_course_run.course_id != enr.course_id
         ]
 
+    #TMA CHECK FOR GEOGRAPHICAL ZONE
+    current_site = get_current_site()
+    try:
+        user_custom_field = json.loads(user.profile.custom_field)
+    except:
+        user_custom_field={}
+    with open("/edx/app/edxapp/edx-platform/lms/djangoapps/tma_apps/zones/zones_infos.json") as zone_file :
+        zone_infos = zone_file.read()
+    user_zone = json.loads(zone_infos).get(str(user_custom_field.get('zoneinfo')).lower())
+    wrong_zone= user_zone is not None and user_zone.lower()!=str(current_site).lower()
+
     context = {
         'urls': urls,
         'programs_data': programs_data,
@@ -849,6 +860,8 @@ def _student_dashboard(request):
         'display_sidebar_account_activation_message': not(user.is_active or hide_dashboard_courses_until_activated),
         'display_dashboard_courses': (user.is_active or not hide_dashboard_courses_until_activated),
         'empty_dashboard_message': empty_dashboard_message,
+        'wrong_zone':wrong_zone,
+        'user_zone':user_zone
     }
 
     if ecommerce_service.is_enabled(request.user):
@@ -875,13 +888,13 @@ def _student_dashboard(request):
          current_organisation = org_whitelist[0]
     
     #homepage courses
-    homepage_json = configuration_helpers.get_value('homepage')
+    homepage_json = configuration_helpers.get_value('homepage') or {}
 
     frontpage_courses = {}
     if request.LANGUAGE_CODE == 'fr':
-        frontpage_courses = homepage_json['fr']
+        frontpage_courses = homepage_json.get('fr',{})
     else:
-        frontpage_courses = homepage_json['en']
+        frontpage_courses = homepage_json.get('en',{})
 
     double_card = {}
     static_card = {}
@@ -956,7 +969,7 @@ def _student_dashboard(request):
         'courses_counter': courses_counter,
         'double_card': double_card,
         'static_card': static_card,
-        'static_double_top': frontpage_courses['static_double_top']
+        'static_double_top': frontpage_courses.get('static_double_top')
     })
 
     return context
