@@ -663,3 +663,16 @@ div.zoomEffect:hover {
     opacity: 1;
     z-index: 999;
 }
+
+
+/* BANDEAU WRONG ZONE */
+#localisation-warning{
+  padding:20px;
+  text-align: center;
+}
+#localisation-warning button{
+  border-radius:50px;
+  color:#003655;
+  border:2px solid;
+  text-transform: uppercase
+}
