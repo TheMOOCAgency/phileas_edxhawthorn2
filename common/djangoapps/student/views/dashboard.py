@@ -811,7 +811,7 @@ def _student_dashboard(request):
     with open("/edx/app/edxapp/edx-platform/lms/djangoapps/tma_apps/zones/zones_infos.json") as zone_file :
         zone_infos = zone_file.read()
     user_zone = json.loads(zone_infos).get(str(user_custom_field.get('zoneinfo')).lower())
-    wrong_zone= user_zone is not None and user_zone.lower()!=str(current_site).lower()
+    wrong_zone= user_zone is not None and user_zone.lower()!=str(current_site).lower().split('.')[0]
 
     context = {
         'urls': urls,
