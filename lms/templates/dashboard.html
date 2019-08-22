@@ -135,19 +135,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     %endif
 </div>
 
-<style>
-#localisation-warning{
-  padding:20px;
-  text-align: center;
-}
-#localisation-warning button{
-  border-radius:50px;
-  color:#003655;
-  border:2px solid;
-  text-transform: uppercase
-}
-</style>
-
+<!-- TMA BANDEAU WRONG ZONE-->
 %if wrong_zone:
 <div id="localisation-warning">
   <h3>${_('The website you are currently logged in does not match your geographical area.')}</h3>
