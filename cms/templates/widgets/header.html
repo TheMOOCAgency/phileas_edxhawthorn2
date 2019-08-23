@@ -21,9 +21,9 @@
       org = CourseOverview.objects.filter(courseenrollment__user=request.user)[0].org
       if 'edx' or 'phileas' in org:
         org = 'europe'
-      else:
-        if SiteConfiguration.objects.filter(site__domain__contains=org).exists():
-          site_id = SiteConfiguration.objects.filter(site__domain__contains=org).id
+        
+      if SiteConfiguration.objects.filter(site__domain__contains=org).exists():
+        site_id = SiteConfiguration.objects.filter(site__domain__contains=org)[0].id
 %>
 
 <%
