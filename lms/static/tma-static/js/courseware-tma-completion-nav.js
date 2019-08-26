@@ -31,6 +31,8 @@ $(document).ready(function(){
   // Check user completion status for popup bravo, for ungraded courses with no exercises
   get_user_grade()
   close_all_subsections();
+
+  isUnitAvailable();
 })
 
 /*Update completion coursenav between units*/
@@ -44,6 +46,8 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
 
     // Check user completion status for popup bravo, for ungraded courses with no exercises
     get_user_grade()
+
+    isUnitAvailable();
   }
 });
 
@@ -107,4 +111,32 @@ function highlight_current_unit(){
   $('#' + unit_id.replace(/([$%&()*+,./:;<=>?@\[\\\]^\{|}~])/g,'\\$1')).addClass('tma-current-unit');
   $('#' + unit_id.replace(/([$%&()*+,./:;<=>?@\[\\\]^\{|}~])/g,'\\$1')).parents('.accordion-panel').removeClass('is-hidden');
   $('#' + unit_id.replace(/([$%&()*+,./:;<=>?@\[\\\]^\{|}~])/g,'\\$1')).parents('li.accordion').find('.fa-chevron-right ').addClass('fa-rotate-90');
+}
+
+// Conditional access to next section
+function isUnitAvailable() {
+  currentUnit = $('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
+  $('ol.outline-item.accordion-panel li a.outline-item.focusable').each(function(i, element){
+    isUnitSeen = ($(this).children().children().hasClass('tma_completed') || $(this).children().children().hasClass('tma_started'))
+    isPreviousSeen = ($('ol.outline-item.accordion-panel li a.outline-item.focusable').eq(i - 1).children().children().hasClass('tma_completed') || $('ol.outline-item.accordion-panel li a.outline-item.focusable').eq(i - 1).children().children().hasClass('tma_started'))
+    // If current unit and previous unit have not been started nor completed, link is disabled
+    if (!isUnitSeen && !isPreviousSeen) {
+      $(this).addClass('disabled-link');
+    }
+
+    if ($(this).hasClass('tma-current-unit') && !$(this).children().children().hasClass('tma_completed')) {
+      $('.sequence-nav-button.button-next').prop('disabled',)
+    }
+
+    if ($('ol.outline-item.accordion-panel li a.outline-item.focusable.tma-current-unit').children().children().attr('id') == currentUnit) {
+      $('.sequence-bottom .sequence-nav-button.button-next').prop('disabled') 
+    }
+  });
+
+  
+  
+
+  console.log(currentUnit)
+  console.log(decodeURIComponent(window.location.search))
+  //$('.sequence-nav-button.button-next').prop('disabled')
 }

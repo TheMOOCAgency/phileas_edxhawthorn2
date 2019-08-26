@@ -385,3 +385,11 @@ nav.sequence-bottom .sequence-nav-button:hover .icon{
   list-style: none!important;
   counter-reset: li!important
 }
+
+.disabled-link {
+  pointer-events: none;
+  text-decoration: none !important;
+}
+.disabled-link:hover {
+  text-decoration: none !important;
+}
