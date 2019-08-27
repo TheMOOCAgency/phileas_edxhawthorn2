@@ -401,7 +401,10 @@ ${HTML(fragment.foot_html())}
 <!--TMA SCRIPT COURSEWARE -->
 <script>
   let global_courseid = "${course.id | n, js_escaped_string}";
-  let hasMenu = "${TmaCourseOverview.objects.get(course_overview_edx__id=course.id).has_menu}"
+  let hasMenu = ("${TmaCourseOverview.objects.get(course_overview_edx__id=course.id).has_menu | n, js_escaped_string}" === "True" ? true : false)
+  let isLinear = ("${TmaCourseOverview.objects.get(course_overview_edx__id=course.id).is_linear | n, js_escaped_string}" === "True" ? true : false)
+  console.log(hasMenu)
+  console.log(isLinear)
 </script>
 <script src="${static.url('tma-static/js/courseware-tma-completion-nav.js')}" charset="utf-8"></script>
 <script src="${static.url('tma-static/js/courseware-tma-grade.js')}" charset="utf-8"></script>

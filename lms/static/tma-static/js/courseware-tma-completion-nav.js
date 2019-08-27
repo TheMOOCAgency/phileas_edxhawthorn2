@@ -1,5 +1,5 @@
 /* Hide Previous & Next buttons if has_menu = false */
-if (hasMenu == 'False') {
+if (!hasMenu) {
   $('button.sequence-nav-button.button-previous').hide();
   $('button.sequence-nav-button.button-next').hide();
 }
@@ -32,7 +32,10 @@ $(document).ready(function(){
   get_user_grade()
   close_all_subsections();
 
-  isUnitAvailable();
+  // Let users access all units unless is_linear = true
+  if (isLinear) {
+    isUnitAvailable();
+  }
 })
 
 /*Update completion coursenav between units*/
@@ -47,8 +50,10 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
     // Check user completion status for popup bravo, for ungraded courses with no exercises
     get_user_grade()
 
-    // Check if current unit is completed, thus if next unit should be available
-    isUnitAvailable();
+    // Let users access all units unless is_linear = true
+    if (isLinear) {
+      isUnitAvailable();
+    }
   }
 });
 
@@ -114,10 +119,9 @@ function highlight_current_unit(){
   $('#' + unit_id.replace(/([$%&()*+,./:;<=>?@\[\\\]^\{|}~])/g,'\\$1')).parents('li.accordion').find('.fa-chevron-right ').addClass('fa-rotate-90');
 }
 
-// Conditional access to next section
+// Check if current unit is completed, thus if next unit should be available
 function isUnitAvailable() {
   currentUnit = $('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
-
   $('ol.outline-item.accordion-panel li a.outline-item.focusable').each(function(i, element){
     isUnitSeen = ($(this).children().children().hasClass('tma_completed') || $(this).children().children().hasClass('tma_started'))
     isPreviousSeen = ($('ol.outline-item.accordion-panel li a.outline-item.focusable').eq(i - 1).children().children().hasClass('tma_completed') || $('ol.outline-item.accordion-panel li a.outline-item.focusable').eq(i - 1).children().children().hasClass('tma_started'))
