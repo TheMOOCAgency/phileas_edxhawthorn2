@@ -385,3 +385,15 @@ nav.sequence-bottom .sequence-nav-button:hover .icon{
   list-style: none!important;
   counter-reset: li!important
 }
+
+/* Completion */
+.disabled-link {
+  pointer-events: none;
+  text-decoration: none !important;
+}
+.disabled-link:hover {
+  text-decoration: none !important;
+}
+.sequence-bottom .sequence-nav-button.button-next:disabled {
+  pointer-events: auto !important;
+}
