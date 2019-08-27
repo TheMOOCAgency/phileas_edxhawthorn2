@@ -37,7 +37,7 @@ $(document).ready(function(){
 
 /*Update completion coursenav between units*/
 $(document).ajaxSuccess(function(e, xhr, settings) {
-  if (settings.url.indexOf('publish_completion')>-1 || settings.url.indexOf('goto_position')>-1) {
+  if (settings.url.indexOf('publish_completion')>-1 || settings.url.indexOf('goto_position')>-1 || settings.url.indexOf('problem_check')>-1) {
     response=JSON.parse(xhr.responseText);
     mark_started_subsections();
     unit_id=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
@@ -47,6 +47,7 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
     // Check user completion status for popup bravo, for ungraded courses with no exercises
     get_user_grade()
 
+    // Check if current unit is completed, thus if next unit should be available
     isUnitAvailable();
   }
 });
@@ -128,13 +129,13 @@ function isUnitAvailable() {
   });
 
   // If current unit is not completed yet, disable button next + add tooltip
-  if (!$('ol.outline-item.accordion-panel li a.outline-item.focusable.tma-current-unit').children().children().hasClass('tma_completed')) {
+  if (!$('a.outline-item.focusable[id="'+ currentUnit+'"]').children().children().hasClass('tma_completed')) {
     $('.sequence-bottom .sequence-nav-button.button-next').prop('disabled', true);
     $('.sequence-bottom .sequence-nav-button.button-next').attr('data-toggle', 'tooltip');
     $('.sequence-bottom .sequence-nav-button.button-next').attr('title', 'You cannot access the next unit because the current unit is not completed. Please ensure that you viewed all contents and answered all questions.');
+  } else {
+    $('.sequence-bottom .sequence-nav-button.button-next').prop('disabled', false);
+    $('.sequence-bottom .sequence-nav-button.button-next').removeAttr('data-toggle', 'tooltip');
+    $('.sequence-bottom .sequence-nav-button.button-next').removeAttr('title', 'You cannot access the next unit because the current unit is not completed. Please ensure that you viewed all contents and answered all questions.');
   }
-
-  //console.log(currentUnit)
-  //console.log(decodeURIComponent(window.location.search))
-  //$('.sequence-nav-button.button-next').prop('disabled')
 }
