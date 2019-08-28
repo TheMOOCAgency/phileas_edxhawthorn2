@@ -163,7 +163,7 @@
    "homeFiltersDetail":[
     {
         "name":"tag",
-        "options":["office-tools","fundamentals","design","communication","management","business-app","compliance","internet"],
+        "options":["Office Tools","Fundamentals","Design","Communication","Management","Business App.","Compliance","Internet"],
         "type":"checkbox"
     },
     {
@@ -174,7 +174,7 @@
     },
     {
         "name":"settings",
-        "options":["all","manager_only", "mandatory"],
+        "options":["all","manager_only", "mandatory","is_linear"],
         "type":"checkbox"
     }
    ],

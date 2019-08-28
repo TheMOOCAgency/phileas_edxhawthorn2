@@ -201,6 +201,8 @@ class TmaCourseInfo():
             courseSettings.append('mandatory')
         if self.tmaOverview.is_manager_only:
             courseSettings.append('manager_only')
+        if self.tmaOverview.is_manager_only:
+            courseSettings.append('is_linear')
         return courseSettings
 
     def get_course_about(self):
@@ -232,6 +234,7 @@ class TmaCourseInfo():
             "has_menu":self.tmaOverview.has_menu,
             "is_course_graded":self.tmaOverview.is_course_graded,
             "is_manager_only":self.tmaOverview.is_manager_only,
+            "is_linear":self.tmaOverview.is_linear,
             "is_mandatory":self.tmaOverview.is_mandatory,
             "is_new":self.tmaOverview.is_new,
             "onboarding":self.tmaOverview.onboarding,
