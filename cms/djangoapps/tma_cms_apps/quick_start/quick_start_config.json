@@ -94,7 +94,8 @@
             "options":[
                 "invitation_only",
                 "is_manager_only",
-                "is_mandatory"
+                "is_mandatory",
+                "is_linear"
             ]
         },
         {

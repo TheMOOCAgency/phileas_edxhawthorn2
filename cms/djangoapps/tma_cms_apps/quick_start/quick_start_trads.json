@@ -22,6 +22,7 @@
       "invitation_only_title":"Invitation Only",
       "is_manager_only_title":"Only for managers",
       "is_mandatory_title":"Mandatory",
+      "is_linear_title":"Is Linear",
       "tag_title":"Course tag",
       "tag_helper":"Tag for the course",
       "onboarding_title":"Course onboarding tag",

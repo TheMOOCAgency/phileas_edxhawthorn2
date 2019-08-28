@@ -21,6 +21,7 @@ class CourseSerializer(serializers.Serializer):
     course_grade = serializers.IntegerField(required=True)
     is_course_graded=serializers.BooleanField(required=True)
     is_manager_only=serializers.BooleanField(required=True)
+    is_linear=serializers.BooleanField(required=True)
     is_mandatory=serializers.BooleanField(required=True)
     invitation_only=serializers.BooleanField(required=True)
     has_menu=serializers.BooleanField(required=True)

@@ -37,7 +37,7 @@ class TmaCourseManager():
         self.course_image_upload=self._upload_image(course_image)
         self.teacher_image_upload=self._upload_image(teacher_image)
         self.download_files_upload=self._upload_multiple_files(download_files)
-        self.tmaOverviewFields=['is_manager_only', 'is_course_graded', 'is_mandatory', 'has_menu', 'tag', 'onboarding', 'course_about']
+        self.tmaOverviewFields=['is_manager_only', 'is_course_graded', 'is_mandatory', 'has_menu', 'tag', 'onboarding', 'course_about','is_linear']
 
     def _create_course_id(self):
         fields= {
