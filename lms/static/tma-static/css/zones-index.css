@@ -45,3 +45,13 @@
     padding-bottom:40px
   }
 }
+@media (max-width: 1024px) {
+  .world-box > img {
+    margin-top: -50px;
+  }
+}
+@media (max-width: 768px) {
+  .world-box > img {
+    margin-top: 0px;
+  }
+}
