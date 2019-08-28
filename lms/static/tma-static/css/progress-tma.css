@@ -1,0 +1,7 @@
+.rotate180 {
+    transform: rotate(0.5turn);
+}
+
+.sections span.fa.fa-chevron-up {
+    cursor: pointer;
+}
