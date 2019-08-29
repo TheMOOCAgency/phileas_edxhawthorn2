@@ -3,5 +3,6 @@
 }
 
 .sections span.fa.fa-chevron-up {
+    float: right;
     cursor: pointer;
 }

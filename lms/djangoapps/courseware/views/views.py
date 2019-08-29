@@ -108,6 +108,7 @@ from ..entrance_exams import user_can_skip_entrance_exam
 from ..module_render import get_module, get_module_by_usage_id, get_module_for_descriptor
 
 # TMA IMPORTS
+from openedx.features.course_experience.utils import get_course_outline_block_tree
 from openedx.core.djangoapps.lang_pref.api import released_languages
 from student.models import CourseEnrollment
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
@@ -1141,6 +1142,18 @@ def _progress(request, course_key, student_id):
     # checking certificate generation configuration
     enrollment_mode, _ = CourseEnrollment.enrollment_mode_for_user(student, course_key)
 
+    # TMA - retrieve display_name for all problems
+    block_tree = get_course_outline_block_tree(request, str(course.id))
+    problems_info = []
+    for section in block_tree.get('children'):
+        for chapter in section.get('children'):
+            for unit in chapter.get('children'):
+                for item in unit.get('children'):
+                    problems_info.append({
+                        'block_id': item['block_id'],
+                        'display_name': item['display_name']
+                    })
+
     context = {
         'course': course,
         'courseware_summary': courseware_summary,
@@ -1152,6 +1165,8 @@ def _progress(request, course_key, student_id):
         'student': student,
         'credit_course_requirements': _credit_course_requirements(course_key, student),
         'certificate_data': _get_cert_data(student, course, enrollment_mode, course_grade),
+        'course_grade': course_grade,
+        'problems_info': problems_info
     }
     context.update(
         get_experiment_user_metadata_context(

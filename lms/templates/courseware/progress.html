@@ -45,8 +45,6 @@ username = get_enterprise_learner_generic_name(request) or student.username
 </script>
 </%block>
 
-<%include file="/courseware/course_navigation.html" args="active_page='progress'" />
-
 <!--<link rel="stylesheet" href="/media/dev/tma-static/css/index-tma-custom.css">-->
 <link rel="stylesheet" href="${static.url('tma-static/css/progress-tma.css')}">
 
@@ -69,10 +67,6 @@ username = get_enterprise_learner_generic_name(request) or student.username
 
                 <div class="wrapper-msg wrapper-auto-cert">
                     <div id="errors-info" class="errors-info"></div>
-                </div>
-
-                <div>
-                    ${_("Results : ")}
                 </div>
 
                 % if credit_course_requirements:
@@ -139,87 +133,85 @@ username = get_enterprise_learner_generic_name(request) or student.username
                 %if courseware_summary:
                 <section class="chapters">
                     <h2 class="sr">${_('Details for each chapter')}</h2>
-                    %for chapter in courseware_summary:
+                    %for i, chapter in enumerate(courseware_summary):
                         %if not chapter['display_name'] == "hidden":
                         <section aria-labelledby="chapter_${loop.index}">
                             <h3 class="hd hd-3" id="chapter_${loop.index}">${ chapter['display_name']}</h3>
                             <div class="sections">
                                 %for section in chapter['sections']:
-                                    <div>
-                                        <%
-                                        earned = section.all_total.earned
-                                        total = section.all_total.possible
-
-                                        percentageString = "{0:.0%}".format(section.percent_graded) if earned > 0 and total > 0 else ""
-                                        %>
-                                        <h4 class="hd hd-4">
-                                            <a href="${reverse('courseware_section', kwargs=dict(course_id=text_type(course.id), chapter=chapter['url_name'], section=section.url_name))}">
-                                                ${ section.display_name}
-                                                %if total > 0 or earned > 0:
-                                                <span class="sr">
-                                                    ${_("{earned} of {total} possible points").format(earned='{:.3n}'.format(float(earned)), total='{:.3n}'.format(float(total)))}
-                                                </span>
-                                                %endif
-                                            </a>
+                                    <%
+                                    earned = section.all_total.earned
+                                    total = section.all_total.possible
+                                    %>
+                                    <h4 class="hd hd-4">
+                                        <a href="${reverse('courseware_section', kwargs=dict(course_id=text_type(course.id), chapter=chapter['url_name'], section=section.url_name))}">
+                                            ${ section.display_name}
                                             %if total > 0 or earned > 0:
-                                            <span> ${"({0:.3n}/{1:.3n}) {2}".format( float(earned), float(total), percentageString )}</span>
+                                            <span class="sr">
+                                                ${_("{earned} of {total} possible points").format(earned='{:.3n}'.format(float(earned)), total='{:.3n}'.format(float(total)))}
+                                            </span>
                                             %endif
-                                            <span class="fa fa-chevron-up" aria-hidden="true"></span>
-                                        </h4>
-                                        <div class="detailed-score-content">
-                                            <p>
-                                                %if section.format is not None:
-                                                    ${section.format}
-                                                %endif
-                                                %if section.due is not None:
-                                                    <em class="localized-datetime" data-datetime="${section.due}" data-string="${_('due {date}')}" data-timezone="${user_timezone}" data-language="${user_language}"></em>
-                                                %endif
-                                            </p>
-                                            <p class="override-notice">
-                                                %if section.override is not None:
-                                                    %if section.format is not None and section.format == "Exam":
-                                                        ${_("Suspicious activity detected during proctored exam review. Exam score 0.")}
-                                                    %else:
-                                                        ${_("Section grade has been overridden.")}
-                                                    %endif
-                                                %endif
-                                            </p>
-                                            %if len(section.problem_scores.values()) > 0:
-                                              %if section.show_grades(staff_access):
-                                              <dl class="scores">
-
-                                                ${section.__dict__}
-
-                                                  <dt class="hd hd-6">${ _("Problem Scores: ") if section.graded else _("Practice Scores: ")}</dt>
-                                                  %for score in section.problem_scores.values():
-                                                    <dd>
-                                                        ${score.__dict__}
-
-                                                        ${"{0:.3n}/{1:.3n}".format(float(score.earned),float(score.possible))}
-                                                    </dd>
-                                                  %endfor
-                                              </dl>
-                                              %else:
-                                                <p class="hide-scores">
-                                                %if section.show_correctness == 'past_due':
-                                                    %if section.graded:
-                                                      ${_("Problem scores are hidden until the due date.")}
-                                                    %else:
-                                                      ${_("Practice scores are hidden until the due date.")}
-                                                    %endif
+                                        </a>
+                                        %if total > 0 or earned > 0:
+                                        <span> ${"({0:.3n}/{1:.3n})".format( float(earned), float(total))}</span>
+                                        %endif
+                                        <span class="fa fa-chevron-up" data-index="${i}-${loop.index}" aria-hidden="true"></span>
+                                    </h4>
+                                    <div class="detail-content" data-index="${i}-${loop.index}">
+                                        <p>
+                                            %if section.format is not None:
+                                                ${section.format}
+                                            %endif
+                                            %if section.due is not None:
+                                                <em class="localized-datetime" data-datetime="${section.due}" data-string="${_('due {date}')}" data-timezone="${user_timezone}" data-language="${user_language}"></em>
+                                            %endif
+                                        </p>
+                                        <p class="override-notice">
+                                            %if section.override is not None:
+                                                %if section.format is not None and section.format == "Exam":
+                                                    ${_("Suspicious activity detected during proctored exam review. Exam score 0.")}
                                                 %else:
-                                                    %if section.graded:
-                                                      ${_("Problem scores are hidden.")}
-                                                    %else:
-                                                      ${_("Practice scores are hidden.")}
-                                                    %endif
+                                                    ${_("Section grade has been overridden.")}
                                                 %endif
-                                                </p>
-                                              %endif
-                                            %else:
-                                            <p class="no-scores">${_("No problem scores in this section")}</p>
                                             %endif
-                                        </div>
+                                        </p>
+                                        %if len(section.problem_scores.values()) > 0:
+                                            %if section.show_grades(staff_access):
+                                                %for problem in section.problem_scores:
+                                                    <dl class="scores">
+                                                        % for info in problems_info:
+                                                            % if info['block_id'] == problem.block_id:
+                                                                <dt class="hd hd-6">${info['display_name']}</dt>
+                                                            % endif
+                                                        % endfor
+                                                        <dd>
+                                                            <%
+                                                                score = course_grade.problem_scores[problem].__dict__ 
+                                                            %>
+                                                            ${"{0:.3n}/{1:.3n}".format(float(score['earned']),float(score['possible']))}
+                                                        </dd>
+                                                    </dl>
+                                                %endfor
+                                            %else:
+                                            <p class="hide-scores">
+                                            %if section.show_correctness == 'past_due':
+                                                %if section.graded:
+                                                    ${_("Problem scores are hidden until the due date.")}
+                                                %else:
+                                                    ${_("Practice scores are hidden until the due date.")}
+                                                %endif
+                                            %else:
+                                                %if section.graded:
+                                                    ${_("Problem scores are hidden.")}
+                                                %else:
+                                                    ${_("Practice scores are hidden.")}
+                                                %endif
+                                            %endif
+                                            </p>
+                                            %endif
+                                        %else:
+                                        <p class="no-scores">${_("No problem scores in this section")}</p>
+                                        %endif
                                     </div>
                                 %endfor
                             </div>
@@ -235,10 +227,10 @@ username = get_enterprise_learner_generic_name(request) or student.username
 
 <script>
     $(document).ready(function(){
-        $('.detailed-score-content').hide();
-        $('.sections').on('click', function(){
-            $(this).find('span.fa.fa-chevron-up').toggleClass('rotate180');
-            $(this).find('.detailed-score-content').toggle();
+        $('.detail-content').hide();
+        $('span.fa.fa-chevron-up').on('click', function(){
+            $(this).toggleClass('rotate180');
+            $('.detail-content[data-index="'+ $(this).data('index') +'"]').toggle();
         });
     });
 </script>
