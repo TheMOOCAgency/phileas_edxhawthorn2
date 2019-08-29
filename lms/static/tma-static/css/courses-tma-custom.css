@@ -95,6 +95,15 @@ input::placeholder {
     border-radius: 50px;
 }
 
+@media (max-width: 992px) {
+    .criteria-box {
+        margin-bottom: 15px;
+    }
+    .col-lg-3 {
+        padding-right: 3rem !important;
+    }
+}
+
 /******DROPDOWN****************/
 /* Filter */
 .dropdown-container {
@@ -119,6 +128,7 @@ input::placeholder {
   .dropdown-container {
     position: relative;
     width: 100%;
+    margin-top: 15px;
   }
 }
 

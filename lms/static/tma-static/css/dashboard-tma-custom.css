@@ -77,12 +77,16 @@ input::placeholder {
         display: none !important;
     }
     .header-box {
-        display: none;
+        display: none !important;
     }
     .gif-box {
-        position: relative;
+        position: relative !important;
         width: 100%;
-        padding: 50px 0px 50px 50px;
+        padding: 50px 0px 50px 50px !important;
+        background-color: #00a1e9 !important;
+    }
+    .title-36 {
+        display: none;
     }
 }
 
@@ -167,6 +171,16 @@ input::placeholder {
     .search-input {
         width: auto !important;
         position: initial !important;
+    }
+}
+
+@media (max-width: 520px) {
+    .col-lg-6 > .course-card-sm {
+        height: 600px !important;
+    }
+    .col-lg-6 > .course-card-sm > .row > .col-6 {
+        flex: none !important;
+        max-width: 100% !important;
     }
 }
 
@@ -324,8 +338,9 @@ input::placeholder {
 }
 .static-div {
     margin-bottom: 30px;
-    height: 400px;
-    width: 100%;
+    max-height: 400px;
+    max-width: 100%;
+    height: auto;
     border: 1px solid rgba(0,0,0,0.09);
     border-radius: 10px;
     box-shadow: 1px 5px 12px 0px rgba(0,0,0,0.09);
@@ -333,6 +348,8 @@ input::placeholder {
 }
 .static-div > img {
     max-height: 100%;
+    max-width: 100%;
+    height: auto;
 }
 
 /* Categories */

@@ -34,7 +34,7 @@
     text-decoration: none !important;
 }
 
-@media only screen and (max-device-width: 480px){
+@media only screen and (max-width: 480px){
   #globeCarte{
     display: none
   }
@@ -43,5 +43,15 @@
   }
   .command-wrap{
     padding-bottom:40px
+  }
+}
+@media (max-width: 1024px) {
+  .world-box > img {
+    margin-top: -50px;
+  }
+}
+@media (max-width: 768px) {
+  .world-box > img {
+    margin-top: 0px;
   }
 }
