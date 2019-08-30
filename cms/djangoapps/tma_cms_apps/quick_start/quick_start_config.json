@@ -12,11 +12,8 @@
     "courseBasis":{
         "course_grade":50,
         "course_pacing":"instructor_paced",
-        "is_course_graded":true,
-        "is_manager_only":false,
-        "is_mandatory":false,
-        "is_invitation_only":false,
-        "has_menu":true,
+        "course_type":[],
+        "course_settings":[],
         "description":"",
         "onboarding":"False",
         "tag":"False",
@@ -174,13 +171,13 @@
         "type":"checkbox"
     },
     {
-        "name":"settings",
-        "options":["all","manager_only", "mandatory","is_linear"],
+        "name":"course_type",
+        "options":["all","is_manager_only", "is_mandatory","is_linear","invitation_only"],
         "type":"checkbox"
     }
    ],
    "orgs":["asia","americas","europe"],
-   "homeFilters":["status","tag","settings","org"],
+   "homeFilters":["status","tag","course_type","org"],
    "createSteps":[
     ["course_name","org","course_number","course_session"],
     ["course_pacing","effort","course_dates","language","course_type"],

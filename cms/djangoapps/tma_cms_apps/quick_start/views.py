@@ -107,8 +107,8 @@ def quick_start_get_course_info(request, course_key_string):
 def quick_start_create(request):
     data = request.POST
     serializer = CourseSerializer(data=data)
-    course_image=request.FILES.get('course_image') if request.FILES.get('course_image')  else data['course_image']
-    teacher_image=request.FILES.get('teacher_image') if request.FILES.get('teacher_image')  else data['teacher_image']
+    course_image = request.FILES.get('course_image') if request.FILES.get('course_image') else data['course_image']
+    teacher_image = request.FILES.get('teacher_image') if request.FILES.get('teacher_image') else data['teacher_image']
 
     #COURSE DOWNLOADS
     download_files=None

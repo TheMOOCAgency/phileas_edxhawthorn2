@@ -63,7 +63,6 @@ class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
     def get(self, request, *args, **kwargs):
         site_config = self.queryset.get(pk=kwargs.get('pk'))
         data = {}
-        log.info(kwargs)
 
         if kwargs['section']:
             data = self.serializer_class(site_config).data['values'][kwargs.get('section')]
@@ -77,7 +76,6 @@ class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
 
         if kwargs['section']:
             data[kwargs.get('section')] = request.data
-            log.info(data)
 
         serializer = self.serializer_class(site_config, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
