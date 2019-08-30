@@ -1145,14 +1145,15 @@ def _progress(request, course_key, student_id):
     # TMA - retrieve display_name for all problems
     block_tree = get_course_outline_block_tree(request, str(course.id))
     problems_info = []
-    for section in block_tree.get('children'):
-        for chapter in section.get('children'):
-            for unit in chapter.get('children'):
-                for item in unit.get('children'):
-                    problems_info.append({
-                        'block_id': item['block_id'],
-                        'display_name': item['display_name']
-                    })
+    if block_tree:
+        for section in block_tree.get('children'):
+            for chapter in section.get('children'):
+                for unit in chapter.get('children'):
+                    for item in unit.get('children'):
+                        problems_info.append({
+                            'block_id': item['block_id'],
+                            'display_name': item['display_name']
+                        })
 
     context = {
         'course': course,
