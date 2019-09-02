@@ -24,6 +24,10 @@
         
       if SiteConfiguration.objects.filter(site__domain__contains=org).exists():
         site_id = SiteConfiguration.objects.filter(site__domain__contains=org)[0].id
+      
+      site_id_list = SiteConfiguration.objects.values('site__domain').order_by('site__domain')
+      site_id_list_length = len(site_id_list)
+      site_id_list_test = site_id_list[1]['site__domain']
 %>
 
 <%
@@ -36,8 +40,10 @@ except:
 <!-- TMA GLOBAL STYLE -->
 <link rel="stylesheet" href="${static.url('tma-cms-static/css/navigation-cms-custom.css')}">
 
-
 <div class="wrapper-header wrapper" id="view-top">
+  <p>site_id_list : ${site_id_list}</p>
+  <p>site_id_list_length : ${site_id_list_length}</p>
+  <p>site_id_list_test : ${site_id_list_test}</p>
   <header class="primary" role="banner">
 
     <div class="wrapper wrapper-l">
