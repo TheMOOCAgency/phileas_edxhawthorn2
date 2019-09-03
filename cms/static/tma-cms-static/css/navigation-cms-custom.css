@@ -59,6 +59,8 @@
     width: 200px;
     display: none;
     position: absolute;
+    padding: 5px 10px 5px 0px;
+    list-style: none;
     text-align: left;
     background-color: white;
 }
