@@ -113,6 +113,7 @@ video {
     }
     .middle-box {
         min-height: 200px;
+        height: auto;
     }
     .middle-box .w-100 {
         padding-top: 25px;

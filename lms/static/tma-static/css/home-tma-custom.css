@@ -111,6 +111,20 @@ a {
     background-color: #D8D8D8;
     opacity: 0.5;
 }
+@media (max-width: 400px) {
+    .title-36-black {
+        margin-bottom: 30px !important;
+    }
+}
+@media (max-width: 360px) {
+    .grey-text {
+        display: none;
+    }
+    .title-36-black {
+        padding-top: 40px;
+        padding-left: 35px;
+    }
+}
 
 /* 2d ROW */
 .ongoing-box {
