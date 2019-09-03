@@ -195,7 +195,6 @@ username = get_enterprise_learner_generic_name(request) or student.username
                                                                     if info['block_id'] == problem.block_id and info['attempted_students'] is not 0:
                                                                         avg = (info['total_grades'] / info['attempted_students']) * 100
                                                             %>
-                                                            - ${_("average score")} : ${avg}%
                                                         </dd>
                                                     </dl>
                                                 %endfor
