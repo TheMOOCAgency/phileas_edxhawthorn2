@@ -23,6 +23,8 @@ from django.conf import settings
 from contentstore.views.course import get_courses_accessible_to_user, _process_courses_list
 from openedx.core.djangoapps.lang_pref.api import released_languages
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from lms.djangoapps.tma_apps.zones.helper import ZoneManager
+from lms.djangoapps.instructor.enrollment import enroll_email
 
 
 #@login_required
@@ -58,13 +60,14 @@ def quick_start(request):
     context['lmsBase']= str("https://"+settings.LMS_BASE)
     context['courses']=coursesList
 
-    #LANGUAGES
+    #LANGUAGES AND ZONE
     language_options = [language.code for language in released_languages()]
     context['filters'].append({
         "name":"language",
         "type":"select",
         "options": language_options
     })
+    context["zone"]=ZoneManager(request.user).get_user_zone()
 
     #ORGANIZATIONS
     if "phileas" in organizations_options: 
@@ -130,6 +133,7 @@ def quick_start_create(request):
             status=400
         else :
             status=200
+            enroll_email(course_id= CourseKey.from_string(response['course_id']), student_email=request.user.email, auto_enroll=False, email_students=False )
         return JsonResponse(response, status=status)
     else :
         return JsonResponse({"details":serializer.errors, "status":"error"}, status=400)

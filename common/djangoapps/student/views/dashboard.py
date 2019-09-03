@@ -68,7 +68,7 @@ from lms.djangoapps.tma_apps.sspeaking.sspeaking import get_sspeaking_href
 from lms.djangoapps.courseware.courses import get_course_by_id
 from operator import itemgetter
 from student.signals import ENROLL_STATUS_CHANGE
-from openedx.core.djangoapps.theming.helpers import get_current_site
+from lms.djangoapps.tma_apps.zones.helper import ZoneManager
 
 log = logging.getLogger("edx.student")
 
@@ -803,15 +803,9 @@ def _student_dashboard(request):
         ]
 
     #TMA CHECK FOR GEOGRAPHICAL ZONE
-    current_site = get_current_site()
-    try:
-        user_custom_field = json.loads(user.profile.custom_field)
-    except:
-        user_custom_field={}
-    with open("/edx/app/edxapp/edx-platform/lms/djangoapps/tma_apps/zones/zones_infos.json") as zone_file :
-        zone_infos = zone_file.read()
-    user_zone = json.loads(zone_infos).get(str(user_custom_field.get('zoneinfo')).lower())
-    wrong_zone= user_zone is not None and user_zone.lower()!=str(current_site).lower().split('.')[0]
+    zones_info = ZoneManager(user)
+    user_zone = zones_info.get_user_zone()
+    wrong_zone= zones_info.check_zone()
 
     context = {
         'urls': urls,
