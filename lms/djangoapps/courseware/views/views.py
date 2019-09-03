@@ -108,15 +108,19 @@ from ..entrance_exams import user_can_skip_entrance_exam
 from ..module_render import get_module, get_module_by_usage_id, get_module_for_descriptor
 
 # TMA IMPORTS
-from openedx.features.course_experience.utils import get_course_outline_block_tree
-from openedx.core.djangoapps.lang_pref.api import released_languages
-from student.models import CourseEnrollment
-from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
-from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
-from student.views.dashboard import get_tma_course_info, get_tma_course_json, get_course_enrollments, is_course_blocked, get_org_black_and_whitelist_for_site
-from shoppingcart.models import CourseRegistrationCode
+import xlrd
 from collections import Counter
 from operator import itemgetter
+
+from openedx.features.course_experience.utils import get_course_outline_block_tree
+from openedx.core.djangoapps.lang_pref.api import released_languages
+from lms.djangoapps.instructor_task.models import ReportStore
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
+from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
+from student.models import CourseEnrollment
+from student.views.dashboard import get_tma_course_info, get_tma_course_json, get_course_enrollments, is_course_blocked, get_org_black_and_whitelist_for_site
+from shoppingcart.models import CourseRegistrationCode
+
 
 log = logging.getLogger("edx.courseware")
 
@@ -1143,17 +1147,46 @@ def _progress(request, course_key, student_id):
     enrollment_mode, _ = CourseEnrollment.enrollment_mode_for_user(student, course_key)
 
     # TMA - retrieve display_name for all problems
-    block_tree = get_course_outline_block_tree(request, str(course.id))
-    problems_info = []
-    if block_tree:
+    blocks_info = []
+    try:
+        block_tree = get_course_outline_block_tree(request, str(course.id))
         for section in block_tree.get('children'):
             for chapter in section.get('children'):
                 for unit in chapter.get('children'):
                     for item in unit.get('children'):
-                        problems_info.append({
+                        blocks_info.append({
                             'block_id': item['block_id'],
                             'display_name': item['display_name']
                         })
+    except:
+        pass
+
+    # TMA - read problem_grade report to calculate average grade per problem
+    report_store = ReportStore.from_config(config_name='GRADES_DOWNLOAD')
+    links = report_store.links_for(course.id)
+    last_report_file = ''
+    for link in links:
+        if 'problem_grade_report' in link[0]:
+            last_report_file = link[1]
+            break
+
+    if last_report_file:
+        path = '/edx/var/edxapp' + str(last_report_file)
+        _file = xlrd.open_workbook(path)
+        report_data = _file.sheet_by_index(0)
+
+        for i, block in enumerate(blocks_info):
+            block['total_grades'] = 0
+            block['attempted_students'] = 0
+            for j in range(1, report_data.ncols):
+                # If col header corresponds to block display_name
+                if block['display_name'] in report_data.cell(1, j).value:
+                    # For every row (student)
+                    for k in range(2, report_data.nrows):
+                        log.info(report_data.cell(k, j).value)
+                        if 'Not Attempted' not in report_data.cell(k, j).value:
+                            blocks_info[i]['total_grades'] += float(report_data.cell(k, j).value)
+                            blocks_info[i]['attempted_students'] += 1
 
     context = {
         'course': course,
@@ -1167,8 +1200,9 @@ def _progress(request, course_key, student_id):
         'credit_course_requirements': _credit_course_requirements(course_key, student),
         'certificate_data': _get_cert_data(student, course, enrollment_mode, course_grade),
         'course_grade': course_grade,
-        'problems_info': problems_info
+        'problems_info': blocks_info
     }
+
     context.update(
         get_experiment_user_metadata_context(
             course,
