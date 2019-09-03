@@ -16,6 +16,7 @@
   # Get site_id for microsite management page URL
   org = ''
   site_id = 2
+  sites_list = []
   if request.user.is_authenticated:
     if CourseEnrollment.objects.filter(user=request.user).exists():
       org = CourseOverview.objects.filter(courseenrollment__user=request.user)[0].org
@@ -24,6 +25,9 @@
         
       if SiteConfiguration.objects.filter(site__domain__contains=org).exists():
         site_id = SiteConfiguration.objects.filter(site__domain__contains=org)[0].id
+
+    sites_list = SiteConfiguration.objects.all()
+  
 %>
 
 <%
@@ -234,7 +238,27 @@ except:
             <a href="//${settings.SITE_NAME}/home/">${_("Course Management")}</a>
           </li>
           <li>
-            <a href="//${settings.SITE_NAME}/tma_cms_apps/manager/pages/homepage/${site_id}/">${_("Microsite Management")}</a>
+            % if request.user.is_superuser:
+              <div class="dropdown-container">
+                <a>${_("Microsite Management")}<img src="${static.url('tma-cms-static/images/flechebas.svg')}"></a>
+                <ul class="dropdown">
+                  % for site in sites_list:
+                    <li>
+                      <a class="btn-site" href="//${settings.SITE_NAME}/tma_cms_apps/manager/pages/homepage/${site.id}/">
+                        % for key, value in site.values.items():
+                          % if 'course_org_filter' in key:
+                            ${value.capitalize()}
+                          % endif
+                        % endfor
+                      </a>
+                      <div class="separator"></div>
+                    </li>
+                  % endfor
+                </ul>
+              </div>
+            % else:
+              <a class="btn-site" href="//${settings.SITE_NAME}/tma_cms_apps/manager/pages/homepage/${site_id}/">${_("Microsite Management")}</a>
+            % endif
           </li>
         </ul>
       </div>
@@ -300,3 +324,13 @@ except:
     </div>-->
   </header>
 </div>
+
+<script>
+  // Microsites dropdown behavior
+  $(document).ready(function(){
+    $('.dropdown-container > a > img').on('click', function(){
+      $(this).css('transform', 'rotate(180deg)');
+      $('.dropdown').toggle();
+    });
+  });
+</script>

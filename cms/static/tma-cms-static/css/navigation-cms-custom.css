@@ -35,3 +35,39 @@
 .tma-nav > li > a:hover {
     color: #0075b4;
 }
+
+/* Dropdown microsites */
+.dropdown-container {
+    width: 200px;
+    text-align: left;
+}
+.dropdown-container > a {
+    padding-left: 10px;
+}
+.dropdown-container > a, .dropdown > li > a {
+    font-size: 14px !important;
+    color: #666;
+    cursor: pointer;
+}
+.dropdown-container > a > img {
+    width: 20px;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+.dropdown {
+    width: 200px;
+    display: none;
+    position: absolute;
+    text-align: left;
+    background-color: white;
+}
+.dropdown > li {
+    padding: 5px 10px 5px 10px;
+}
+.btn-site {
+    color: #666;
+}
+.btn-site:hover {
+    color: #0075b4;
+}
