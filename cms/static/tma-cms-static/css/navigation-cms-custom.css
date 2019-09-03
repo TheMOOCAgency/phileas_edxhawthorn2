@@ -59,6 +59,7 @@
     width: 200px;
     display: none;
     position: absolute;
+    list-style: none;
     text-align: left;
     background-color: white;
 }
