@@ -42,8 +42,10 @@
 }
 
 .stat-box {
-    display: -ms-inline-grid;
-    display: inline-grid;
+    /* display: -ms-inline-grid;
+    display: inline-grid; */
+    display: inline-block;
+    text-align: left;
 }
 .stat-box > span {
     text-align: left;
@@ -52,10 +54,10 @@
     line-height: 1.5;
 }
 .footer-stats > .col-lg-3:nth-child(-n+3) > .text-center {
-    border-right: solid 1px #7777778f;
+    border-right: solid 1px rgb(119, 119, 119);
 }
 .stat-box > span:last-of-type {
-    display: table-caption;
+    display: block;
     margin-top: 0px;
     margin-bottom: 0px;
     line-height: 10px;
@@ -90,8 +92,12 @@
     .footer-stats > .col-lg-3 {
         padding: 0rem 0 1rem 0;
     }
+    .footer-stats > .col-lg-3:nth-child(-n+3) > .text-center {
+        border-right: solid 0px;
+    }
     .stat-box {
         border-right: none;
+        text-align: center;
     }
     img[src="/media/microsite/phileas/assets/img/trophee.png"] {
         display: none;
