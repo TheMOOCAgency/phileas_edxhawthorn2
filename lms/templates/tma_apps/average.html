@@ -1,7 +1,7 @@
 <%page expression_filter="h"/>
 <%inherit file="/main.html" />
 <%namespace name='static' file='/static_content.html'/>
-<%def name="online_help_token()"><% return "progress" %></%def>
+<%def name="online_help_token()"><% return "average" %></%def>
 <%!
 from course_modes.models import CourseMode
 from lms.djangoapps.certificates.models import CertificateStatuses
@@ -26,27 +26,40 @@ username = get_enterprise_learner_generic_name(request) or student.username
 <%static:css group='style-course'/>
 </%block>
 
-
-<%namespace name="progress_graph" file="/courseware/progress_graph.js"/>
-
-<%block name="pagetitle">${_("{course_number} Progress").format(course_number=course.display_number_with_default)}</%block>
-
 <%block name="js_extra">
 <script type="text/javascript" src="${static.url('js/vendor/flot/jquery.flot.js')}"></script>
 <script type="text/javascript" src="${static.url('js/vendor/flot/jquery.flot.stack.js')}"></script>
 <script type="text/javascript" src="${static.url('js/vendor/flot/jquery.flot.symbol.js')}"></script>
-<script type="text/javascript" src="${static.url('js/courseware/certificates_api.js')}"></script>
-<script type="text/javascript" src="${static.url('js/courseware/credit_progress.js')}"></script>
-<script>
-    ## This JavaScript is being HTML-escaped because it historically has, and it is not clear what
-    ## the correct syntax is. For safety, maintain the previous behavior.
-    ## xss-lint: disable=mako-invalid-js-filter
-    ${progress_graph.body(grade_summary, course.grade_cutoffs, "grade-detail-graph", not course.no_grade, not course.no_grade)}
-</script>
 </%block>
 
 <!--<link rel="stylesheet" href="/media/dev/tma-static/css/index-tma-custom.css">-->
 <link rel="stylesheet" href="${static.url('tma-static/css/progress-tma.css')}">
+
+<style>
+    #main .profile-wrapper {
+        border-right: none;
+        border-bottom: none;
+        border-left: none;
+    }
+
+    .btn-refresh {
+        width: 150px;
+        padding: 8px;
+        border-radius: 28px;
+        background-color: white;
+        color: #0B1A4C !important;
+        border: 2px solid #0B1A4C;
+        font-weight: normal !important;
+        font-size: 0.8rem;
+        vertical-align: middle;
+        float: right;
+    }
+    .btn-refresh:hover {
+        background-color: #0B1A4C!important;
+        color: white !important;
+        border: 2px solid white!important;
+    }
+</style>
 
 <main id="main" aria-label="Content" tabindex="-1">
     <div class="container">
@@ -56,15 +69,10 @@ username = get_enterprise_learner_generic_name(request) or student.username
                 lang="${course.language}"
               % endif
               >
-                % if staff_access and studio_url is not None:
-                <div class="wrap-instructor-info">
-                    <a class="instructor-info-action studio-view" href="${studio_url}">${_("View Grading in studio")}</a>
-                </div>
-                % endif
-                <h2 class="hd hd-2 progress-certificates-title">
-                    ${_("Course Progress for Student '{username}' ({email})").format(username=username, email=student.email)}
+                <h2 class="hd hd-2 progress-certificates-title text-center d-block">
+                    ${_("Average score for the course: {course_name}").format(course_name=course.display_name)}
+                    <button class="btn-refresh">Refresh average scores</button>
                 </h2>
-
                 <div class="wrapper-msg wrapper-auto-cert">
                     <div id="errors-info" class="errors-info"></div>
                 </div>
@@ -145,16 +153,23 @@ username = get_enterprise_learner_generic_name(request) or student.username
                                     %>
                                     <h4 class="hd hd-4">
                                         <a href="${reverse('courseware_section', kwargs=dict(course_id=text_type(course.id), chapter=chapter['url_name'], section=section.url_name))}">
-                                            ${ section.display_name}
+                                            ${section.display_name}
                                             %if total > 0 or earned > 0:
                                             <span class="sr">
                                                 ${_("{earned} of {total} possible points").format(earned='{:.3n}'.format(float(earned)), total='{:.3n}'.format(float(total)))}
                                             </span>
                                             %endif
                                         </a>
+                                        <%
+                                            avg = 0
+                                            for info in chapters_info:
+                                                if info['display_name'] == section.display_name and info['attempted_students'] is not 0:
+                                                    avg = round((info['total_grades'] / info['attempted_students']) * 100, 2)
+                                        %>
                                         %if total > 0 or earned > 0:
-                                        <span> ${"({0:.3n}/{1:.3n})".format( float(earned), float(total))}</span>
+                                            <span>${avg}%</span>
                                         %endif
+                                        
                                         <span class="fa fa-chevron-up" data-index="${i}-${loop.index}" aria-hidden="true"></span>
                                     </h4>
                                     <div class="detail-content" data-index="${i}-${loop.index}">
@@ -188,7 +203,13 @@ username = get_enterprise_learner_generic_name(request) or student.username
                                                             <%
                                                                 score = course_grade.problem_scores[problem].__dict__ 
                                                             %>
-                                                            ${"{0:.3n}/{1:.3n}".format(float(score['earned']),float(score['possible']))}
+                                                            <%
+                                                                avg = 0
+                                                                for info in problems_info:
+                                                                    if info['block_id'] == problem.block_id and info['attempted_students'] is not 0:
+                                                                        avg = (info['total_grades'] / info['attempted_students']) * 100
+                                                            %>
+                                                            ${avg}%
                                                         </dd>
                                                     </dl>
                                                 %endfor
