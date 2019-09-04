@@ -119,6 +119,9 @@
 .internet {
     background-color: rgb(0,79,159);
 }
+.hr, .rh {
+    background-color: #f07d00;
+}
 
 .pin-row > .like {
     background-color: white;
