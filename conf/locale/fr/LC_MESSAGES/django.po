@@ -25430,6 +25430,10 @@ msgid "Business App."
 msgstr "App. Métier"
 
 #: lms/templates/courseware/courses.html
+msgid "HR"
+msgstr "RH"
+
+#: lms/templates/courseware/courses.html
 msgid "New Starter"
 msgstr "Nouvel arrivant"
 
