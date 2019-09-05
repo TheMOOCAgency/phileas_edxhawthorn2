@@ -9,6 +9,7 @@ from .activity_dashboard import views as activity_dashboard_views
 from .delete_cookies import views as delete_cookies_views
 from .legal import views as legal_views
 from .tma_reports import views as tma_reports_views
+from .average_score import views as average_views
 
 urlpatterns = [
     #Certificates
@@ -41,4 +42,13 @@ urlpatterns = [
 
     #TTMA specific reports
     url(r'^{}/export_invited$'.format(settings.COURSE_ID_PATTERN), tma_reports_views.download_invited_report, name="export_invited"),
+
+    # TMA average grade page
+    url(
+        r'^{}/progress/average$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        average_views.average,
+        name='average',
+    ),
 ]

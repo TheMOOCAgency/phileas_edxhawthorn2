@@ -1161,33 +1161,6 @@ def _progress(request, course_key, student_id):
     except:
         pass
 
-    # TMA - read problem_grade report to calculate average grade per problem
-    report_store = ReportStore.from_config(config_name='GRADES_DOWNLOAD')
-    links = report_store.links_for(course.id)
-    last_report_file = ''
-    for link in links:
-        if 'problem_grade_report' in link[0]:
-            last_report_file = link[1]
-            break
-
-    if last_report_file:
-        path = '/edx/var/edxapp' + str(last_report_file)
-        _file = xlrd.open_workbook(path)
-        report_data = _file.sheet_by_index(0)
-
-        for i, block in enumerate(blocks_info):
-            block['total_grades'] = 0
-            block['attempted_students'] = 0
-            for j in range(1, report_data.ncols):
-                # If col header corresponds to block display_name
-                if block['display_name'] in report_data.cell(1, j).value:
-                    # For every row (student)
-                    for k in range(2, report_data.nrows):
-                        log.info(report_data.cell(k, j).value)
-                        if 'Not Attempted' not in report_data.cell(k, j).value:
-                            blocks_info[i]['total_grades'] += float(report_data.cell(k, j).value)
-                            blocks_info[i]['attempted_students'] += 1
-
     context = {
         'course': course,
         'courseware_summary': courseware_summary,
