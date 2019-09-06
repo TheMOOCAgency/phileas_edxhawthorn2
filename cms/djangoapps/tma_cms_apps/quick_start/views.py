@@ -62,7 +62,7 @@ def quick_start(request):
 
     #LANGUAGES AND ZONE
     language_options = [language.code for language in released_languages()]
-    context['filters'].append({
+    context['fields'].append({
         "name":"language",
         "type":"select",
         "options": language_options
@@ -72,10 +72,17 @@ def quick_start(request):
     #ORGANIZATIONS
     if "phileas" in organizations_options: 
         organizations_options.remove("phileas")
+    checkedOrg=[]
+    if ZoneManager(request.user).get_user_zone() :
+        checkedOrg=ZoneManager(request.user).get_user_zone()
+    elif coursesList:
+        checkedOrg=[next(course['org'] for course in coursesList if course['org'] in organizations_options)]
+    
+
     context["homeFiltersDetail"].append({
         "name":"org",
         "options":organizations_options,
-        "checked":[next(course['org'] for course in coursesList if course['org'] in organizations_options)],
+        "checked":checkedOrg,
         "type":"checkbox"        
     })
 
