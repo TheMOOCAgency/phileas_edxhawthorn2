@@ -4,7 +4,6 @@
   from django.urls import reverse
   from django.utils.translation import ugettext as _
   from openedx.core.djangoapps.lang_pref.api import footer_language_selector_is_enabled
-  from student.views.dashboard import get_tma_footer_info
   from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 %>
 <%namespace name='static' file='static_content.html'/>
@@ -80,17 +79,4 @@
         };
     };
   };
-  const updateCounters = function(type, counter) {
-    if (!isNaN(counter)) {
-      $("#"+type+"_counter").html(counter);
-      $("#"+type+"_counter").attr('data-max', counter);
-      $("#"+type+"_counter").attr('data-increment', counter/3);
-      $("#"+type+"_counter").attr('data-delay', incrementNumber(counter));
-    };
-  };
-
-  updateCounters('users', users_counter);
-  updateCounters('courses', courses_counter);
-  updateCounters('likes', likes_counter);
-  updateCounters('hours', hours_counter);
 </script>
