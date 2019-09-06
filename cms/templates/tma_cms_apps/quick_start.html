@@ -27,6 +27,9 @@ from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_str
     #view-top{
         background-color:white;
     }
+    .rdw-editor-main {
+        max-height: 250px!important
+    }
 </style>
 
 <!doctype html>
@@ -39,7 +42,7 @@ from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_str
     <meta name="theme-color" content="#000000" />
     <link rel="manifest" href="/phileas-quickstart/manifest.json" />
     <title>Phileas</title>
-    <link href="${static.url('tma-cms-static/quick-start/css/2.5ec480d0.chunk.css')}" rel="stylesheet">
+    <link href="${static.url('tma-cms-static/quick-start/css/2.359193c6.chunk.css')}" rel="stylesheet">
     <link href="${static.url('tma-cms-static/quick-start/css/main.7993e815.chunk.css')}" rel="stylesheet">
 </head>
 
@@ -125,13 +128,15 @@ from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_str
         window.props=${dump_js_escaped_json(props) | n, decode.utf8};
         window.props.csrfToken="${csrf_token}"
     </script>
-    <script src="${static.url('tma-cms-static/quick-start/js/2.20a6b875.chunk.js')}"></script>
-    <script src="${static.url('tma-cms-static/quick-start/js/main.e67cd086.chunk.js')}"></script>
+    <script src="${static.url('tma-cms-static/quick-start/js/2.b1303180.chunk.js')}"></script>
+    <script src="${static.url('tma-cms-static/quick-start/js/main.514b65d0.chunk.js')}"></script>
     <script
         src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous">
     </script>
+
+
 </body>
 
 </html>

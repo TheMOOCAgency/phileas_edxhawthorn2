@@ -120,6 +120,7 @@ class TmaCourseManager():
 
         self.data['course_about']=json.dumps({
             "description":self.data.get('description', ""),
+            "goals":self.data.get('course_goals', ""),
             "course_map":course_map,
             "teacher_image":"/"+str(self.teacher_image_upload.location) if (self.teacher_image_upload and not isinstance(self.teacher_image_upload, basestring)) else (self.teacher_image_upload if self.teacher_image_upload is not None else ""),
             "teacher_name":self.data.get('teacher_name', "") if self.data.get('teacher_name')!="null" else "",
@@ -149,7 +150,7 @@ class TmaCourseManager():
                 for download_file in uploadFiles
             ]
 
-        if self.data['actual_course_downloads']:
+        if self.data.get('actual_course_downloads'):
             actual_course_downloads = json.loads(unicode(self.data['actual_course_downloads']))
             if actual_course_downloads and len(actual_course_downloads)>0:
                 fileUploads+=actual_course_downloads
@@ -188,7 +189,7 @@ class TmaCourseInfo():
         links={
             "configure_url":"#/configure/"+self.course_id,
             "statistics_url": self.lmsBase+"/login?next="+urllib.quote("/figures/course/"+self.course_id,''),
-            "preview_url": self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/courseware",''),
+            "preview_url": self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/about",'') if self.tmaOverview.is_vodeclic else self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/courseware",''),
             "email_url":self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/instructor",''),
             "rerun_url":"#/create/"+self.course_id,
             "contribute_url":reverse('course_handler', args=[self.course_id]),
@@ -216,6 +217,7 @@ class TmaCourseInfo():
         course_about.setdefault("teacher_email","")
         course_about.setdefault("teacher_name","")
         course_about.setdefault("teacher_image","")
+        course_about['course_goals']=course_about.get('goals') or ""
         course_about['actual_course_downloads']=course_about.get('downloads')
         return course_about
 

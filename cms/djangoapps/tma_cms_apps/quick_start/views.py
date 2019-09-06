@@ -27,7 +27,7 @@ from lms.djangoapps.tma_apps.zones.helper import ZoneManager
 from lms.djangoapps.instructor.enrollment import enroll_email
 
 
-@login_required
+#@login_required
 @ensure_csrf_cookie
 def quick_start(request):
     context={}
@@ -62,7 +62,7 @@ def quick_start(request):
 
     #LANGUAGES AND ZONE
     language_options = [language.code for language in released_languages()]
-    context['filters'].append({
+    context['fields'].append({
         "name":"language",
         "type":"select",
         "options": language_options
@@ -72,17 +72,24 @@ def quick_start(request):
     #ORGANIZATIONS
     if "phileas" in organizations_options: 
         organizations_options.remove("phileas")
+    checkedOrg=[]
+    if ZoneManager(request.user).get_user_zone() :
+        checkedOrg=ZoneManager(request.user).get_user_zone()
+    elif coursesList:
+        checkedOrg=[next(course['org'] for course in coursesList if course['org'] in organizations_options)]
+    
+
     context["homeFiltersDetail"].append({
         "name":"org",
         "options":organizations_options,
-        "checked":[next(course['org'] for course in coursesList if course['org'] in organizations_options)],
+        "checked":checkedOrg,
         "type":"checkbox"        
     })
 
     return render_to_response('/tma_cms_apps/quick_start.html', {"props":context})
 
 
-@login_required
+#@login_required
 @require_http_methods(["GET"])
 @csrf_exempt
 def quick_start_checkid_exists(request, course_key_string):
@@ -94,7 +101,7 @@ def quick_start_checkid_exists(request, course_key_string):
         response={"details":"valid_new_id"}          
     return JsonResponse(response)
 
-@login_required
+#@login_required
 @require_http_methods(["GET"])
 @csrf_exempt
 def quick_start_get_course_info(request, course_key_string):
@@ -104,7 +111,7 @@ def quick_start_get_course_info(request, course_key_string):
         response= TmaCourseInfo(tmaOverview=tmaOverview).getDetailedInfo()
     return JsonResponse(response)
 
-@login_required
+#@login_required
 @require_http_methods(["POST"])
 @csrf_exempt
 def quick_start_create(request):
