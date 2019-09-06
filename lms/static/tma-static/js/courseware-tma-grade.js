@@ -201,8 +201,13 @@ function showAnswers(url, id){
         })
         //Disable submit button
         $('#'+ id).find('.action .check').addClass('is-disabled');
-        //Display detailed solution if last attempt
+        //Display detailed solution if last attempt or if correct
         if($("#"+ id).find('.tma-attempts').attr('data-remaining') <= 0){
+          $("#"+ id).addClass('show-detailed');
+          $(this).css('pointer-events', 'none');
+        }
+
+        if ($("#"+ id).hasClass('tma-success')) {
           $("#"+ id).addClass('show-detailed');
           $(this).css('pointer-events', 'none');
         }
