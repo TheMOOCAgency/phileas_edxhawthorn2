@@ -75,8 +75,6 @@ def quick_start(request):
     checkedOrg=[]
     if ZoneManager(request.user).get_user_zone() :
         checkedOrg=ZoneManager(request.user).get_user_zone()
-    elif coursesList:
-        checkedOrg=[next(course['org'] for course in coursesList if course['org'] in organizations_options)]
     
 
     context["homeFiltersDetail"].append({
