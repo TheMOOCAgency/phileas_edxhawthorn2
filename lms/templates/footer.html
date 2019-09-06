@@ -5,6 +5,13 @@
   from django.utils.translation import ugettext as _
   from openedx.core.djangoapps.lang_pref.api import footer_language_selector_is_enabled
   from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+
+  import json
+  from openedx.core.djangolib.js_utils import dump_js_escaped_json
+
+  data = ""
+  with open('/edx/var/edxapp/media/footer.json', 'r') as _file:
+    data = json.load(_file)
 %>
 <%namespace name='static' file='static_content.html'/>
 
@@ -79,4 +86,19 @@
         };
     };
   };
+
+  const updateCounters = function(type, counter) {
+    if (!isNaN(counter)) {
+      $("#"+type+"_counter").html(counter);
+      $("#"+type+"_counter").attr('data-max', counter);
+      $("#"+type+"_counter").attr('data-increment', counter/3);
+      $("#"+type+"_counter").attr('data-delay', incrementNumber(counter));
+    };
+  };
+
+  let footerValues = ${dump_js_escaped_json(data) | n, decode.utf8}
+  updateCounters('users', footerValues.users);
+  updateCounters('courses', footerValues.courses);
+  updateCounters('likes', footerValues.likes);
+  updateCounters('hours', footerValues.hours);
 </script>
