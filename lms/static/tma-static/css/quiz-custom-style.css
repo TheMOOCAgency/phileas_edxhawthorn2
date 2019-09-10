@@ -11,6 +11,9 @@ fieldset {
 .xmodule_display.xmodule_CapaModule div.problem .action .problem-action-btn.save, .xmodule_display.xmodule_CapaModule div.problem .action .problem-action-btn.show {
     display: none;
 }
+.xmodule_display.xmodule_CapaModule div.problem .notification.general {
+    display: none !important;
+}
 
 /* Submit button */
 .xmodule_display.xmodule_CapaModule div.problem .action {
