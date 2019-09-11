@@ -87,7 +87,7 @@ def _average(request, course_key):
             last_report_file = link[1]
             break
 
-    if last_report_file:
+    if last_report_file and last_report_file.endswith('.xls'):
         path = '/edx/var/edxapp' + str(last_report_file)
         _file = xlrd.open_workbook(path)
         report_data = _file.sheet_by_index(0)
