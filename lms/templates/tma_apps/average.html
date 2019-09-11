@@ -75,7 +75,7 @@ username = get_enterprise_learner_generic_name(request) or student.username
                 lang="${course.language}"
               % endif
               >
-                <h2 class="hd hd-2 progress-certificates-title text-center d-block">
+                <h2 class="hd hd-2 progress-certificates-title text-center d-flex">
                     ${_("Average score for the course: {course_name}").format(course_name=course.display_name)}
                     <button id="btn-refresh" data-endpoint="${problem_grade_report_url}">Refresh average scores</button>
                 </h2>
@@ -173,7 +173,7 @@ username = get_enterprise_learner_generic_name(request) or student.username
                                                     avg = round((info['total_grades'] / info['attempted_students']) * 100, 2)
                                         %>
                                         %if total > 0 or earned > 0:
-                                            <span>${avg}%</span>
+                                            <span>${round(avg, 2)}%</span>
                                         %endif
                                         
                                         <span class="fa fa-chevron-up" data-index="${i}-${loop.index}" aria-hidden="true"></span>
@@ -215,7 +215,7 @@ username = get_enterprise_learner_generic_name(request) or student.username
                                                                     if info['block_id'] == problem.block_id and info['attempted_students'] is not 0:
                                                                         avg = (info['total_grades'] / info['attempted_students']) * 100
                                                             %>
-                                                            ${avg}%
+                                                            ${round(avg, 2)}%
                                                         </dd>
                                                     </dl>
                                                 %endfor
