@@ -6,6 +6,7 @@ from django.db import transaction
 from django.shortcuts import redirect
 from django.views.decorators.cache import cache_control
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.urls import reverse
 from opaque_keys.edx.keys import CourseKey
 
 from openedx.features.enterprise_support.api import data_sharing_consent_required
@@ -31,7 +32,7 @@ from operator import itemgetter
 from openedx.features.course_experience.utils import get_course_outline_block_tree
 from lms.djangoapps.instructor_task.models import ReportStore
 
-log = logging.getLogger("edx.tma_apps")
+log = logging.getLogger()
 
 @transaction.non_atomic_requests
 @login_required
@@ -97,7 +98,7 @@ def _average(request, course_key):
                 if block['display_name'] in report_data.cell(1, j).value:
                     # For every row (student)
                     for k in range(2, report_data.nrows):
-                        # log.info(report_data.cell(k, j).value)
+                        log.info(report_data.cell(k, j).value)
                         if 'Not Attempted' not in report_data.cell(k, j).value:
                             blocks_info[i]['total_grades'] += float(report_data.cell(k, j).value)
                             blocks_info[i]['attempted_students'] += 1
@@ -118,7 +119,9 @@ def _average(request, course_key):
         'student': student,
         'course_grade': course_grade,
         'chapters_info': chapters_info,
-        'problems_info': blocks_info
+        'problems_info': blocks_info,
+        'list_report_downloads_url': reverse('list_report_downloads', kwargs={'course_id': unicode(course_key)}),
+        'problem_grade_report_url': reverse('problem_grade_report', kwargs={'course_id': unicode(course_key)})
     }
 
     context.update(
