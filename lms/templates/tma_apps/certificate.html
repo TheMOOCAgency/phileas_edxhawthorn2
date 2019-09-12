@@ -92,7 +92,7 @@ from django.utils.translation import ugettext as _
   }
 </style>
 
-% if passed or is_tma_staff(request.user):
+% if passed or is_tma_staff(request.user) or forced_certificate:
 <div id="main" class="align-vertically">
   <div id="bandeau-top" class="transparency-color">
     <h1>${_('Certificate')}</h1>

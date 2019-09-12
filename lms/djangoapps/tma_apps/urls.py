@@ -15,6 +15,8 @@ urlpatterns = [
     #Certificates
     url(r'^{}/certificate/ensure$'.format(settings.COURSE_ID_PATTERN), certificates_views.ensure),
     url(r'^{}/certificate/render$'.format(settings.COURSE_ID_PATTERN), certificates_views.render),
+    url(r'^{}/certificate/check_best_grade$'.format(settings.COURSE_ID_PATTERN), certificates_views.check_best_grade),
+    url(r'^{}/certificate/generate$'.format(settings.COURSE_ID_PATTERN), certificates_views.generate),
 
     #Completion
     url(r'^{}/completion/get_course_completion$'.format(settings.COURSE_ID_PATTERN), completion_views.get_course_completion),

@@ -127,6 +127,7 @@ def instructor_dashboard_2(request, course_id):
         _section_discussions_management(course, access),
         _section_student_admin(course, access),
         _section_data_download(course, access),
+        _section_tma_certificates(course, access)
     ]
 
     analytics_dashboard_message = None
@@ -801,6 +802,21 @@ def _section_open_response_assessment(request, course, openassessment_blocks, ac
     }
     return section_data
 
+# TMA CERTIFICATES SECTION
+def _section_tma_certificates(course, access):
+    """Provide data for the corresponding dashboard section """
+    course_key = course.id
+    section_data = {
+        'section_key': 'tma_certificates',
+        'section_display_name': _('Certificates'),
+        'access': access,
+        'course_id': unicode(course_key),
+        'check_best_grade_url': '/tma_apps/{course_id}/certificate/check_best_grade'.format(course_id=course.id),
+        'generate_url': '/tma_apps/{course_id}/certificate/generate'.format(course_id=course.id),
+        # remove access if course staff or instructor
+        'is_hidden': not access['admin']
+    }
+    return section_data
 
 def is_ecommerce_course(course_key):
     """

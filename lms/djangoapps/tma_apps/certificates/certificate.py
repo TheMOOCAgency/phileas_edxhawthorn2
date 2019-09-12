@@ -4,6 +4,7 @@ from edxmako.shortcuts import render_to_response
 from django.utils.translation import ugettext as _
 import logging
 
+from datetime import date
 from django.apps import apps
 TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
 
@@ -54,7 +55,7 @@ class certificate():
             last_name = _("Unknown last name")
 
         name = last_name+" "+first_name
-        certificate_info=TmaCourseEnrollment.get_courseenrollment(course_key, self.user)
+        certificate_info = TmaCourseEnrollment.get_courseenrollment(course_key, self.user)
 
         context = {
             "passed":passed,
@@ -64,4 +65,37 @@ class certificate():
             "certificate_info":certificate_info
         }
 
-        return render_to_response('tma_apps/certificate.html',context)
+        return render_to_response('tma_apps/certificate.html', context)
+
+
+    def generate(self, course_key, score):
+        passed = self.get_certificate_status(course_key)
+    	try:
+            first_name = self.user.first_name
+    	except:
+    	    first_name = _("Unknown first name")
+    	try:
+            last_name = self.user.last_name
+        except:
+            last_name = _("Unknown last name")
+
+        name = last_name+" "+first_name
+
+        certificate_info = TmaCourseEnrollment.get_courseenrollment(course_key, self.user)
+
+        # Override score and mark course as done
+        certificate_info.best_student_grade = score/float(100)
+        certificate_info.date_best_student_grade = date.today()
+        certificate_info.has_validated_course = True
+        certificate_info.save()
+
+        context = {
+            "passed": passed,
+            "forced_certificate": True,
+            "course_name":self.course.display_name_with_default,
+            "first_name":first_name,
+            "last_name":last_name,
+            "certificate_info":certificate_info
+        }
+
+        return render_to_response('tma_apps/certificate.html', context)
