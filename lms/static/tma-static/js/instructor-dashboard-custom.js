@@ -1,14 +1,14 @@
-"use strict";
+'use strict';
 
 const getLightDashboard = function() {
     // Relocate
     window.location.hash = '#view-membership';
     // Remove active class on all sections except membership
-    $('#course_info, #cohort_management, #discussions_management, #student_admin, #data_download, #instructor_analytics').removeClass('active-section');
+    $('#course_info, #cohort_management, #discussions_management, #student_admin, #data_download, #instructor_analytics, #tma_certificates').removeClass('active-section');
     // Add active class on membership
     $('#membership').addClass('active-section');
     // Hide instructor nav + section titles + membership titles + other stuff
-    $('.course_info, .cohort_management, .discussions_management, .student_admin, .data_download, .instructor_analytics').hide();
+    $('.course_info, .cohort_management, .discussions_management, .student_admin, .data_download, .instructor_analytics, .tma_certificates').hide();
     $('nav.instructor, .role, .enroll-option, .enrollment-button[data-action="unenroll"], .batch-beta-testers, .member-lists-management, hr.divider, #header-membership, #heading-batch-enrollment').hide();
 };
 
@@ -32,7 +32,7 @@ $(document).ready(function(){
         if ($('.switch-instructor > input[type="checkbox"]').prop('checked')) {
         getLightDashboard();
         } else {
-        $('.course_info, .cohort_management, .discussions_management, .student_admin, .data_download, .instructor_analytics').show();
+        $('.course_info, .cohort_management, .discussions_management, .student_admin, .data_download, .instructor_analytics, .tma_certificates').show();
         $('nav.instructor, .role, .enroll-option, .enrollment-button[data-action="unenroll"], .batch-beta-testers, .member-lists-management, hr.divider, #header-membership, #heading-batch-enrollment').show();
         }
     });

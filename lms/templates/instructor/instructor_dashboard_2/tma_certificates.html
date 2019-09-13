@@ -1,0 +1,71 @@
+<%page args="section_data" expression_filter="h"/>
+<%namespace name='static' file='/static_content.html'/>
+<%!
+    from django.utils.translation import ugettext as _
+    from django.utils.translation import pgettext
+    from openedx.core.djangolib.markup import HTML, Text
+
+    from django.contrib.auth import get_user_model
+
+%>
+<style>
+    .tma-certificates-section > label:not(.score) {
+        display: flex;
+        align-items: center;
+    }
+    button {
+        margin: 1rem 1rem 1rem 0rem;
+        font-size: 1rem;
+    }
+    .score {
+        display: none;
+    }
+</style>
+<fieldset class="tma-certificates-section">
+    <h3>${_("Generate a certificate for a specific student and mark course as done.")}</h3><br/>
+    <label>
+        ${_("Learner email address")}
+        <input id="learner-email" type="email">
+        <button class="email-submit">OK</button>
+        <p class="email-error"></p>
+    </label><br/>
+    <label class="score">
+        ${_("Learner score to display on the certificate (percent)")}
+        <input id="learner-score" type="number" min="0" max="100"><br/>
+        <button class="score-submit">${_("Generate Certificate")}</button>
+        <p>${_("NB: by generating a certificate for this student, you will also mark the course as done.")}</p>
+    </label>
+
+</fieldset>
+
+<script>
+    // check email adress, if exists + learner enrolled > display input score + submit
+    $(document).ready(function(){
+        // Submit target Learner - check if exists and is enrolled and retrieve best grade
+        $('.email-submit').on('click', function(){
+            $.ajax({
+                type: 'POST',
+                url: '${section_data["check_best_grade_url"]}',
+                data: {
+                    email: $('#learner-email').val()
+                },
+                success: function(res){
+                    if (res.error) {
+                        $('.email-error').text(res.error);
+                    } else {
+                        $('.email-submit').attr('disabled', true)
+                        $('.email-error').text('');
+                        $('#learner-score').val(parseInt(res.best_grade * 100));
+                        $('.score').show();
+                    }
+                }
+            });
+        });
+
+        // Generate certificate
+        $('.score-submit').on('click', function(){
+            $(this).attr('disabled', true)
+            window.location = '${section_data["generate_url"]}?email='+$('#learner-email').val()+'&score='+$('#learner-score').val();
+        });
+    });
+</script>
