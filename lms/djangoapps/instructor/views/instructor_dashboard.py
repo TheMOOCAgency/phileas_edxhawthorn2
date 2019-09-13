@@ -126,8 +126,7 @@ def instructor_dashboard_2(request, course_id):
         _section_cohort_management(course, access),
         _section_discussions_management(course, access),
         _section_student_admin(course, access),
-        _section_data_download(course, access),
-        _section_tma_certificates(course, access)
+        _section_data_download(course, access)
     ]
 
     analytics_dashboard_message = None
@@ -227,6 +226,10 @@ def instructor_dashboard_2(request, course_id):
     )
 
     certificate_invalidations = CertificateInvalidation.get_certificate_invalidations(course_key)
+
+    # TMA add tma_certificates section if course is graded
+    if not course.no_grade:
+        sections.append(_section_tma_certificates(course, access))
 
     context = {
         'course': course,

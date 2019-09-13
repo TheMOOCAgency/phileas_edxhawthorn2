@@ -249,17 +249,17 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                         % endif
                     </p>
                 </div>
-                    % if 'Vodeclic' in str(enrollment.course_id) or 'APOC+APOC' in str(enrollment.course_id):
-                        <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
-                    % elif not get_course(enrollment.course_id).no_grade:
-                        % if certificate(request.user).get_certificate_status(enrollment.course_id):
-                            <div class="col-lg-2"><a href="/tma_apps/${enrollment._course_id}/certificate/render">${_("Download")}</a></div>
-                        % else:
-                            <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
-                        % endif
+                % if 'Vodeclic' in str(enrollment.course_id) or 'APOC+APOC' in str(enrollment.course_id):
+                    <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
+                % elif not get_course(enrollment.course_id).no_grade:
+                    % if certificate(request.user).get_certificate_status(enrollment.course_id):
+                        <div class="col-lg-2"><a href="/tma_apps/${enrollment._course_id}/certificate/render">${_("Download")}</a></div>
                     % else:
                         <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
                     % endif
+                % else:
+                    <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
+                % endif
                 <div class="table-separator"></div>
             </div>
 

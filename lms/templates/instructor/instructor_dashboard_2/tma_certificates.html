@@ -9,6 +9,14 @@
 
 %>
 <style>
+    .tma-certificates-section > label:not(.score) {
+        display: flex;
+        align-items: center;
+    }
+    button {
+        margin: 1rem 1rem 1rem 0rem;
+        font-size: 1rem;
+    }
     .score {
         display: none;
     }
@@ -23,8 +31,9 @@
     </label><br/>
     <label class="score">
         ${_("Learner score to display on the certificate (percent)")}
-        <input id="learner-score" type="number" min="0" max="100"><br/>%
-        <button class="score-submit">Generate Certificate</button>
+        <input id="learner-score" type="number" min="0" max="100"><br/>
+        <button class="score-submit">${_("Generate Certificate")}</button>
+        <p>${_("NB: by generating a certificate for this student, you will also mark the course as done.")}</p>
     </label>
 
 </fieldset>
@@ -34,7 +43,6 @@
     $(document).ready(function(){
         // Submit target Learner - check if exists and is enrolled and retrieve best grade
         $('.email-submit').on('click', function(){
-            $(this).attr('disabled', true)
             $.ajax({
                 type: 'POST',
                 url: '${section_data["check_best_grade_url"]}',
@@ -45,6 +53,8 @@
                     if (res.error) {
                         $('.email-error').text(res.error);
                     } else {
+                        $('.email-submit').attr('disabled', true)
+                        $('.email-error').text('');
                         $('#learner-score').val(parseInt(res.best_grade * 100));
                         $('.score').show();
                     }
