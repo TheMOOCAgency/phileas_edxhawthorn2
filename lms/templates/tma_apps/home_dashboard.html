@@ -223,7 +223,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                     % if 'Vodeclic' in str(enrollment.course_id) or 'APOC+APOC' in str(enrollment.course_id):
                         <p class="mb-0">${_("Grade not available")}</p>
                     % elif not get_course(enrollment.course_id).no_grade:
-                        <p class="mb-0"><span class="font-weight-bold">${int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100)}</span>/100</p>
+                        <p class="mb-0"><span class="font-weight-bold">${int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100)}</span>/100</p>
                     % else:
                         <p class="mb-0">${_("Course not graded")}</p>
                     % endif
@@ -232,11 +232,11 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                     <p class="mb-0">
                         % if not 'Vodeclic' in str(enrollment.course_id) and not 'APOC+APOC' in str(enrollment.course_id):
                             % if not get_course(enrollment._course_id).no_grade:
-                                % if int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 95:
+                                % if int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100) >= 95:
                                     <img class="badge-cert" src="${static.url('tma-static/images/certificate.svg')}">
-                                % elif 95 >= int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) and int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 90:
+                                % elif 95 >= int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100) and int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 90:
                                     <img class="badge-cert" src="${static.url('tma-static/images/certificate-silver.svg')}">
-                                % elif 90 >= int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) and int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 80:
+                                % elif 90 >= int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100) and int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 80:
                                     <img class="badge-cert" src="${static.url('tma-static/images/certificate-bronze.svg')}">
                                 % else:
                                     --
