@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
@@ -22,15 +23,21 @@ log = logging.getLogger(__name__)
 @login_required
 def admin_homepage(request, *args, **kwargs):
     context = {}
-    
-    site_id = kwargs.get('id')    
+
+    site_id = kwargs.get('id')
     context['site_id'] = site_id
 
     return render(request, '/tma_cms_apps/admin_hp.html', context)
 
+def admin_faq(request, *args, **kwargs):
+    context = {}
+    site_id = kwargs.get('id')
+    context['site_id'] = site_id
+
+    return render(request, '/tma_cms_apps/admin_faq.html', context)
 
 class SiteConfigurationDetailSerializer(serializers.ModelSerializer):
-    values = serializers.JSONField()    
+    values = serializers.JSONField()
 
     class Meta:
         model = SiteConfiguration
@@ -57,6 +64,7 @@ class SiteConfigurationDetailViewSet(viewsets.ViewSet):
 
 
 class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
+
     queryset = SiteConfiguration.objects.all()
     serializer_class = SiteConfigurationDetailSerializer
 
@@ -67,7 +75,7 @@ class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
 
         if kwargs['section']:
             data = self.serializer_class(site_config).data['values'][kwargs.get('section')]
-            
+
         return Response(data)
 
     def update(self, request, *args, **kwargs):
@@ -85,6 +93,21 @@ class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
 
         return Response(serializer.data)
 
+class SiteConfigurationAPIViewJSONCustom(generics.RetrieveUpdateAPIView):
+    queryset = ''
+
+    def get(self, request, *args, **kwargs):
+        urlSection = '/edx/var/edxapp/media/' + str(kwargs.get('section')) + '.json'
+    	json_data = open(urlSection)
+        data1 = json.load(json_data)
+        return Response(data1)
+
+    def update(self, request, *args, **kwargs):
+        urlSection = '/edx/var/edxapp/media/' + str(kwargs.get('section')) + '.json'
+        with open(urlSection, 'w') as f:
+             json.dump(request.data, f)
+        return Response(request.data)
+
 """
 class SectionPerLangAPIView(generics.RetrieveUpdateAPIView):
     queryset = SiteConfiguration.objects.all()
@@ -96,7 +119,7 @@ class SectionPerLangAPIView(generics.RetrieveUpdateAPIView):
 
         if kwargs['section'] and kwargs['lang']:
             data = self.serializer_class(site_config).data['values'][kwargs['section']][kwargs['lang']]
-            
+
         return Response(data)
 
     def update(self, request, *args, **kwargs):
