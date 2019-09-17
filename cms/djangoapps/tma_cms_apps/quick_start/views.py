@@ -23,9 +23,11 @@ from django.conf import settings
 from contentstore.views.course import get_courses_accessible_to_user, _process_courses_list
 from openedx.core.djangoapps.lang_pref.api import released_languages
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from lms.djangoapps.tma_apps.zones.helper import ZoneManager
+from lms.djangoapps.instructor.enrollment import enroll_email
 
 
-#@login_required
+@login_required
 @ensure_csrf_cookie
 def quick_start(request):
     context={}
@@ -58,28 +60,34 @@ def quick_start(request):
     context['lmsBase']= str("https://"+settings.LMS_BASE)
     context['courses']=coursesList
 
-    #LANGUAGES
+    #LANGUAGES AND ZONE
     language_options = [language.code for language in released_languages()]
-    context['filters'].append({
+    context['fields'].append({
         "name":"language",
         "type":"select",
         "options": language_options
     })
+    context["zone"]=ZoneManager(request.user).get_user_zone()
 
     #ORGANIZATIONS
     if "phileas" in organizations_options: 
         organizations_options.remove("phileas")
+    checkedOrg=[]
+    if ZoneManager(request.user).get_user_zone() :
+        checkedOrg=ZoneManager(request.user).get_user_zone()
+    
+
     context["homeFiltersDetail"].append({
         "name":"org",
         "options":organizations_options,
-        "checked":[next(course['org'] for course in coursesList if course['org'] in organizations_options)],
+        "checked":checkedOrg,
         "type":"checkbox"        
     })
 
     return render_to_response('/tma_cms_apps/quick_start.html', {"props":context})
 
 
-#@login_required
+@login_required
 @require_http_methods(["GET"])
 @csrf_exempt
 def quick_start_checkid_exists(request, course_key_string):
@@ -91,7 +99,7 @@ def quick_start_checkid_exists(request, course_key_string):
         response={"details":"valid_new_id"}          
     return JsonResponse(response)
 
-#@login_required
+@login_required
 @require_http_methods(["GET"])
 @csrf_exempt
 def quick_start_get_course_info(request, course_key_string):
@@ -101,14 +109,14 @@ def quick_start_get_course_info(request, course_key_string):
         response= TmaCourseInfo(tmaOverview=tmaOverview).getDetailedInfo()
     return JsonResponse(response)
 
-#@login_required
+@login_required
 @require_http_methods(["POST"])
 @csrf_exempt
 def quick_start_create(request):
     data = request.POST
     serializer = CourseSerializer(data=data)
-    course_image=request.FILES.get('course_image') if request.FILES.get('course_image')  else data['course_image']
-    teacher_image=request.FILES.get('teacher_image') if request.FILES.get('teacher_image')  else data['teacher_image']
+    course_image = request.FILES.get('course_image') if request.FILES.get('course_image') else data['course_image']
+    teacher_image = request.FILES.get('teacher_image') if request.FILES.get('teacher_image') else data['teacher_image']
 
     #COURSE DOWNLOADS
     download_files=None
@@ -130,6 +138,7 @@ def quick_start_create(request):
             status=400
         else :
             status=200
+            enroll_email(course_id= CourseKey.from_string(response['course_id']), student_email=request.user.email, auto_enroll=False, email_students=False )
         return JsonResponse(response, status=status)
     else :
         return JsonResponse({"details":serializer.errors, "status":"error"}, status=400)

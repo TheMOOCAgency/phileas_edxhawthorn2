@@ -140,7 +140,9 @@ function styleQuizOnSubmit(data, url) {
     // If no more attempts available OR illimited attempts : show right answers
     if (($('#'+ questionId).find('.tma-attempts').attr('data-remaining') <= 0) || ($('#'+ questionId).find('.tma-attempts').length == 0)) {
       showAnswers(url, questionId);
-      $('#'+ questionId).css('pointer-events', 'none');
+      if ($('#'+ questionId).find('.tma-attempts').attr('data-remaining') <= 0) {
+        $('#'+ questionId).css('pointer-events', 'none');
+      }
     }
   } else {
     // If correct answer : green icon
@@ -150,6 +152,7 @@ function styleQuizOnSubmit(data, url) {
       // Mark question as answered and success
       $('#'+ questionId).addClass('tma-success').addClass('tma-answered');
 
+      
       if ($('#'+ questionId).find('.tma-attempts').attr('data-remaining') <= 0) {
         $('#'+ questionId).css('pointer-events', 'none');
       }
@@ -157,6 +160,9 @@ function styleQuizOnSubmit(data, url) {
   }
   //Update progress to get points
   $('#'+questionId).attr('data-problem-score', data['current_score']);
+
+  // Show explanation if any
+  $('#'+questionId).find('.show.problem-action-btn').click();
 }
 
 function restyleButtons(element) {
@@ -201,11 +207,6 @@ function showAnswers(url, id){
         })
         //Disable submit button
         $('#'+ id).find('.action .check').addClass('is-disabled');
-        //Display detailed solution if last attempt
-        if($("#"+ id).find('.tma-attempts').attr('data-remaining') <= 0){
-          $("#"+ id).addClass('show-detailed');
-          $(this).css('pointer-events', 'none');
-        }
     }
   });
 };

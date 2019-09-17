@@ -16,8 +16,6 @@ from openedx.core.djangolib.markup import HTML, Text
 from branding import api as branding_api
 from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_enabled, released_languages
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-
-from student.views.dashboard import get_tma_footer_info
 %>
 
 ## Provide a hook for themes to inject branding on top.
@@ -58,21 +56,6 @@ from student.views.dashboard import get_tma_footer_info
     catch(e){window.attachEvent("onload", $buo_f)}
   </script>
 % endif
-<%
-  is_global = False
-  if 'global' in str(request.META['PATH_INFO']):
-    is_global = True
-  footer_counters = {}
-  footer_counters = get_tma_footer_info(request.user, is_global)
-%>
-<script type="text/javascript">
-  // TMA footer values
-  var courses_counter = parseInt('${footer_counters["courses_counter"]}');
-  var users_counter = parseInt('${footer_counters["users_counter"]}');
-  var likes_counter = parseInt('${footer_counters["likes_counter"]}');
-  var hours_counter = parseInt('${footer_counters["hours_counter"]}');
-</script>
-
 <header>
     % if use_cookie_banner:
         ${static.renderReact(

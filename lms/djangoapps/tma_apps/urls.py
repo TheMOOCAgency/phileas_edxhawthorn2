@@ -9,11 +9,14 @@ from .activity_dashboard import views as activity_dashboard_views
 from .delete_cookies import views as delete_cookies_views
 from .legal import views as legal_views
 from .tma_reports import views as tma_reports_views
+from .average_score import views as average_views
 
 urlpatterns = [
     #Certificates
     url(r'^{}/certificate/ensure$'.format(settings.COURSE_ID_PATTERN), certificates_views.ensure),
     url(r'^{}/certificate/render$'.format(settings.COURSE_ID_PATTERN), certificates_views.render),
+    url(r'^{}/certificate/check_best_grade$'.format(settings.COURSE_ID_PATTERN), certificates_views.check_best_grade),
+    url(r'^{}/certificate/generate$'.format(settings.COURSE_ID_PATTERN), certificates_views.generate),
 
     #Completion
     url(r'^{}/completion/get_course_completion$'.format(settings.COURSE_ID_PATTERN), completion_views.get_course_completion),
@@ -41,4 +44,13 @@ urlpatterns = [
 
     #TTMA specific reports
     url(r'^{}/export_invited$'.format(settings.COURSE_ID_PATTERN), tma_reports_views.download_invited_report, name="export_invited"),
+
+    # TMA average grade page
+    url(
+        r'^{}/progress/average$'.format(
+            settings.COURSE_ID_PATTERN,
+        ),
+        average_views.average,
+        name='average',
+    ),
 ]

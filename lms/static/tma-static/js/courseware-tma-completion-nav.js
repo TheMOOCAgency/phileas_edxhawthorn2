@@ -123,12 +123,17 @@ function highlight_current_unit(){
 function isUnitAvailable() {
   currentUnit = $('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
   $('ol.outline-item.accordion-panel li a.outline-item.focusable').each(function(i, element){
-    isUnitSeen = ($(this).children().children().hasClass('tma_completed') || $(this).children().children().hasClass('tma_started'))
-    isPreviousSeen = ($('ol.outline-item.accordion-panel li a.outline-item.focusable').eq(i - 1).children().children().hasClass('tma_completed') || $('ol.outline-item.accordion-panel li a.outline-item.focusable').eq(i - 1).children().children().hasClass('tma_started'))
-
-    // If current unit and previous unit have not been started nor completed, link is disabled
-    if (!isUnitSeen && !isPreviousSeen) {
-      $(this).addClass('disabled-link');
+    // Not for first unit
+    if (i !== 0) {
+      isUnitSeen = ($(this).children().children().hasClass('tma_completed') || $(this).children().children().hasClass('tma_started'))
+      isPreviousSeen = ($('ol.outline-item.accordion-panel li a.outline-item.focusable').eq(i - 1).children().children().hasClass('tma_completed') || $('ol.outline-item.accordion-panel li a.outline-item.focusable').eq(i - 1).children().children().hasClass('tma_started'))
+  
+      // If current unit and previous unit have not been started nor completed, link is disabled
+      if (!isUnitSeen && !isPreviousSeen) {
+        $(this).addClass('disabled-link');
+      } else {
+        $(this).removeClass('disabled-link');
+      }
     }
   });
 

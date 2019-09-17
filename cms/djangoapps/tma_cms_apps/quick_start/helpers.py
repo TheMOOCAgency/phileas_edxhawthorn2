@@ -37,7 +37,7 @@ class TmaCourseManager():
         self.course_image_upload=self._upload_image(course_image)
         self.teacher_image_upload=self._upload_image(teacher_image)
         self.download_files_upload=self._upload_multiple_files(download_files)
-        self.tmaOverviewFields=['is_manager_only', 'is_course_graded', 'is_mandatory', 'has_menu', 'tag', 'onboarding', 'course_about']
+        self.tmaOverviewFields=['is_manager_only', 'is_course_graded', 'is_mandatory', 'has_menu', 'tag', 'onboarding', 'course_about','is_linear']
 
     def _create_course_id(self):
         fields= {
@@ -120,14 +120,15 @@ class TmaCourseManager():
 
         self.data['course_about']=json.dumps({
             "description":self.data.get('description', ""),
+            "goals":self.data.get('course_goals', ""),
             "course_map":course_map,
             "teacher_image":"/"+str(self.teacher_image_upload.location) if (self.teacher_image_upload and not isinstance(self.teacher_image_upload, basestring)) else (self.teacher_image_upload if self.teacher_image_upload is not None else ""),
             "teacher_name":self.data.get('teacher_name', "") if self.data.get('teacher_name')!="null" else "",
             "teacher_email":self.data.get('teacher_email', "") if self.data.get('teacher_email')!="null" else "",
             "downloads": self.download_files_upload
             })
-        tmaOverview = TmaCourseOverview.objects.filter(course_overview_edx__id=self.course_key)
-        tmaOverview.update(**{field:self.data.get(field) for field in self.tmaOverviewFields})
+        tmaOverview = TmaCourseOverview.objects.get(course_overview_edx__id=self.course_key)
+        TmaCourseOverview.objects.filter(course_overview_edx__id=self.course_key).update(**{field:self.data.get(field) for field in self.tmaOverviewFields if getattr(tmaOverview, field)!=self.data.get(field)})
     
     def _upload_image(self, imageFile):
         if imageFile and not isinstance(imageFile, basestring):
@@ -149,7 +150,7 @@ class TmaCourseManager():
                 for download_file in uploadFiles
             ]
 
-        if self.data['actual_course_downloads']:
+        if self.data.get('actual_course_downloads'):
             actual_course_downloads = json.loads(unicode(self.data['actual_course_downloads']))
             if actual_course_downloads and len(actual_course_downloads)>0:
                 fileUploads+=actual_course_downloads
@@ -188,22 +189,24 @@ class TmaCourseInfo():
         links={
             "configure_url":"#/configure/"+self.course_id,
             "statistics_url": self.lmsBase+"/login?next="+urllib.quote("/figures/course/"+self.course_id,''),
-            "preview_url": self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/courseware",''),
+            "preview_url": self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/about",'') if self.tmaOverview.is_vodeclic else self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/courseware",''),
             "email_url":self.lmsBase+"/login?next="+urllib.quote("/courses/"+self.course_id+"/instructor",''),
             "rerun_url":"#/create/"+self.course_id,
             "contribute_url":reverse('course_handler', args=[self.course_id]),
         }
         return links
 
-    def get_course_settings(self):
-        courseSettings=[]
+    def get_course_type(self):
+        course_type=[]
         if self.tmaOverview.is_mandatory:
-            courseSettings.append('mandatory')
+            course_type.append('is_mandatory')
         if self.tmaOverview.is_manager_only:
-            courseSettings.append('manager_only')
-        if self.tmaOverview.is_manager_only:
-            courseSettings.append('is_linear')
-        return courseSettings
+            course_type.append('is_manager_only')
+        if self.tmaOverview.is_linear:
+            course_type.append('is_linear')
+        if self.get_course_metadata('invitation_only'):
+            course_type.append('invitation_only')
+        return course_type
 
     def get_course_about(self):
         try:
@@ -214,34 +217,42 @@ class TmaCourseInfo():
         course_about.setdefault("teacher_email","")
         course_about.setdefault("teacher_name","")
         course_about.setdefault("teacher_image","")
+        course_about['course_goals']=course_about.get('goals') or ""
         course_about['actual_course_downloads']=course_about.get('downloads')
         return course_about
 
-    def get_course_info(self):
+    def get_course_metadata(self, title):
         course=get_course_by_id(self.course_key)
         course_metadata = CourseMetadata.fetch_all(course)
-        course_info={
-            "course_grade":course.grade_cutoffs.get('Pass',0.5)*100,
-            "language":course.language,
-            "invitation_only":course_metadata['invitation_only']['value'],
-            "course_image":self.edxOverview.image_urls['large'] if not "static" in self.edxOverview.image_urls['large'] else ""
-        }
+        if title=="all":
+            course_info={
+                "course_grade":course.grade_cutoffs.get('Pass',0.5)*100,
+                "language":course.language,
+                "course_image":self.edxOverview.image_urls['large'] if not "static" in self.edxOverview.image_urls['large'] else ""
+            }
+        elif title=="invitation_only":
+            course_info=course_metadata['invitation_only']['value']
         return course_info
     
     def get_tmaOverview_info(self):
         tmaOverviewInfo={
             "tag":self.tmaOverview.tag,
-            "has_menu":self.tmaOverview.has_menu,
-            "is_course_graded":self.tmaOverview.is_course_graded,
-            "is_manager_only":self.tmaOverview.is_manager_only,
-            "is_linear":self.tmaOverview.is_linear,
-            "is_mandatory":self.tmaOverview.is_mandatory,
             "is_new":self.tmaOverview.is_new,
             "onboarding":self.tmaOverview.onboarding,
             "type": 'vodeclic' if self.tmaOverview.is_vodeclic else 'phileas',
-            "settings":self.get_course_settings()
+            "course_type":self.get_course_type(),
+            "course_settings":self.get_course_settings()
+
         }
         return tmaOverviewInfo
+    
+    def get_course_settings(self):
+        settings=[]
+        if self.tmaOverview.has_menu:
+            settings.append("has_menu")
+        if self.tmaOverview.is_course_graded:
+            settings.append("is_course_graded")
+        return settings
 
     def get_detailed_status(self):
         status="open"
@@ -269,6 +280,6 @@ class TmaCourseInfo():
     def getDetailedInfo(self):
         detailedInfo = self.getShortInfo()
         detailedInfo.update(self.get_course_about())
-        detailedInfo.update(self.get_course_info())
+        detailedInfo.update(self.get_course_metadata("all"))
         return detailedInfo
 

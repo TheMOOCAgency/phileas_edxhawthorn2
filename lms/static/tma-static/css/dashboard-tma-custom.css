@@ -145,8 +145,8 @@ input::placeholder {
 .user-box {
     height: 308px;
     right: 0;
-    position: absolute;
-    top: 326px;
+    position: relative;
+    top: -188px;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -224,6 +224,7 @@ input::placeholder {
     .container-fluid.bg-grey-light > .container-fluid {
         padding-right: 75px;
         padding-left: 75px;
+        margin-top: -188px;
     }
 }
 

@@ -1,0 +1,303 @@
+<%page expression_filter="h"/>
+<%inherit file="/main.html" />
+<%namespace name='static' file='/static_content.html'/>
+<%def name="online_help_token()"><% return "average" %></%def>
+<%!
+from course_modes.models import CourseMode
+from lms.djangoapps.certificates.models import CertificateStatuses
+from django.utils.translation import ugettext as _
+from openedx.core.djangolib.markup import HTML, Text
+from django.urls import reverse
+from django.conf import settings
+from django.utils.http import urlquote_plus
+from six import text_type
+
+from openedx.features.enterprise_support.utils import get_enterprise_learner_generic_name
+%>
+
+<%
+username = get_enterprise_learner_generic_name(request) or student.username
+%>
+
+<%block name="bodyclass">view-in-course view-progress</%block>
+
+<%block name="headextra">
+<%static:css group='style-course-vendor'/>
+<%static:css group='style-course'/>
+</%block>
+
+<%block name="js_extra">
+<script type="text/javascript" src="${static.url('js/vendor/flot/jquery.flot.js')}"></script>
+<script type="text/javascript" src="${static.url('js/vendor/flot/jquery.flot.stack.js')}"></script>
+<script type="text/javascript" src="${static.url('js/vendor/flot/jquery.flot.symbol.js')}"></script>
+</%block>
+
+<!--<link rel="stylesheet" href="/media/dev/tma-static/css/index-tma-custom.css">-->
+<link rel="stylesheet" href="${static.url('tma-static/css/progress-tma.css')}">
+
+<style>
+    #main .profile-wrapper {
+        border-right: none;
+        border-bottom: none;
+        border-left: none;
+    }
+
+    .hd.hd-2.progress-certificates-title {
+        align-items: center;
+        width: 100%;
+    }
+
+    #btn-refresh {
+        width: 150px;
+        margin-left: auto;
+        padding: 8px;
+        border-radius: 28px;
+        background-color: white;
+        color: #0B1A4C !important;
+        border: 2px solid #0B1A4C;
+        font-weight: normal !important;
+        font-size: 0.8rem;
+        vertical-align: middle;
+        float: right;
+    }
+    #btn-refresh:hover {
+        background-color: #0B1A4C!important;
+        color: white !important;
+        border: 2px solid white!important;
+    }
+</style>
+
+<main id="main" aria-label="Content" tabindex="-1">
+    <div class="container">
+        <div class="profile-wrapper">
+            <section class="course-info" id="course-info-progress"
+              % if getattr(course, 'language'):
+                lang="${course.language}"
+              % endif
+              >
+                <h2 class="hd hd-2 progress-certificates-title text-center d-flex">
+                    ${_("Average score for the course: {course_name}").format(course_name=course.display_name)}
+                    <button id="btn-refresh" data-endpoint="${problem_grade_report_url}">Refresh average scores</button>
+                </h2>
+                <div class="wrapper-msg wrapper-auto-cert">
+                    <div id="errors-info" class="errors-info"></div>
+                </div>
+
+                % if credit_course_requirements:
+                <section class="credit-eligibility">
+                    <h3 class="hd hd-4 eligibility-heading">${_("Requirements for Course Credit")}</h3>
+                    <div class="credit-eligibility-container">
+                        %if credit_course_requirements['eligibility_status'] == 'not_eligible':
+                        <span class="eligibility_msg">${_("{student_name}, you are no longer eligible for credit in this course.").format(student_name=student.profile.name)}</span>
+                        %elif credit_course_requirements['eligibility_status'] == 'eligible':
+                        <span class="eligibility_msg">
+                            ${Text(_("{student_name}, you have met the requirements for credit in this course. {a_start}Go to your dashboard{a_end} to purchase course credit.")).format(
+                                student_name=student.profile.name,
+                                a_start=HTML("<a href={url}>").format(url=reverse('dashboard')),
+                                a_end=HTML("</a>")
+                            )}
+                        </span>
+                        %elif credit_course_requirements['eligibility_status'] == 'partial_eligible':
+                        <span>${_("{student_name}, you have not yet met the requirements for credit.").format(student_name=student.profile.name)}</span>
+                        %endif
+
+                        <a href="${settings.CREDIT_HELP_LINK_URL}" class="credit-help">
+                            <span class="fa fa-question" aria-hidden="true"></span>
+                            <span class="sr">${_("Information about course credit requirements")}</span>
+                        </a><br />
+
+                        <div class="requirement-container" data-eligible="${credit_course_requirements['eligibility_status']}">
+                            %for requirement in credit_course_requirements['requirements']:
+                            <div class="requirement">
+                                <div class="requirement-name">
+                                    ${_(requirement['display_name'])}
+                                    %if requirement['namespace'] == 'grade':
+                                    <span>${int(requirement['criteria']['min_grade'] * 100)}%</span>
+                                    %endif
+                                </div>
+                                <div class="requirement-status">
+                                    %if requirement['status']:
+                                        %if requirement['status'] == 'submitted':
+                                        <span class="requirement-submitted">${_("Verification Submitted")}</span>
+                                        %elif requirement['status'] == 'failed':
+                                        <span class="fa fa-times" aria-hidden="true"></span>
+                                        <span>${_("Verification Failed" )}</span>
+                                        %elif requirement['status'] == 'declined':
+                                        <span class="fa fa-times" aria-hidden="true"></span>
+                                        <span>${_("Verification Declined" )}</span>
+                                        %elif requirement['status'] == 'satisfied':
+                                        <span class="fa fa-check" aria-hidden="true"></span>
+                                        <span class="localized-datetime" data-datetime="${requirement['status_date']}" data-string="${_('Completed by {date}')}" data-timezone="${user_timezone}" data-language="${user_language}"></span>
+                                        %endif
+                                    %else:
+                                    <span class="not-achieve">${_("Upcoming")}</span>
+                                    %endif
+                                </div>
+                            </div>
+                            %endfor
+                        </div>
+                        <button class="detail-collapse">
+                            <span class="fa fa-caret-up" aria-hidden="true"></span>
+                            <span class="requirement-detail">${_("Less")}</span>
+                        </button>
+                    </div>
+                </section>
+                %endif
+
+                %if courseware_summary:
+                <section class="chapters">
+                    <h2 class="sr">${_('Details for each chapter')}</h2>
+                    %for i, chapter in enumerate(courseware_summary):
+                        %if not chapter['display_name'] == "hidden":
+                        <section aria-labelledby="chapter_${loop.index}">
+                            <h3 class="hd hd-3" id="chapter_${loop.index}">${ chapter['display_name']}</h3>
+                            <div class="sections">
+                                %for section in chapter['sections']:
+                                    <%
+                                    earned = section.all_total.earned
+                                    total = section.all_total.possible
+                                    %>
+                                    <h4 class="hd hd-4">
+                                        <a href="${reverse('courseware_section', kwargs=dict(course_id=text_type(course.id), chapter=chapter['url_name'], section=section.url_name))}">
+                                            ${section.display_name}
+                                            %if total > 0 or earned > 0:
+                                            <span class="sr">
+                                                ${_("{earned} of {total} possible points").format(earned='{:.3n}'.format(float(earned)), total='{:.3n}'.format(float(total)))}
+                                            </span>
+                                            %endif
+                                        </a>
+                                        <%
+                                            avg = 0
+                                            for info in chapters_info:
+                                                if info['display_name'] == section.display_name and info['attempted_students'] is not 0:
+                                                    avg = round((info['total_grades'] / info['attempted_students']) * 100, 2)
+                                        %>
+                                        %if total > 0 or earned > 0:
+                                            <span>${round(avg, 2)}%</span>
+                                        %endif
+                                        
+                                        <span class="fa fa-chevron-up" data-index="${i}-${loop.index}" aria-hidden="true"></span>
+                                    </h4>
+                                    <div class="detail-content" data-index="${i}-${loop.index}">
+                                        <p>
+                                            %if section.format is not None:
+                                                ${section.format}
+                                            %endif
+                                            %if section.due is not None:
+                                                <em class="localized-datetime" data-datetime="${section.due}" data-string="${_('due {date}')}" data-timezone="${user_timezone}" data-language="${user_language}"></em>
+                                            %endif
+                                        </p>
+                                        <p class="override-notice">
+                                            %if section.override is not None:
+                                                %if section.format is not None and section.format == "Exam":
+                                                    ${_("Suspicious activity detected during proctored exam review. Exam score 0.")}
+                                                %else:
+                                                    ${_("Section grade has been overridden.")}
+                                                %endif
+                                            %endif
+                                        </p>
+                                        %if len(section.problem_scores.values()) > 0:
+                                            %if section.show_grades(staff_access):
+                                                %for problem in section.problem_scores:
+                                                    <dl class="scores">
+                                                        % for info in problems_info:
+                                                            % if info['block_id'] == problem.block_id:
+                                                                <dt class="hd hd-6">${info['display_name']}</dt>
+                                                            % endif
+                                                        % endfor
+                                                        <dd>
+                                                            <%
+                                                                score = course_grade.problem_scores[problem].__dict__ 
+                                                            %>
+                                                            <%
+                                                                avg = 0
+                                                                for info in problems_info:
+                                                                    if info['block_id'] == problem.block_id and info['attempted_students'] is not 0:
+                                                                        avg = (info['total_grades'] / info['attempted_students']) * 100
+                                                            %>
+                                                            ${round(avg, 2)}%
+                                                        </dd>
+                                                    </dl>
+                                                %endfor
+                                            %else:
+                                            <p class="hide-scores">
+                                            %if section.show_correctness == 'past_due':
+                                                %if section.graded:
+                                                    ${_("Problem scores are hidden until the due date.")}
+                                                %else:
+                                                    ${_("Practice scores are hidden until the due date.")}
+                                                %endif
+                                            %else:
+                                                %if section.graded:
+                                                    ${_("Problem scores are hidden.")}
+                                                %else:
+                                                    ${_("Practice scores are hidden.")}
+                                                %endif
+                                            %endif
+                                            </p>
+                                            %endif
+                                        %else:
+                                        <p class="no-scores">${_("No problem scores in this section")}</p>
+                                        %endif
+                                    </div>
+                                %endfor
+                            </div>
+                        </section>
+                        %endif
+                    %endfor
+                </section>
+                %endif
+            </section>
+        </div>
+    </div>
+</main>
+
+<script>
+    $(document).ready(function(){
+        // Toggle sections
+        $('.detail-content').hide();
+        $('span.fa.fa-chevron-up').on('click', function(){
+            $(this).toggleClass('rotate180');
+            $('.detail-content[data-index="'+ $(this).data('index') +'"]').toggle();
+        });
+
+        // Check if new report is ready
+        let urlListReports = "${list_report_downloads_url}"
+        function isReportAvailable() {
+            setInterval(function(){
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: urlListReports,
+                    error: function(error) {
+                        console.log(error)
+                    },
+                    success: function(data) {
+                        document.location.reload();
+                    }
+                });
+            }, 1500)
+        }
+
+        // Refresh report button behavior
+        $('#btn-refresh').on('click', function(){
+            let url = $(this).data('endpoint');
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: url,
+                error: function(error) {
+                    console.log(error)
+                },
+                success: function(data) {
+                    console.log(data)
+                    isReportAvailable();
+                }
+            });
+        });
+    });
+</script>
+
+<%static:require_module_async module_name="js/dateutil_factory" class_name="DateUtilFactory">
+    DateUtilFactory.transform(iterationKey=".localized-datetime");
+</%static:require_module_async>
