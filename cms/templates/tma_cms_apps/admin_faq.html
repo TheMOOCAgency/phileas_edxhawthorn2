@@ -1,5 +1,3 @@
-
-
 <!doctype html>
 <%namespace name='static' file='../static_content.html'/>
 <%
@@ -124,12 +122,12 @@ from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_str
         }([])
     </script>
     <script>
-	window.csrf = "${js_escaped_string(csrf_token) | n, decode.utf8}"
+	      window.csrf = "${js_escaped_string(csrf_token) | n, decode.utf8}"
         window.siteID = {siteID: "${js_escaped_string(site_id) | n, decode.utf8}"}
+        window.tineMceFR = "${static.url('tma-cms-static/admin-faq/js/fr_FR.js')}"
     </script>
-    <script  src="../../../../../media/props.js"></script>
-    <script src="${static.url('tma-cms-static/admin-faq/js/2.290fb409.chunk.js')}"></script>
-    <script src="${static.url('tma-cms-static/admin-faq/js/main.9c490af4.chunk.js')}"></script>
+    <script src="${static.url('tma-cms-static/admin-faq/js/2.8fbbb67f.chunk.js')}"></script>
+    <script src="${static.url('tma-cms-static/admin-faq/js/main.355032ee.chunk.js')}"></script>
 </body>
 
 </html>
