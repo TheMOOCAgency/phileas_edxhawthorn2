@@ -124,7 +124,7 @@ from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_str
     <script>
 	      window.csrf = "${js_escaped_string(csrf_token) | n, decode.utf8}"
         window.siteID = {siteID: "${js_escaped_string(site_id) | n, decode.utf8}"}
-        window.tineMceFR = "${static.url('tma-cms-static/admin-faq/js/fr_FR.js')}"
+        window.tineMceFR = "${js_escaped_string(static.url('tma-cms-static/admin-faq/js/fr_FR.js')) | n, decode.utf8}"
     </script>
     <script src="${static.url('tma-cms-static/admin-faq/js/2.8fbbb67f.chunk.js')}"></script>
     <script src="${static.url('tma-cms-static/admin-faq/js/main.355032ee.chunk.js')}"></script>
