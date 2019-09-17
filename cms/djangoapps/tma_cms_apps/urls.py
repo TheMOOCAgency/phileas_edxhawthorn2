@@ -17,11 +17,18 @@ router.register(
 urlpatterns = [
     # UI Templates
     url(r'^manager/pages/homepage/(?P<id>.+)/$', views.admin_homepage, name='admin-homepage'),
+    url(r'^manager/pages/faq/(?P<id>.+)/$', views.admin_faq, name='admin-faq'),
 
     url(r'^api/v1/$', include(router.urls, namespace='api')),
+
     url(
         r'^api/v1/microsite_manager/(?P<pk>[0-9]+)/(?P<section>.+)/$',
         views.SiteConfigurationAPIView.as_view(),
         name='site-configuration'
+    ),
+    url(
+        r'^api/v1/microsite_manager/json/(?P<pk>[0-9]+)/(?P<section>.+)/$',
+        views.SiteConfigurationAPIViewJSONCustom.as_view(),
+        name='faqJSON'
     )
 ]
