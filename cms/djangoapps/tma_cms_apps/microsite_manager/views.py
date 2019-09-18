@@ -11,7 +11,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from django.contrib.sites.models import Site
-
+from django.contrib.sites.shortcuts import get_current_site
 from edxmako.shortcuts import render_to_response
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
@@ -40,7 +40,6 @@ def admin_faq(request, *args, **kwargs):
 
 class SiteConfigurationDetailSerializer(serializers.ModelSerializer):
     values = serializers.JSONField()
-
     class Meta:
         model = SiteConfiguration
         fields = ['values']
@@ -64,18 +63,18 @@ class SiteConfigurationDetailViewSet(viewsets.ViewSet):
 
         return Response(data['values'])
 
-
 class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
 
     queryset = SiteConfiguration.objects.all()
+
     serializer_class = SiteConfigurationDetailSerializer
 
     def get(self, request, *args, **kwargs):
         site_config = self.queryset.get(pk=kwargs.get('pk'))
         data = {}
+
         if kwargs['section']:
             data = self.serializer_class(site_config).data['values'][kwargs.get('section')]
-
         return Response(data)
 
     def update(self, request, *args, **kwargs):
@@ -95,19 +94,23 @@ class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
 class JSONCustomAPIView(generics.RetrieveUpdateAPIView):
     queryset = SiteConfiguration.objects.all()
 
-    org_whitelist,org_blacklist = get_org_black_and_whitelist_for_site()
-    current_organisation = "phileas"
-    if org_whitelist:
-         current_organisation = org_whitelist[0]
+    def findSiteName(self,request):
+        org = ''
+        if CourseEnrollment.objects.filter(user=request.user).exists():
+            org = CourseOverview.objects.filter(courseenrollment__user=request.user)[0].org
+            if 'edx' or 'phileas' in org:
+                org = 'europe'
+            return org
 
     def get(self, request, *args, **kwargs):
-        urlSection = '/edx/var/edxapp/media/'+str(self.current_organisation) + '/'+ str(kwargs.get('section')) + '.json'
+        site_config = self.queryset.get(pk=kwargs.get('pk'))
+        urlSection = '/edx/var/edxapp/media/'+ str(self.findSiteName(request)) + '/' + str(kwargs.get('section')) + '.json'
     	json_data = open(urlSection)
         data1 = json.load(json_data)
         return Response(data1)
 
     def update(self, request, *args, **kwargs):
-        urlSection = '/edx/var/edxapp/media/'+str(self.current_organisation) + '/'+ str(kwargs.get('section')) + '.json'
+        urlSection = '/edx/var/edxapp/media/'+ str(self.findSiteName(request)) + '/' + str(kwargs.get('section')) + '.json'
         with open(urlSection, 'w') as f:
              json.dump(request.data, f)
         return Response(request.data)
