@@ -95,6 +95,7 @@ class JSONCustomAPIView(generics.RetrieveUpdateAPIView):
     queryset = SiteConfiguration.objects.all()
 
     def get_org_filter(self, id_site):
+        id_site = kwargs.get('pk')
         site_config = SiteConfiguration.objects.filter(id=id_site)
         data = self.serializer_class(site_config).data['values']
         org_name = data['course_org_filter']
