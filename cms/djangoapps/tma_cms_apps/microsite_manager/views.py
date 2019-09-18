@@ -94,24 +94,23 @@ class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
 class JSONCustomAPIView(generics.RetrieveUpdateAPIView):
     queryset = SiteConfiguration.objects.all()
 
-    def findSiteName(self,request):
-        org = ''
-        if CourseEnrollment.objects.filter(user=request.user).exists():
-            org = CourseOverview.objects.filter(courseenrollment__user=request.user)[0].org
-            if 'edx' or 'phileas' in org:
-                org = 'europe'
-            return org
+    def get_org_filter(self, id_site):
+        site_config = SiteConfiguration.objects.filter(id=id_site)
+        data = self.serializer_class(site_config).data['values']
+        org_name = data['course_org_filter']
+        return str(org_name)
 
     def get(self, request, *args, **kwargs):
-        site_config = self.queryset.get(pk=kwargs.get('pk'))
-        urlSection = '/edx/var/edxapp/media/'+ str(self.findSiteName(request)) + '/' + str(kwargs.get('section')) + '.json'
-    	json_data = open(urlSection)
+        id_site = kwargs.get('pk')
+        url_section = '/edx/var/edxapp/media/'+ self.get_org_filter(id_site) + '/' + str(kwargs.get('section')) + '.json'
+    	json_data = open(url_section)
         data1 = json.load(json_data)
         return Response(data1)
 
     def update(self, request, *args, **kwargs):
-        urlSection = '/edx/var/edxapp/media/'+ str(self.findSiteName(request)) + '/' + str(kwargs.get('section')) + '.json'
-        with open(urlSection, 'w') as f:
+        id_site = kwargs.get('pk')
+        url_section = '/edx/var/edxapp/media/'+ self.get_org_filter(id_site) + '/' + str(kwargs.get('section')) + '.json'
+        with open(url_section, 'w') as f:
              json.dump(request.data, f)
         return Response(request.data)
 
