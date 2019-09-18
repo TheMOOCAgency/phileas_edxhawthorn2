@@ -28,7 +28,7 @@ urlpatterns = [
     ),
     url(
         r'^api/v1/microsite_manager/json/(?P<pk>[0-9]+)/(?P<section>.+)/$',
-        views.SiteConfigurationAPIViewJSONCustom.as_view(),
+        views.JSONCustomAPIView.as_view(),
         name='faqJSON'
     )
 ]
