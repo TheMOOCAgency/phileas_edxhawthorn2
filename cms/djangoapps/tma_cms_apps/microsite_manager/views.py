@@ -64,9 +64,7 @@ class SiteConfigurationDetailViewSet(viewsets.ViewSet):
         return Response(data['values'])
 
 class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
-
     queryset = SiteConfiguration.objects.all()
-
     serializer_class = SiteConfigurationDetailSerializer
 
     def get(self, request, *args, **kwargs):
@@ -79,7 +77,6 @@ class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         site_config = self.queryset.get(pk=kwargs.get('pk'))
-
         data = self.serializer_class(site_config).data['values']
 
         if kwargs['section']:
@@ -93,54 +90,22 @@ class SiteConfigurationAPIView(generics.RetrieveUpdateAPIView):
 
 class JSONCustomAPIView(generics.RetrieveUpdateAPIView):
     queryset = SiteConfiguration.objects.all()
+    serializer_class = SiteConfigurationDetailSerializer
 
-    def get_org_filter(self, id_site):
-        site_config = self.queryset.get(pk=id_site)
-
+    def get_org_filter(self, site_id):
+        site_config = self.queryset.get(pk=site_id)
         data = self.serializer_class(site_config).data['values']
         org_name = data['course_org_filter']
-        return str(org_name)
+        return org_name
 
     def get(self, request, *args, **kwargs):
-        id_site = kwargs.get('pk')
-        url_section = '/edx/var/edxapp/media/'+ self.get_org_filter(id_site) + '/' + str(kwargs.get('section')) + '.json'
+        url_section = '/edx/var/edxapp/media/'+ self.get_org_filter(kwargs.get('pk')) + '/' + kwargs.get('section') + '.json'
     	json_data = open(url_section)
         data1 = json.load(json_data)
         return Response(data1)
 
     def update(self, request, *args, **kwargs):
-        id_site = kwargs.get('pk')
-        url_section = '/edx/var/edxapp/media/'+ self.get_org_filter(id_site) + '/' + str(kwargs.get('section')) + '.json'
+        url_section = '/edx/var/edxapp/media/'+ self.get_org_filter(kwargs.get('pk')) + '/' + kwargs.get('section') + '.json'
         with open(url_section, 'w') as f:
              json.dump(request.data, f)
         return Response(request.data)
-
-"""
-class SectionPerLangAPIView(generics.RetrieveUpdateAPIView):
-    queryset = SiteConfiguration.objects.all()
-    serializer_class = SiteConfigurationDetailSerializer
-
-    def get(self, request, *args, **kwargs):
-        site_config = self.queryset.get(pk=kwargs.get('pk'))
-        data = {}
-
-        if kwargs['section'] and kwargs['lang']:
-            data = self.serializer_class(site_config).data['values'][kwargs['section']][kwargs['lang']]
-
-        return Response(data)
-
-    def update(self, request, *args, **kwargs):
-        site_config = self.queryset.get(pk=kwargs.get('pk'))
-
-        data = self.serializer_class(site_config).data['values']
-
-        if kwargs['section']:
-            data[kwargs['section']] = request.data
-            log.info(data)
-
-        serializer = self.serializer_class(site_config, data=data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data)
-"""
