@@ -33,26 +33,41 @@ $(document).ready(function(){
   close_all_subsections();
 
   // Let users access all units unless is_linear = true
+  currentUnit=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
   if (isLinear) {
-    isUnitAvailable();
+    isUnitAvailable(currentUnit);
   }
 })
 
 /*Update completion coursenav between units*/
 $(document).ajaxSuccess(function(e, xhr, settings) {
-  if (settings.url.indexOf('publish_completion')>-1 || settings.url.indexOf('goto_position')>-1 || settings.url.indexOf('problem_check')>-1) {
+  if (settings.url.indexOf('goto_position')>-1 || settings.url.indexOf('problem_check')>-1) {
     response=JSON.parse(xhr.responseText);
     mark_started_subsections();
-    unit_id=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
-    mark_unit_completed(unit_id);
     get_course_completion()
+    
 
     // Check user completion status for popup bravo, for ungraded courses with no exercises
     get_user_grade()
 
     // Let users access all units unless is_linear = true
+    currentUnit=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
     if (isLinear) {
-      isUnitAvailable();
+      isUnitAvailable(currentUnit);
+    }
+  }
+});
+
+$(document).ajaxSuccess(function(e, xhr, settings) {
+  if (settings.url.indexOf('publish_completion')>-1) {
+    response=JSON.parse(xhr.responseText);
+    unit_id=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
+    mark_unit_completed(unit_id);
+
+    // Let users access all units unless is_linear = true
+    currentUnit=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
+    if (isLinear) {
+      isUnitAvailable(currentUnit);
     }
   }
 });
@@ -120,8 +135,7 @@ function highlight_current_unit(){
 }
 
 // Check if current unit is completed, thus if next unit should be available
-function isUnitAvailable() {
-  currentUnit = $('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
+function isUnitAvailable(currentUnit) {
   $('ol.outline-item.accordion-panel li a.outline-item.focusable').each(function(i, element){
     // Not for first unit
     if (i !== 0) {
