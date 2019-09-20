@@ -1,10 +1,11 @@
-/* Hide Previous & Next buttons if has_menu = false */
+/********************** ACTIONS **********************/
+/* HIDE PREVIOUS & NEXT BUTTONS IF HAS_MENU = TRUE */
 if (!hasMenu) {
   $('button.sequence-nav-button.button-previous').hide();
   $('button.sequence-nav-button.button-next').hide();
 }
 
-/*Toggle Menu*/
+/* TOGGLE MENU */
 $('span.open-courseware-nav').on('click', function(){
   $('#tma-completion-nav').removeClass('folded');
   $('.open-courseware-nav').addClass('tma-visibility-hidden');
@@ -19,59 +20,77 @@ $('.xmodule_display.xmodule_SequenceModule .sequence-bottom .sequence-nav-button
   close_all_subsections();
 })
 
-/*Prepare completion coursenav on pageload */
+/* OPEN & CLOSE MENU */
+$('#tma-completion-nav .close-courseware-nav').on('click', function(){
+  close_all_subsections();
+});
+$('.open-courseware-nav').on('click', function(){
+  highlight_current_unit();
+})
+
+
+/* GET COMPLETION ON PAGE LOAD */
 $(document).ready(function(){
   // Open menu when landing on page if coming from course_about
   if ((document.referrer.indexOf('/about') > -1) && hasMenu == 'True') {
     $('#tma-completion-nav').removeClass('folded');
     $('.open-courseware-nav').addClass('tma-visibility-hidden');
   };
+
   mark_started_subsections();
-  get_course_completion();
-  // Check user completion status for popup bravo, for ungraded courses with no exercises
-  get_user_grade()
   close_all_subsections();
 
-  // Let users access all units unless is_linear = true
+  // Get course completion to feed progress bar
+  get_course_completion();
+
+  // Check user grade for popup bravo, for ungraded courses with no exercises
+  get_user_grade()
+
+  // Get completion per xblock
   currentUnit=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
+  get_unit_completion(currentUnit, isLinear)
+
   if (isLinear) {
     isUnitAvailable(currentUnit);
   }
+
 })
 
-/*Update completion coursenav between units*/
+/* GET COMPLETION WHEN CLICKING ON NEXT OR WHEN ANSWERING A PROBLEM */
 $(document).ajaxSuccess(function(e, xhr, settings) {
   if (settings.url.indexOf('goto_position')>-1 || settings.url.indexOf('problem_check')>-1) {
     response=JSON.parse(xhr.responseText);
     mark_started_subsections();
-    get_course_completion()
-    
 
-    // Check user completion status for popup bravo, for ungraded courses with no exercises
+    // Get course completion to feed progress bar
+    get_course_completion();
+
+    // Check user grade for popup bravo, for ungraded courses with no exercises
     get_user_grade()
 
-    // Let users access all units unless is_linear = true
+    // Get completion per xblock
     currentUnit=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
+    get_unit_completion(currentUnit, isLinear)
+
     if (isLinear) {
       isUnitAvailable(currentUnit);
     }
   }
 });
 
+/* GET COMPLETION WHEN XBLOCK IS CONSIDERED AS VIEWED */
 $(document).ajaxSuccess(function(e, xhr, settings) {
   if (settings.url.indexOf('publish_completion')>-1) {
-    response=JSON.parse(xhr.responseText);
-    unit_id=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
-    mark_unit_completed(unit_id);
-
-    // Let users access all units unless is_linear = true
     currentUnit=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');
+    get_unit_completion(currentUnit, isLinear)
+
     if (isLinear) {
       isUnitAvailable(currentUnit);
     }
   }
 });
 
+/********************** FUNCTIONS **********************/
 function mark_started_subsections(){
   $('.subsection.accordion').each(function(){
     subsection_started=false;
@@ -90,7 +109,7 @@ function mark_unit_completed(unit_id){
   $('#' + unit_id.replace(/([$%&()*+,./:;<=>?@\[\\\]^\{|}~])/g,'\\$1')).find('.vertical-title').addClass('tma_completed');
 }
 
-
+// Get course completion to provide data for top-right progress bar 
 function get_course_completion(){
   url ='/tma_apps/'+global_courseid+'/completion/get_course_completion'
   $.ajax({
@@ -106,10 +125,28 @@ function get_course_completion(){
   })
 }
 
-// On  Menu close close all subsections - On menu open open current subsection
-$('#tma-completion-nav .close-courseware-nav').on('click', function(){
-  close_all_subsections();
-})
+// Get unit completion to provide data for left menu and Next button
+function get_unit_completion(currentUnit, isLinear){
+  url ='/tma_apps/'+global_courseid+'/'+currentUnit+'/completion/get_unit_completion'
+  $.ajax({
+    type:'get',
+    url:url,
+    success : function(response) {
+      allBlocksCompleted = true
+      response.unit_blocks.children.forEach(function(block){
+        if (!block.complete) {
+          allBlocksCompleted = false;
+        }
+      });
+      if (allBlocksCompleted) {
+        mark_unit_completed(currentUnit);
+        if (isLinear) {
+          isUnitAvailable(currentUnit);
+        }
+      }
+    }
+  });
+}
 
 function close_all_subsections(){
   $('#tma-completion-nav .subsection .outline-item.accordion-panel').each(function(){
@@ -122,10 +159,6 @@ function close_all_subsections(){
     $(this).removeClass('tma-current-unit')
   })
 }
-
-$('.open-courseware-nav').on('click', function(){
-  highlight_current_unit();
-})
 
 function highlight_current_unit(){
   unit_id=$('.xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized').data('usage-id');

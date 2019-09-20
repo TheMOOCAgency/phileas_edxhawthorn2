@@ -11,3 +11,10 @@ log = logging.getLogger()
 @require_GET
 def get_course_completion(request,course_id):
     return JsonResponse(Completion(request).get_course_completion(course_id))
+
+@login_required
+@require_GET
+def get_unit_completion(request, *args, **kwargs):
+    course_id = kwargs.get('course_id')
+    unit_id = kwargs.get('usage_key_string')
+    return JsonResponse(Completion(request).get_unit_completion(course_id, unit_id))
