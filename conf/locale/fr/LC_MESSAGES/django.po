@@ -25477,7 +25477,7 @@ msgstr "Ce certificat est adressé à"
 
 #: lms/templates/tma_apps/certificate.html
 msgid "This certificate acknowledges that the above named has successfully completed the necessary training and testing including didactif and video modules."
-msgstr "Ce certificat reconnaît que le personne nommée ci-dessus a réussi le parcours et les examens de ce cours, y compris les modules didactiques et vidéo."
+msgstr "Ce certificat reconnaît que la personne nommée ci-dessus a réussi le parcours et les examens de ce cours, y compris les modules didactiques et vidéo."
 
 #: lms/templates/tma_apps/certificate.html
 msgid "CERTIFICATE UNAVAILABLE"
