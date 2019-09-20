@@ -48,3 +48,18 @@ class Completion():
     def get_course_completion(self, course_id):
         response=self.calculate_completion(course_id)
         return response
+
+    def get_unit_completion(self, course_id, unit_id):
+        response = {}
+        course_sections = get_course_outline_block_tree(self.request,course_id).get('children')
+
+        for section in course_sections :
+          for subsection in section.get('children') :
+            if subsection.get('children'):
+                for unit in subsection.get('children'):
+                    # If current unit
+                    if unit['block_id'] in unit_id:
+                        response['unit_blocks'] = unit
+                        response['success'] = 'ok'
+
+        return response
