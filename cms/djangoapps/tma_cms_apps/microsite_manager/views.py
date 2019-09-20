@@ -104,6 +104,7 @@ class JSONCustomAPIView(generics.RetrieveUpdateAPIView):
 
     def get(self, request, *args, **kwargs):
         site_config = self.queryset.get(pk=kwargs.get('pk'))
+        log.info(Site)
         urlSection = '/edx/var/edxapp/media/'+ str(self.findSiteName(request)) + '/' + str(kwargs.get('section')) + '.json'
     	json_data = open(urlSection)
         data1 = json.load(json_data)
