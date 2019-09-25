@@ -243,7 +243,6 @@
         $('.no-results h3:first-of-type').html('${_("No results were found matching your request.")}');
         $('.no-results h3:last-of-type').html('${_("Browse our catalog.")}');
         $('.no-results .discover-btn').html('${_("Discover")}');
-        //query = {tag: [], language: [], org: [], is_new: false, input: ''};
       }
   };
 
@@ -251,7 +250,7 @@
     // When coming from HP - query from URL
     if (window.location.search) {
       // Get filter from URL (utf-8 for accents)
-      urlParam = decodeURIComponent(window.location.search.split('=')[1]);
+      urlParam = decodeURIComponent(window.location.search.split('=')[1]).replace('+', ' ');
       // Prevent interfering with filter dropdown
       if (urlParam != 'likes' && urlParam != 'enrollments') {
         // Filter case
