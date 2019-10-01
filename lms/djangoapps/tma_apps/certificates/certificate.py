@@ -8,6 +8,7 @@ import logging
 from datetime import date
 from django.apps import apps
 TmaCourseEnrollment = apps.get_model('tma_apps','TmaCourseEnrollment')
+TmaCourseOverview = apps.get_model('tma_apps','TmaCourseOverview')
 
 log = logging.getLogger()
 
@@ -16,7 +17,7 @@ class certificate():
     def __init__(self,user):
         self.user = user
         self.course = None
-        self.courseGrade = None
+        self.course_grade = None
 
     def get_certificate_status(self, course_key):
         passed = False
@@ -24,15 +25,15 @@ class certificate():
             self.course = get_course_by_id(course_key)
             if self.course is not None and self.user is not None:
                 # Get best_student_grade
-                self.courseGrade = TmaCourseEnrollment.objects.get(course_enrollment_edx__course_id=self.course.id, course_enrollment_edx__user_id=self.user.id).best_student_grade
+                self.course_grade = TmaCourseEnrollment.objects.get(course_enrollment_edx__course_id=self.course.id, course_enrollment_edx__user_id=self.user.id).best_student_grade
 
                 # If this grade is zero, check CourseGradeFactory
-                if self.courseGrade == 0.0:
-                    self.courseGrade = CourseGradeFactory().read(self.user, self.course)
-                    passed = self.courseGrade.passed
+                if self.course_grade == 0.0:
+                    self.course_grade = CourseGradeFactory().read(self.user, self.course)
+                    passed = self.course_grade.passed
                 else:
                     # If best_student_grade passes
-                    if self.courseGrade >= self.course.grade_cutoffs['Pass']:
+                    if self.course_grade >= self.course.grade_cutoffs['Pass']:
                         passed = True
 
                 TmaCourseEnrollment.update_course_validation(course_key, self.user, passed)
@@ -92,12 +93,20 @@ class certificate():
 
         name = last_name+" "+first_name
 
+        is_course_graded = TmaCourseOverview.objects.get(course_overview_edx__id=course_key).is_course_graded
         certificate_info = TmaCourseEnrollment.get_courseenrollment(course_key, self.user)
 
-        # Override score and mark course as done
-        grade = score/float(100)
-        certificate_info.best_student_grade = grade
-        certificate_info.date_best_student_grade = date.today()
+        if is_course_graded:
+            # Override score and mark course as done
+            grade = score/float(100)
+            certificate_info.best_student_grade = grade
+            certificate_info.date_best_student_grade = date.today()
+            certificate_info.has_validated_course = True
+        else:
+            # Mark course as done
+            certificate_info.has_validated_course = True
+
+        
         certificate_info.save()
 
         # Get new value of passed - should be true as best_grade is updated
@@ -108,7 +117,8 @@ class certificate():
             "course_name":self.course.display_name_with_default,
             "first_name":first_name,
             "last_name":last_name,
-            "certificate_info":certificate_info
+            "certificate_info":certificate_info,
+            "is_course_graded": is_course_graded
         }
 
         return render_to_response('tma_apps/certificate.html', context)

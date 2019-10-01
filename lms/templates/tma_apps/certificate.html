@@ -116,12 +116,14 @@ from django.utils.translation import ugettext as _
           </div>
           <h4 class="sub-title">${_('Date')}</h4>
         </div>
-        <div class="col-md-6 certificate-info">
-          <div class='bottom-line'>
-            <p>${round((certificate_info.best_student_grade*100),2)}%</p>
+        %if is_course_graded:
+          <div class="col-md-6 certificate-info">
+            <div class='bottom-line'>
+              <p>${round((certificate_info.best_student_grade*100),2)}%</p>
+            </div>
+            <h4 class="sub-title">${_('Score')}</h4>
           </div>
-          <h4 class="sub-title">${_('Score')}</h4>
-        </div>
+        %endif
       </div>
     </div>
   </div>
