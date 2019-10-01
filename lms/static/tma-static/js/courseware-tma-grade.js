@@ -147,7 +147,7 @@ function styleQuizOnSubmit(data, url) {
   } else {
     // If correct answer : green icon
     if (data['success'] == 'correct') {
-      problemTitle.html(problemTitle.html()+' <i style="color:#6ac259;" class="fas fa-check"></i>');
+      problemTitle.html(problemTitle.html() +' <i style="color:#6ac259;" class="fa fa-check"></i>');
       $('#'+ questionId).find('label > input:checked ~ .checksuccess').show();
       // Mark question as answered and success
       $('#'+ questionId).addClass('tma-success').addClass('tma-answered');
