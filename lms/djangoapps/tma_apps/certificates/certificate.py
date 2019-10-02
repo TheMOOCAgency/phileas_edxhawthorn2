@@ -18,26 +18,39 @@ class certificate():
         self.user = user
         self.course = None
         self.course_grade = None
+        self.completion_rate = None
+        self.is_course_graded = False
 
     def get_certificate_status(self, course_key):
         passed = False
+        self.is_course_graded = TmaCourseOverview.objects.get(course_overview_edx__id=course_key).is_course_graded
+
         if course_key is not None:
             self.course = get_course_by_id(course_key)
             if self.course is not None and self.user is not None:
-                # Get best_student_grade
-                self.course_grade = TmaCourseEnrollment.objects.get(course_enrollment_edx__course_id=self.course.id, course_enrollment_edx__user_id=self.user.id).best_student_grade
+                # If course is graded 
+                if self.is_course_graded:
+                    # Get best_student_grade
+                    self.course_grade = TmaCourseEnrollment.objects.get(course_enrollment_edx__course_id=self.course.id, course_enrollment_edx__user_id=self.user.id).best_student_grade
 
-                # If this grade is zero, check CourseGradeFactory
-                if self.course_grade == 0.0:
-                    self.course_grade = CourseGradeFactory().read(self.user, self.course)
-                    passed = self.course_grade.passed
+                    # If this grade is zero, check CourseGradeFactory
+                    if self.course_grade == 0.0:
+                        self.course_grade = CourseGradeFactory().read(self.user, self.course)
+                        passed = self.course_grade.passed
+                    else:
+                        # If best_student_grade passes
+                        if self.course_grade >= self.course.grade_cutoffs['Pass']:
+                            passed = True
+
                 else:
-                    # If best_student_grade passes
-                    if self.course_grade >= self.course.grade_cutoffs['Pass']:
+                    # Check completion
+                    self.completion_rate = TmaCourseEnrollment.objects.get(course_enrollment_edx__course_id=self.course.id, course_enrollment_edx__user_id=self.user.id).completion_rate
+                    if self.completion_rate == 1:
                         passed = True
-
+                
                 TmaCourseEnrollment.update_course_validation(course_key, self.user, passed)
                 
+
         return passed
 
     def check_course_certificate(self, course_key):
@@ -93,18 +106,17 @@ class certificate():
 
         name = last_name+" "+first_name
 
-        is_course_graded = TmaCourseOverview.objects.get(course_overview_edx__id=course_key).is_course_graded
+        self.is_course_graded = TmaCourseOverview.objects.get(course_overview_edx__id=course_key).is_course_graded
         certificate_info = TmaCourseEnrollment.get_courseenrollment(course_key, self.user)
 
-        if is_course_graded:
+        if self.is_course_graded:
             # Override score and mark course as done
             grade = score/float(100)
             certificate_info.best_student_grade = grade
             certificate_info.date_best_student_grade = date.today()
-            certificate_info.has_validated_course = True
         else:
-            # Mark course as done
-            certificate_info.has_validated_course = True
+            # Override completion
+            certificate_info.completion_rate = 1
 
         
         certificate_info.save()
@@ -118,7 +130,7 @@ class certificate():
             "first_name":first_name,
             "last_name":last_name,
             "certificate_info":certificate_info,
-            "is_course_graded": is_course_graded
+            "is_course_graded": self.is_course_graded
         }
 
         return render_to_response('tma_apps/certificate.html', context)
