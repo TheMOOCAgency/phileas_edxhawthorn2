@@ -49,7 +49,6 @@ class certificate():
                         passed = True
                 
                 TmaCourseEnrollment.update_course_validation(course_key, self.user, passed)
-                
 
         return passed
 
@@ -117,7 +116,7 @@ class certificate():
         else:
             # Override completion
             certificate_info.completion_rate = 1
-
+            certificate_info.date_best_student_grade = date.today()
         
         certificate_info.save()
 
