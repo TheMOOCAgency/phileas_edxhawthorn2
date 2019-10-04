@@ -400,6 +400,7 @@ ${HTML(fragment.foot_html())}
 
 <!--TMA SCRIPT COURSEWARE -->
 <script>
+  let language = "${request.LANGUAGE_CODE | n, js_escaped_string}"
   let global_courseid = "${course.id | n, js_escaped_string}";
   let hasMenu = ("${TmaCourseOverview.objects.get(course_overview_edx__id=course.id).has_menu | n, js_escaped_string}" === "True" ? true : false)
   let isLinear = ("${TmaCourseOverview.objects.get(course_overview_edx__id=course.id).is_linear | n, js_escaped_string}" === "True" ? true : false)
