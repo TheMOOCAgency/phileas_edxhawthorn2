@@ -6,12 +6,7 @@
   from openedx.core.djangoapps.lang_pref.api import footer_language_selector_is_enabled
   from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
-  import json
-  from openedx.core.djangolib.js_utils import dump_js_escaped_json
-
-  data = ""
-  with open('/edx/var/edxapp/media/footer.json', 'r') as _file:
-    data = json.load(_file)
+  from openedx.core.djangolib.js_utils import js_escaped_string
 %>
 <%namespace name='static' file='static_content.html'/>
 
@@ -96,9 +91,38 @@
     };
   };
 
-  let footerValues = ${dump_js_escaped_json(data) | n, decode.utf8}
-  updateCounters('users', footerValues.users);
-  updateCounters('courses', footerValues.courses);
-  updateCounters('likes', footerValues.likes);
-  updateCounters('hours', footerValues.hours);
+  $(document).ready(function() {
+    let footerValues = {}
+    let site = '${request.META["HTTP_HOST"] | n,js_escaped_string}';
+    let org = site.split('.')[0];
+
+    $.getJSON( "/media/footer.json", function(data){
+      footerValues = data
+      switch (org) {
+        case 'europe':
+          updateCounters('users', footerValues.europe.users);
+          updateCounters('courses', footerValues.europe.courses);
+          updateCounters('likes', footerValues.europe.likes);
+          updateCounters('hours', footerValues.europe.hours);
+          break;
+        case 'americas':
+          updateCounters('users', footerValues.americas.users);
+          updateCounters('courses', footerValues.americas.courses);
+          updateCounters('likes', footerValues.americas.likes);
+          updateCounters('hours', footerValues.americas.hours);
+          break;
+        case 'asia':
+          updateCounters('users', footerValues.asia.users);
+          updateCounters('courses', footerValues.asia.courses);
+          updateCounters('likes', footerValues.asia.likes);
+          updateCounters('hours', footerValues.asia.hours);
+          break;
+        default:
+          updateCounters('users', footerValues.users);
+          updateCounters('courses', footerValues.courses);
+          updateCounters('likes', footerValues.likes);
+          updateCounters('hours', footerValues.hours);
+      };
+    });
+  });
 </script>
