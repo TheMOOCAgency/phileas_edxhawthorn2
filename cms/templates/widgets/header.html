@@ -244,13 +244,14 @@ except:
                 <ul class="dropdown">
                   % for site in sites_list:
                     <li>
-                      <a class="btn-site" href="//${settings.SITE_NAME}/tma_cms_apps/manager/pages/homepage/${site.id}/">
-                        % for key, value in site.values.items():
-                          % if 'course_org_filter' in key:
-                            ${value.capitalize()}
-                          % endif
-                        % endfor
-                      </a>
+                      % for key, value in site.values.items():
+                        % if 'course_org_filter' in key:
+                          ${value.capitalize()} -   
+                          <a class="btn-site" href="//${settings.SITE_NAME}/tma_cms_apps/manager/pages/homepage/${site.id}/">HP</a>
+                           -
+                           <a class="btn-site" href="//${settings.SITE_NAME}/tma_cms_apps/manager/pages/faq/${site.id}/">FAQ</a>
+                        % endif
+                      % endfor
                       <div class="separator"></div>
                     </li>
                   % endfor
