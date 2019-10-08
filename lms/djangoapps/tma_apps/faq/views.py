@@ -29,6 +29,7 @@ def faq_view(request):
     data = json.load(json_data)
 
     context['data'] = data
-    return render(request, '/tma_apps/faq.html',context )
+
+    return render_to_response('tma_apps/faq.html',context)
 
 
