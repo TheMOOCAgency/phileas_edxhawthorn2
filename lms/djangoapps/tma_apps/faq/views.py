@@ -15,19 +15,20 @@ from django.contrib.sites.shortcuts import get_current_site
 from edxmako.shortcuts import render_to_response
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
-
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
 log = logging.getLogger(__name__)
 
 
 def faq_view(request):
     context = {}
-    url_section = '/edx/var/edxapp/media/america/faq.json'
-    json_data = open(url_section)
-    data1 = json.load(json_data)
+    site_org = configuration_helpers.get_current_site_orgs()[0]
 
-    context['data'] = data1
-    log.info(context)
+    url_section = '/edx/var/edxapp/media/'+site_org+'/faq.json'
+    json_data = open(url_section)
+    data = json.load(json_data)
+
+    context['data'] = data
     return render(request, '/tma_apps/faq.html',context )
 
 
