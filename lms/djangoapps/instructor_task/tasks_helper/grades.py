@@ -549,7 +549,7 @@ class ProblemGradeReport(object):
             try:
                 tma_course_enrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__user_id=student.id, course_enrollment_edx__course_id=course_id)
                 best_grade = tma_course_enrollment.best_student_grade
-                completion_rate = str(int(round(tma_course_enrollment.completion_rate*100)))+"%"
+                completion_rate = str(int(round(tma_course_enrollment.completion_rate*100))/100)
             except:
                 pass
 

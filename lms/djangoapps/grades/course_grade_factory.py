@@ -14,6 +14,8 @@ from .course_data import CourseData
 from .course_grade import CourseGrade, ZeroCourseGrade
 from .models import PersistentCourseGrade, prefetch
 
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
+
 log = getLogger(__name__)
 
 
@@ -206,6 +208,15 @@ class CourseGradeFactory(object):
                 user=user,
                 course_id=course_data.course_key,
             )
+
+        try:
+            TmaCourseEnrollment.update_grade(course_data.course_key, user, course_grade.percent, course_grade.passed)
+        except:
+            log.error(
+                u'Could not update best grade: %s, User: %s, %s, persisted: %s',
+                course_data.full_string(), user.id, course_grade, should_persist,
+            )
+            pass
 
         log.info(
             u'Grades: Update, %s, User: %s, %s, persisted: %s',
