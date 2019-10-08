@@ -10,6 +10,7 @@ from .delete_cookies import views as delete_cookies_views
 from .legal import views as legal_views
 from .tma_reports import views as tma_reports_views
 from .average_score import views as average_views
+from .faq import views as faq_views
 
 urlpatterns = [
     #Certificates
@@ -54,4 +55,7 @@ urlpatterns = [
         average_views.average,
         name='average',
     ),
+
+    #TMA faq
+    url(r'^faq$', faq_views.faq_view),
 ]
