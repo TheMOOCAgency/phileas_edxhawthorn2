@@ -544,12 +544,12 @@ class ProblemGradeReport(object):
                 student_profile_fields_2 = [getattr(profile, field_name) for field_name in header_profile_row_2]
 
             # TmaCourseEnrollment info
-            completion_rate = "0%"
+            completion_rate = 0
             best_grade = 0
             try:
                 tma_course_enrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__user_id=student.id, course_enrollment_edx__course_id=course_id)
                 best_grade = tma_course_enrollment.best_student_grade
-                completion_rate = str(int(round(tma_course_enrollment.completion_rate*100))/100)
+                completion_rate = float(round(tma_course_enrollment.completion_rate*100))/100
             except:
                 pass
 
