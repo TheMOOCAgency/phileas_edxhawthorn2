@@ -554,7 +554,13 @@ class ProblemGradeReport(object):
                 pass
 
             registration_date = CourseEnrollment.objects.get(user_id=student.id, course_id=course_id).created.strftime('%d-%m-%Y')
-            has_passed = course_grade.passed
+
+            has_passed = 'n/a'
+            try:
+                has_passed = TmaCourseEnrollment.objects.get(course_enrollment_edx__user_id=student.id, course_enrollment_edx__course_id=course_id).has_validated_course
+            except:
+                pass
+
             ### END ###
 
             task_progress.attempted += 1

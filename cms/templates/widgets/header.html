@@ -232,7 +232,21 @@ except:
       <div class="wrapper wrapper-r">
         <ul class="tma-nav">
           <li>
-            <a href="//${org}.${settings.LMS_BASE}">${_("Student View")}</a>
+            % if request.user.is_superuser:
+            <div class="dropdown-container">
+              <a>${_("Student View")}<img src="${static.url('tma-cms-static/images/flechebas.svg')}"></a>
+              <ul class="dropdown">
+                % for site in sites_list:
+                  <li>  
+                    <a class="btn-site" href="//${site.values['site_domain']}">${site.values['course_org_filter'].capitalize()}</a>
+                    <div class="separator"></div>
+                  </li>
+                % endfor
+              </ul>
+            </div>
+            % else:
+              <a href="//${org}.${settings.LMS_BASE}">${_("Student View")}</a>
+            % endif
           </li>
           <li>
             <a href="//${settings.SITE_NAME}/home/">${_("Course Management")}</a>
@@ -328,9 +342,9 @@ except:
 <script>
   // Microsites dropdown behavior
   $(document).ready(function(){
-    $('.dropdown-container > a > img').on('click', function(){
-      $(this).css('transform', 'rotate(180deg)');
-      $('.dropdown').toggle();
+    $('.dropdown-container').on('click', function(){
+      //$(this).children().children('img').css('transform', 'rotate(-180deg)');
+      $(this).children('.dropdown').toggle();
     });
   });
 </script>
