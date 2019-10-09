@@ -22,9 +22,8 @@ log = logging.getLogger(__name__)
 
 def faq_view(request):
     context = {}
-    site_org = configuration_helpers.get_current_site_orgs()[0]
 
-    url_section = '/edx/var/edxapp/media/'+site_org+'/faq.json'
+    url_section = '/edx/var/edxapp/media/america/faq.json'
     json_data = open(url_section)
     data = json.load(json_data)
 
