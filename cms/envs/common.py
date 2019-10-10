@@ -1163,7 +1163,7 @@ INSTALLED_APPS = [
 
     #cms tma APPS
     'cms.djangoapps.tma_cms_apps',
-
+]
 
 ################# EDX MARKETING SITE ##################################
 
