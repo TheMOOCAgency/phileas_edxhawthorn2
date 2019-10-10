@@ -101,9 +101,9 @@ class TmaCourseEnrollment(models.Model):
                 enrollment.date_best_student_grade = datetime.datetime.now()
                 response['new_best_grade'] = True
             course = get_course_by_id(course_key)
-            if enrollment.best_student_grade >= course.grade_cutoffs['Pass']:
+            if enrollment.best_student_grade >= course.grade_cutoffs['Pass'] and not course.no_grade:
                 enrollment.has_validated_course = True
-            else:
+            elif enrollment.best_student_grade < course.grade_cutoffs['Pass'] and not course.no_grade:
                 enrollment.has_validated_course = False
             enrollment.save()
             response['status'] = 'success'
