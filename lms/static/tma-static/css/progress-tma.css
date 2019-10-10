@@ -16,5 +16,5 @@
     width: 95% !important;
 }
 .profile-wrapper .course-info>.chapters>section .hd {
-    width: none;
+    width: unset !important;
 }
