@@ -16,5 +16,8 @@
     width: 95% !important;
 }
 .profile-wrapper .course-info>.chapters>section .hd {
-    width: unset !important;
+    width: unset;
+}
+.profile-wrapper .course-info>.chapters>section .hd-3 {
+    width: 30% !important;
 }
