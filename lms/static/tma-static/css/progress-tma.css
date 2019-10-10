@@ -6,3 +6,16 @@
     float: right;
     cursor: pointer;
 }
+
+.chapters > section {
+    table-layout: fixed;
+}
+.profile-wrapper .course-info > .chapters > section .sections {
+    display: table-cell;
+}
+.chapters > section > .hd-3 {
+    width: 30% !important;
+}
+.chapters > section > .sections > .hd-4 {
+    display: inline !important;
+}
