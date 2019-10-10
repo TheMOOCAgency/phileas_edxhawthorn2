@@ -2319,6 +2319,10 @@ INSTALLED_APPS = [
 
     #TMA Apps
     'lms.djangoapps.tma_apps',
+
+    #CSV Exports Admin
+    'django_csv_exports',
+
 ]
 
 ######################### CSRF #########################################
