@@ -8,14 +8,13 @@
 }
 
 .chapters > section {
-    table-layout: fixed;
+    display: flex !important;
 }
 .profile-wrapper .course-info > .chapters > section .sections {
-    display: table-cell;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 95% !important;
 }
-.chapters > section > .hd-3 {
-    width: 30% !important;
-}
-.chapters > section > .sections > .hd-4 {
-    display: inline !important;
+.profile-wrapper .course-info>.chapters>section .hd {
+    width: none;
 }
