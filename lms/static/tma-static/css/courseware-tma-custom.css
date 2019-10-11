@@ -92,7 +92,7 @@ span.fa.fa-chevron-right.fa-rotate-90{
   padding: 2px 0px 2px 0px;
   width: 100%;
 }
-#tma-completion-nav .vertical-title:before, #tma-completion-nav .subsection-title:before {
+#tma-completion-nav .vertical-title:before, #tma-completion-nav .subsection-title:before, #tma-completion-nav .section-title:before {
     content: "";
     height: 10px;
     width: 10px;
@@ -101,11 +101,11 @@ span.fa.fa-chevron-right.fa-rotate-90{
     display: inline-block;
     margin-right: 10px;
 }
-#tma-completion-nav .subsection-title.tma_completed:before{
+#tma-completion-nav .subsection-title.tma_completed:before, #tma-completion-nav .section-title.tma_completed:before{
   background-color: #9EE000;
   border:1px solid #9EE000;
 }
-#tma-completion-nav .vertical-title.tma_completed:before, #tma-completion-nav .subsection-title.tma_started:before {
+#tma-completion-nav .vertical-title.tma_completed:before, #tma-completion-nav .subsection-title.tma_started:before, #tma-completion-nav .section-title.tma_started:before {
     background-color: #009EE0;
 }
 #tma-completion-nav .subsection-completed .vertical-title.tma_completed:before {
@@ -115,17 +115,12 @@ span.fa.fa-chevron-right.fa-rotate-90{
 #tma-completion-nav h1,h2,h3,h4,h5,h6,p, div.vertical-title{
   font-size: 1rem;
 }
-#tma-completion-nav button.section-name{
-  display: none;
-}
-#tma-completion-nav{
-  /*display: none;*/
-}
+
 #tma-completion-nav .course-outline .block-tree .section ol.outline-item .subsection .vertical a.outline-item, .course-outline .block-tree .section ol.outline-item .subsection, .course-outline .block-tree .section{
   border: none;
 }
 .course-outline .block-tree .section ol.outline-item .subsection{
-  margin: 0 0 0 -25px;
+  margin: 0 0 0 0;
 }
 .course-outline .block-tree .section ol.outline-item .subsection .subsection-title{
   margin-right: 15px;
@@ -357,10 +352,16 @@ nav.sequence-bottom .sequence-nav-button:hover .icon{
   font-size: 16px;
   font-weight: 500;
 }
+#tma-completion-nav h3{
+  padding-left: 0px;
+  font-size: 18px;
+  font-weight: 500;
+}
 #tma-completion-nav .outline-item{
   margin-left: 9px!important;
   color: #00A1E9 !important;
 }
+
 
 .tma-current-unit{
   background-color: white!important;

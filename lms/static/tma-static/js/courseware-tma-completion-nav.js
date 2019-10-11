@@ -17,12 +17,12 @@ $('button.close-courseware-nav').on('click', function(){
 $('.xmodule_display.xmodule_SequenceModule .sequence-bottom .sequence-nav-button').on('click',function(){
   $('#tma-completion-nav').addClass('folded');
   $('.open-courseware-nav').removeClass('tma-visibility-hidden');
-  close_all_subsections();
+  closeSections();
 })
 
 /* OPEN & CLOSE MENU */
 $('#tma-completion-nav .close-courseware-nav').on('click', function(){
-  close_all_subsections();
+  closeSections();
 });
 $('.open-courseware-nav').on('click', function(){
   highlight_current_unit();
@@ -38,7 +38,7 @@ $(document).ready(function(){
   };
 
   mark_started_subsections();
-  close_all_subsections();
+  closeSections();
 
   // Get course completion to feed progress bar
   get_course_completion();
@@ -148,8 +148,8 @@ function get_unit_completion(currentUnit, isLinear){
   });
 }
 
-function close_all_subsections(){
-  $('#tma-completion-nav .subsection .outline-item.accordion-panel').each(function(){
+function closeSections(){
+  $('#tma-completion-nav .subsection .outline-item.accordion-panel, #tma-completion-nav .section .outline-item.accordion-panel').each(function(){
     $(this).addClass('is-hidden');
   })
   $('#tma-completion-nav .fa-chevron-right').each(function(){
