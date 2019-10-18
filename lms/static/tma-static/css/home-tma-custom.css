@@ -7,7 +7,7 @@ a:hover, a:visited, a:focus {
     text-decoration: none !important;
 }
 a {
-    color: #0B1A4C !important;
+    color: black !important;
 }
 
 /* 1st ROW */
@@ -27,7 +27,6 @@ a {
     height: 70px;
     float: right;
     border-radius: 50px;
-    background-color: #00A1E9;
     color: white;
     padding-top: 17px;
     font-size: 24px;
@@ -39,11 +38,10 @@ a {
     padding-left: 70px;
     padding-right: 70px;
 }
-.bg-blue-box {
+.color-box {
     position: absolute;
     height: 300px;
     width: 100%;
-    background-color: #0B1A4C;
 }
 .bg-grey-box {
     position: absolute;
@@ -54,7 +52,7 @@ a {
 }
 .title-36-black {
     font-size: 36px;
-    color: black;
+    color: rgb(49,49,49);
     letter-spacing: normal;
     margin-bottom: 15px;
     text-transform: none;
@@ -63,7 +61,7 @@ a {
 }
 .title-24 {
     font-size: 24px;
-    color: #0B1A4C;
+    color: rgb(49,49,49);
     letter-spacing: normal;
     margin-bottom: 15px;
     text-transform: none;
@@ -72,7 +70,7 @@ a {
     padding-left: 5px;
     font-size: 28px;
     font-weight: bold;
-    color: #0B1A4C;
+    color: rgb(49,49,49);
     letter-spacing: normal;
     margin-bottom: 25px;
     text-transform: none;
@@ -81,7 +79,7 @@ a {
 .title-20 {
     font-size: 20px;
     font-weight: bold;
-    color: #0B1A4C;
+    color: rgb(49,49,49);
     letter-spacing: normal;
     line-height: 24px;
     text-transform: none;
@@ -153,7 +151,7 @@ a {
     font-size: 20px;
     font-weight: 600;
     line-height: normal;
-    color: #0B1A4C;
+    color: rgb(49,49,49);
 }
 
 .unenroll {
@@ -186,7 +184,7 @@ a {
     top: 50%;
     left: 40%;
     text-align: center;
-    border: 2px solid #0B1A4C;
+    border: 2px solid black;
 }
 
 .progress, .no-progress {
@@ -200,7 +198,7 @@ a {
     margin-bottom: 20px;
 }
 .progress-bar {
-    background-color: #00A1E9;
+    background-color: #28a745;
 }
 .progress.not-mandatory-course-enrolment {
     height: 35px;
@@ -227,7 +225,7 @@ a {
     color:#777777;
 }
 .dates-box span {
-    color: #0B1A4C;
+    color: rgb(49,49,49);
     font-weight: 500;
 }
 
@@ -239,32 +237,12 @@ a {
     font-size: 14px;
 }
 .pin-row > .col-4 > p {
-    color: #009EE0;
+    color: rgb(49,49,49);
 }
 .pin-row > .col-8 {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-}
-a.continue-btn, a.enroll-btn {
-    cursor: pointer;
-    width: 150px;
-    padding: 6px;
-    margin: 1rem;
-    border-radius: 28px;
-    border: 2px solid #0B1A4C;
-    background-color: transparent;
-    color: #0B1A4C !important;
-    font-weight: 600 !important;
-    display: inline-block;
-    vertical-align: middle;
-}
-
-a.continue-btn:hover, a.enroll-btn:hover {
-    background-color: #0B1A4C;
-    color: white !important;
-    border: 2px solid #0B1A4C;
-    text-decoration: none;
 }
 .popup a.continue-btn {
     width: 250px;
@@ -291,10 +269,10 @@ a.continue-btn:hover, a.enroll-btn:hover {
     flex-wrap: wrap;
 }
 .finished-box .col-lg-3 span {
-    color: #0B1A4C;
+    color: rgb(49,49,49);
 }
 .finished-box a {
-    color: #0B1A4C;
+    color: rgb(49,49,49);
 }
 .finished-box a:hover {
     color: #777777;
@@ -303,7 +281,7 @@ a.continue-btn:hover, a.enroll-btn:hover {
 
 .legend p {
     font-size: 14;
-    color: black;
+    color: rgb(49,49,49);
     line-height: 24px;
 }
 

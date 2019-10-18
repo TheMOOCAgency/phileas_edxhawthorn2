@@ -23,7 +23,6 @@ from lms.djangoapps.courseware.courses import (
 )
 from openedx.features.course_experience import course_home_url_name
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
-from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from lms.djangoapps.tma_apps.certificates.certificate import certificate
 %>
 
@@ -95,9 +94,9 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
             <div class="row">
                 <div class="col-lg-1 text-right">
                     % if user.first_name and user.last_name:
-                        <div class="profile-img">${user.first_name[0] + user.last_name[0]}</div>
+                        <div class="profile-img secondary-bg-color">${user.first_name[0] + user.last_name[0]}</div>
                     % else:
-                        <div class="profile-img"></div>
+                        <div class="profile-img secondary-bg-color"></div>
                     % endif
                 </div>
                 <div class="col-lg-5">
@@ -113,7 +112,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
     </div>
     <!-- ONGOING COURSES -->
     <div class="row position-relative">
-        <div class="bg-blue-box"></div>
+        <div class="main-bg-color color-box"></div>
         <div class="container-fluid padding-70 pt-4 pb-4 ongoing-box ">
             <div class="row pt-4">
                 <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">${_("Your ongoing courses")}</h1>
@@ -188,27 +187,9 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
         %for enrollment in done_course_enrollments:
             <div class="row finished">
                 %if enrollment.course_id in show_courseware_links_for:
-                    % if 'Vodeclic' in str(enrollment.course_id):
-                        <div class="col-lg-3 title-20" style="cursor:pointer">
-                            <p class="mb-0" onclick="window.open('${get_vodeclic_href(request.user,enrollment.course_id)}','_blank');">${enrollment.course_overview.display_name_with_default}</p>
-                        </div>
-                    % elif 'APOC+APOC' in str(enrollment.course_id):
-                  <form name="apocform" target="_blank" action="https://apoc.themoocagency.com/autologreg" style="display:none" method="POST">
-                    <input type='text' name='PID' value='${user.profile.rpid}' />
-                    <input type='text' name='firstname' value='${user.first_name}' />
-                    <input type='text' name='lastname' value='${user.last_name}' />
-                    <input type='text' name='email' value='${user.email}' />
-                    <input type='text' name='entity_id' value='amundi' />
-                    <button>Submit</button>
-                  </form>
-                        <div class="col-lg-3 title-20" style="cursor:pointer">
-                            <p class="mb-0" onclick="document.querySelector('form[name=&quot;apocform&quot;]').submit();">${enrollment.course_overview.display_name_with_default}</p>
-                        </div>
-                    % else:
-                        <div class="col-lg-3 title-20" style="cursor:pointer">
-                            <p class="mb-0" onclick="window.location.href='/courses/${enrollment.course_id}/courseware'">${enrollment.course_overview.display_name_with_default}</p>
-                        </div>
-                    %endif
+                    <div class="col-lg-3 title-20" style="cursor:pointer">
+                        <p class="mb-0" onclick="window.location.href='/courses/${enrollment.course_id}/courseware'">${enrollment.course_overview.display_name_with_default}</p>
+                    </div>
                 %else:
                     <div class="col-lg-3 title-20">
                         <p class="mb-0">${enrollment.course_overview.display_name_with_default}</p>
@@ -220,9 +201,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                     % endif
                 </div>
                 <div class="col-lg-2">
-                    % if 'Vodeclic' in str(enrollment.course_id) or 'APOC+APOC' in str(enrollment.course_id):
-                        <p class="mb-0">${_("Grade not available")}</p>
-                    % elif not get_course(enrollment.course_id).no_grade:
+                    % if not get_course(enrollment.course_id).no_grade:
                         <p class="mb-0"><span class="font-weight-bold">${int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100)}</span>/100</p>
                     % else:
                         <p class="mb-0">${_("Course not graded")}</p>
@@ -230,17 +209,13 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                 </div>
                 <div class="col-lg-2 pl-5">
                     <p class="mb-0">
-                        % if not 'Vodeclic' in str(enrollment.course_id) and not 'APOC+APOC' in str(enrollment.course_id):
-                            % if not get_course(enrollment._course_id).no_grade:
-                                % if int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100) >= 95:
-                                    <img class="badge-cert" src="${static.url('tma-static/images/certificate.svg')}">
-                                % elif 95 >= int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100) and int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 90:
-                                    <img class="badge-cert" src="${static.url('tma-static/images/certificate-silver.svg')}">
-                                % elif 90 >= int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100) and int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 80:
-                                    <img class="badge-cert" src="${static.url('tma-static/images/certificate-bronze.svg')}">
-                                % else:
-                                    --
-                                % endif
+                        % if not get_course(enrollment._course_id).no_grade:
+                            % if int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100) >= 95:
+                                <img class="badge-cert" src="${static.url('tma-static/images/certificate.svg')}">
+                            % elif 95 >= int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100) and int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 90:
+                                <img class="badge-cert" src="${static.url('tma-static/images/certificate-silver.svg')}">
+                            % elif 90 >= int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100) and int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 80:
+                                <img class="badge-cert" src="${static.url('tma-static/images/certificate-bronze.svg')}">
                             % else:
                                 --
                             % endif
@@ -249,15 +224,11 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                         % endif
                     </p>
                 </div>
-                % if 'Vodeclic' in str(enrollment.course_id) or 'APOC+APOC' in str(enrollment.course_id):
-                    <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
-                % else:
                     % if certificate(request.user).get_certificate_status(enrollment.course_id):
                         <div class="col-lg-2"><a href="/tma_apps/${enrollment._course_id}/certificate/render">${_("Download")}</a></div>
                     % else:
                         <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
                     % endif
-                % endif
                 <div class="table-separator"></div>
             </div>
 

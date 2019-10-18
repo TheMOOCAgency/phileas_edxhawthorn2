@@ -19,7 +19,7 @@ input::placeholder {
 }
 .criteria-box a:not(.filter-selected), .criteria-box a:not(.filter-selected):hover, .criteria-box a:not(.filter-selected):visited {
     text-decoration: none !important;
-    color: #0C1C49 !important;
+    color: rgb(49,49,49) !important;
 }
 
 .search-title {
@@ -36,13 +36,13 @@ input::placeholder {
 
 .criteria-box {
     min-height: 700px;
-    background-color: #E6EDFA;
+    background-color: rgba(185, 198, 212, 0.3);;
 }
 
 .criteria-box form {
     width: 95%;
     margin: auto;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgb(49,49,49);
 }
 
 .criteria-box button {
@@ -154,7 +154,7 @@ input::placeholder {
     text-align: center;
 }
 .dropdown > li > a {
-    color: #0c1c49 !important;
+    color: rgb(49,49,49) !important;
     font-size: 14px;
 }
 .dropdown > li > a:hover, .dropdown-container > button:hover, .dropdown > li > a:focus {

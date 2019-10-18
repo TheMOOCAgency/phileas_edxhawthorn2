@@ -64,11 +64,9 @@ from django.contrib.auth import get_user_model
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from lms.djangoapps.tma_apps.models import TmaCourseOverview, TmaCourseEnrollment
-from lms.djangoapps.tma_apps.sspeaking.sspeaking import get_sspeaking_href
 from lms.djangoapps.courseware.courses import get_course_by_id
 from operator import itemgetter
 from student.signals import ENROLL_STATUS_CHANGE
-from lms.djangoapps.tma_apps.zones.helper import ZoneManager
 
 log = logging.getLogger("edx.student")
 
@@ -802,11 +800,6 @@ def _student_dashboard(request):
             enr for enr in course_enrollments if entitlement.enrollment_course_run.course_id != enr.course_id
         ]
 
-    #TMA CHECK FOR GEOGRAPHICAL ZONE
-    zones_info = ZoneManager(user)
-    user_zone = zones_info.get_user_zone()
-    wrong_zone= zones_info.check_zone()
-
     context = {
         'urls': urls,
         'programs_data': programs_data,
@@ -853,9 +846,7 @@ def _student_dashboard(request):
         'display_sidebar_on_dashboard': display_sidebar_on_dashboard,
         'display_sidebar_account_activation_message': not(user.is_active or hide_dashboard_courses_until_activated),
         'display_dashboard_courses': (user.is_active or not hide_dashboard_courses_until_activated),
-        'empty_dashboard_message': empty_dashboard_message,
-        'wrong_zone':wrong_zone,
-        'user_zone':user_zone
+        'empty_dashboard_message': empty_dashboard_message
     }
 
     if ecommerce_service.is_enabled(request.user):
@@ -877,9 +868,9 @@ def _student_dashboard(request):
     courses_to_display = []
     # Get current org
     org_whitelist,org_blacklist = get_org_black_and_whitelist_for_site()
-    current_organisation = "phileas"
+    current_organisation = ''
     if org_whitelist:
-         current_organisation = org_whitelist[0]
+        current_organisation = org_whitelist[0]
     
     #homepage courses
     homepage_json = configuration_helpers.get_value('homepage') or {}
@@ -954,7 +945,6 @@ def _student_dashboard(request):
     context.update({
         'final_course_list':final_course_list,
         'language': request.LANGUAGE_CODE,
-        'sspeaking_data': get_sspeaking_href(user),
         'mandatory_courses_count':mandatory_courses_count,
         'favorite_courses_count':favorite_courses_count,
         'ongoing_courses_count':ongoing_courses_count,
@@ -989,7 +979,6 @@ def get_tma_course_info(user, course_id, block_courses):
     TmaOverviewInfo = TmaCourseOverview.get_tma_course_overview_by_course_id(course_id)
     course['is_mandatory'] = TmaOverviewInfo.is_mandatory
     course['is_manager_only'] = TmaOverviewInfo.is_manager_only
-    course['is_vodeclic'] = TmaOverviewInfo.is_vodeclic
     course['liked_total'] = TmaOverviewInfo.liked_total
     course['tag'] = str(TmaOverviewInfo.tag)
     course['is_new'] = TmaOverviewInfo.is_new

@@ -40,7 +40,7 @@
     padding: 10px 0px 20px 0px;
     font-size: 20px;
     line-height: normal;
-    color: #0B1A4C;
+    color: rgb(49,49,49);
 }
 
 .front .course-title {
@@ -49,11 +49,11 @@
 
 .course-title > h3 {
     padding-top: 10px;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  color: #0B1A4C;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    color: rgb(49,49,49);
 }
 
 .course-name > span {
@@ -315,24 +315,6 @@
     padding: 20px;
 }
 
-a.enroll-btn {
-    width: 150px;
-    padding: 8px;
-    margin: 0 1rem 1rem 1rem;
-    border-radius: 28px;
-    background-color: white;
-    color: #0B1A4C !important;
-    border: 2px solid #0B1A4C;
-    font-weight: bold;
-    display: inline-block;
-    vertical-align: middle;
-}
-a.enroll-btn:hover {
-    background-color: #0B1A4C;
-    color: white !important;
-    text-decoration: none;
-    cursor:pointer;
-}
 @media (max-width: 485px) {
     a.enroll-btn {
         width: 100px;

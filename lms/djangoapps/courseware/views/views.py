@@ -116,7 +116,6 @@ from openedx.features.course_experience.utils import get_course_outline_block_tr
 from openedx.core.djangoapps.lang_pref.api import released_languages
 from lms.djangoapps.instructor_task.models import ReportStore
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
-from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from student.models import CourseEnrollment
 from student.views.dashboard import get_tma_course_info, get_tma_course_json, get_course_enrollments, is_course_blocked, get_org_black_and_whitelist_for_site
 from shoppingcart.models import CourseRegistrationCode
@@ -300,9 +299,6 @@ def courses(request):
             final_course_list = sorted(final_course_list, key=itemgetter('display_name'))
 
         # JSON info for dynamic course cards
-        # Vodelic link
-        vodeclic_link = get_vodeclic_href(request.user, course.id)
-        course_json_info['vodeclic_link'] = vodeclic_link
 
         # Button text ugettext
         button_text = ''
@@ -353,10 +349,6 @@ def courses(request):
     new_counter = Counter()
     for course in final_course_list:
         language_counters[course['language']] += 1
-        if course['is_vodeclic']:
-            org_counters['Vodeclic'] += 1
-        else:
-            org_counters['Amundi'] += 1
         if course['is_new']:
             new_counter['new'] += 1
 
@@ -1041,11 +1033,7 @@ def course_about(request, course_id):
             'tag': tag
         }
 
-        if tma_course_overview.is_vodeclic:
-            vodeclic_url = get_vodeclic_href(request.user, course.id)
-            return redirect(vodeclic_url)
-        else:
-            return render_to_response('courseware/course_about.html', context)
+        return render_to_response('courseware/course_about.html', context)
 
 
 @ensure_csrf_cookie

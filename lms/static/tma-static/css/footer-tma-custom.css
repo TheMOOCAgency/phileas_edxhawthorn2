@@ -1,6 +1,5 @@
 .footer {
     min-height: 200px;
-    background-color: #0B1A4C;
 }
 .footer .brand-logo-size {
     margin: 10px;
@@ -8,9 +7,6 @@
 .footer .brand-logo-size:first-of-type {
     padding-left: 4rem;
     padding-bottom: 35px;
-}
-.footer > .row:last-of-type {
-    background-color: #0B1A4C;
 }
 .footer > .row > .col-lg-4 {
     display: flex;
@@ -37,7 +33,6 @@
 
 .footer-stats > .col-lg-3 > .stat-box > p:first-child {
     font-size: 36px;
-    color: #00A0E3;
     font-weight: bold;
 }
 
@@ -65,7 +60,6 @@
 .stat-box > span:first-of-type {
     margin-bottom: 0px;
     font-size: 36px;
-    color: #00A0E3;
     font-weight: bold;
 }
 

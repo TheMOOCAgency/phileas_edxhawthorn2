@@ -21,12 +21,12 @@
   <script src="${static.url('tma-static/js/numscroller.js')}"></script>
 % endif
 
-<div class="container-fluid footer">
+<div class="container-fluid footer main-bg-color">
   <div class="row footer-stats">
     <div class="col-lg-3">
       <div class="text-center">
         <div class="stat-box">
-          <span id="users_counter" class="numscroller" data-min='1' data-max='0' data-delay='10' data-increment='0'>0</span>
+          <span id="users_counter" class="numscroller secondary-color" data-min='1' data-max='0' data-delay='10' data-increment='0'>0</span>
           <span>${_("Users")}</span>
         </div>
       </div>
@@ -34,7 +34,7 @@
     <div class="col-lg-3">
       <div class="text-center">
         <div class="stat-box">
-          <span id="courses_counter" class="numscroller" data-min='1' data-max='0' data-delay='10' data-increment='0'>0</span>
+          <span id="courses_counter" class="numscroller secondary-color" data-min='1' data-max='0' data-delay='10' data-increment='0'>0</span>
           <span>${_("Courses")}</span>
         </div>
       </div>
@@ -42,7 +42,7 @@
     <div class="col-lg-3">
       <div class="text-center">
         <div class="stat-box">
-          <span id="likes_counter" class="numscroller" data-min='1' data-max='0' data-delay='10' data-increment='0'>0</span>
+          <span id="likes_counter" class="numscroller secondary-color" data-min='1' data-max='0' data-delay='10' data-increment='0'>0</span>
           <span>${_("Likes")}</span>
         </div>
       </div>
@@ -50,20 +50,20 @@
     <div class="col-lg-3">
       <div class="text-center">
         <div class="stat-box">
-          <span id="hours_counter" class="numscroller" data-min='1' data-max='0' data-delay='10' data-increment='0'>0</span>
+          <span id="hours_counter" class="numscroller secondary-color" data-min='1' data-max='0' data-delay='10' data-increment='0'>0</span>
           <span>${_("Training hours")}</span>
         </div>
       </div>
     </div>
   </div>
-  <div class="row footer-links justify-content-between">
+  <div class="row footer-links justify-content-between main-bg-color">
     <div class="col-lg-4 logo-part">
       <img class="brand-logo-size" src="${static.url('tma-static/images/logo_phileas_white.svg')}"/>
       <img class="brand-logo-size" src="${static.url('tma-static/images/logo_amundi_white.svg')}"/>
     </div>
     <div class="col-lg-4 links-part">
         <a href="/tma_apps/faq">${_("FAQ")}</a>
-      <a href="mailto:phileas-training@amundi.com?subject=PHILEAS">${_("Contact")}</a>
+      <a href="">${_("Contact")}</a>
       <a href="/tma_apps/legal">${_("Legal Notice")}</a>
     </div>
   </div>

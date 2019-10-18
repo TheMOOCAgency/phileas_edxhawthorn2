@@ -83,7 +83,6 @@ input::placeholder {
         position: relative !important;
         width: 100%;
         padding: 50px 0px 50px 50px !important;
-        background-color: #00a1e9 !important;
     }
     .title-36 {
         display: none;
@@ -95,52 +94,29 @@ input::placeholder {
     z-index: 1;
     padding-top: 145px;
     padding-left: 90px;
-    background-color: #00a1e9;
 }
 
 /* Second row */
-.ext-links {
-    cursor: pointer;
-    line-height: normal !important;
-    font-weight: 500 !important;
-}
-
-.img-bw {
-    width: inherit;
-}
-
 .static-top {
     height: 120px;
     padding: 0px;
     background-position: center;
     background-size: cover;
 }
-.static-top a {
+.ext-links {
     position: absolute;
     top: 40px;
     left: 0;
     width: 100%;
-    font-size: 18px;
-    color: #0B1A4C !important;
+    color: rgb(49,49,49) !important;;
+    cursor: pointer;
+    line-height: normal !important;
+    font-weight: 500 !important;
 }
-.static-top a:hover {
-    color: #0B1A4C !important;
+.ext-links:hover {
+    color: #b9c6d4 !important;
     text-decoration: none;
 }
-
-/*
-.img-bw-1 {
-    background-image: url('/static/tma-static/images/elearning.jpg');
-}
-
-.img-bw-2 {
-    background-image: url('/static/tma-static/images/reglementaire.jpg');
-}
-
-.img-bw-3 {
-    background-image: url('/static/tma-static/images/gettogether.jpg');
-}
-*/
 
 .user-box {
     height: 308px;
@@ -269,7 +245,7 @@ input::placeholder {
     padding: 20px 5px 20px 5px;
     border: 2px solid #b9c6d4;
     border-radius: 0px;
-    color: #0c1c49;
+    color: rgb(49,49,49);
     text-transform: none;
     line-height: normal;
     font-size: 14px;
@@ -286,7 +262,7 @@ input::placeholder {
 }
 .dropdown > li > a {
     display: block;
-    color: #0c1c49 !important;
+    color: rgb(49,49,49) !important;
     font-size: 14px;
 }
 .dropdown > li > a:hover, .dropdown-container > button:hover, .dropdown > li > a:focus {
@@ -394,7 +370,6 @@ input::placeholder {
 }
 .categories > .col-lg-4 > a {
     width: 100%;
-    color: #003063 !important;
     font: inherit;
     font-size: 24px;
     font-weight: 500;
@@ -402,25 +377,25 @@ input::placeholder {
     transition: all 0.1s linear 0s;
 }
 .categories > .col-lg-4 > a:hover {
-    color: #003063 !important;
+    color: black !important;
 }
 .cat-1 {
-    background-image: url('/static/tma-static/images/bureautique.png');
+    background-image: url('/static/tma-static/images/cat1.png');
 }
 .cat-2 {
-    background-image: url('/static/tma-static/images/fondamentaux.png');
+    background-image: url('/static/tma-static/images/cat2.png');
 }
 .cat-3 {
-    background-image: url('/static/tma-static/images/applications.png');
+    background-image: url('/static/tma-static/images/cat3.png');
 }
 .cat-4 {
-    background-image: url('/static/tma-static/images/marketing.png');
+    background-image: url('/static/tma-static/images/cat4.png');
 }
 .cat-5 {
-    background-image: url('/static/tma-static/images/compliance.png');
+    background-image: url('/static/tma-static/images/cat5.png');
 }
 .cat-6 {
-    background-image: url('/static/tma-static/images/management.png');
+    background-image: url('/static/tma-static/images/cat6.png');
 }
 
 /*zooming effet*/
@@ -441,16 +416,3 @@ div.zoomEffect:hover {
     opacity: 1;
     z-index: 999;
 }
-
-
-/* BANDEAU WRONG ZONE */
-#localisation-warning{
-    padding:20px;
-    text-align: center;
-  }
-  #localisation-warning button{
-    border-radius:50px;
-    color:#003655;
-    border:2px solid;
-    text-transform: uppercase
-  }

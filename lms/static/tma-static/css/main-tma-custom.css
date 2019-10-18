@@ -19,8 +19,58 @@
   margin:0;
 }
 
-.phileas-button{
-  border: 2px solid #0C1C49!important;
+/* COLORS */
+.main-color {
+  color: #009CDF;
+}
+.main-bg-color {
+  background-color: #009CDF;
+}
+.secondary-color {
+  color: #FB4402;
+}
+.secondary-bg-color {
+  background-color: #FB4402;
+}
+
+/* BUTTONS */
+.tma-button{
+  border: 2px solid #009CDF!important;
   border-radius: 28px!important;
-  color: #0C1C49;
+  color: #009CDF !important;
+}
+.tma-button:hover {
+  border: 2px solid #009CDF!important;
+  background-color: #009CDF !important;
+  color: white !important;
+}
+
+.btn-admin {
+  width: 100px;
+  border-radius: 28px;
+  border: 2px solid #009CDF;
+  text-align: center;
+}
+.btn-admin:hover {
+  background-color:#009CDF;
+  color: white !important;
+}
+
+a.enroll-btn, a.continue-btn {
+  width: 150px;
+  padding: 8px;
+  margin: 0 1rem 1rem 1rem;
+  border-radius: 28px;
+  background-color: white;
+  color: #009CDF !important;
+  border: 2px solid #009CDF;
+  font-weight: bold;
+  display: inline-block;
+  vertical-align: middle;
+}
+a.enroll-btn:hover, a.continue-btn:hover {
+  background-color: #009CDF;
+  color: white !important;
+  text-decoration: none;
+  cursor:pointer;
 }

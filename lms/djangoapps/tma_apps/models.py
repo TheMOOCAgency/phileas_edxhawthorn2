@@ -199,7 +199,6 @@ class TmaCourseOverview(models.Model):
     course_overview_edx = models.ForeignKey(CourseOverview, unique=True)
     is_manager_only = models.BooleanField(default=False)
     is_mandatory = models.BooleanField(default=False)
-    is_vodeclic = models.BooleanField(default=False)
     has_menu = models.BooleanField(default=True)
     is_linear = models.BooleanField(default=False)
     favourite_total = models.IntegerField(default=0)
@@ -221,14 +220,6 @@ class TmaCourseOverview(models.Model):
             return tma_course_overview
         except:
             pass
-
-    @classmethod
-    def add_vodelic_course(cls, course_key, tag):
-        tma_course_overview=cls.get_tma_course_overview_by_course_id(course_key)
-        tma_course_overview.is_vodeclic=True
-        tma_course_overview.tag=tag
-        tma_course_overview.save()
-        return tma_course_overview
 
     @classmethod
     def change_active_enrollments_total(cls, course_key, event):

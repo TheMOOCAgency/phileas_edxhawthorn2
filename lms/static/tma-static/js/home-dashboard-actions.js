@@ -58,27 +58,4 @@ $(document).ready(function () {
         let update_info = change_social_attributes($(this),'favorite');
         console.log(update_info)
     });
-    
-    // Mark as done Vodeclic course
-    $('.tma_markasdone').on("click", function() {
-        var courseId = $(this).parent().data('course-id');
-        url ='/tma_apps/'+courseId+'/grade_tracking/mark_as_done'
-        $.ajax({
-          type: 'POST',
-          url: url,
-          data: {
-            'marked_as_done':'True',
-            'is_vodeclic': 'True'
-          },
-          success: function(){
-            window.location.reload();
-          }
-        });
-    });
-
-    //Enroll when click on no course about page courses join because no course about page -> USEFUL FOR FAVORITES which are not always active enrollments
-    $('.nocourseabout_register').on('click', function(){
-      let course_id=$(this).data('nocourseaboutcourse-id')
-      $.post("/change_enrollment", {"enrollment_action": "enroll","course_id":course_id})
-    })
 });

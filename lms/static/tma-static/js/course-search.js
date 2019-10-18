@@ -112,18 +112,6 @@ const searchByFilter = function(coursesJson, queryObj) {
                 // Both orgs
                 if (queryObj[key].length > 1) {
                     orgIsValid = true
-                } else {
-                    // Only Vodeclic
-                    if (queryObj[key].indexOf('Vodeclic') > -1) {
-                        if (checkValueAsBool(course, 'is_vodeclic', false)) {
-                            orgIsValid = false;
-                        }
-                    } else {
-                        // Only Amundi
-                        if (checkValueAsBool(course, 'is_vodeclic', true)) {
-                            orgIsValid = false;
-                        }
-                    }
                 }
             }
 
@@ -155,7 +143,6 @@ const displayResults = function(results) {
     results.forEach(function(item){
         var isMandatory = item.is_mandatory;
         var isManagerOnly = item.is_manager_only;
-        var isVodeclic = item.is_vodeclic;
         var isFavorite = item.is_favorite;
         var isLiked = item.is_liked;
         var language = item.language;
@@ -163,31 +150,16 @@ const displayResults = function(results) {
         var isBlocked = item.is_blocked;
         var courseId = item.id.split('+').join('').split(':').join('');
         var subjectTag = item.tag_text;
-        var isApoc = item.id.indexOf("course-v1:americas+APOC+APOC") > -1 || item.id.indexOf("course-v1:asia+APOC+APOC") > -1 || item.id.indexOf("course-v1:europe+APOC+APOC") > -1;
-
+        
         var buttonText = function(){
             var buttonText;
             if (isManagerOnly || isBlocked) {
                 buttonText = '<a class="enroll-btn no-enroll">'+item.button_text+'</a>';
             } else {
-                if (isVodeclic) {
-                    if (isEnrolled) {
-                        buttonText = '<a href="'+item.vodeclic_link+'" target="_blank" class="enroll-btn">'+item.button_text+'</a>';
-                    } else {
-                        buttonText = '<a href="/courses/'+item.id+'/about" target="_blank" class="enroll-btn nocourseabout_register" data-nocourseaboutcourse-id="'+item.id+'">'+item.button_text+'</a>';
-                    };
-                } else if (isApoc) {
-                    if (isEnrolled) {
-                        buttonText = '<a onclick="document.querySelector(\'form[name=&quot;apocform&quot;]\').submit();" target="_blank" class="enroll-btn">'+item.button_text+'</a>';
-                    } else {
-                        buttonText = '<a href="/courses/'+item.id+'/about" class="enroll-btn">'+item.button_text+'</a>';
-                    };
+                if (isEnrolled) {
+                    buttonText = '<a href="/courses/'+item.id+'/courseware/" class="enroll-btn">'+item.button_text+'</a>';
                 } else {
-                    if (isEnrolled) {
-                        buttonText = '<a href="/courses/'+item.id+'/courseware/" class="enroll-btn">'+item.button_text+'</a>';
-                    } else {
-                        buttonText = '<a href="/courses/'+item.id+'/about" class="enroll-btn">'+item.button_text+'</a>';
-                    };
+                    buttonText = '<a href="/courses/'+item.id+'/about" class="enroll-btn">'+item.button_text+'</a>';
                 };
             };
             return buttonText;

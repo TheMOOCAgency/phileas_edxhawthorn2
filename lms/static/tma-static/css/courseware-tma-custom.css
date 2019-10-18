@@ -169,7 +169,7 @@ span.fa.fa-chevron-right.fa-rotate-90{
   margin: 0px;
 }
 
-
+#28a745
 
 /* Zone Cours */
 .page-header{
@@ -278,7 +278,7 @@ nav.sequence-bottom .sequence-nav-button{
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
 }
-nav.sequence-bottom .sequence-nav-button:hover, .phileas-button:hover{
+nav.sequence-bottom .sequence-nav-button:hover, .back-button:hover{
   background-color: #0C1C49!important;
   color: white!important;
 }

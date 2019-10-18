@@ -23,7 +23,6 @@ from lms.djangoapps.courseware.courses import (
   get_course_overview_with_access,
   get_course
 )
-from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from lms.djangoapps.tma_apps.models import TmaCourseOverview
 %>
 
@@ -135,20 +134,6 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
     %endif
 </div>
 
-<!-- TMA BANDEAU WRONG ZONE-->
-%if wrong_zone:
-<div id="localisation-warning">
-  <h3>${_('The website you are currently logged in does not match your geographical area.')}</h3>
-  <p>${_('Please click on the link below to be redirected to your local website :')}</p>
-  <a href="https://${user_zone}.${settings.SITE_NAME}">
-    <button>
-      ${user_zone}
-    </button>
-  </a>
-</div>
-%endif
-
-
 <%
   n_courses = 0
   try:
@@ -161,7 +146,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 <div class="container-fluid bg-grey-light">
   <!--PRESENTATION ROW-->
   <div class="row bg-white">
-      <form method="get" action="/courses" class="gif-box">
+      <form method="get" action="/courses" class="gif-box secondary-bg-color">
         <p class="title-36">${_("Find your course")} <br>${_("among")}
           <span class="numscroller" data-min='1' data-max='${n_courses}' data-delay='5' data-increment='${n_courses}/3'>${n_courses}</span>
            ${_("available")}
@@ -179,7 +164,7 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       <div class="header-box col-lg-6">
       </div>
       <video autoplay="true" class="embed-responsive-item" height="420" loop muted>
-        <source src="${static.url('tma-static/video/hp_femme_comp.mp4')}" type="video/mp4">
+        <source src="${static.url('tma-static/video/dashboard-video.mp4')}" type="video/mp4">
       </video>
   </div>
   <div class="row">
@@ -206,27 +191,13 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
       </div>
     %endif
     <!--User dark blue box-->
-    <div class="col-lg-3 bg-blue-dark user-box text-white">
+    <div class="col-lg-3 user-box main-bg-color text-white">
       <div class="container-fluid">
         <div class="row">
             <div class="col-12 mb-3">
-              <p class="text-blue-light">${_("Last course")}</p>
+              <p class="main-color">${_("Last course")}</p>
               % if last_enrollment:
-                %if "Vodeclic" in str(last_enrollment.course_id).split('+')[2]:
-                  <p class="last-course-title" onclick="window.open('${get_vodeclic_href(request.user,last_enrollment.course_id)}','_blank');">${last_enrollment.course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
-                %elif "APOC+APOC" in str(last_enrollment.course_id):
-                  <form name="apocform" target="_blank" action="https://apoc.themoocagency.com/autologreg" method="POST" style="display:none">
-                    <input type='text' name='PID' value='${user.profile.rpid}' />
-                    <input type='text' name='firstname' value='${user.first_name}' />
-                    <input type='text' name='lastname' value='${user.last_name}' />
-                    <input type='text' name='email' value='${user.email}' />
-                    <input type='text' name='entity_id' value='amundi' />
-                    <button>Submit</button>
-                  </form>
-                  <p class="last-course-title" onclick="document.querySelector('form[name=&quot;apocform&quot;]').submit();">${last_enrollment.course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
-                %else:
-                  <p class="last-course-title" onclick="window.location.href = '/courses/${last_enrollment.course_id}/courseware';">${last_enrollment.course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
-                %endif
+                <p class="last-course-title" onclick="window.location.href = '/courses/${last_enrollment.course_id}/courseware';">${last_enrollment.course_overview.display_name_with_default}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
               % else:
                 <p>${_("No enrollment yet")}<img class="m-1 ml-3" src="${static.url('tma-static/images/fleche-dr-blanc.svg')}"></p>
               % endif
@@ -359,19 +330,19 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
           </div>
       </div>
       <div class="row categories">
-        <div class="zoomEffect col-lg-4 text-center cat-1"><a href="/courses?filter=Office">${_("Office Tools")}</a></div>
-        <div class="zoomEffect col-lg-4 text-center cat-2"><a href="/courses?filter=Fundamentals">${_("Fundamentals")}</a></div>
+        <div class="zoomEffect col-lg-4 text-center cat-1"><a href="/courses?filter=Office" style="main-color">${_("Office Tools")}</a></div>
+        <div class="zoomEffect col-lg-4 text-center cat-2"><a href="/courses?filter=Fundamentals" style="main-color">${_("Fundamentals")}</a></div>
         <div class="zoomEffect col-lg-4 text-center cat-3">
-          <a href="/courses?filter=Business">${_("Business Applications")}</a>
+          <a href="/courses?filter=Business" style="main-color">${_("Business Applications")}</a>
         </div>
         <div class="zoomEffect col-lg-4 text-center cat-4">
-          <a href="/courses?filter=Communication">${_("Communication")}</a>
+          <a href="/courses?filter=Communication" style="main-color">${_("Communication")}</a>
         </div>
         <div class="zoomEffect col-lg-4 text-center cat-5">
-          <a href="/courses?onboarding=newstarter">${_("Onboarding")}</a>
+          <a href="/courses?onboarding=newstarter" style="main-color">${_("Onboarding")}</a>
         </div>
         <div class="zoomEffect col-lg-4 text-center cat-6">
-          <a href="/courses?filter=Management">${_("Management")}</a>
+          <a href="/courses?filter=Management" style="main-color">${_("Management")}</a>
         </div>
       </div>
     </div>
@@ -383,30 +354,6 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 <script>
   let etoile_src = "${static.url('tma-static/images/etoile.svg')}"
   let counter = ${favorite_courses_count}
-  const ssData = ${dump_js_escaped_json(sspeaking_data) | n, decode.utf8};
-
-  const postSspeaking = function(ssData) {
-    var form = document.createElement("form");
-    form.setAttribute("method", "POST");
-    form.setAttribute("action", ssData.sspeaking_url);
-    form.setAttribute("target", "_blank");
-    for (var key in ssData.sspeaking_data) {
-      if (ssData.sspeaking_data.hasOwnProperty(key)) {
-        var hiddenField = document.createElement("input");
-        hiddenField.setAttribute("type", "hidden");
-        hiddenField.setAttribute("name", key);
-        hiddenField.setAttribute("value", ssData.sspeaking_data[key]);
-
-        form.appendChild(hiddenField);
-      }
-    }
-    document.body.appendChild(form);
-    form.submit();
-  };
-
-  $('#7speaking').click(function() {
-    postSspeaking(ssData);
-  });
 
 
 </script>

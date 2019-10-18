@@ -14,14 +14,6 @@ $(document).ready(function() {
     $('.dropdown').toggleClass("is-down");
   });
 
-  //Enroll when click on "no course about page" like APOC or vodeclic
-  $('.nocourseabout_register').on('click', function(){
-    let course_id = $(this).data('nocourseaboutcourse-id')
-    $.post("/change_enrollment", {"enrollment_action": "enroll","course_id":course_id})
-    ongoing_counter = parseInt($('#ongoin-counter-number').html());
-    $('#ongoin-counter-number').html(ongoing_counter+1)
-  });
-
   // Random banner display
   const randomBanner = function() {
     randomNumber = Math.floor(Math.random()*3); 
