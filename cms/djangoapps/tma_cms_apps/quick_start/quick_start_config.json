@@ -116,7 +116,7 @@
               "name":"onboarding",
               "type":"select",
               "options":[
-                  "new starter"
+                  "New Starter"
               ]
           },
           {
