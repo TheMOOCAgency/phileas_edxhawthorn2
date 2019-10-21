@@ -50,7 +50,7 @@
           },
          {
           "name":"tag",
-          "options":["Office Tools","Fundamentals","Design","Communication","Management","Business App.","Compliance","Internet","Human Resources"],
+          "options":["Office Tools","Fundamentals","Design","Communication","Management","Business App.","Compliance","Internet","HR"],
           "type":"select"
           },
          {
@@ -167,7 +167,7 @@
      "homeFiltersDetail":[
       {
           "name":"tag",
-          "options":["Office Tools","Fundamentals","Design","Communication","Management","Business App.","Compliance","Internet","Human Resources"],
+          "options":["Office Tools","Fundamentals","Design","Communication","Management","Business App.","Compliance","Internet","HR"],
           "type":"checkbox"
       },
       {
