@@ -25477,7 +25477,7 @@ msgstr "Ce certificat est adressé à"
 
 #: lms/templates/tma_apps/certificate.html
 msgid "This certificate acknowledges that the above named has successfully completed the necessary training and testing including didactif and video modules."
-msgstr "Ce certificat reconnaît que le personne nommée ci-dessus a réussi le parcours et les examens de ce cours, y compris les modules didactiques et vidéo."
+msgstr "Ce certificat reconnaît que la personne nommée ci-dessus a réussi le parcours et les examens de ce cours, y compris les modules didactiques et vidéo."
 
 #: lms/templates/tma_apps/certificate.html
 msgid "CERTIFICATE UNAVAILABLE"
@@ -25542,3 +25542,22 @@ msgstr "Création rapide de cours"
 #: lms/templates/student_account/login_and_register.html
 msgid "Having troubles login in ? Please empty your browser cache before contacting support."
 msgstr "Vous avez des difficultés à vous connecter ? Veuillez effacer le cache de votre navigateur avant de contacter le support."
+
+#: lms/template/seq_module.html
+msgid "Sorry"
+msgstr "Désolé"
+
+msgid "You did not pass. You obtained"
+msgstr "Vous n'avez pas réussi. Vous avez obtenu"
+
+msgid "but the required score is"
+msgstr "mais le score requis est"
+
+msgid "Congratulations"
+msgstr "Félicitations"
+
+msgid "You got"
+msgstr "Vous avez obtenu"
+
+msgid "right answers or"
+msgstr "bonnes réponses soit"

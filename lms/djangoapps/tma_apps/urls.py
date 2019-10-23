@@ -10,6 +10,7 @@ from .delete_cookies import views as delete_cookies_views
 from .legal import views as legal_views
 from .tma_reports import views as tma_reports_views
 from .average_score import views as average_views
+from .faq import views as faq_views
 
 urlpatterns = [
     #Certificates
@@ -20,6 +21,7 @@ urlpatterns = [
 
     #Completion
     url(r'^{}/completion/get_course_completion$'.format(settings.COURSE_ID_PATTERN), completion_views.get_course_completion),
+    url(r'^{course_id}/{unit_id}/completion/get_unit_completion$'.format(course_id=settings.COURSE_ID_PATTERN, unit_id=settings.USAGE_KEY_PATTERN), completion_views.get_unit_completion),
 
     #Favoris
     url(r'^{}/favorite/update_favorite$'.format(settings.COURSE_ID_PATTERN), favourite_views.api_update_favourite),
@@ -53,4 +55,7 @@ urlpatterns = [
         average_views.average,
         name='average',
     ),
+
+    #TMA faq
+    url(r'^faq$', faq_views.faq_view),
 ]

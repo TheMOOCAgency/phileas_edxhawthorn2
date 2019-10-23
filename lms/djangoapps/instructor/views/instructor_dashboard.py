@@ -227,9 +227,7 @@ def instructor_dashboard_2(request, course_id):
 
     certificate_invalidations = CertificateInvalidation.get_certificate_invalidations(course_key)
 
-    # TMA add tma_certificates section if course is graded
-    if not course.no_grade:
-        sections.append(_section_tma_certificates(course, access))
+    sections.append(_section_tma_certificates(course, access))
 
     context = {
         'course': course,
@@ -816,6 +814,7 @@ def _section_tma_certificates(course, access):
         'course_id': unicode(course_key),
         'check_best_grade_url': '/tma_apps/{course_id}/certificate/check_best_grade'.format(course_id=course.id),
         'generate_url': '/tma_apps/{course_id}/certificate/generate'.format(course_id=course.id),
+        'is_course_graded': not course.no_grade,
         # remove access if course staff or instructor
         'is_hidden': not access['admin']
     }

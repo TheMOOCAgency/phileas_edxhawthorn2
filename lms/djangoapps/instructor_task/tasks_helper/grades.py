@@ -548,13 +548,19 @@ class ProblemGradeReport(object):
             best_grade = 0
             try:
                 tma_course_enrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__user_id=student.id, course_enrollment_edx__course_id=course_id)
-                best_grade = enrollment.best_student_grade
-                completion_rate = enrollment.completion_rate
+                best_grade = tma_course_enrollment.best_student_grade
+                completion_rate = float(round(tma_course_enrollment.completion_rate*100))/100
             except:
                 pass
 
             registration_date = CourseEnrollment.objects.get(user_id=student.id, course_id=course_id).created.strftime('%d-%m-%Y')
-            has_passed = course_grade.passed
+
+            has_passed = 'n/a'
+            try:
+                has_passed = TmaCourseEnrollment.objects.get(course_enrollment_edx__user_id=student.id, course_enrollment_edx__course_id=course_id).has_validated_course
+            except:
+                pass
+
             ### END ###
 
             task_progress.attempted += 1

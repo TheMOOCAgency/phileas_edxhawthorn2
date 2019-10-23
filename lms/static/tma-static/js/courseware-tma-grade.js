@@ -6,6 +6,7 @@ $(document).ready(function(){
   highlightChoices();
   checkAttemptsAllowed();
   changeHintWording();
+  translate(language);
 
   $(document).ajaxSuccess(function(e, xhr, settings) {
     /* Each time a problem is submitted */
@@ -17,6 +18,7 @@ $(document).ready(function(){
       styleQuizOnSubmit(data, settings.url);
       highlightChoices();
       changeHintWording();
+      translate(language);
     }
     /* When passing from unit to another (no reload) */
     if (settings.url.indexOf('goto_position') > -1) {
@@ -29,6 +31,7 @@ $(document).ready(function(){
       highlightChoices();
       checkAttemptsAllowed();
       changeHintWording();
+      translate(language);
     }
   });
 });
@@ -91,7 +94,7 @@ function styleAlreadyAnsweredQuestions() {
     } else {
       if (indicatorContainer.hasClass('correct')  || goodChoice.length > 0) {
         $(this).addClass('tma-success').addClass('tma-answered');
-        problemTitle.html(problemTitle.html()+' <i style="color:#6ac259;" class="fas fa-check"></i>');
+        problemTitle.html(problemTitle.html()+' <i style="color:#6ac259;" class="fa fa-check"></i>');
         $('#'+ questionId).find('label > input:checked ~ .checksuccess').show();
         showAnswers(url, questionId);
         if ($(this).find('.tma-attempts').attr('data-remaining') <= 0){
@@ -147,7 +150,7 @@ function styleQuizOnSubmit(data, url) {
   } else {
     // If correct answer : green icon
     if (data['success'] == 'correct') {
-      problemTitle.html(problemTitle.html()+' <i style="color:#6ac259;" class="fas fa-check"></i>');
+      problemTitle.html(problemTitle.html() +' <i style="color:#6ac259;" class="fa fa-check"></i>');
       $('#'+ questionId).find('label > input:checked ~ .checksuccess').show();
       // Mark question as answered and success
       $('#'+ questionId).addClass('tma-success').addClass('tma-answered');
@@ -271,3 +274,11 @@ function get_user_grade(finalScore){
     }
   });
 };
+
+function translate(language){
+  if (language == 'fr') {
+    setInterval(function(){
+      $('.detailed-solution > p:first-child').text('Explication');
+    }, 300)
+  }
+}

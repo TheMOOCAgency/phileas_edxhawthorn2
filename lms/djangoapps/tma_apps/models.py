@@ -3,6 +3,8 @@
 from student.models import CourseEnrollment
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from opaque_keys.edx.keys import CourseKey
+from courseware.courses import get_course_by_id
+
 from django.db import models
 from django.dispatch import receiver
 from student.signals import UNENROLL_DONE
@@ -98,7 +100,11 @@ class TmaCourseEnrollment(models.Model):
                 enrollment.best_student_grade = grade
                 enrollment.date_best_student_grade = datetime.datetime.now()
                 response['new_best_grade'] = True
-            enrollment.has_validated_course = passed
+            course = get_course_by_id(course_key)
+            if enrollment.best_student_grade >= course.grade_cutoffs['Pass'] and not course.no_grade:
+                enrollment.has_validated_course = True
+            elif enrollment.best_student_grade < course.grade_cutoffs['Pass'] and not course.no_grade:
+                enrollment.has_validated_course = False
             enrollment.save()
             response['status'] = 'success'
             response['has_displayed_message'] = enrollment.has_displayed_message

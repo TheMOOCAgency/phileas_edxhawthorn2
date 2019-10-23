@@ -1163,8 +1163,10 @@ INSTALLED_APPS = [
 
     #cms tma APPS
     'cms.djangoapps.tma_cms_apps',
-]
 
+    #CSV Exports Admin
+    'django_csv_exports',
+]
 
 ################# EDX MARKETING SITE ##################################
 

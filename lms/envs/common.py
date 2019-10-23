@@ -2318,7 +2318,11 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
 
     #TMA Apps
-    'lms.djangoapps.tma_apps'
+    'lms.djangoapps.tma_apps',
+
+    #CSV Exports Admin
+    'django_csv_exports',
+
 ]
 
 ######################### CSRF #########################################
