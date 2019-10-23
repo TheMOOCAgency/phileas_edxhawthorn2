@@ -78,11 +78,11 @@ button, button:hover, button:hover:not(:disabled), button:active:not(:disabled),
 
 .navbar .brand-logo-size {
     height: 100%;
-    padding: 0px 0px 10px 75px;
+    padding: 0px 0px 0px 70px;
 }
 
 .logo {
-    width: 210px;
+    width: 155px;
 }
 
 /* SWITCH */
