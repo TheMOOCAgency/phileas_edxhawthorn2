@@ -15,6 +15,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from edxmako.shortcuts import render_to_response
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
 
 log = logging.getLogger(__name__)
 
