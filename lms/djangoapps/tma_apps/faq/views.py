@@ -19,7 +19,6 @@ from openedx.core.djangoapps.site_configuration import helpers as configuration_
 
 log = logging.getLogger(__name__)
 
-
 def faq_view(request):
     context = {}
     site_org = configuration_helpers.get_current_site_orgs()[0]
@@ -31,5 +30,3 @@ def faq_view(request):
     context['data'] = data
 
     return render_to_response('tma_apps/faq.html',context)
-
-
