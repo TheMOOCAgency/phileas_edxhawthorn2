@@ -203,22 +203,21 @@
                                                                     <tr>
                                                                         <td valign='top' class='mcnTextContent'
                                                                             style='padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #606060;font-family: Helvetica;font-size: 14px;line-height: 150%;text-align: left;'>
-                                                                            {% trans "Hello" %},<br/><br/>
+                                                                            {% trans "Hello" %},<br/>
 
-                                                                            {{ content.name_text }} <strong>{{ display_name }}</strong><br/><br/>
+                                                                            {{ content.name_text }} <strong>{{ display_name }}</strong><br/>
 
-                                                                            {{ content.effort_text }}<br/><br/>
+                                                                            {{ content.effort_text }}<br/>
 
                                                                             {% if mandatory_text %}
-                                                                                {{ mandatory_text }}<br/><br/>
+                                                                                {{ mandatory_text }}<br/>
                                                                             {% endif %}
 
-                                                                            {{ content.link_text }}<a href="{{ course_about_url }}"> {{ display_name }}</a><br/><br/>
+                                                                            {{ content.link_text }}<a href="{{ course_about_url }}"> {{ display_name }}</a><br/>
 
-                                                                            {{ content.last_text }}<br/>
-
-                                                                            {{ content.signature }}<br/><br/>
-                                                                            - <br>
+                                                                            {{ content.last_text }}
+                                                                            {{ content.signature }}<br/>
+                                                                            -
                                                                             {% trans "This email was automatically sent. Please do not respond." %}
                                                                         </td>
                                                                     </tr>
