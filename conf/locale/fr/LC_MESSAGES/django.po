@@ -25524,10 +25524,6 @@ msgid "This email was automatically sent. Please do not respond."
 msgstr "Ce message est généré automatiquement par la plateforme. Veuillez ne pas y répondre."
 
 #: lms/templates/emails/phileas-email.html
-msgid "Thank you,"
-msgstr "Merci,"
-
-#: lms/templates/emails/phileas-email.html
 msgid "The training team"
 msgstr "L'équipe formation"
 
