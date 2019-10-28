@@ -422,10 +422,10 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
         site=stripped_site_name
     )
     tma_params["content"] = {
-        "name_text": _("You are invited to follow the training"),
-        "effort_text": _("Estimated time to complete this training is {effort}.").format(effort=effort),
-        "link_text": _("You can access training course by clicking on the following link : "),
-        "last_text": _("We wish you a nice training time."),
+        "name_text": _("You are invited to take the training course, "),
+        "effort_text": _("The estimated time to complete this training is {effort}.").format(effort=effort),
+        "link_text": _("You can access the training course by clicking on the following link : "),
+        "last_text": _("Thank you,"),
         "signature": _("The training team")
     }
 
