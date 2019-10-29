@@ -434,6 +434,7 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     else:
         tma_params["content"]["mandatory_text"] = ""
 
+    log.info(tma_params)
     email_params.update(tma_params)
 
     return email_params
