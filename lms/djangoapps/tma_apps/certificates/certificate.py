@@ -87,7 +87,8 @@ class certificate():
             "course_name":self.course.display_name_with_default,
             "first_name":first_name,
             "last_name":last_name,
-            "certificate_info":certificate_info
+            "certificate_info":certificate_info,
+            "is_course_graded": self.is_course_graded
         }
 
         return render_to_response('tma_apps/certificate.html', context)
