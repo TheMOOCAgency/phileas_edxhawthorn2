@@ -6,7 +6,11 @@ file='../static_content.html'/>
 import json
 from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string
 from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
-site_org = configuration_helpers.get_current_site_orgs()[0]
+if configuration_helpers.get_current_site_orgs()[0]:
+  site_org = configuration_helpers.get_current_site_orgs()[0]
+else:
+  site_org = "phileas"
+endif
 url_section = '/edx/var/edxapp/media/'+site_org+'/faq.json'
 json_data = open(url_section)
 data = json.load(json_data)
@@ -139,6 +143,6 @@ data = json.load(json_data)
       window.lang = "${LANGUAGE_CODE}";
     </script>
     <script src="${static.url('tma-static/widget-faq/static/js/2.4c37cabb.chunk.js')}"></script>
-    <script src="${static.url('tma-static/widget-faq/static/js/main.1d0fe0ae.chunk.js')}"></script>
+    <script src="${static.url('tma-static/widget-faq/static/js/main.fca9d254.chunk.js')}"></script>
   </body>
 </html>
