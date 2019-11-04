@@ -430,7 +430,7 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     }
 
     if TmaCourseOverview.objects.get(course_overview_edx__id=course.id).is_mandatory:
-        tma_params["content"]["mandatory_text"] = _("Please remind that this training is mandatory and have to be passed as soon as possible and by no means after {end_date}.").format(end_date=CourseOverview.objects.get(id=course.id).end.strftime("%d-%m-%Y"))
+        tma_params["content"]["mandatory_text"] = _("This training is mandatory and must be completed before {end_date}.").format(end_date=CourseOverview.objects.get(id=course.id).end.strftime("%d-%m-%Y"))
     else:
         tma_params["content"]["mandatory_text"] = False
 

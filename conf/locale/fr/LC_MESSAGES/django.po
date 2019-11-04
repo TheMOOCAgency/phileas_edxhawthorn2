@@ -25520,8 +25520,8 @@ msgid "You can access the training course by clicking on the following link : "
 msgstr "Vous pouvez accéder à la formation en cliquant sur le lien suivant : "
 
 #: lms/templates/emails/phileas-email.html
-msgid "Please remind that this training is mandatory and have to be passed as soon as possible and by no means after {end_date}."
-msgstr "Ce cours est obligatoire et doit être suivi dès que possible, en aucun cas après la date du {end_date}."
+msgid "This training is mandatory and must be completed before {end_date}."
+msgstr "Ce module est obligatoire et doit être réalisé avant le {end_date}."
 
 #: lms/templates/emails/phileas-email.html
 msgid "This email was automatically sent. Please do not respond."
