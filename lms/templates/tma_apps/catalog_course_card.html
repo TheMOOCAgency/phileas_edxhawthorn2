@@ -67,7 +67,19 @@ is_apoc = "APOC+APOC" in str(course['id'])
                     </div>
                     <div class="col-4 text-center pl-2 pr-2">
                         <img src="${static.url('tma-static/images/Time.png')}">
-                        <span>${course['effort']}<span>
+                        <span>
+                          % if course['effort'] is not None:
+                            % if len(course['effort'].split(':')) > 1:
+                              % if int(course['effort'].split(':')[1]) > 0:
+                                ${course['effort']} mn
+                              % endif
+                            % else:
+                              ${course['effort']}
+                            % endif
+                          % else:
+                            n/a
+                          % endif
+                        <span>
                     </div>
                     <div class="col-4 text-center pl-2 pr-2">
                         % if course['language'] == "fr":

@@ -215,7 +215,22 @@ import json
     <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/time.svg')}" width="36">
       <p>${_("Duration")}</p>
-      <p id="course-duration" class="font-weight-bold">${get_course_about_section(request, course, "effort")}</p>
+      <p id="course-duration" class="font-weight-bold">
+        <%
+          effort = get_course_about_section(request, course, "effort")
+        %>
+        % if effort is not None:
+          % if len(effort.split(':')) > 1:
+            % if int(effort.split(':')[1]) > 0:
+              ${effort} mn
+            % endif
+          % else:
+            ${effort}
+          % endif
+        % else:
+          n/a
+        % endif
+      </p>
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
       <img src="${static.url('tma-static/images/langue.svg')}" width="50" class="mb-0">
