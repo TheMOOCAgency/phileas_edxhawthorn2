@@ -258,6 +258,7 @@ class TmaCourseInfo():
         status="open"
         if not self.tmaOverview.is_vodeclic and not course_open_for_self_enrollment(self.course_key):
             status="closed"
+        return status
 
     def getBaseInfos(self):
         baseInfo={
@@ -269,6 +270,7 @@ class TmaCourseInfo():
             "org":self.org,
             "description":self.edxOverview.short_description   
         }
+        log.info(baseInfo)
         return baseInfo
 
     def getShortInfo(self):
