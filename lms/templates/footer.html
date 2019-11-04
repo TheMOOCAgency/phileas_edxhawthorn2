@@ -61,7 +61,9 @@
       <img class="brand-logo-size" src="${static.url('tma-static/images/logo-phileas-white-2.png')}"/>
     </div>
     <div class="col-lg-4 links-part">
+      % if request.user.is_authenticated:
         <a href="/tma_apps/faq">${_("FAQ")}</a>
+      % endif
       <a href="mailto:phileas-training@amundi.com?subject=PHILEAS">${_("Contact")}</a>
       <a href="/tma_apps/legal">${_("Legal Notice")}</a>
     </div>
