@@ -26,8 +26,14 @@ from django.utils.translation import ugettext as _
 		<%static:js group='base_vendor'/>
     <%static:js group='base_application'/>
     <script type="text/javascript" src="${static.url('common/js/vendor/bootstrap.bundle.js')}"></script>
-    <link rel="stylesheet" href="${static.url('tma-static/faq/static/css/main.210cac54.chunk.css')}">
-    <h1 style="text-align: center;margin-top : 50px">FAQ</h1>
+    <link rel="stylesheet" href="${static.url('tma-static/faq/static/css/main.bba54e59.chunk.css')}">
+
+    <!-- TMA Custom CSS and Font -->
+    <link rel="stylesheet" type="text/css" href="${static.url('tma-static/css/main-tma-custom.css')}">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500" rel="stylesheet">
+    
+    <h1 style="text-align: center;margin-top : 20px">FAQ</h1>
+  
     <div id="root"></div>
     <script>
            ! function(l) {
