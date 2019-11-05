@@ -159,7 +159,19 @@ const displayResults = function(results) {
         var isFavorite = item.is_favorite;
         var isLiked = item.is_liked;
         var language = item.language;
-        var effortWording = item.effort.split(':')[1] ? (parseInt(item.effort.split(':')[1]) > 0 ? ' mn' : '') : '';
+        var effort = item.effort;
+        if (item.effort) {
+            if (item.effort.split(':')[1]) {
+                if ((parseInt(item.effort.split(':')[0]) > 0) && (parseInt(item.effort.split(':')[1]) > 0)) {
+                    effort = item.effort.split(':')[0] + ' h ' + item.effort.split(':')[1] + ' mn'
+                } else if ((parseInt(item.effort.split(':')[0]) == 0) && (parseInt(item.effort.split(':')[1]) > 0)) {
+                    effort = item.effort + ' mn'
+                }
+            }
+        } else {
+            effort = 'n/a';
+        }
+
         var isEnrolled = item.is_enrolled;
         var isBlocked = item.is_blocked;
         var courseId = item.id.split('+').join('').split(':').join('');
@@ -215,7 +227,7 @@ const displayResults = function(results) {
         (isFavorite ? '<span class="pin favorite favorite-on"></span>' : '<span class="pin favorite favorite-off"></span>') + '</div><div class="row course-title"><p>'+item.display_name+'</p></div><div class="pictos-box"><div data-course-id="'+item.id+'" class="row course-pictos '+courseId+'"><div data-course-id="'+item.id+'" class="col-4 text-center pl-2 pr-2 '+courseId+'">'+
         // Is liked
         (isLiked ? '<span class="pin like like-on"></span>' : '<span class="pin like like-off"></span>') +
-        '<span class="like_count count-box" data-min="0" data-max="'+item.liked_total+'" data-delay="1" data-increment="'+(item.liked_total/3)+'">'+item.liked_total+'</span></div><div class="col-4 text-center pl-2 pr-2"><img src="/static/tma-static/images/Time.png"><span>'+item.effort+effortWording+'<span></div><div class="col-4 text-center pl-2 pr-2">'+
+        '<span class="like_count count-box" data-min="0" data-max="'+item.liked_total+'" data-delay="1" data-increment="'+(item.liked_total/3)+'">'+item.liked_total+'</span></div><div class="col-4 text-center pl-2 pr-2"><img src="/static/tma-static/images/Time.png"><span>'+effort+'<span></div><div class="col-4 text-center pl-2 pr-2">'+
         // Language
         ((language == "fr") ? '<img src="/static/tma-static/images/lang_fr.svg">' : '<img src="/static/tma-static/images/lang_en.svg">') +
         '<span class="text-uppercase">'+language+'</span></div></div></div><div class="row"><div class="col text-center"><a href="#"><img src="/static/tma-static/images/flechebas.png"></a></div></div></div></div></div></div></div>' +
