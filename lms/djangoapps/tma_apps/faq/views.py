@@ -31,5 +31,3 @@ def faq_view(request):
     context['data'] = data
 
     return render_to_response('tma_apps/faq.html',context)
-
-

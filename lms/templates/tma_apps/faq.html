@@ -9,9 +9,13 @@ from django.utils.translation import get_language_bidi
 <%!
 from django.utils.translation import ugettext as _
 %>
+<% csrf_token %>
+<script
+	src="https://code.jquery.com/jquery-3.4.1.min.js"
+	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+	crossorigin="anonymous">
+</script>
 <%include file="${static.get_template_path('../header.html')}" args="online_help_token=online_help_token" />
-
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,user-scalable=no">
     <script type="text/javascript" src="${static.url('js/vendor/noreferrer.js')}" charset="utf-8"></script>
@@ -19,8 +23,8 @@ from django.utils.translation import ugettext as _
     <script type="text/javascript" src="${static.url('js/header/header.js')}"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="${static.url('common/js/vendor/jquery.js')}"></script>
-    <link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
-    <link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
+		<%static:js group='base_vendor'/>
+    <%static:js group='base_application'/>
     <script type="text/javascript" src="${static.url('common/js/vendor/bootstrap.bundle.js')}"></script>
     <link rel="stylesheet" href="${static.url('tma-static/faq/static/css/main.bba54e59.chunk.css')}">
 
@@ -29,6 +33,7 @@ from django.utils.translation import ugettext as _
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500" rel="stylesheet">
     
     <h1 style="text-align: center;margin-top : 20px">FAQ</h1>
+  
     <div id="root"></div>
     <script>
            ! function(l) {
@@ -109,8 +114,8 @@ from django.utils.translation import ugettext as _
         window.props = ${dump_js_escaped_json(data) | n, decode.utf8};
         window.lang ="${LANGUAGE_CODE}"
     </script>
-    <script src="${static.url('tma-static/faq/static/js/2.373ccd69.chunk.js')}"></script>
-    <script src="${static.url('tma-static/faq//static/js/main.47cf1bd3.chunk.js')}"></script>
-
-
+    <script src="${static.url('tma-static/faq/static/js/2.a11054b6.chunk.js')}"></script>
+    <script src="${static.url('tma-static/faq/static/js/main.6570a3a7.chunk.js')}"></script>
+    <link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
+    <link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
     <%include file="${static.get_template_path('../footer.html')}" args="online_help_token=online_help_token" />
