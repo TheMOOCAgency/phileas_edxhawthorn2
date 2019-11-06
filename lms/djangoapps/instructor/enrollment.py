@@ -417,12 +417,12 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     effort = CourseOverview.objects.get(id=course.id).effort
     if effort is not None:
         if len(effort.split(':')) > 1:
-            if int(effort.split(':')[1]) > 0 and int(effort.split(':')[0]) > 0 and (effort.split(':')[0] != '00'):
-              effort = effort.split(':')[0] + ' h ' + effort.split(':')[1]
-            elif int(effort.split(':')[1]) > 0:
+            if (int(effort.split(':')[0]) == 0) or (effort.split(':')[0] == '00'):
                 effort = effort.split(':')[1] + ' mn'
+            else:
+                effort = effort.split(':')[0]} + ' h ' + effort.split(':')[1]
     else:
-        effort = 'n/a'
+        effort = "n/a"
 
 
     tma_params = {}
