@@ -221,10 +221,10 @@ import json
         %>
         % if effort is not None:
           % if len(effort.split(':')) > 1:
-            % if int(effort.split(':')[1]) > 0 and int(effort.split(':')[0]) > 0 and (effort.split(':')[0] != '00'):
-              ${effort.split(':')[0]} h ${effort.split(':')[1]}
-            % elif int(effort.split(':')[1]) > 0:
+            % if (int(effort.split(':')[0]) == 0) or (effort.split(':')[0] == '00'):
               ${effort.split(':')[1]} mn
+            % else:
+              ${effort.split(':')[0]} h ${effort.split(':')[1]}
             % endif
           % else:
             ${effort}
