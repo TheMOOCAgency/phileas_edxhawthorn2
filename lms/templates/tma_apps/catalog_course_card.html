@@ -71,9 +71,9 @@ is_apoc = "APOC+APOC" in str(course['id'])
                           % if course['effort'] is not None:
                             % if len(course['effort'].split(':')) > 1:
                               % if int(course['effort'].split(':')[1]) > 0 and int(course['effort'].split(':')[0]) > 0 and (course['effort'].split(':') != '00'):
-                                ${course['effort'].split(':')[0]} h ${course['effort'].split(':')[1]} mn
+                                ${course['effort'].split(':')[0]} h ${course['effort'].split(':')[1]}
                               % elif int(course['effort'].split(':')[1]) > 0 and int(course['effort'].split(':')[0]) == 0:
-                                ${course['effort']} mn
+                                ${course['effort'].split(':')[1]} mn
                               % endif
                             % else:
                               ${course['effort']}

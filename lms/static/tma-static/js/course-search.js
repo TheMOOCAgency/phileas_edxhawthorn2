@@ -163,9 +163,9 @@ const displayResults = function(results) {
         if (item.effort) {
             if (item.effort.split(':')[1]) {
                 if ((parseInt(item.effort.split(':')[0]) > 0) && (parseInt(item.effort.split(':')[1]) > 0) && (item.effort.split(':')[0] !== '00')) {
-                    effort = item.effort.split(':')[0] + ' h ' + item.effort.split(':')[1] + ' mn'
-                } else if ((parseInt(item.effort.split(':')[0]) == 0) && (parseInt(item.effort.split(':')[1]) > 0)) {
-                    effort = item.effort + ' mn'
+                    effort = item.effort.split(':')[0] + ' h ' + item.effort.split(':')[1]
+                } else if ((parseInt(item.effort.split(':')[0]) == 0 || item.effort.split(':')[0] == '00') && (parseInt(item.effort.split(':')[1]) > 0)) {
+                    effort = item.effort.split(':')[1] + ' mn'
                 }
             }
         } else {
