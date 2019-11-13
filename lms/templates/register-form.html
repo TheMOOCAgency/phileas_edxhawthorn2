@@ -4,6 +4,9 @@ from third_party_auth import pipeline, provider
 from django.utils.translation import ugettext as _
 from django_countries import countries
 from student.models import UserProfile
+
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+extra_form = configuration_helpers.get_value('FORM_EXTRA')
 %>
 
 <input type="hidden" name="csrfmiddlewaretoken" value="${ csrf_token }">
@@ -146,6 +149,34 @@ from student.models import UserProfile
 
   % endif
 </div>
+
+<!-- TMA FORM EXTRA-->
+<div class="group group-form group-form-requiredinformation">
+  <ol class="list-input">
+  % for n in extra_form:
+    <li class="field ${n.get('type')} ${'required' if n.get('required') else ''}">
+    <div class="field ${n.get('type')}" id="field-${n.get('name')}">
+    % if n.get('type') == 'text':
+    <label for="${n.get('name')}">${_(n.get('label'))}</label>
+    <input id="${n.get('name')}" type="${n.get('type')}" name="${n.get('name')}" value="" placeholder="${_(n.get('placeholder'))}" aria-describedby="${n.get('name')}-tip" ${'required aria-required="true"' if n.get('required') else ''} />
+    % elif n.get('type') == 'select':
+    <label for="${n.get('name')}">${_(n.get('label'))}</label>
+    <select id="${n.get('name')}" name="${n.get('name')}" ${'required aria-required="true"' if n.get('required') else ''}>
+      % for j in n.get('options'):
+      <option value="${j.get('value')}" ${'default aria-default="true"' if j.get('default') else ''}>${j.get('name')}</option>
+      %endfor
+    </select>
+    % elif n.get('type') == 'checkbox':
+    <input id="${n.get('name')}" type="${n.get('type')}" name="${n.get('name')}" value="true" ${'required aria-required="true"' if n.get('required') else ''}/>
+    <label for="${n.get('name')}">${_(n.get('label'))}</label>
+    % endif
+    </div>
+    </li>
+  % endfor
+  </ol>
+</div>
+<!-- END -->
+
 
 <div class="group group-form group-form-secondary group-form-personalinformation">
   <h2 class="sr">${_("Additional Personal Information")}</h2>

@@ -602,6 +602,16 @@ def create_account_with_params(request, params):
         'REGISTRATION_EXTRA_FIELDS',
         getattr(settings, 'REGISTRATION_EXTRA_FIELDS', {})
     )
+
+    # TMA REGISTRATION FIELDS
+    custom_field_data = {}
+    try:
+        for n in configuration_helpers.get_value('FORM_EXTRA'):
+            custom_field_data[n.get('name')] = request.POST.get(n.get('name'))
+    except:
+        custom_field_data = {}
+    # END
+
     # registration via third party (Google, Facebook) using mobile application
     # doesn't use social auth pipeline (no redirect uri(s) etc involved).
     # In this case all related info (required for account linking)
@@ -672,7 +682,7 @@ def create_account_with_params(request, params):
     # Perform operations within a transaction that are critical to account creation
     with outer_atomic(read_committed=True):
         # first, create the account
-        (user, profile, registration) = do_create_account(form, custom_form)
+        (user, profile, registration) = do_create_account(form, custom_form, custom_field_data)
 
         # If a 3rd party auth provider and credentials were provided in the API, link the account with social auth
         # (If the user is using the normal register page, the social auth pipeline does the linking, not this code)
@@ -943,6 +953,22 @@ def create_account(request, post_override=None):
 
     warnings.warn("Please use RegistrationView instead.", DeprecationWarning)
 
+    # TMA CUSTOM FIELDS #
+    extrafield = configuration_helpers.get_value('FORM_EXTRA')
+    if extrafield is not None:
+        for n in extrafield:
+            field = request.POST.get(n.get('name'))
+            required = n.get('required')
+            if required and field == '':
+                return JsonResponse(
+                    {
+                        "success": False,
+                        "field": n.get('name'),
+                        "value": n.get('errorMessages'),
+                    },
+                    status=400
+                )
+    # END #
     try:
         user = create_account_with_params(request, post_override or request.POST)
     except AccountValidationError as exc:
