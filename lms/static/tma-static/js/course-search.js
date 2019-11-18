@@ -163,9 +163,13 @@ const displayResults = function(results) {
         if (item.effort) {
             if (item.effort.split(':')[1]) {
                 if ((parseInt(item.effort.split(':')[0]) == 0) || (item.effort.split(':')[0] == '00')) {
-                    effort = item.effort.split(':')[1] + ' mn'
+                    effort = item.effort.split(':')[1] + ' mn';
                 } else {
-                    effort = item.effort.split(':')[0] + ' h ' +item.effort.split(':')[1]
+                    if ((parseInt(item.effort.split(':')[1]) == 0) || (item.effort.split(':')[1] == '00')) {
+                        effort = item.effort.split(':')[0] + ' h ';
+                    } else {
+                        effort = item.effort.split(':')[0] + ' h ' +item.effort.split(':')[1];
+                    }
                 }
             }
         } else {

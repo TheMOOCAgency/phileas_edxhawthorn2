@@ -220,18 +220,20 @@ import json
           effort = get_course_about_section(request, course, "effort")
         %>
         % if effort is not None:
-          % if len(effort.split(':')) > 1:
-            % if (int(effort.split(':')[0]) == 0) or (effort.split(':')[0] == '00'):
-              ${effort.split(':')[1]} mn
-            % else:
-              ${effort.split(':')[0]} h ${effort.split(':')[1]}
-            % endif
+        % if len(effort.split(':')) > 1:
+          % if (int(effort.split(':')[0]) == 0) or (effort.split(':')[0] == '00'):
+            ${effort.split(':')[1]} mn
+          % elif (int(effort.split(':')[1]) == 0) or (effort.split(':')[1] == '00'):
+            ${effort.split(':')[0]} h
           % else:
-            ${effort}
+            ${effort.split(':')[0]} h ${effort.split(':')[1]}
           % endif
         % else:
-          n/a
+          ${effort}
         % endif
+      % else:
+        n/a
+      % endif
       </p>
     </div>
     <div class="col-lg-2 col-2 text-center border-left-grey">
