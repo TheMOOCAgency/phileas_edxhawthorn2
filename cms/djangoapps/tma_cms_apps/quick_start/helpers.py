@@ -224,11 +224,14 @@ class TmaCourseInfo():
     def get_course_metadata(self, title):
         course=get_course_by_id(self.course_key)
         course_metadata = CourseMetadata.fetch_all(course)
+
         if title=="all":
             course_info={
                 "course_grade":course.grade_cutoffs.get('Pass',0.5)*100,
                 "language":course.language,
-                "course_image":self.edxOverview.image_urls['large'] if not "static" in self.edxOverview.image_urls['large'] else ""
+                "course_image":self.edxOverview.image_urls['large'] if not "static" in self.edxOverview.image_urls['large'] else "",
+                "start_date": course.start,
+                "end_date":course.end
             }
         elif title=="invitation_only":
             course_info=course_metadata['invitation_only']['value']
@@ -270,7 +273,6 @@ class TmaCourseInfo():
             "org":self.org,
             "description":self.edxOverview.short_description   
         }
-        log.info(baseInfo)
         return baseInfo
 
     def getShortInfo(self):

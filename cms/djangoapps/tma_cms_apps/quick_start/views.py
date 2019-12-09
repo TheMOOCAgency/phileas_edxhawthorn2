@@ -83,6 +83,9 @@ def quick_start(request):
         "checked":checkedOrg,
         "type":"checkbox"        
     })
+    
+    for course in coursesList:
+        log.info(course)
 
     return render_to_response('/tma_cms_apps/quick_start.html', {"props":context})
 
