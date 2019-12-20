@@ -25524,6 +25524,10 @@ msgid "This training is mandatory and must be completed before {end_date}."
 msgstr "Ce module est obligatoire et doit être réalisé avant le {end_date}."
 
 #: lms/templates/emails/phileas-email.html
+msgid "This training is mandatory."
+msgstr "Ce module est obligatoire."
+
+#: lms/templates/emails/phileas-email.html
 msgid "This email was automatically sent. Please do not respond."
 msgstr "Ce message est généré automatiquement par la plateforme. Veuillez ne pas y répondre."
 
