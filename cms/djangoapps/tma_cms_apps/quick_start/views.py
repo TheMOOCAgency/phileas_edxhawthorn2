@@ -138,7 +138,7 @@ def quick_start_create(request):
             status=400
         else :
             status=200
-            enroll_email(course_id= CourseKey.from_string(response['course_id']), student_email=request.user.email, auto_enroll=False, email_students=False )
+        enroll_email(course_id= CourseKey.from_string(response['course_id']), student_email=request.user.email, auto_enroll=False, email_students=False )
         return JsonResponse(response, status=status)
     else :
         return JsonResponse({"details":serializer.errors, "status":"error"}, status=400)
