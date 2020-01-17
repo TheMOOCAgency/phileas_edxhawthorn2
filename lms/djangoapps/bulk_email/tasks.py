@@ -52,7 +52,8 @@ from util.date_utils import get_default_time_display
 
 log = logging.getLogger('edx.celery.task')
 
-
+from bulk_email.models import SEND_TO_LEARNERS
+from student.models import CourseEnrollmentAllowed
 # Errors that an individual email is failing to be sent, and should just
 # be treated as a fail.
 SINGLE_EMAIL_FAILURE_ERRORS = (
@@ -185,6 +186,20 @@ def perform_delegate_email_batches(entry_id, course_id, task_input, action_name)
     combined_set = combined_set.distinct()
     recipient_fields = ['profile__name', 'email']
 
+    outside_queryset_additional_items = None
+    target_types = [target.target_type for target in targets]
+
+    # if there is SEND_TO_LEARNERS in the target then we add all users that have been invited but did not connect yet and thus don't have an enrollment
+    if SEND_TO_LEARNERS in target_types:
+        queryset_additional_items = CourseEnrollmentAllowed.may_enroll_and_unenrolled(course_id)
+        if queryset_additional_items.count() > 0:
+            log.info(u"Task %s: Preparing subtask data for invited learners for course %s",task_id, course_id)
+            outside_queryset_additional_items = []
+            pseudo_pk = 1
+            for additional_item in queryset_additional_items:
+                outside_queryset_additional_items.append({"pk":pseudo_pk,"email":additional_item.email,"profile__name":additional_item.email})
+                pseudo_pk += 1
+
     log.info(u"Task %s: Preparing to queue subtasks for sending emails for course %s, email %s",
              task_id, course_id, email_id)
 
@@ -227,6 +242,7 @@ def perform_delegate_email_batches(entry_id, course_id, task_input, action_name)
         recipient_fields,
         settings.BULK_EMAIL_EMAILS_PER_TASK,
         total_recipients,
+        outside_queryset_additional_items,
     )
 
     # We want to return progress here, as this is what will be stored in the
