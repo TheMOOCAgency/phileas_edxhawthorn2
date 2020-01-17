@@ -120,7 +120,7 @@ from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from student.models import CourseEnrollment
 from student.views.dashboard import get_tma_course_info, get_tma_course_json, get_course_enrollments, is_course_blocked, get_org_black_and_whitelist_for_site
 from shoppingcart.models import CourseRegistrationCode
-
+from pprint import pformat
 
 log = logging.getLogger("edx.courseware")
 
@@ -288,10 +288,18 @@ def courses(request):
     # Add TMA course info
     final_course_list = []
     json_course_list = []
+    displayable_course_overviews = get_courses(request.user, org = current_organisation)
+    displayable_course_ids = [str(x.id) for x in displayable_course_overviews]
+
     for course in courses_to_display :
+        if str(course.id) not in displayable_course_ids or course.invitation_only or not bool(has_access(request.user, 'enroll', course)):
+            continue
+
         course_info = get_tma_course_info(request.user, course.id, block_courses)
         course_json_info = get_tma_course_json(request.user, course.id, block_courses)
+
         final_course_list.append(course_info)
+
         if drop_filter and drop_filter == "likes":
             final_course_list = sorted(final_course_list, key=itemgetter('liked_total'), reverse=True)
         elif drop_filter and drop_filter == "enrollments":
