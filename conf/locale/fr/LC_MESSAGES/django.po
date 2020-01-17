@@ -14337,7 +14337,7 @@ msgstr ""
 
 #: lms/templates/api_admin/terms_of_service.html
 msgid "Compliance"
-msgstr "réglementaire"
+msgstr "Réglementaire"
 
 #: lms/templates/api_admin/terms_of_service.html
 msgid ""
