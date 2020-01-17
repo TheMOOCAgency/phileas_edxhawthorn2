@@ -73,7 +73,9 @@ def quick_start(request):
     if "phileas" in organizations_options: 
         organizations_options.remove("phileas")
     checkedOrg=[]
-    if ZoneManager(request.user).get_user_zone() :
+    if request.user.is_superuser:
+        checkedOrg=""
+    elif ZoneManager(request.user).get_user_zone() :
         checkedOrg=ZoneManager(request.user).get_user_zone()
     
 

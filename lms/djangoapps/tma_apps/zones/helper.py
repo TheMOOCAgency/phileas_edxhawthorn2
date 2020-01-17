@@ -4,6 +4,7 @@ import json
 import logging
 log = logging.getLogger()
 
+from pprint import pformat
 
 class ZoneManager():
     def __init__(self, user):
@@ -21,8 +22,8 @@ class ZoneManager():
         zones_infos=""
         with open("/edx/app/edxapp/edx-platform/lms/djangoapps/tma_apps/zones/zones_infos.json") as zone_file :
             zone_infos = zone_file.read()
-        user_zone = json.loads(zone_infos).get(str(self.user_custom_field.get('zoneinfo')).lower())
-        return user_zone
+            user_zone = json.loads(zone_infos).get(str(self.user_custom_field.get('zoneinfo')).lower())
+            return user_zone
 
     def check_zone(self):
         current_site = get_current_site()
