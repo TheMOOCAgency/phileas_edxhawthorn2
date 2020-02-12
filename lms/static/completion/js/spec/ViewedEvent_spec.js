@@ -1,7 +1,6 @@
-import { ElementViewing, ViewedEventTracker } from '../ViewedEvent';
+import { ElementViewing, ViewedEventTracker } from "../ViewedEvent";
 
-
-describe('ViewedTracker', () => {
+describe("ViewedTracker", () => {
   let existingHTML;
   beforeEach(() => {
     existingHTML = document.body.innerHTML;
@@ -11,31 +10,35 @@ describe('ViewedTracker', () => {
     document.body.innerHTML = existingHTML;
   });
 
-  it('calls the handlers when an element is viewed', () => {
-    document.body.innerHTML = '<div id="d1"></div><div id="d2"></div><div id="d3"></div>';
+  it("calls the handlers when an element is viewed", () => {
+    document.body.innerHTML =
+      '<div id="d1"></div><div id="d2"></div><div id="d3"></div>';
     const tracker = new ViewedEventTracker();
-    for (const element of document.getElementsByTagName('div')) {
+    for (const element of document.getElementsByTagName("div")) {
       tracker.addElement(element, 1000);
     }
-    const handlerSpy = jasmine.createSpy('handlerSpy');
+    const handlerSpy = jasmine.createSpy("handlerSpy");
     tracker.addHandler(handlerSpy);
     const elvIter = tracker.elementViewings.values();
     // Pick two elements, and mock them so that one has met the criteria to be viewed,
     // and the other hasn't.
     const viewed = elvIter.next().value;
-    spyOn(viewed, 'areViewedCriteriaMet').and.returnValue(true);
+    spyOn(viewed, "areViewedCriteriaMet").and.returnValue(true);
     viewed.checkIfViewed();
     expect(handlerSpy).toHaveBeenCalledWith(viewed.el, {
-      elementHasBeenViewed: true,
+      elementHasBeenViewed: true
     });
     const unviewed = elvIter.next().value;
-    spyOn(unviewed, 'areViewedCriteriaMet').and.returnValue(false);
+    spyOn(unviewed, "areViewedCriteriaMet").and.returnValue(false);
     unviewed.checkIfViewed();
-    expect(handlerSpy).not.toHaveBeenCalledWith(unviewed.el, jasmine.anything());
+    expect(handlerSpy).not.toHaveBeenCalledWith(
+      unviewed.el,
+      jasmine.anything()
+    );
   });
 });
 
-describe('ElementViewing', () => {
+describe("ElementViewing", () => {
   beforeEach(() => {
     jasmine.clock().install();
   });
@@ -44,9 +47,9 @@ describe('ElementViewing', () => {
     jasmine.clock().uninstall();
   });
 
-  it('calls checkIfViewed when enough time has elapsed', () => {
+  it("calls checkIfViewed when enough time has elapsed", () => {
     const viewing = new ElementViewing({}, 500, () => {});
-    spyOn(viewing, 'checkIfViewed').and.callThrough();
+    spyOn(viewing, "checkIfViewed").and.callThrough();
     viewing.seenForMs = 250;
     viewing.handleVisible();
     jasmine.clock().tick(249);
@@ -55,10 +58,10 @@ describe('ElementViewing', () => {
     expect(viewing.checkIfViewed).toHaveBeenCalled();
   });
 
-  it('has been viewed after the specified number of milliseconds', () => {
+  it("has been viewed after the specified number of milliseconds", () => {
     const viewing = new ElementViewing({}, 500, () => {});
     viewing.seenForMs = 250;
-    spyOn(Date, 'now').and.returnValue(750);
+    spyOn(Date, "now").and.returnValue(750);
     viewing.handleVisible();
     viewing.markTopSeen();
     viewing.markBottomSeen();
@@ -70,7 +73,7 @@ describe('ElementViewing', () => {
     expect(viewing.hasBeenViewed).toBeTruthy();
   });
 
-  it('has not been viewed if the bottom has not been seen', () => {
+  it("has not been viewed if the bottom has not been seen", () => {
     const viewing = new ElementViewing(undefined, 500, () => {});
     viewing.markTopSeen();
     viewing.seenForMs = 500;
@@ -79,7 +82,7 @@ describe('ElementViewing', () => {
     expect(viewing.hasBeenViewed).toBeFalsy();
   });
 
-  it('has not been viewed if the top has not been seen', () => {
+  it("has not been viewed if the top has not been seen", () => {
     const viewing = new ElementViewing(undefined, 500, () => {});
     viewing.markBottomSeen();
     viewing.seenForMs = 500;
@@ -88,7 +91,7 @@ describe('ElementViewing', () => {
     expect(viewing.hasBeenViewed).toBeFalsy();
   });
 
-  it('does not update time seen if lastSeen is undefined', () => {
+  it("does not update time seen if lastSeen is undefined", () => {
     const viewing = new ElementViewing(undefined, 500, () => {});
     viewing.becameVisibleAt = undefined;
     expect(viewing.becameVisibleAt).toBeUndefined();

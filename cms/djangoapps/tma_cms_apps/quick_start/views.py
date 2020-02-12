@@ -50,11 +50,13 @@ def quick_start(request):
     #COURSES
     courses_iter, in_process_course_actions = get_courses_accessible_to_user(request, org=None)
     active_courses, archived_courses = _process_courses_list(courses_iter, in_process_course_actions, split_archived=False)
+    
 
     coursesList=[]
     for course in active_courses:
         tmaOverview = TmaCourseOverview.get_tma_course_overview_by_course_id(SlashSeparatedCourseKey.from_deprecated_string(course['course_key']))
         if tmaOverview and tmaOverview.course_overview_edx.org in organizations_options:
+            log.info(TmaCourseInfo(tmaOverview=tmaOverview).getShortInfo())
             coursesList.append(TmaCourseInfo(tmaOverview=tmaOverview).getShortInfo())
 
     context['lmsBase']= str("https://"+settings.LMS_BASE)
@@ -85,7 +87,6 @@ def quick_start(request):
         "checked":checkedOrg,
         "type":"checkbox"        
     })
-
     return render_to_response('/tma_cms_apps/quick_start.html', {"props":context})
 
 

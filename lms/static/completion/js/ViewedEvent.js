@@ -13,7 +13,6 @@ function throttle(fn, wait) {
   return delay;
 }
 
-
 export class ElementViewing {
   /**
    * A wrapper for an HTMLElement that tracks whether the element has been
@@ -44,12 +43,9 @@ export class ElementViewing {
       this.becameVisibleAt = Date.now();
       // We're now visible; after viewedAfterMs, if the top and bottom have been
       // seen, this block will count as viewed.
-      setTimeout(
-        () => {
-          this.checkIfViewed();
-        },
-        this.viewedAfterMs - this.seenForMs,
-      );
+      setTimeout(() => {
+        this.checkIfViewed();
+      }, this.viewedAfterMs - this.seenForMs);
     }
   }
 
@@ -80,7 +76,11 @@ export class ElementViewing {
   }
 
   areViewedCriteriaMet() {
-    return this.topSeen && this.bottomSeen && (this.getTotalTimeSeen() >= this.viewedAfterMs);
+    return (
+      this.topSeen &&
+      this.bottomSeen &&
+      this.getTotalTimeSeen() >= this.viewedAfterMs
+    );
   }
 
   checkIfViewed() {
@@ -95,7 +95,6 @@ export class ElementViewing {
     }
   }
 }
-
 
 export class ViewedEventTracker {
   /**
@@ -116,11 +115,9 @@ export class ViewedEventTracker {
   /** Add an element to track.  */
   addElement(element, viewedAfterMs) {
     this.elementViewings.add(
-     new ElementViewing(
-       element,
-       viewedAfterMs,
-       (el, event) => this.callHandlers(el, event),
-      ),
+      new ElementViewing(element, viewedAfterMs, (el, event) =>
+        this.callHandlers(el, event)
+      )
     );
     this.updateVisible();
   }
@@ -135,7 +132,7 @@ export class ViewedEventTracker {
    *  Also marks when an elements top or bottom has been seen.
    * */
   updateVisible() {
-    this.elementViewings.forEach((elv) => {
+    this.elementViewings.forEach(elv => {
       if (elv.hasBeenViewed) {
         return;
       }
@@ -174,9 +171,8 @@ export class ViewedEventTracker {
    *  for recently disappeared elements.
    */
   callHandlers(el, event) {
-    this.handlers.forEach((handler) => {
+    this.handlers.forEach(handler => {
       handler(el, event);
     });
   }
 }
-

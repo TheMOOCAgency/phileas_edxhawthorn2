@@ -84,15 +84,19 @@
   % endfor
   <div id="seq_content" role="tabpanel"></div>
   % endif
-
   <div id="tma-feedback-success">
     <p>${_("Congratulations")}</p>
     <p>${_("You got")} <span class="score-user"></span>/<span class="score-total"></span> ${_("right answers or")} <span class="score-percent"></span>%</p>
   </div>
-  <div id="tma-feedback-fail">
+  <div id="tma-feedback-fail" >
       <p>${_("Sorry")}</p>
       <p>${_("You did not pass. You obtained")} <span class="score-user-percent"></span>% </span>${_("but the required score is")} <span class="score-percent"></span>%</p>
   </div>
+  <div id="tma-feedback-fail-and-reset" >
+    <p>${_("Sorry")}</p>
+    <p>${_("You did not pass. You obtained")} <span class="score-user-percent"></span>% </span>${_("but the required score is")} <span class="score-percent"></span>%</p>
+    <button class="staff-debug-all-sdelete">${_("Restart quiz")}</button>
+</div>
   <nav class="sequence-bottom" aria-label="${_('Section')}">
     <button class="sequence-nav-button button-previous">
       <span class="icon fa fa-chevron-prev" aria-hidden="true"></span>
@@ -104,3 +108,5 @@
     </button>
   </nav>
 </div>
+
+

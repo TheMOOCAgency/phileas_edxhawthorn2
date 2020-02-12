@@ -25565,3 +25565,6 @@ msgstr "Vous avez obtenu"
 
 msgid "right answers or"
 msgstr "bonnes réponses soit"
+
+msgid "Restart quiz"
+msgstr "Recommencez"

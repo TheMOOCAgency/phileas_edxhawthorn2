@@ -1901,7 +1901,7 @@ def get_student_progress_url(request, course_id):
 @require_POST
 @ensure_csrf_cookie
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
-@require_level('staff')
+# @require_level('staff')
 @require_post_params(
     problem_to_reset="problem urlname to reset"
 )
