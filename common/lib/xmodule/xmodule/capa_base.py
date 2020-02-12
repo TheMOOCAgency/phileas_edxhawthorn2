@@ -858,6 +858,7 @@ class CapaMixin(ScorableXBlockMixin, CapaFields):
         """
         Is the student still allowed to submit answers?
         """
+
         if self.max_attempts is not None and self.attempts >= self.max_attempts:
             return True
         if self.is_past_due():
@@ -1539,6 +1540,12 @@ class CapaMixin(ScorableXBlockMixin, CapaFields):
         event_info['problem_id'] = text_type(self.location)
         _ = self.runtime.service(self, "i18n").ugettext
 
+        
+
+        # if str(_data["isResettable"]) == "true":
+        #     self.attempts = 0
+
+        # added _data condition for new reset option to be done by student himself
         if self.closed():
             event_info['failure'] = 'closed'
             self.track_function_unmask('reset_problem_fail', event_info)
@@ -1574,7 +1581,6 @@ class CapaMixin(ScorableXBlockMixin, CapaFields):
 
         event_info['new_state'] = self.lcp.get_state()
         self.track_function_unmask('reset_problem', event_info)
-
         return {
             'success': True,
             'html': self.get_problem_html(encapsulate=False),

@@ -1,172 +1,228 @@
 /* Prevent EdX style */
 fieldset {
-    border: none;
-    padding: 0px;
+  border: none;
+  padding: 0px;
 }
 
 .xmodule_display.xmodule_CapaModule div.problem {
-    padding-top: 5px;
+  padding-top: 5px;
 }
 
-.xmodule_display.xmodule_CapaModule div.problem .action .problem-action-btn.save, .xmodule_display.xmodule_CapaModule div.problem .action .problem-action-btn.show {
-    display: none;
+.xmodule_display.xmodule_CapaModule
+  div.problem
+  .action
+  .problem-action-btn.save,
+.xmodule_display.xmodule_CapaModule
+  div.problem
+  .action
+  .problem-action-btn.show {
+  display: none;
 }
 .xmodule_display.xmodule_CapaModule div.problem .notification.general {
-    display: none !important;
+  display: none !important;
 }
 
 /* Submit button */
 .xmodule_display.xmodule_CapaModule div.problem .action {
-    margin-top: 0px;
+  margin-top: 0px;
 }
-.xmodule_display.xmodule_CapaModule div.problem .action .submit-attempt-container .submit {
-    float: none;
+.xmodule_display.xmodule_CapaModule
+  div.problem
+  .action
+  .submit-attempt-container
+  .submit {
+  float: none;
 }
 .submit-attempt-container {
-    text-align: center;
-    padding: 0px !important;
+  text-align: center;
+  padding: 0px !important;
 }
 
 .xmodule_display.xmodule_CapaModule div.problem .submission-feedback {
-    display: none;
+  display: none;
 }
 
-/* Progress + score */ 
+/* Progress + score */
 .xmodule_display.xmodule_CapaModule div.problem-progress {
-    padding-top: 20px;
+  padding-top: 20px;
 }
 .course-wrapper .course-content .xblock h3 {
-    padding-top: 0px !important;
+  padding-top: 0px !important;
 }
 .tma-attempts {
-    display: inline-block;
-    color: #5e5e5e;
-    font-size: 0.875em;
+  display: inline-block;
+  color: #5e5e5e;
+  font-size: 0.875em;
 }
 
 /*Question labels */
-.xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_incorrect, .xmodule_display.xmodule_CapaModule div.problem .choicegroup label:hover {
-    border: 2px solid #e4e4e4;
+.xmodule_display.xmodule_CapaModule
+  div.problem
+  .choicegroup
+  label.choicegroup_incorrect,
+.xmodule_display.xmodule_CapaModule div.problem .choicegroup label:hover {
+  border: 2px solid #e4e4e4;
 }
-.xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_incorrect, .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_incorrect:hover {
-    border: 2px solid #e4e4e4;
+.xmodule_display.xmodule_CapaModule
+  div.problem
+  .choicegroup
+  label.choicegroup_incorrect,
+.xmodule_display.xmodule_CapaModule
+  div.problem
+  .choicegroup
+  label.choicegroup_incorrect:hover {
+  border: 2px solid #e4e4e4;
 }
-.xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_correct, .xmodule_display.xmodule_CapaModule div.problem .choicegroup label.choicegroup_correct:hover {
-    color: white;
-    border: 2px solid #6ac259;
-    background-color: #6ac259;
+.xmodule_display.xmodule_CapaModule
+  div.problem
+  .choicegroup
+  label.choicegroup_correct,
+.xmodule_display.xmodule_CapaModule
+  div.problem
+  .choicegroup
+  label.choicegroup_correct:hover {
+  color: white;
+  border: 2px solid #6ac259;
+  background-color: #6ac259;
 }
 
 /* Label icon */
-span.status.correct, span.status.incorrect {
-    display: none;
+span.status.correct,
+span.status.incorrect {
+  display: none;
 }
 
 /* Bottom notification */
 .xmodule_display.xmodule_CapaModule div.problem .notification.success {
-    display: none;
+  display: none;
 }
 .xmodule_display.xmodule_CapaModule div.problem .notification.error {
-    margin-top: 30px;
-    margin-bottom: 20px;
-    border-top: none;
-    font-size: 18px;
-    text-align: center;
-    color: red;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  border-top: none;
+  font-size: 18px;
+  text-align: center;
+  color: red;
 }
-.xmodule_display.xmodule_CapaModule div.problem .notification.error .icon, .xmodule_display.xmodule_CapaModule div.problem .notification.success .icon {
-    display: none;
+.xmodule_display.xmodule_CapaModule div.problem .notification.error .icon,
+.xmodule_display.xmodule_CapaModule div.problem .notification.success .icon {
+  display: none;
 }
 
 .xmodule_display.xmodule_CapaModule div.problem .choicegroup fieldset .field {
-    margin-left: 40px;
+  margin-left: 40px;
 }
 
-/* Input custom */ 
-.xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="radio"], .xmodule_display.xmodule_CapaModule div.problem .choicegroup input[type="checkbox"] {
-    display: none;
+/* Input custom */
+.xmodule_display.xmodule_CapaModule
+  div.problem
+  .choicegroup
+  input[type="radio"],
+.xmodule_display.xmodule_CapaModule
+  div.problem
+  .choicegroup
+  input[type="checkbox"] {
+  display: none;
 }
 
 .checkmark {
-    position: absolute;
-    top: 5px;
-    left: -42px;
-    height: 30px;
-    width: 30px;
-    border-radius: 30px;
+  position: absolute;
+  top: 5px;
+  left: -42px;
+  height: 30px;
+  width: 30px;
+  border-radius: 30px;
 }
 
-.checkfail, .checksuccess {
-    display: none;
-    position: absolute;
-    top: 5px;
-    left: -42px;
-    height: 30px;
-    width: 30px;
-    border-radius: 30px;
-    background-color: white;
+.checkfail,
+.checksuccess {
+  display: none;
+  position: absolute;
+  top: 5px;
+  left: -42px;
+  height: 30px;
+  width: 30px;
+  border-radius: 30px;
+  background-color: white;
 }
 
-.xmodule_display.xmodule_CapaModule div.problem .choicegroup label.selected-tma {
-    background-color: #00A1E9;
-    color: rgb(255, 255, 255);
-    border-color: #00A1E9;
+.xmodule_display.xmodule_CapaModule
+  div.problem
+  .choicegroup
+  label.selected-tma {
+  background-color: #00a1e9;
+  color: rgb(255, 255, 255);
+  border-color: #00a1e9;
 }
 
-.xmodule_display.xmodule_CapaModule div.problem .choicegroup label.unselected-tma {
-    background-color: transparent;
-    color: #313131;
-    border: 2px solid #e4e4e4;
+.xmodule_display.xmodule_CapaModule
+  div.problem
+  .choicegroup
+  label.unselected-tma {
+  background-color: transparent;
+  color: #313131;
+  border: 2px solid #e4e4e4;
 }
 
 /* TMA feedback */
-#tma-feedback-success, #tma-feedback-fail {
-    width: 450px;
-    padding: 20px;
-    margin: auto;
-    display: none;
-    text-align: center;
-    border: 2px solid #e4e4e4;
+#tma-feedback-success,
+#tma-feedback-fail,
+#tma-feedback-fail-and-reset {
+  width: 450px;
+  padding: 20px;
+  margin: auto;
+  display: none;
+  text-align: center;
+  border: 2px solid #e4e4e4;
 }
 
-#tma-feedback-success p, #tma-feedback-fail p, #tma-feedback-success span, #tma-feedback-fail span {
-    text-align: center;
-    font-size: 18px;
-    font-weight: 500;
+#tma-feedback-success p,
+#tma-feedback-fail p,
+#tma-feedback-fail-and-reset p,
+#tma-feedback-success span,
+#tma-feedback-fail span,
+#tma-feedback-fail-and-reset span {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 /* Dropdown styling */
 .xmodule_display.xmodule_CapaModule div.problem select {
-    width: calc(100% - 40px);
-    height: 50px;
-    background-color: white;
+  width: calc(100% - 40px);
+  height: 50px;
+  background-color: white;
 }
 
 .show-detailed .detailed-solution {
-    display: block !important;
+  display: block !important;
 }
 solution > .detailed-solution {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: white;
-    font-size: 20px;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: white;
+  font-size: 20px;
 }
 .solution-span {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
-.feedback-hint-incorrect, .feedback-hint-correct {
-    margin-top: 20px;
-    margin-bottom: 60px;
+.feedback-hint-incorrect,
+.feedback-hint-correct {
+  margin-top: 20px;
+  margin-bottom: 60px;
 }
 .xmodule_display.xmodule_CapaModule .hint-label {
-    display: none;
+  display: none;
 }
-.detailed-solution > p:first-of-type, .xmodule_display.xmodule_CapaModule .explanation-title {
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    font-weight: bold;
-    color: #00A1E9;
+.detailed-solution > p:first-of-type,
+.xmodule_display.xmodule_CapaModule .explanation-title {
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #00a1e9;
 }
-.detailed-solution > p:last-of-type, .xmodule_display.xmodule_CapaModule .hint-label, .xmodule_display.xmodule_CapaModule .hint-text {
-    font-weight: bold;
+.detailed-solution > p:last-of-type,
+.xmodule_display.xmodule_CapaModule .hint-label,
+.xmodule_display.xmodule_CapaModule .hint-text {
+  font-weight: bold;
 }
