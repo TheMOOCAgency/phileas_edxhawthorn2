@@ -1901,7 +1901,6 @@ def get_student_progress_url(request, course_id):
 @require_POST
 @ensure_csrf_cookie
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
-# @require_level('staff')
 @require_post_params(
     problem_to_reset="problem urlname to reset"
 )
@@ -1926,7 +1925,7 @@ def reset_student_attempts(request, course_id):
     """
     course_id = CourseKey.from_string(course_id)
     course = get_course_with_access(
-        request.user, 'staff', course_id, depth=None
+        request.user, 'load', course_id, depth=None
     )
     all_students = _get_boolean_param(request, 'all_students')
 
