@@ -1957,7 +1957,7 @@ def reset_student_attempts(request, course_id):
 
     response_payload = {}
     response_payload['problem_to_reset'] = problem_to_reset
-
+    
     if student:
         try:
             enrollment.reset_student_attempts(

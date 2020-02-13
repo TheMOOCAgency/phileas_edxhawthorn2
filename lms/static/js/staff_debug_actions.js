@@ -17,8 +17,13 @@ var StaffDebug = (function() {
   var getUser = function(locationName) {
     var sanitizedLocationName = sanitizeString(locationName);
     var uname = $("#sd_fu_" + sanitizedLocationName).val();
-    if (uname === "") {
+    if (!uname) {
       uname = $("#sd_fu_" + sanitizedLocationName).attr("placeholder");
+      if (!uname) {
+        // ADDED FOR STUDENT DELETE STATE MODULE
+        uname = JSON.parse($("#user-metadata").html())["username"];
+        console.log(uname);
+      }
     }
     return uname;
   };
