@@ -22,7 +22,6 @@ var StaffDebug = (function() {
       if (!uname) {
         // ADDED FOR STUDENT DELETE STATE MODULE
         uname = JSON.parse($("#user-metadata").html())["username"];
-        console.log(uname);
       }
     }
     return uname;
