@@ -109,7 +109,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                     % else:
                         <h2 class="title-24"><span class="font-weight-bold">${_("Hello")}</span> ${user.username}</h2>
                     % endif
-                    <p class="grey-text">${_("You'll find on this page all your ongoing courses, mandatory or not, as well as your favorite and finished courses.")}</p>
+                    <p class="grey-text">${_("You'll find on this page all your ongoing programs, mandatory or not, as well as your favorite and finished courses.")}</p>
                 </div>
             </div>
         </div>
@@ -119,7 +119,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
         <div class="bg-blue-box"></div>
         <div class="container-fluid padding-70 pt-4 pb-4 ongoing-box ">
             <div class="row pt-4">
-                <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">${_("Your ongoing courses")}</h1>
+                <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">${_("Your ongoing programs")}</h1>
             </div>
              %if ongoing_course_enrollments:
              <div class="row">
@@ -129,7 +129,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                 % endfor
              %else:
              <div class="row" style="margin-bottom:180px;">
-                <div style="margin:0 auto;z-index:2"><p class="text-white">${_("You have no ongoing courses yet")}</p></div>
+                <div style="margin:0 auto;z-index:2"><p class="text-white">${_("You have no ongoing programs yet")}</p></div>
              %endif
             </div>
         </div>
@@ -139,7 +139,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
     <div class="row">
         <div class="container-fluid padding-70 pt-4 pb-4 mandatory-box">
             <div class="row pt-4">
-                <h1 class="title-28"><img class="picto" src="${static.url('tma-static/images/warning.svg')}">${_("Your mandatory courses")}</h1>
+                <h1 class="title-28"><img class="picto" src="${static.url('tma-static/images/warning.svg')}">${_("Your mandatory programs")}</h1>
             </div>
             <div class="row">
              %if mandatory_course_enrollments:
@@ -158,7 +158,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
         <div class="bg-grey-box"></div>
         <div class="container-fluid padding-70 pt-4 pb-4 favorite-box">
             <div class="row pt-4">
-                <h1 class="title-28"><img class="picto" src="${static.url('tma-static/images/etoile.svg')}">${_("Your favorite courses")}</h1>
+                <h1 class="title-28"><img class="picto" src="${static.url('tma-static/images/etoile.svg')}">${_("Your favorite programs")}</h1>
             </div>
             <div class="row">
              %if favorite_course_enrollments:
@@ -167,7 +167,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
                     <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id],is_liked=is_liked[enrollment.course_id], is_ongoing=is_ongoing, is_favorite=is_favorite' />
                 % endfor
              %else:
-                    <div style="margin:0 auto"><p>${_("You have no favorite courses yet")}</p></div>
+                    <div style="margin:0 auto"><p>${_("You have no favorite programs yet")}</p></div>
              %endif
             </div>
         </div>
@@ -177,7 +177,7 @@ for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx_
     <div id="finished-section" class="row">
         <div class="container-fluid padding-70 pt-4 finished-box">
             <div class="row pt-4 pl-3">
-                <h1 class="title-28">${_("Your finished courses")}</h1>
+                <h1 class="title-28">${_("Your finished programs")}</h1>
             </div>
             <div class="row legend">
                 <div class="col-lg-3">${_("Course :")}</div>
