@@ -30,8 +30,7 @@ urlpatterns = [
     url(r'^{}/like/update_like$'.format(settings.COURSE_ID_PATTERN), like_views.api_update_like),
 
     # Home dashboard
-    url(r'^dashboard/home/courses$', activity_dashboard_views.home_dashboard_courses, name='home_dashboard_courses'),
-    url(r'^dashboard/home/programs$', activity_dashboard_views.home_dashboard_programs, name='home_dashboard_programs'),
+    url(r'^dashboard/home/$', activity_dashboard_views.home_dashboard, name='home_dashboard'),
 
     #Student Grade Tracking
     url(r'^{}/grade_tracking/get_user_grade$'.format(settings.COURSE_ID_PATTERN), grade_views.get_user_grade),

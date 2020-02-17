@@ -383,7 +383,7 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     registration_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}'.format(
         proto=protocol,
         site=stripped_site_name,
-        path=urllib.quote(reverse('home_dashboard_courses'),'')
+        path=urllib.quote(reverse('home_dashboard'),'')
     )
     course_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}'.format(
         proto=protocol,
