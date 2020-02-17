@@ -25305,38 +25305,6 @@ msgstr "Pas de certificat"
 msgid "Grade not available"
 msgstr "Note indisponible"
 
-#: lms/templates/tma_apps/programs_dashboard.html
-msgid "Your ongoing programs"
-msgstr "Vos programmes en cours"
-
-#: lms/templates/tma_apps/programs_dashboard.html
-msgid "Your mandatory programs"
-msgstr "Vos programmes obligatoires"
-
-#: lms/templates/tma_apps/programs_dashboard.html
-msgid "Your favorite programs"
-msgstr "Vos programmes favorites"
-
-#: lms/templates/tma_apps/programs_dashboard.html
-msgid "Your finished programs"
-msgstr "Vos programmes terminées"
-
-#: lms/templates/tma_apps/programs_dashboard.html
-msgid "You have no ongoing programs yet"
-msgstr "Vous n'avez pas de programme en cours"
-
-#: lms/templates/tma_apps/programs_dashboard.html
-msgid "You are not enrolled in mandatory programs yet"
-msgstr "Vous n'êtes inscrit(e) à aucun programme obligatoire"
-
-#: lms/templates/tma_apps/programs_dashboard.html
-msgid "You have no favorite programs yet"
-msgstr "Vous n'avez aucun programme favori"
-
-#: lms/templates/tma_apps/programs_dashboard.html
-msgid "Program not graded"
-msgstr "Programme non noté"
-
 #: lms/templates/courseware/course_about.html
 msgid "You have no finished course yet"
 msgstr "Vous n'avez terminé aucune formation"
