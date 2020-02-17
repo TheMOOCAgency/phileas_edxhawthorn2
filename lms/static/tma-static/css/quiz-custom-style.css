@@ -176,6 +176,23 @@ span.status.incorrect {
   border: 2px solid #e4e4e4;
 }
 
+#tma-feedback-success button:active,
+#tma-feedback-fail button:active,
+#tma-feedback-fail-and-reset button:active,
+#tma-feedback-success button:focus,
+#tma-feedback-fail button:focus,
+#tma-feedback-fail-and-reset button:focus {
+  border: 2px solid #0b1a4c;
+}
+
+#tma-feedback-success button:hover,
+#tma-feedback-fail button:hover,
+#tma-feedback-fail-and-reset button:hover {
+  color: white;
+  border: 2px solid white;
+  background-color: #0b1a4c;
+}
+
 #tma-feedback-success p,
 #tma-feedback-fail p,
 #tma-feedback-fail-and-reset p,
