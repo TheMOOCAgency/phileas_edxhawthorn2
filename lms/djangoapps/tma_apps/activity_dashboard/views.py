@@ -20,11 +20,6 @@ log = logging.getLogger(__name__)
 
 
 @login_required
-def home_dashboard_courses(request):
-    context = _student_dashboard(request)
-    return render_to_response('tma_apps/home_dashboard.html', context)
-
-@login_required
-def home_dashboard_programs(request):
+def home_dashboard(request):
     context = _student_dashboard(request)
     return render_to_response('tma_apps/home_dashboard.html', context)
