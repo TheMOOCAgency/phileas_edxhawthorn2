@@ -35,7 +35,7 @@ var StaffDebug = (function() {
     }
     return score;
   };
-
+  var count = 0;
   var doInstructorDashAction = function(action) {
     var pdata = {
       problem_to_reset: action.location,
@@ -56,9 +56,13 @@ var StaffDebug = (function() {
           interpolate: /\{(.+?)\}/g
         })({ text: text });
         $("#result_" + sanitizeString(action.locationName)).html(html);
-
+        count++;
+        console.log(count);
         // reload after student clears attempts
-        action.reload && action.reload();
+        if (count === action.length) {
+          // count = 0;
+          return window.location.reload();
+        }
       },
       error: function(request, status, error) {
         var responseJSON;
@@ -93,11 +97,11 @@ var StaffDebug = (function() {
     });
   };
 
-  var deleteStudentState = function(locname, location, reload) {
+  var deleteStudentState = function(locname, location, length) {
     this.doInstructorDashAction({
       locationName: locname,
       location: location,
-      reload: reload,
+      length: length,
       method: "reset_student_attempts",
       success_msg: gettext(
         "Successfully deleted student state for user {user}"
@@ -192,26 +196,28 @@ $(document).ready(function() {
   });
   // IN ORDER TO DELETE ALL XBLOCKS STATE IN A SINGLE PAGE, BY STUDENT HIMSELF
   $courseContent.on("click", ".staff-debug-all-sdelete", function() {
-    let xBlocks = $(".xblock-student_view-problem");
-    let count = 0;
+    let getXblocks = $(".xblock-student_view-library_content");
+    if (getXblocks.length === 0) {
+      getXblocks = $(".xblock-student_view-problem");
+    }
+    let xBlocks = [];
+    for (let i = 0; i < getXblocks.length; i++) {
+      if (xBlocks.indexOf($(getXblocks[i]).data("usage-id")) === -1) {
+        console.log($(getXblocks[i]).data("usage-id"));
+        xBlocks.push($(getXblocks[i]).data("usage-id"));
+      }
+    }
+
     let location = "";
     let locName = "";
     let index = 0;
     for (i = 0; i < xBlocks.length; i++) {
-      count += 1;
-      location = $(xBlocks[i]).data("usage-id");
+      console.log(xBlocks.length);
+      location = xBlocks[i];
       index = location.lastIndexOf("@") + 1;
       locName = location.slice(index);
 
-      const reloadOnSuccess = () => {
-        if (count >= xBlocks.length) {
-          return window.location.reload();
-        } else {
-          return null;
-        }
-      };
-
-      StaffDebug.deleteStudentState(locName, location, reloadOnSuccess);
+      StaffDebug.deleteStudentState(locName, location, xBlocks.length);
     }
     return false;
   });
