@@ -243,24 +243,23 @@ function isUnitAvailable(currentUnit) {
   );
 
   // If current unit is not completed yet, disable button next + add tooltip
+  let button = $(".sequence-bottom .sequence-nav-button.button-next");
   if (
     !$('a.outline-item.focusable[id="' + currentUnit + '"]')
       .children()
       .children()
       .hasClass("tma_completed")
   ) {
-    $(".sequence-bottom .sequence-nav-button.button-next").prop(
-      "disabled",
-      true
-    );
-    $(".sequence-bottom .sequence-nav-button.button-next").qtip({
+    // HAD TO ATTRIBUTE IT TO PARENT AS IT DOESNT WORK ON DISABLED BUTTON
+    button.prop("disabled", true);
+    button.parent().qtip({
       content: {
         text:
           "You cannot access the next unit because the current unit is not completed. Please ensure that you viewed all contents and answered all questions."
       },
       position: {
         my: "top right",
-        at: "bottom left"
+        at: "bottom right"
       },
       events: {
         render: function(event, api) {
@@ -269,9 +268,7 @@ function isUnitAvailable(currentUnit) {
       }
     });
   } else {
-    $(".sequence-bottom .sequence-nav-button.button-next").prop(
-      "disabled",
-      false
-    );
+    button.prop("disabled", false);
+    button.parent().qtip("destroy", true);
   }
 }
