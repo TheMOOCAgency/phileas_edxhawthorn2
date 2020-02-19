@@ -6,32 +6,32 @@ if (!hasMenu) {
 }
 
 /* TOGGLE MENU */
-$("span.open-courseware-nav").on("click", function() {
+$("span.open-courseware-nav").on("click", function () {
   $("#tma-completion-nav").removeClass("folded");
   $(".open-courseware-nav").addClass("tma-visibility-hidden");
 });
-$("button.close-courseware-nav").on("click", function() {
+$("button.close-courseware-nav").on("click", function () {
   $("#tma-completion-nav").addClass("folded");
   $(".open-courseware-nav").removeClass("tma-visibility-hidden");
 });
 $(
   ".xmodule_display.xmodule_SequenceModule .sequence-bottom .sequence-nav-button"
-).on("click", function() {
+).on("click", function () {
   $("#tma-completion-nav").addClass("folded");
   $(".open-courseware-nav").removeClass("tma-visibility-hidden");
   close_all_subsections();
 });
 
 /* OPEN & CLOSE MENU */
-$("#tma-completion-nav .close-courseware-nav").on("click", function() {
+$("#tma-completion-nav .close-courseware-nav").on("click", function () {
   close_all_subsections();
 });
-$(".open-courseware-nav").on("click", function() {
+$(".open-courseware-nav").on("click", function () {
   highlight_current_unit();
 });
 
 /* GET COMPLETION ON PAGE LOAD */
-$(document).ready(function() {
+$(document).ready(function () {
   // Open menu when landing on page if coming from course_about
   if (document.referrer.indexOf("/about") > -1 && hasMenu == "True") {
     $("#tma-completion-nav").removeClass("folded");
@@ -59,10 +59,11 @@ $(document).ready(function() {
 });
 
 /* GET COMPLETION WHEN CLICKING ON NEXT OR WHEN ANSWERING A PROBLEM */
-$(document).ajaxSuccess(function(e, xhr, settings) {
+$(document).ajaxSuccess(function (e, xhr, settings) {
   if (
     settings.url.indexOf("goto_position") > -1 ||
-    settings.url.indexOf("problem_check") > -1
+    settings.url.indexOf("problem_check") > -1 ||
+    settings.url.indexOf("scorm_set_value") > -1
   ) {
     response = JSON.parse(xhr.responseText);
     mark_started_subsections();
@@ -86,7 +87,7 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
 });
 
 /* GET COMPLETION WHEN XBLOCK IS CONSIDERED AS VIEWED */
-$(document).ajaxSuccess(function(e, xhr, settings) {
+$(document).ajaxSuccess(function (e, xhr, settings) {
   if (settings.url.indexOf("publish_completion") > -1) {
     currentUnit = $(
       ".xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized"
@@ -101,11 +102,11 @@ $(document).ajaxSuccess(function(e, xhr, settings) {
 
 /********************** FUNCTIONS **********************/
 function mark_started_subsections() {
-  $(".subsection.accordion").each(function() {
+  $(".subsection.accordion").each(function () {
     subsection_started = false;
     $(this)
       .find(".accordion-panel .vertical-title")
-      .each(function() {
+      .each(function () {
         if ($(this).hasClass("tma_completed")) {
           subsection_started = true;
         }
@@ -135,7 +136,7 @@ function get_course_completion() {
   $.ajax({
     type: "get",
     url: url,
-    success: function(response) {
+    success: function (response) {
       completion_rate = Math.round(response.completion_rate * 100);
       $("#tma-completion-value").html(completion_rate + "%");
       if (completion_rate != 0) {
@@ -148,7 +149,7 @@ function get_course_completion() {
 }
 
 // Get unit completion to provide data for left menu and Next button
-function get_unit_completion(currentUnit, isLinear) {
+function get_unit_completion(currentUnit, isLinear, redBorderedUncompletedBlocks = false) {
   url =
     "/tma_apps/" +
     global_courseid +
@@ -158,11 +159,17 @@ function get_unit_completion(currentUnit, isLinear) {
   $.ajax({
     type: "get",
     url: url,
-    success: function(response) {
+    success: function (response) {
       allBlocksCompleted = true;
-      response.unit_blocks.children.forEach(function(block) {
+      response.unit_blocks.children.forEach(function (block) {
+        selector = "data-id='" + block.id + "'";
         if (!block.complete) {
           allBlocksCompleted = false;
+          if (redBorderedUncompletedBlocks) {
+            $("div.vert[" + selector + "]").css("border", "solid red 5px");
+          }
+        } else {
+          $("div.vert[" + selector + "]").css("border", "none");
         }
       });
       if (allBlocksCompleted) {
@@ -177,14 +184,14 @@ function get_unit_completion(currentUnit, isLinear) {
 
 function close_all_subsections() {
   $("#tma-completion-nav .subsection .outline-item.accordion-panel").each(
-    function() {
+    function () {
       $(this).addClass("is-hidden");
     }
   );
-  $("#tma-completion-nav .fa-chevron-right").each(function() {
+  $("#tma-completion-nav .fa-chevron-right").each(function () {
     $(this).removeClass("fa-rotate-90");
   });
-  $(".tma-current-unit").each(function() {
+  $(".tma-current-unit").each(function () {
     $(this).removeClass("tma-current-unit");
   });
 }
@@ -205,10 +212,17 @@ function highlight_current_unit() {
     .addClass("fa-rotate-90");
 }
 
+function colorize_uncompleted() {
+  currentUnit = $(
+    ".xblock.xblock-student_view.xblock-student_view-vertical.xblock-initialized"
+  ).data("usage-id");
+  get_unit_completion(currentUnit, true, true)
+}
+
 // Check if current unit is completed, thus if next unit should be available
 function isUnitAvailable(currentUnit) {
   $("ol.outline-item.accordion-panel li a.outline-item.focusable").each(
-    function(i, element) {
+    function (i, element) {
       // Not for first unit
       if (i !== 0) {
         isUnitSeen =
@@ -252,7 +266,10 @@ function isUnitAvailable(currentUnit) {
   ) {
     // HAD TO ATTRIBUTE IT TO PARENT AS IT DOESNT WORK ON DISABLED BUTTON
     button.prop("disabled", true);
-    button.parent().qtip({
+    // avoid being bound several times
+    $(".overlay-button-next").unbind("mouseenter", colorize_uncompleted);
+    $(".overlay-button-next").bind("mouseenter", colorize_uncompleted);
+    $(".overlay-button-next").qtip({
       content: {
         text:
           "You cannot access the next unit because the current unit is not completed. Please ensure that you viewed all contents and answered all questions."
@@ -262,13 +279,14 @@ function isUnitAvailable(currentUnit) {
         at: "bottom right"
       },
       events: {
-        render: function(event, api) {
+        render: function (event, api) {
           var elem = api.elements.tip;
         }
       }
     });
   } else {
     button.prop("disabled", false);
-    button.parent().qtip("destroy", true);
+    $(".overlay-button-next").qtip("destroy", true);
+    $(".overlay-button-next").hide();
   }
 }
