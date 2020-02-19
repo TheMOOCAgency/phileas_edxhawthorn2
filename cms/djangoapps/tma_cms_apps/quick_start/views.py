@@ -116,7 +116,9 @@ def quick_start_get_course_info(request, course_key_string):
 @require_http_methods(["POST"])
 @csrf_exempt
 def quick_start_create(request):
-    data = request.POST
+    data = request.POST.copy()
+    if data['end_date'] == 'null':
+        data['end_date'] = ''
     serializer = CourseSerializer(data=data)
     course_image = request.FILES.get('course_image') if request.FILES.get('course_image') else data['course_image']
     teacher_image = request.FILES.get('teacher_image') if request.FILES.get('teacher_image') else data['teacher_image']
@@ -133,7 +135,6 @@ def quick_start_create(request):
             "title":download_files_titles[index],
             "file":request.FILES.get(value)
             } for index,value in enumerate(downloads_files_keys)]
-
     if serializer.is_valid():
         tmaCourseCreator = TmaCourseManager(request,serializer.validated_data, course_image, teacher_image, download_files)
         response=tmaCourseCreator.createUpdateCourse()
