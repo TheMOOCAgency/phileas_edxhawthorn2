@@ -25568,3 +25568,16 @@ msgstr "bonnes réponses soit"
 
 msgid "Restart quiz"
 msgstr "Recommencez"
+
+#: lms/static/tma-static/js/courseware-tma-completion-nav.js
+msgid "You cannot access the next unit because the current unit is not completed."
+msgstr "Vous ne pouvez pas accéder à l'unité suivante car l'unité actuelle n'a pas été terminée."
+
+#: lms/static/tma-static/js/courseware-tma-completion-nav.js
+msgid "Please ensure that you viewed all contents and answered all questions."
+msgstr "Veuillez vous assurer d'avoir vu tous les contenus et répondu à toutes les questions."
+
+#: lms/static/tma-static/js/courseware-tma-completion-nav.js
+msgid "A blue border appears on uncompleted blocks."
+msgstr "Un cadre bleu désigne les contenus qui n'ont pas été terminés."
+

@@ -397,3 +397,19 @@ nav.sequence-bottom .sequence-nav-button:hover .icon{
 .sequence-bottom .sequence-nav-button.button-next:disabled {
   pointer-events: auto !important;
 }
+
+.wrapper-button-next-overlay {
+  position:relative;
+}
+.overlay-button-next {
+  display: block;
+  z-index: 1001;
+  width: 120px;
+  height: 70px;
+  right: 0;
+  position: absolute;
+}
+.vert.notcompletedborders{
+  border: #00A0E3 solid 3px;
+  border-bottom: #00A0E3 solid 3px !important;
+}
