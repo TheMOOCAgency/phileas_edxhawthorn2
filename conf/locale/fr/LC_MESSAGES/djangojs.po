@@ -11796,3 +11796,13 @@ msgstr ""
 #: cms/templates/js/video/transcripts/messages/transcripts-use-existing.underscore
 msgid "Use Current Transcript"
 msgstr "Utiliser la transcription courante"
+
+#: lms/static/
+msgid ""
+"You cannot access the next unit because the current unit is not completed. "
+"Please ensure that you viewed all contents and answered all questions. "
+"A blue border appears on uncompleted blocks."
+msgstr ""
+"Vous ne pouvez pas accéder à l'unité suivante car l'unité actuelle n'a pas été terminée. "
+"Veuillez vous assurer d'avoir vu tous les contenus et répondu à toutes les questions. "
+"Un cadre bleu désigne les contenus qui n'ont pas été terminés."

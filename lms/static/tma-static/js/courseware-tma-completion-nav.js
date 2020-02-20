@@ -149,7 +149,7 @@ function get_course_completion() {
 }
 
 // Get unit completion to provide data for left menu and Next button
-function get_unit_completion(currentUnit, isLinear, redBorderedUncompletedBlocks = false) {
+function get_unit_completion(currentUnit, isLinear, borderedUncompletedBlocks = false) {
   url =
     "/tma_apps/" +
     global_courseid +
@@ -165,11 +165,11 @@ function get_unit_completion(currentUnit, isLinear, redBorderedUncompletedBlocks
         selector = "data-id='" + block.id + "'";
         if (!block.complete) {
           allBlocksCompleted = false;
-          if (redBorderedUncompletedBlocks) {
-            $("div.vert[" + selector + "]").css("border", "solid red 5px");
+          if (borderedUncompletedBlocks) {
+            $("div.vert[" + selector + "]").addClass("notcompletedborders");
           }
         } else {
-          $("div.vert[" + selector + "]").css("border", "none");
+          $("div.vert[" + selector + "]").removeClass("notcompletedborders");
         }
       });
       if (allBlocksCompleted) {
@@ -266,13 +266,14 @@ function isUnitAvailable(currentUnit) {
   ) {
     // HAD TO ATTRIBUTE IT TO PARENT AS IT DOESNT WORK ON DISABLED BUTTON
     button.prop("disabled", true);
+    $(".overlay-button-next").show();
     // avoid being bound several times
     $(".overlay-button-next").unbind("mouseenter", colorize_uncompleted);
     $(".overlay-button-next").bind("mouseenter", colorize_uncompleted);
     $(".overlay-button-next").qtip({
       content: {
         text:
-          "You cannot access the next unit because the current unit is not completed. Please ensure that you viewed all contents and answered all questions."
+          gettext("You cannot access the next unit because the current unit is not completed. Please ensure that you viewed all contents and answered all questions. A blue border appears on uncompleted blocks.")
       },
       position: {
         my: "top right",
