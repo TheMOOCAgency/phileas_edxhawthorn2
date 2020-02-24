@@ -12,7 +12,7 @@ export function markBlocksCompletedOnViewIfNeeded(runtime, containerElement) {
 
     // replaced blockElement.dataset.markCompletedOnViewAfterDelay by "500" ms to kill the timer process
     blockElements.forEach(blockElement => {
-      const markCompletedOnViewAfterDelay = parseInt("500", 10);
+      const markCompletedOnViewAfterDelay = parseInt("3000", 10);
       if (markCompletedOnViewAfterDelay >= 0) {
         tracker.addElement(blockElement, markCompletedOnViewAfterDelay);
       }
