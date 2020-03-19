@@ -34,7 +34,8 @@ from student.models import (
     anonymous_id_for_user,
     is_email_retired,
 )
-from submissions import api as sub_api  # installed from the edx-submissions repository
+# installed from the edx-submissions repository
+from submissions import api as sub_api
 from submissions.models import score_set
 from track.event_transaction_utils import (
     create_new_event_transaction_id,
@@ -57,6 +58,7 @@ log = logging.getLogger(__name__)
 
 class EmailEnrollmentState(object):
     """ Store the complete enrollment state of an email in a class """
+
     def __init__(self, course_id, email):
         # N.B. retired users are not a concern here because they should be
         # handled at a higher level (i.e. in enroll_email).  Besides, this
@@ -64,16 +66,19 @@ class EmailEnrollmentState(object):
         exists_user = User.objects.filter(email=email).exists()
         if exists_user:
             user = User.objects.get(email=email)
-            mode, is_active = CourseEnrollment.enrollment_mode_for_user(user, course_id)
+            mode, is_active = CourseEnrollment.enrollment_mode_for_user(
+                user, course_id)
             # is_active is `None` if the user is not enrolled in the course
             exists_ce = is_active is not None and is_active
             full_name = user.profile.name
-            ceas = CourseEnrollmentAllowed.for_user(user).filter(course_id=course_id).all()
+            ceas = CourseEnrollmentAllowed.for_user(
+                user).filter(course_id=course_id).all()
         else:
             mode = None
             exists_ce = False
             full_name = None
-            ceas = CourseEnrollmentAllowed.objects.filter(email=email, course_id=course_id).all()
+            ceas = CourseEnrollmentAllowed.objects.filter(
+                email=email, course_id=course_id).all()
         exists_allowed = ceas.exists()
         state_auto_enroll = exists_allowed and ceas[0].auto_enroll
 
@@ -153,20 +158,24 @@ def enroll_email(course_id, student_email, auto_enroll=False, email_students=Fal
         if previous_state.enrollment:
             course_mode = previous_state.mode
 
-        enrollment_obj = CourseEnrollment.enroll_by_email(student_email, course_id, course_mode)
+        enrollment_obj = CourseEnrollment.enroll_by_email(
+            student_email, course_id, course_mode)
         if email_students:
             email_params['message'] = 'enrolled_enroll'
             email_params['email_address'] = student_email
             email_params['full_name'] = previous_state.full_name
-            send_mail_to_student(student_email, email_params, language=language)
+            send_mail_to_student(
+                student_email, email_params, language=language)
     elif not is_email_retired(student_email):
-        cea, _ = CourseEnrollmentAllowed.objects.get_or_create(course_id=course_id, email=student_email)
+        cea, _ = CourseEnrollmentAllowed.objects.get_or_create(
+            course_id=course_id, email=student_email)
         cea.auto_enroll = auto_enroll
         cea.save()
         if email_students:
             email_params['message'] = 'allowed_enroll'
             email_params['email_address'] = student_email
-            send_mail_to_student(student_email, email_params, language=language)
+            send_mail_to_student(
+                student_email, email_params, language=language)
 
     after_state = EmailEnrollmentState(course_id, student_email)
 
@@ -192,15 +201,18 @@ def unenroll_email(course_id, student_email, email_students=False, email_params=
             email_params['message'] = 'enrolled_unenroll'
             email_params['email_address'] = student_email
             email_params['full_name'] = previous_state.full_name
-            send_mail_to_student(student_email, email_params, language=language)
+            send_mail_to_student(
+                student_email, email_params, language=language)
 
     if previous_state.allowed:
-        CourseEnrollmentAllowed.objects.get(course_id=course_id, email=student_email).delete()
+        CourseEnrollmentAllowed.objects.get(
+            course_id=course_id, email=student_email).delete()
         if email_students:
             email_params['message'] = 'allowed_unenroll'
             email_params['email_address'] = student_email
             # Since no User object exists for this student there is no "full_name" available.
-            send_mail_to_student(student_email, email_params, language=language)
+            send_mail_to_student(
+                student_email, email_params, language=language)
 
     after_state = EmailEnrollmentState(course_id, student_email)
 
@@ -220,10 +232,12 @@ def send_beta_role_email(action, user, email_params):
         email_params['email_address'] = user.email
         email_params['full_name'] = user.profile.name
     else:
-        raise ValueError("Unexpected action received '{}' - expected 'add' or 'remove'".format(action))
+        raise ValueError(
+            "Unexpected action received '{}' - expected 'add' or 'remove'".format(action))
     trying_to_add_inactive_user = not user.is_active and action == 'add'
     if not trying_to_add_inactive_user:
-        send_mail_to_student(user.email, email_params, language=get_user_email_language(user))
+        send_mail_to_student(user.email, email_params,
+                             language=get_user_email_language(user))
 
 
 def reset_student_attempts(course_id, student, module_state_key, requesting_user, delete_module=False):
@@ -252,7 +266,8 @@ def reset_student_attempts(course_id, student, module_state_key, requesting_user
         if block.has_children:
             for child in block.children:
                 try:
-                    reset_student_attempts(course_id, student, child, requesting_user, delete_module=delete_module)
+                    reset_student_attempts(
+                        course_id, student, child, requesting_user, delete_module=delete_module)
                 except StudentModule.DoesNotExist:
                     # If a particular child doesn't have any state, no big deal, as long as the parent does.
                     pass
@@ -271,7 +286,8 @@ def reset_student_attempts(course_id, student, module_state_key, requesting_user
                 submission_cleared = True
     except ItemNotFoundError:
         block = None
-        log.warning("Could not find %s in modulestore when attempting to reset attempts.", module_state_key)
+        log.warning(
+            "Could not find %s in modulestore when attempting to reset attempts.", module_state_key)
 
     # Reset the student's score in the submissions API, if xblock.clear_student_state has not done so already.
     # We need to do this before retrieving the `StudentModule` model, because a score may exist with no student module.
@@ -383,12 +399,13 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     registration_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}'.format(
         proto=protocol,
         site=stripped_site_name,
-        path=urllib.quote(reverse('home_dashboard'),'')
+        path=urllib.quote(reverse('home_dashboard_courses'), '')
     )
     course_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}'.format(
         proto=protocol,
         site=stripped_site_name,
-        path=urllib.quote(reverse('course_root', kwargs={'course_id': course_key}),'')
+        path=urllib.quote(reverse('course_root', kwargs={
+                          'course_id': course_key}), '')
     )
 
     # We can't get the url to the course's About page if the marketing site is enabled.
@@ -397,7 +414,8 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
         course_about_url = u'{proto}://{site}/auth/login/amundi/?auth_entry=register&next={path}'.format(
             proto=protocol,
             site=stripped_site_name,
-            path=urllib.quote(reverse('about_course', kwargs={'course_id': course_key}),'')
+            path=urllib.quote(reverse('about_course', kwargs={
+                              'course_id': course_key}), '')
         )
 
     is_shib_course = uses_shib(course)
@@ -425,7 +443,6 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     else:
         effort = "n/a"
 
-
     tma_params = {}
     tma_params["language"] = settings.LANGUAGE_CODE
     tma_params["site_url"] = u'{proto}://{site}'.format(
@@ -443,11 +460,14 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     if TmaCourseOverview.objects.get(course_overview_edx__id=course.id).is_mandatory:
         if CourseOverview.objects.get(id=course.id).end is not None:
             if ZoneManager(request.user).get_user_zone() is "americas":
-                tma_params["content"]["mandatory_text"] = _("This training is mandatory and must be completed before {end_date}.").format(end_date=CourseOverview.objects.get(id=course.id).end.strftime("%m-%d-%Y"))
-            else:       
-                tma_params["content"]["mandatory_text"] = _("This training is mandatory and must be completed before {end_date}.").format(end_date=CourseOverview.objects.get(id=course.id).end.strftime("%d-%m-%Y"))
+                tma_params["content"]["mandatory_text"] = _("This training is mandatory and must be completed before {end_date}.").format(
+                    end_date=CourseOverview.objects.get(id=course.id).end.strftime("%m-%d-%Y"))
+            else:
+                tma_params["content"]["mandatory_text"] = _("This training is mandatory and must be completed before {end_date}.").format(
+                    end_date=CourseOverview.objects.get(id=course.id).end.strftime("%d-%m-%Y"))
         else:
-            tma_params["content"]["mandatory_text"] = _("This training is mandatory.")
+            tma_params["content"]["mandatory_text"] = _(
+                "This training is mandatory.")
     else:
         tma_params["content"]["mandatory_text"] = False
 
@@ -545,9 +565,10 @@ def send_mail_to_student(student, param_dict, language=None):
             tma_email_template_dict.get(message_type, None),
             param_dict
         )
-    ### END
+    # END
 
-    subject_template, message_template = email_template_dict.get(message_type, (None, None))
+    subject_template, message_template = email_template_dict.get(
+        message_type, (None, None))
     if subject_template is not None and message_template is not None:
         subject, message = render_message_to_string(
             subject_template, message_template, param_dict, language=language
@@ -564,12 +585,14 @@ def send_mail_to_student(student, param_dict, language=None):
             settings.DEFAULT_FROM_EMAIL
         )
 
-        ### TMA SEND MAIL
+        # TMA SEND MAIL
         if "allowed_enroll" or "enrolled_enroll" in message_type:
-            send_mail(subject, message, from_address, [student],fail_silently=False, html_message=html_message)
+            send_mail(subject, message, from_address, [
+                      student], fail_silently=False, html_message=html_message)
         else:
-            send_mail(subject, message, from_address, [student], fail_silently=False)
-        ### END
+            send_mail(subject, message, from_address,
+                      [student], fail_silently=False)
+        # END
 
 
 def render_message_to_string(subject_template, message_template, param_dict, language=None):
