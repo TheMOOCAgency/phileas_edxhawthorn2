@@ -1,9 +1,14 @@
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import ensure_csrf_cookie
+from openedx.core.djangoapps.util.maintenance_banner import add_maintenance_banner
 from edxmako.shortcuts import render_to_response
-from student.views.dashboard import _student_dashboard
+from .helpers import programs_dashboard_context
 
 
 @login_required
-def programs_dashboard(request):
-    context = _student_dashboard(request)
-    return render_to_response('tma_apps/programs_dashboard.html', context)
+@ensure_csrf_cookie
+@add_maintenance_banner
+def programs_dashboard_view(request):
+    context = programs_dashboard_context(request)
+    response = render_to_response('tma_apps/programs_dashboard.html', context)
+    return response
