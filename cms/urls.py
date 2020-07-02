@@ -20,6 +20,7 @@ from ratelimitbackend import admin
 from cms.djangoapps.tma_cms_apps.tma_advanced_settings.views import amundi_settings_handler
 import cms.djangoapps.tma_cms_apps
 from cms.djangoapps.tma_cms_apps.quick_start.views import quick_start, quick_start_create, quick_start_checkid_exists, quick_start_get_course_info
+from lms.djangoapps.tma_apps.programs.views import create_program
 
 django_autodiscover()
 admin.site.site_header = _('Studio Administration')
@@ -180,10 +181,13 @@ urlpatterns = [
 urlpatterns += [
     url(r'^tma_apps/quickstart/$',quick_start , name='quick_start'),
     url(r'^tma_apps/quickstart/create-course/$',quick_start_create , name='quick_start_create'),
-    url(r'^tma_apps/quickstart/checkid/{}$'.format(
-        settings.COURSE_KEY_PATTERN), quick_start_checkid_exists , name='quick_start_checkid'),
-    url(r'^tma_apps/quickstart/getCourseInfo/{}$'.format(
-        settings.COURSE_KEY_PATTERN), quick_start_get_course_info , name='quick_start_getInfo')
+    url(r'^tma_apps/quickstart/checkid/{}$'.format(settings.COURSE_KEY_PATTERN), quick_start_checkid_exists , name='quick_start_checkid'),
+    url(r'^tma_apps/quickstart/getCourseInfo/{}$'.format(settings.COURSE_KEY_PATTERN), quick_start_get_course_info , name='quick_start_getInfo')
+]
+
+# Programs
+urlpatterns += [
+    url(r'^tma_apps/programs/create_program/$',create_program , name='create_program'),
 ]
 
 # Microsite Manager API
