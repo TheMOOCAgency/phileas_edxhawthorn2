@@ -18,11 +18,8 @@ def programs_dashboard_view(request):
 
 @login_required
 @require_http_methods(["POST"])
-@csrf_exempt
 def create_program(request):
     program_data = request.POST.copy()
-    program_data['end_date'] == '' if program_data['end_date'] == 'null'
-
     tma_program_creator = TmaProgramManager(request, program_data)
     new_program = tma_program_creator.create_new_program()
 
