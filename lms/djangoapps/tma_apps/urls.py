@@ -6,7 +6,6 @@ from .completion import views as completion_views
 from .favourite import views as favourite_views
 from .like import views as like_views
 from .activity_dashboard import views as activity_dashboard_views
-from .programs import views as programs_views
 from .delete_cookies import views as delete_cookies_views
 from .legal import views as legal_views
 from .tma_reports import views as tma_reports_views
@@ -34,7 +33,7 @@ urlpatterns = [
     url(r'^dashboard/home/courses$', activity_dashboard_views.home_dashboard_courses, name='home_dashboard_courses'),
 
     # Programs dashboard
-    url(r'^dashboard/home/programs$', programs_views.programs_dashboard_view, name='programs_dashboard_view'),
+    url(r'^dashboard/home/programs$', activity_dashboard_views.programs_dashboard_view, name='programs_dashboard_view'),
 
     #Student Grade Tracking
     url(r'^{}/grade_tracking/get_user_grade$'.format(settings.COURSE_ID_PATTERN), grade_views.get_user_grade),

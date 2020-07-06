@@ -20,7 +20,7 @@ from ratelimitbackend import admin
 from cms.djangoapps.tma_cms_apps.tma_advanced_settings.views import amundi_settings_handler
 import cms.djangoapps.tma_cms_apps
 from cms.djangoapps.tma_cms_apps.quick_start.views import quick_start, quick_start_create, quick_start_checkid_exists, quick_start_get_course_info
-from lms.djangoapps.tma_apps.programs.views import create_program
+from cms.djangoapps.tma_cms_apps.programs.views import create_program
 
 django_autodiscover()
 admin.site.site_header = _('Studio Administration')
