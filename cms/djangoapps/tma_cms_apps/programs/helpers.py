@@ -28,6 +28,7 @@ class TmaProgramManager():
         program_type = self.program_data['program_type']
         program_start_date = self.program_data['start_date']
         program_due_date = self.program_data['end_date']
+        program_name = self.program_data['program_name']
 
         is_manager_only = True if 'is_manager_only' in program_type else False
         is_mandatory = True if 'is_mandatory' in program_type else False
@@ -41,7 +42,8 @@ class TmaProgramManager():
             invitation_only = invitation_only,
             is_new = True,
             program_start_date = program_start_date,
-            program_due_date = program_due_date
+            program_due_date = program_due_date,
+            program_name = program_name
         )
 
         return new_program_overview

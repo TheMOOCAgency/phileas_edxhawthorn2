@@ -17,6 +17,7 @@ class TmaProgramOverview(models.Model):
     is_new = models.BooleanField(default=False)
     program_start_date = models.DateTimeField(null=True)
     program_due_date = models.DateTimeField(null=True)
+    program_name = models.CharField(default='')
 
 class TmaProgramEnrollment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
