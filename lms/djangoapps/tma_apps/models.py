@@ -4,7 +4,6 @@ from student.models import CourseEnrollment
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from opaque_keys.edx.keys import CourseKey
 from courseware.courses import get_course_by_id
-
 from django.db import models
 from django.dispatch import receiver
 from student.signals import UNENROLL_DONE
