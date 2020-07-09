@@ -189,7 +189,7 @@ urlpatterns += [
 
 # Programs
 urlpatterns += [
-    url(r'^tma_apps/programs/create_program/$',create_program , name='create_program'),
+    url(r'^tma_apps/programs/create-program/$',create_program , name='create_program'),
     url(r'^tma_apps/programs/enroll/{}$'.format(PROGRAM_KEY_PATTERN), enroll_program , name='enroll_program'),
 ]
 
