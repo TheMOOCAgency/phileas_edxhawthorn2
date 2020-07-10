@@ -14,7 +14,7 @@ from xmodule.course_module import CourseFields
 from xmodule.modulestore.django import modulestore
 from random import randint
 import logging
-from pprint import pformat
+import json
 
 log = logging.getLogger()
 
@@ -22,30 +22,25 @@ class TmaProgramManager():
     def __init__(self, request, program_data):
         self.request = request
         self.program_data = program_data
+        self.is_manager_only = True if self.program_data['is_manager_only'] == 'true' else False
+        self.is_mandatory = True if self.program_data['is_mandatory'] == 'true' else False
+        self.is_linear = True if self.program_data['is_linear'] == 'true' else False
+        self.invitation_only = True if self.program_data['invitation_only'] == 'true' else False
         self.program_overview = self._create_program_overview()
 
 
     def _create_program_overview(self):
         self.program_data['end_date'] = '' if self.program_data['end_date'] == 'null' else self.program_data['end_date']
         
-        is_manager_only = self.program_data['is_manager_only']
-        is_mandatory = self.program_data['is_mandatory']
-        is_linear = self.program_data['is_linear']
-        invitation_only = self.program_data['invitation_only']
         program_start_date = self.program_data['start_date']
         program_due_date = self.program_data['end_date']
         program_name = self.program_data['program_name']
 
-        is_manager_only = True if 'is_manager_only' == 'true' else False
-        is_mandatory = True if 'is_mandatory' == 'true' else False
-        is_linear = True if 'is_linear' == 'true' else False
-        invitation_only = True if 'invitation_only' == 'true' else False
-
         new_program_overview = TmaProgramOverview.objects.create(
-            is_manager_only = is_manager_only,
-            is_mandatory = is_mandatory,
-            is_linear = is_linear,
-            invitation_only = invitation_only,
+            is_manager_only = self.is_manager_only,
+            is_mandatory = self.is_mandatory,
+            is_linear = self.is_linear,
+            invitation_only = self.invitation_only,
             is_new = True,
             program_start_date = program_start_date,
             program_due_date = program_due_date,
@@ -63,7 +58,6 @@ class TmaProgramManager():
     
     def _create_program_course(self, course_key_string, index):
         course_key = CourseKey.from_string(course_key_string)
-
         course = CourseOverview.objects.get(id=course_key)
 
         random_integer = str(randint(100000, 999999))
@@ -88,44 +82,46 @@ class TmaProgramManager():
         fields['wiki_slug'] = wiki_slug
 
         new_course_key = rerun_course(self.request.user, course_key, org, number, run, fields)
-
-        course_overview = CourseOverview.objects.get(id=new_course_key)
-
-        log.info('course_overview OK')
         
-        # update course details depending on program details
-        course_details = CourseDetails.objects.get(course_id=new_course_key)
-        log.info('course_details')
-        log.info(course_details)
+        # Update CourseDetails dates depending on program dates     
+        program_dates = {}
+        program_dates['start_date'] = start
+        program_dates['end_date'] = self.program_data['end_date']
 
-        course_details.start = start
-        course_details.end = self.program_data['end_date']
-        course_details.save()
-        
-        course = get_course_by_id(self.new_course_key)
-        invitation_only = True if self.program_data['invitation_only'] == 'true' else False
-        metadata = {'invitation_only': invitation_only}
+        json_update = json.dumps(program_dates)
+
+        ########### TO FIX - course_details.update_from_json(new_course_key, json_update, self.request.user)
+        course_details = CourseDetails(org, new_course_key, run)
+        course = get_course_by_id(new_course_key)
+        metadata = {'invitation_only': self.invitation_only}
         CourseMetadata.update_from_dict(metadata, course, self.request.user)
-        
-        tma_course_overview = TmaCourseOverview.objects.get(course_overview_edx=course_overview)
-        tma_course_overview.is_manager_only = True if self.program_data['is_manager_only'] == 'true' else False
-        tma_course_overview.is_linear = True if self.program_data['is_linear'] == 'true' else False
-        tma_course_overview.is_mandatory = True if self.program_data['is_mandatory'] == 'true' else False
-        tma_course_overview.save()
 
-        TmaProgramCourse.objects.create(
+        # Update TmaCourseOverview params depending on program params
+        course_overview = CourseOverview.objects.get(id=new_course_key)
+        TmaCourseOverview.objects.filter(course_overview_edx=course_overview).update(is_mandatory=self.is_mandatory, is_manager_only=self.is_manager_only, is_linear=self.is_linear)
+
+        log.info('will create program course')
+        log.info(self.program_overview)
+        log.info(course_overview)
+        log.info(index)
+
+        new_program_course = TmaProgramCourse.objects.create(
             program = self.program_overview,
             course = course_overview,
             order = index
         )
 
+        log.info('program course created')
+        log.info(new_program_course)
+
+        return new_program_course
 
     def create_new_program(self):
         try:
             self._duplicate_original_courses()
             return { 'status':'success' }
         except:
-            return { 'status':'error', 'message': "Could not duplicate courses" }
+            return { 'status':'error' }
 
 
 class TmaProgramEnrollmentManager():

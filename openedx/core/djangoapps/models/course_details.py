@@ -190,7 +190,7 @@ class CourseDetails(object):
         descriptor = module_store.get_course(course_key)
 
         dirty = False
-
+        
         # In the descriptor's setter, the date is converted to JSON
         # using Date's to_json method. Calling to_json on something that
         # is already JSON doesn't work. Since reaching directly into the

@@ -2,7 +2,7 @@
 
 from django.utils import timezone
 from django.db import models
-from student.models import CourseEnrollment
+from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from django.contrib.auth.models import User
 import logging
 
@@ -28,5 +28,5 @@ class TmaProgramEnrollment(models.Model):
 
 class TmaProgramCourse(models.Model):
     program = models.ForeignKey(TmaProgramEnrollment, on_delete=models.CASCADE, unique=True)
-    course = models.ForeignKey(CourseEnrollment, on_delete=models.CASCADE, unique=True)
+    course = models.ForeignKey(CourseOverview, on_delete=models.CASCADE, unique=True)
     order = models.IntegerField(default=0)
