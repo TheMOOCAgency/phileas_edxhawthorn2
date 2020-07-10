@@ -29,8 +29,11 @@ urlpatterns = [
     #Liked
     url(r'^{}/like/update_like$'.format(settings.COURSE_ID_PATTERN), like_views.api_update_like),
 
-    # Home dashboard
-    url(r'^dashboard/home/$', activity_dashboard_views.home_dashboard, name='home_dashboard'),
+    # Courses dashboard
+    url(r'^dashboard/home/courses$', activity_dashboard_views.home_dashboard_courses, name='home_dashboard_courses'),
+
+    # Programs dashboard
+    url(r'^dashboard/home/programs$', activity_dashboard_views.programs_dashboard_view, name='programs_dashboard_view'),
 
     #Student Grade Tracking
     url(r'^{}/grade_tracking/get_user_grade$'.format(settings.COURSE_ID_PATTERN), grade_views.get_user_grade),

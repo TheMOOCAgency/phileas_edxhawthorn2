@@ -1,0 +1,283 @@
+<%page expression_filter="h"/>
+<%inherit file="../main.html" />
+<%def name="online_help_token()"><% return "learnerdashboard" %></%def>
+<%namespace name='static' file='../static_content.html'/>
+<%!
+import pytz
+from datetime import datetime, timedelta
+from django.urls import reverse
+from django.utils.translation import ugettext as _
+from django.template import RequestContext
+from entitlements.models import CourseEntitlement
+from third_party_auth import pipeline
+from util.date_utils import strftime_localized
+from opaque_keys.edx.keys import CourseKey
+from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
+from openedx.core.djangoapps.site_configuration import helpers as configuration_helpers
+from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string
+from openedx.core.djangolib.markup import HTML, Text
+from student.models import CourseEnrollment
+from lms.djangoapps.courseware.courses import (
+  get_course_overview_with_access,
+  get_course
+)
+from openedx.features.course_experience import course_home_url_name
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
+from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
+from lms.djangoapps.tma_apps.certificates.certificate import certificate
+import logging
+log = logging.getLogger(__name__)
+%>
+
+<%
+favorite_course_enrollments = []
+mandatory_course_enrollments = []
+done_course_enrollments = []
+ongoing_course_enrollments = []
+liked_total = {}
+is_liked = {}
+is_ongoing = False
+is_favorite = False
+
+# Iterate on all course enrollments for ongoing mandatory and done
+for enrollment in course_enrollments:
+    tmacourseoverview = TmaCourseOverview.get_tma_course_overview_by_course_id(enrollment.course_overview.id)
+    liked_total[enrollment.course_id] = tmacourseoverview.liked_total
+    is_liked[enrollment.course_id] = False
+    tmacourseenrollment = None
+    if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
+        tmacourseenrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
+        is_liked[enrollment.course_id] = tmacourseenrollment.is_liked
+    if enrollment.course_id in show_courseware_links_for:
+                #If course is open
+                if tmacourseenrollment.has_validated_course:
+                    done_course_enrollments.append(enrollment)
+                else:
+                    ongoing_course_enrollments.append(enrollment)
+                    if TmaCourseOverview.objects.filter(course_overview_edx_id=enrollment.course_overview.id).exists():
+                        if TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id).is_mandatory:
+                            mandatory_course_enrollments.append(enrollment)
+    else:
+    #If course is not open
+        done_course_enrollments.append(enrollment)
+
+
+
+#Favorites / Likes have a different logic - no need for enrollment to be active
+for user_enrollment in TmaCourseEnrollment.objects.filter(course_enrollment_edx__user=request.user) :
+  edx_associated_enrollment = user_enrollment.course_enrollment_edx
+  if user_enrollment.is_favourite:
+    favorite_course_enrollments.append(edx_associated_enrollment)
+  is_liked[edx_associated_enrollment.course_id] = user_enrollment.is_liked
+  try:
+    liked_total[edx_associated_enrollment.course_id]= TmaCourseOverview.get_tma_course_overview_by_course_id(edx_associated_enrollment.course_id).liked_total
+  except:
+    pass
+%>
+
+<%block name="pagetitle">${_("Dashboard")}</%block>
+
+<!-- TMA enable BOOTSTRAP-->
+<link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
+<script type="text/javascript" src="${static.url('common/js/vendor/bootstrap.bundle.js')}"></script>
+
+<!-- TMA GLOBAL STYLE -->
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,500" rel="stylesheet">
+<link rel="stylesheet" href="${static.url('tma-static/css/home-tma-custom.css')}">
+<link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
+<link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
+
+<div id="cards-box" class="container-fluid bg-white">
+    <div class="row">
+        <div class="col home-box">
+            <div class="row mt-5">
+                <div class="col">
+                    <h1 class="title-36-black mb-5">${_("Your dashboard")}</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-1 text-right">
+                    % if user.first_name and user.last_name:
+                        <div class="profile-img">${user.first_name[0] + user.last_name[0]}</div>
+                    % else:
+                        <div class="profile-img"></div>
+                    % endif
+                </div>
+                <div class="col-lg-5">
+                    % if user.first_name and user.last_name:
+                        <h2 class="title-24"><span class="font-weight-bold">${_("Hello")}</span> ${user.first_name}</h2>
+                    % else:
+                        <h2 class="title-24"><span class="font-weight-bold">${_("Hello")}</span> ${user.username}</h2>
+                    % endif
+                    <p class="grey-text">${_("You'll find on this page all your ongoing programs, mandatory or not, as well as your favorite and finished courses.")}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ONGOING COURSES -->
+    <div class="row position-relative">
+        <div class="bg-blue-box"></div>
+        <div class="container-fluid padding-70 pt-4 pb-4 ongoing-box ">
+            <div class="row pt-4">
+                <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">${_("Your ongoing programs")}</h1>
+            </div>
+             %if ongoing_course_enrollments:
+             <div class="row">
+                %for enrollment in ongoing_course_enrollments:
+                    <% is_ongoing = True %>
+                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id], is_liked=is_liked[enrollment.course_id], is_ongoing=is_ongoing, is_favorite=is_favorite' />
+                % endfor
+             %else:
+             <div class="row" style="margin-bottom:180px;">
+                <div style="margin:0 auto;z-index:2"><p class="text-white">${_("You have no ongoing programs yet")}</p></div>
+             %endif
+            </div>
+        </div>
+    </div>
+    <div class="separator"></div>
+    <!-- MANDATORY COURSES -->
+    <div class="row">
+        <div class="container-fluid padding-70 pt-4 pb-4 mandatory-box">
+            <div class="row pt-4">
+                <h1 class="title-28"><img class="picto" src="${static.url('tma-static/images/warning.svg')}">${_("Your mandatory programs")}</h1>
+            </div>
+            <div class="row">
+             %if mandatory_course_enrollments:
+                %for enrollment in mandatory_course_enrollments:
+                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id],is_liked=is_liked[enrollment.course_id], is_ongoing=is_ongoing, is_favorite=is_favorite' />
+                % endfor
+             %else:
+                    <div style="margin:0 auto"><p>${_("You are not enrolled in mandatory courses yet")}</p></div>
+             %endif
+            </div>
+        </div>
+    </div>
+    <div class="separator"></div>
+    <!-- FAVORITE COURSES -->
+    <div class="row position-relative">
+        <div class="bg-grey-box"></div>
+        <div class="container-fluid padding-70 pt-4 pb-4 favorite-box">
+            <div class="row pt-4">
+                <h1 class="title-28"><img class="picto" src="${static.url('tma-static/images/etoile.svg')}">${_("Your favorite programs")}</h1>
+            </div>
+            <div class="row">
+             %if favorite_course_enrollments:
+                %for enrollment in favorite_course_enrollments:
+                    <% is_favorite = True %>
+                    <%include file='course_card.html' args='enrollment=enrollment, mandatory_course_enrollments=mandatory_course_enrollments, liked_total=liked_total[enrollment.course_id],is_liked=is_liked[enrollment.course_id], is_ongoing=is_ongoing, is_favorite=is_favorite' />
+                % endfor
+             %else:
+                    <div style="margin:0 auto"><p>${_("You have no favorite programs yet")}</p></div>
+             %endif
+            </div>
+        </div>
+    </div>
+    <div class="separator"></div>
+    <!-- FINISHED COURSES-->
+    <div id="finished-section" class="row">
+        <div class="container-fluid padding-70 pt-4 finished-box">
+            <div class="row pt-4 pl-3">
+                <h1 class="title-28">${_("Your finished programs")}</h1>
+            </div>
+            <div class="row legend">
+                <div class="col-lg-3">${_("Course :")}</div>
+                <div class="col-lg-3">${_("Date :")}</div>
+                <div class="col-lg-2">${_("Score :")}</div>
+                <div class="col-lg-2">${_("Certification :")}</div>
+                <div class="col-lg-2">${_("Download certificate :")}</div>
+            </div>
+            <div class="table-separator"></div>
+     %if done_course_enrollments:
+        %for enrollment in done_course_enrollments:
+            <div class="row finished">
+                %if enrollment.course_id in show_courseware_links_for:
+                    % if 'Vodeclic' in str(enrollment.course_id):
+                        <div class="col-lg-3 title-20" style="cursor:pointer">
+                            <p class="mb-0" onclick="window.open('${get_vodeclic_href(request.user,enrollment.course_id)}','_blank');">${enrollment.course_overview.display_name_with_default}</p>
+                        </div>
+                    % elif 'APOC+APOC' in str(enrollment.course_id):
+                  <form name="apocform" target="_blank" action="https://apoc.themoocagency.com/autologreg" style="display:none" method="POST">
+                    <input type='text' name='PID' value='${user.profile.rpid}' />
+                    <input type='text' name='firstname' value='${user.first_name}' />
+                    <input type='text' name='lastname' value='${user.last_name}' />
+                    <input type='text' name='email' value='${user.email}' />
+                    <input type='text' name='entity_id' value='amundi' />
+                    <button>Submit</button>
+                  </form>
+                        <div class="col-lg-3 title-20" style="cursor:pointer">
+                            <p class="mb-0" onclick="document.querySelector('form[name=&quot;apocform&quot;]').submit();">${enrollment.course_overview.display_name_with_default}</p>
+                        </div>
+                    % else:
+                        <div class="col-lg-3 title-20" style="cursor:pointer">
+                            <p class="mb-0" onclick="window.location.href='/courses/${enrollment.course_id}/courseware'">${enrollment.course_overview.display_name_with_default}</p>
+                        </div>
+                    %endif
+                %else:
+                    <div class="col-lg-3 title-20">
+                        <p class="mb-0">${enrollment.course_overview.display_name_with_default}</p>
+                    </div>
+                %endif
+                <div class="col-lg-3 grey-text">
+                    % if TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).date_best_student_grade:
+                        <p class="mb-0"><span>${TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).date_best_student_grade.strftime('%d-%m-%Y')}</span></p>
+                    % endif
+                </div>
+                <div class="col-lg-2">
+                    % if 'Vodeclic' in str(enrollment.course_id) or 'APOC+APOC' in str(enrollment.course_id):
+                        <p class="mb-0">${_("Grade not available")}</p>
+                    % elif not get_course(enrollment.course_id).no_grade:
+                        <p class="mb-0"><span class="font-weight-bold">${int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100)}</span>/100</p>
+                    % else:
+                        <p class="mb-0">${_("Course not graded")}</p>
+                    % endif
+                </div>
+                <div class="col-lg-2 pl-5">
+                    <p class="mb-0">
+                        % if not 'Vodeclic' in str(enrollment.course_id) and not 'APOC+APOC' in str(enrollment.course_id):
+                            % if not get_course(enrollment._course_id).no_grade:
+                                % if int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100) >= 95:
+                                    <img class="badge-cert" src="${static.url('tma-static/images/certificate.svg')}">
+                                % elif 95 >= int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100) and int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 90:
+                                    <img class="badge-cert" src="${static.url('tma-static/images/certificate-silver.svg')}">
+                                % elif 90 >= int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).best_student_grade*100) and int(TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).student_grade*100) >= 80:
+                                    <img class="badge-cert" src="${static.url('tma-static/images/certificate-bronze.svg')}">
+                                % else:
+                                    --
+                                % endif
+                            % else:
+                                --
+                            % endif
+                        % else:
+                            --
+                        % endif
+                    </p>
+                </div>
+                % if 'Vodeclic' in str(enrollment.course_id) or 'APOC+APOC' in str(enrollment.course_id):
+                    <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
+                % else:
+                    % if certificate(request.user).get_certificate_status(enrollment.course_id):
+                        <div class="col-lg-2"><a href="/tma_apps/${enrollment._course_id}/certificate/render">${_("Download")}</a></div>
+                    % else:
+                        <div class="col-lg-2"><p class="mb-0">${_("No certificate available")}</p></div>
+                    % endif
+                % endif
+                <div class="table-separator"></div>
+            </div>
+
+        %endfor
+     %else:
+        <div class="row"><p class="col text-center mb-0">${_("You have no finished course yet")}</p></div>
+        <div class="table-separator"></div>
+     %endif
+        <div class="row mb-5 mt-3">
+            % if len(done_course_enrollments) > 4:
+                <div class="col text-center more-btn">
+                    <a onclick="loadMore()"><img src="${static.url('tma-static/images/+.svg')}"></a>
+                </div>
+            % endif
+        </div>
+        </div>
+    </div>
+</div>
+<script src="${static.url('tma-static/js/home-dashboard-actions.js')}" charset="utf-8"></script>
+<script src="${static.url('tma-static/js/likes-and-favorite.js')}" charset="utf-8"></script>
