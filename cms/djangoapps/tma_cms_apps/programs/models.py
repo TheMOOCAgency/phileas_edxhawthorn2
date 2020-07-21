@@ -27,6 +27,6 @@ class TmaProgramEnrollment(models.Model):
     program_completion_rate = models.FloatField(default=0)
 
 class TmaProgramCourse(models.Model):
-    program = models.ForeignKey(TmaProgramEnrollment, on_delete=models.CASCADE, unique=True)
+    program = models.ForeignKey(TmaProgramOverview, on_delete=models.CASCADE, unique=True)
     course = models.ForeignKey(CourseOverview, on_delete=models.CASCADE, unique=True)
     order = models.IntegerField(default=0)

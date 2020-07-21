@@ -90,7 +90,8 @@ class TmaProgramManager():
 
         json_update = json.dumps(program_dates)
 
-        ########### TO FIX - course_details.update_from_json(new_course_key, json_update, self.request.user)
+        ########### TO FIX - 
+        course_details.update_from_json(new_course_key, json_update, self.request.user)
         course_details = CourseDetails(org, new_course_key, run)
         course = get_course_by_id(new_course_key)
         metadata = {'invitation_only': self.invitation_only}
@@ -115,6 +116,7 @@ class TmaProgramManager():
         log.info(new_program_course)
 
         return new_program_course
+
 
     def create_new_program(self):
         try:
