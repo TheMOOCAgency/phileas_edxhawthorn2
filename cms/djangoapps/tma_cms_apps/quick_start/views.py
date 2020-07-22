@@ -9,7 +9,9 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
 from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from datetime import datetime
 from django.views.decorators.http import require_http_methods
-from tma_cms_apps.quick_start.serializer import CourseSerializer 
+from tma_cms_apps.quick_start.serializer import CourseSerializer
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramOverview
+from cms.djangoapps.tma_cms_apps.programs.serializer import ProgramSerializer  
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
@@ -52,15 +54,22 @@ def quick_start(request):
     active_courses, archived_courses = _process_courses_list(courses_iter, in_process_course_actions, split_archived=False)
     
 
-    coursesList=[]
+    coursesList = []
     for course in active_courses:
         tmaOverview = TmaCourseOverview.get_tma_course_overview_by_course_id(SlashSeparatedCourseKey.from_deprecated_string(course['course_key']))
         if tmaOverview and tmaOverview.course_overview_edx.org in organizations_options:
             log.info(TmaCourseInfo(tmaOverview=tmaOverview).getShortInfo())
             coursesList.append(TmaCourseInfo(tmaOverview=tmaOverview).getShortInfo())
 
-    context['lmsBase']= str("https://"+settings.LMS_BASE)
-    context['courses']=coursesList
+    programs_list = []
+    for program in TmaProgramOverview.objects.values():
+        program_serializer = ProgramSerializer(program)
+        programs_list.append(program_serializer.data)
+
+    context['lmsBase'] = str("https://"+settings.LMS_BASE)
+    context['courses'] = coursesList
+    context['programs'] = programs_list
+    log.info(context['programs'])
 
     #LANGUAGES AND ZONE
     language_options = [language.code for language in released_languages()]

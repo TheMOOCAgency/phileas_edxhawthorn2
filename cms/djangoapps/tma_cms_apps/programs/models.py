@@ -4,9 +4,7 @@ from django.utils import timezone
 from django.db import models
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from django.contrib.auth.models import User
-import logging
 
-log = logging.getLogger()
 
 class TmaProgramOverview(models.Model):
     is_manager_only = models.BooleanField(default=False)

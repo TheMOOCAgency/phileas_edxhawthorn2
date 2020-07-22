@@ -84,13 +84,6 @@ class TmaProgramManager():
 
         new_course_key = rerun_course(self.request.user, course_key, org, number, run, fields)
         
-        # Update CourseDetails dates depending on program dates     
-        #program_dates = {}
-        #program_dates['start_date'] = start
-        #program_dates['end_date'] = self.program_data['end_date']
-
-        #json_update = json.dumps(program_dates)
-
         # update duplicated course dates depending on program dates
         date = Date()
         module_store = modulestore()
