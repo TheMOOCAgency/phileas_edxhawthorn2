@@ -2320,6 +2320,8 @@ INSTALLED_APPS = [
     #TMA Apps
     'lms.djangoapps.tma_apps',
 
+    'cms.djangoapps.tma_cms_apps',
+
     #CSV Exports Admin
     'django_csv_exports',
 

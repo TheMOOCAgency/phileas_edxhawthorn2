@@ -61,13 +61,15 @@ def quick_start(request):
             log.info(TmaCourseInfo(tmaOverview=tmaOverview).getShortInfo())
             coursesList.append(TmaCourseInfo(tmaOverview=tmaOverview).getShortInfo())
 
+    context['lmsBase'] = str("https://"+settings.LMS_BASE)
+    context['courses'] = coursesList
+    
+    #PROGRAMS
     programs_list = []
     for program in TmaProgramOverview.objects.values():
         program_serializer = ProgramSerializer(program)
         programs_list.append(program_serializer.data)
-
-    context['lmsBase'] = str("https://"+settings.LMS_BASE)
-    context['courses'] = coursesList
+    
     context['programs'] = programs_list
     log.info(context['programs'])
 

@@ -1,6 +1,6 @@
 ### JC - PROGRAMS HELPERS ###
 
-from .models import TmaProgramEnrollment, TmaProgramOverview, TmaProgramCourse
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramEnrollment, TmaProgramOverview, TmaProgramCourse
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
 from openedx.core.djangoapps.models.course_details import CourseDetails
@@ -15,7 +15,6 @@ from xmodule.modulestore.django import modulestore
 from xmodule.fields import Date
 from random import randint
 import logging
-import json
 
 log = logging.getLogger()
 
@@ -108,8 +107,6 @@ class TmaProgramManager():
         )
 
         log.info('program course created')
-
-        return new_program_course
 
 
     def create_new_program(self):
