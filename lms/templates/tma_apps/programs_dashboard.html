@@ -26,6 +26,7 @@ from openedx.features.course_experience import course_home_url_name
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
 from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from lms.djangoapps.tma_apps.certificates.certificate import certificate
+from math import ceil
 import logging
 log = logging.getLogger(__name__)
 %>
@@ -33,6 +34,10 @@ log = logging.getLogger(__name__)
 <%block name="pagetitle">${_("Dashboard")}</%block>
 
 <%
+
+completion_rate = 55
+progress_bar_size = ceil(ceil(completion_rate)/10)*10
+
 ongoing_program_enrollments = programs.values()
 program_courses = {}
 
@@ -84,9 +89,20 @@ for program in ongoing_program_enrollments:
         <div class="container-fluid padding-70 pt-4 pb-4 ongoing-box ">
         % if ongoing_program_enrollments:
             % for program in ongoing_program_enrollments:
-                <div class="bg-blue-box" style="left:0;"></div>
+                <div class="bg-blue-box" style="left:0;z-index:0;"></div>
                     <div class="row pt-4">
                         <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">${program.program_name}</h1>
+                    </div>
+                    <div class="row" style="z-index:2;color:white;">
+                        <p>${_("Start date")}: <span>${program.program_start_date.strftime('%Y-%m-%d')}</span></p>
+                        <p>${_("End date")}: <span>${program.program_due_date.strftime('%Y-%m-%d')}</span></p>          
+                    </div>
+                    <div class="row">
+                    %if completion_rate > 0:
+                        <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
+                    %else:
+                        <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
+                    %endif
                     </div>
                     <div class="row">
                         % for course in program_courses[program.id]:
