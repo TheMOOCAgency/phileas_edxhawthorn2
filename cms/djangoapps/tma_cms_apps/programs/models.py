@@ -4,9 +4,7 @@ from django.utils import timezone
 from django.db import models
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from django.contrib.auth.models import User
-import logging
 
-log = logging.getLogger()
 
 class TmaProgramOverview(models.Model):
     is_manager_only = models.BooleanField(default=False)
@@ -27,6 +25,6 @@ class TmaProgramEnrollment(models.Model):
     program_completion_rate = models.FloatField(default=0)
 
 class TmaProgramCourse(models.Model):
-    program = models.ForeignKey(TmaProgramEnrollment, on_delete=models.CASCADE, unique=True)
+    program = models.ForeignKey(TmaProgramOverview, on_delete=models.CASCADE, unique=True)
     course = models.ForeignKey(CourseOverview, on_delete=models.CASCADE, unique=True)
     order = models.IntegerField(default=0)

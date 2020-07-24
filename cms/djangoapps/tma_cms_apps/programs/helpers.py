@@ -1,6 +1,6 @@
 ### JC - PROGRAMS HELPERS ###
 
-from .models import TmaProgramEnrollment, TmaProgramOverview, TmaProgramCourse
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramEnrollment, TmaProgramOverview, TmaProgramCourse
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
 from openedx.core.djangoapps.models.course_details import CourseDetails
@@ -12,9 +12,9 @@ from contentstore.views.course import rerun_course
 from opaque_keys.edx.keys import CourseKey
 from xmodule.course_module import CourseFields
 from xmodule.modulestore.django import modulestore
+from xmodule.fields import Date
 from random import randint
 import logging
-import json
 
 log = logging.getLogger()
 
@@ -83,15 +83,15 @@ class TmaProgramManager():
 
         new_course_key = rerun_course(self.request.user, course_key, org, number, run, fields)
         
-        # Update CourseDetails dates depending on program dates     
-        program_dates = {}
-        program_dates['start_date'] = start
-        program_dates['end_date'] = self.program_data['end_date']
+        # update duplicated course dates depending on program dates
+        date = Date()
+        module_store = modulestore()
+        descriptor = module_store.get_course(new_course_key)
+        descriptor.start = date.from_json(start)
+        descriptor.end = date.from_json(self.program_data['end_date'])
+        module_store.update_item(descriptor, self.request.user.id)
 
-        json_update = json.dumps(program_dates)
-
-        ########### TO FIX - course_details.update_from_json(new_course_key, json_update, self.request.user)
-        course_details = CourseDetails(org, new_course_key, run)
+        # update course metadata
         course = get_course_by_id(new_course_key)
         metadata = {'invitation_only': self.invitation_only}
         CourseMetadata.update_from_dict(metadata, course, self.request.user)
@@ -100,11 +100,6 @@ class TmaProgramManager():
         course_overview = CourseOverview.objects.get(id=new_course_key)
         TmaCourseOverview.objects.filter(course_overview_edx=course_overview).update(is_mandatory=self.is_mandatory, is_manager_only=self.is_manager_only, is_linear=self.is_linear)
 
-        log.info('will create program course')
-        log.info(self.program_overview)
-        log.info(course_overview)
-        log.info(index)
-
         new_program_course = TmaProgramCourse.objects.create(
             program = self.program_overview,
             course = course_overview,
@@ -112,9 +107,7 @@ class TmaProgramManager():
         )
 
         log.info('program course created')
-        log.info(new_program_course)
 
-        return new_program_course
 
     def create_new_program(self):
         try:
