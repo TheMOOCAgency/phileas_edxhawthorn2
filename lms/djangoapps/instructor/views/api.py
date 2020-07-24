@@ -137,6 +137,8 @@ from .tools import (
     strip_if_string
 )
 
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramCourse
+
 log = logging.getLogger(__name__)
 
 TASK_SUBMISSION_OK = 'created'
@@ -603,7 +605,7 @@ def create_and_enroll_user(email, username, name, country, password, course_id, 
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
 @require_level('staff')
 @require_post_params(action="enroll or unenroll", identifiers="stringified list of emails and/or usernames")
-def students_update_enrollment(request, course_id):
+def students_update_enrollment(request, course_id, recursive=False):
     """
     Enroll or unenroll students by email.
     Requires staff access.
@@ -640,8 +642,19 @@ def students_update_enrollment(request, course_id):
         ]
     }
     """
-    
     course_id = CourseKey.from_string(course_id)
+    
+    # JC - if course is part of a program, all program courses must be enrolled 
+    if recursive:
+        course_overview = CourseOverview.objects.get(id=course_id)
+        program_course = TmaProgramCourse.objects.get(course=course_overview)
+        all_program_courses = TmaProgramCourse.objects.filter(program=program_course.program)
+
+        for program_course_overview in all_program_courses:
+            if program_course_overview.course.id != course_id:
+                students_update_enrollment(request, program_course_overview.course.id, recursive=False)
+
+                
     action = request.POST.get('action')
     identifiers_raw = request.POST.get('identifiers')
     identifiers = _split_input_list(identifiers_raw)
