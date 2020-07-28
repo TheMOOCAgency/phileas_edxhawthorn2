@@ -4,7 +4,7 @@ from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramEnrollment, Tm
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
 from openedx.core.djangoapps.models.course_details import CourseDetails
-from courseware.courses import get_course_by_id
+from lms.djangoapps.courseware.courses import get_course_by_id
 from cms.djangoapps.models.settings.course_metadata import CourseMetadata
 from course_modes.models import CourseMode
 from student.models import CourseEnrollment
@@ -81,15 +81,15 @@ class TmaProgramManager():
         wiki_slug = u"{0}.{1}.{2}".format(org, number, run)
         fields['wiki_slug'] = wiki_slug
 
-        new_course_key = rerun_course(self.request.user, course_key, org, number, run, fields)
+        new_course_key = rerun_course(self.request.user, course_key, org, number, run, fields, async=False)
         
         # update duplicated course dates depending on program dates
         date = Date()
+        new_course = self._get_course_from_module_store(new_course_key)
+        new_course.start = date.from_json(start)
+        new_course.end = date.from_json(self.program_data['end_date'])
         module_store = modulestore()
-        descriptor = module_store.get_course(new_course_key)
-        descriptor.start = date.from_json(start)
-        descriptor.end = date.from_json(self.program_data['end_date'])
-        module_store.update_item(descriptor, self.request.user.id)
+        module_store.update_item(new_course, self.request.user.id)
 
         # update course metadata
         course = get_course_by_id(new_course_key)
@@ -100,13 +100,29 @@ class TmaProgramManager():
         course_overview = CourseOverview.objects.get(id=new_course_key)
         TmaCourseOverview.objects.filter(course_overview_edx=course_overview).update(is_mandatory=self.is_mandatory, is_manager_only=self.is_manager_only, is_linear=self.is_linear)
 
-        new_program_course = TmaProgramCourse.objects.create(
+        log.info('will create program course')
+        log.info(type(self.program_overview))
+        log.info(type(course_overview))
+        log.info(type(index))
+
+        new_program_course = TmaProgramCourse.objects.get_or_create(
             program = self.program_overview,
             course = course_overview,
             order = index
         )
-
+        
         log.info('program course created')
+
+    
+    def _get_course_from_module_store(self, course_key):
+        ''' wait for course to be created in modulestore, to be improved '''
+        module_store = modulestore()
+        new_course = module_store.get_course(course_key)
+
+        if new_course:
+            return new_course
+        else:
+            return self._get_course_from_module_store(course_key)
 
 
     def create_new_program(self):
