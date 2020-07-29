@@ -378,7 +378,7 @@ def _fire_score_changed_for_block(
             )
 
 
-def get_email_params(course, auto_enroll, secure=True, course_key=None, display_name=None):
+def get_email_params(course, auto_enroll, secure=True, course_key=None, display_name=None,):
     """
     Generate parameters used when parsing email templates.
 
@@ -459,12 +459,15 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
 
     if TmaCourseOverview.objects.get(course_overview_edx__id=course.id).is_mandatory:
         if CourseOverview.objects.get(id=course.id).end is not None:
-            if ZoneManager(request.user).get_user_zone() is "americas":
+            course_overview = CourseOverview.objects.get(id=course.id)
+            course_org = course_overview.display_org_with_default()
+            log.info(course_org)
+            if course_org is "americas":
                 tma_params["content"]["mandatory_text"] = _("This training is mandatory and must be completed before {end_date}.").format(
-                    end_date=CourseOverview.objects.get(id=course.id).end.strftime("%m-%d-%Y"))
+                    end_date=course_overview.end.strftime("%m-%d-%Y"))
             else:
                 tma_params["content"]["mandatory_text"] = _("This training is mandatory and must be completed before {end_date}.").format(
-                    end_date=CourseOverview.objects.get(id=course.id).end.strftime("%d-%m-%Y"))
+                    end_date=course_overview.end.strftime("%d-%m-%Y"))
         else:
             tma_params["content"]["mandatory_text"] = _(
                 "This training is mandatory.")
