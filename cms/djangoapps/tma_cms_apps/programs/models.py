@@ -18,13 +18,13 @@ class TmaProgramOverview(models.Model):
 
 class TmaProgramEnrollment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    program = models.ForeignKey(TmaProgramOverview, on_delete=models.CASCADE, unique=True)
+    program = models.ForeignKey(TmaProgramOverview, on_delete=models.CASCADE)
     enrollment_date = models.DateTimeField(db_index=True, auto_now_add=True, null=True)
     has_started_program = models.BooleanField(default=False)
     has_validated_program = models.BooleanField(default=False)
     program_completion_rate = models.FloatField(default=0)
 
 class TmaProgramCourse(models.Model):
-    program = models.ForeignKey(TmaProgramOverview, on_delete=models.CASCADE, unique=True)
+    program = models.ForeignKey(TmaProgramOverview, on_delete=models.CASCADE)
     course = models.ForeignKey(CourseOverview, on_delete=models.CASCADE, unique=True)
     order = models.IntegerField(default=0)
