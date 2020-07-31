@@ -1,6 +1,6 @@
 ### JC - PROGRAMS HELPERS ###
 
-from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramEnrollment, TmaProgramOverview, TmaProgramCourse
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramOverview, TmaProgramCourse
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
 from openedx.core.djangoapps.models.course_details import CourseDetails
@@ -8,7 +8,7 @@ from lms.djangoapps.courseware.courses import get_course_by_id
 from cms.djangoapps.models.settings.course_metadata import CourseMetadata
 from course_modes.models import CourseMode
 from student.models import CourseEnrollment
-from contentstore.views.course import rerun_course
+from cms.djangoapps.contentstore.views.course import rerun_course
 from opaque_keys.edx.keys import CourseKey
 from xmodule.course_module import CourseFields
 from xmodule.modulestore.django import modulestore
@@ -115,61 +115,8 @@ class TmaProgramManager():
         except:
             return { 'status':'error' }
 
-
-class TmaProgramEnrollmentManager():
-    def __init__(self, request, enrollment_data):
-        self.request = request
-        self.enrollment_data = enrollment_data
-        self.program = TmaProgramOverview.objects.get(id=self.enrollment_data.program_id)
-        self.courses = TmaProgramCourse.objects.filter(program=program)
+    def is_program_course(self):
+        return True
 
 
-    def _enroll_program_courses(self):
-        ''' Enroll invidually to all program courses '''
 
-        log.info('enroll courses')
-        for course in self.courses:
-            course_key = course.course_id
-
-            available_modes = CourseMode.modes_for_course_dict(course_key)
-
-            if CourseMode.can_auto_enroll(course_key):
-                enroll_mode = CourseMode.auto_enroll_mode(course_key, available_modes)
-
-                if enroll_mode:
-                    CourseEnrollment.enroll(self.request.user, course_key, check_access=True, mode=enroll_mode)
-
-
-    def get_program_completion_rate(self):
-        ''' Calculate the average of program courses completion rates '''
-        total_rates = 0
-        global_average = 0
-
-        for course in self.courses:
-            course_key = course.id
-
-            total_rates += TmaCourseEnrollment.objects.get(course_enrollment_edx__course_id=course_key, course_enrollment_edx__user_id=self.request.user.id).completion_rate
-        
-        global_average = total_rates / len(self.courses)
-
-        return global_average
-
-
-    def create_new_program_enrollment(self):
-        try:
-            self._enroll_program_courses()
-
-            TmaProgramEnrollment.objects.create(
-                user = self.request.user,
-                program = self.program,
-                enrollment_date = datetime.now(),
-                has_started_program = True,
-                has_validated_program = False,
-                program_completion_rate = 0
-            )
-
-            return { 'status':'success' }
-
-        except:
-
-            return { 'status':'error' }

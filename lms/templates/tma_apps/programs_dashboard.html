@@ -33,22 +33,6 @@ log = logging.getLogger(__name__)
 
 <%block name="pagetitle">${_("Dashboard")}</%block>
 
-<%
-
-completion_rate = 55
-progress_bar_size = ceil(ceil(completion_rate)/10)*10
-
-ongoing_program_enrollments = programs.values()
-program_courses = {}
-
-for program in ongoing_program_enrollments:
-    if program.id not in program_courses.keys():
-        program_courses[program.id] = []
-
-        for course_id in courses[program.id]:
-            program_courses[program.id].append(course_id)
-%>
-
 <!-- TMA enable BOOTSTRAP-->
 <link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
 <script type="text/javascript" src="${static.url('common/js/vendor/bootstrap.bundle.js')}"></script>
@@ -58,6 +42,20 @@ for program in ongoing_program_enrollments:
 <link rel="stylesheet" href="${static.url('tma-static/css/home-tma-custom.css')}">
 <link rel="stylesheet" href="${static.url('tma-static/css/global-tma-custom.css')}">
 <link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
+<style>
+.program-dates-box div, .program-dates-box span {
+    line-height: 18px;
+    font-size: 14px;
+}
+.program-dates-box div {
+    color:white;
+}
+.program-dates-box span {
+    color: white;
+    font-weight: 500;
+}
+
+</style>
 <div id="cards-box" class="container-fluid bg-white" style="min-height:100vh;">
     <div class="row">
         <div class="col home-box">
@@ -87,29 +85,32 @@ for program in ongoing_program_enrollments:
     </div>
     <div class="row position-relative">
         <div class="container-fluid padding-70 pt-4 pb-4 ongoing-box ">
-        % if ongoing_program_enrollments:
-            % for program in ongoing_program_enrollments:
-                <div class="bg-blue-box" style="left:0;z-index:0;"></div>
-                    <div class="row pt-4">
-                        <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">${program.program_name}</h1>
-                    </div>
-                    <div class="row" style="z-index:2;color:white;">
-                        <p>${_("Start date")}: <span>${program.program_start_date.strftime('%Y-%m-%d')}</span></p>
-                        <p>${_("End date")}: <span>${program.program_due_date.strftime('%Y-%m-%d')}</span></p>          
-                    </div>
-                    <div class="row">
-                    %if completion_rate > 0:
-                        <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
-                    %else:
-                        <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
-                    %endif
-                    </div>
-                    <div class="row">
-                        % for course in program_courses[program.id]:
-                            <%include file='program_card.html' />
-                        % endfor
-                    </div>
+        % if programs_enrollments:
+            % for program_enrollment in programs_enrollments.values():
+                <div class="bg-blue-box" style="left:0;"></div>
+                <div class="row pt-4">
+                    <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">${program_enrollment['program_overview']['program_name']}</h1>
+                </div>
+                <div class="col program-dates-box m-3 pl-1">
+                    <div>${_("Start date")}: <span>${program_enrollment['program_overview']['program_start_date'].strftime('%Y-%m-%d')}</span></div>
+                    <div>${_("End date")}: <span>${program_enrollment['program_overview']['program_due_date'].strftime('%Y-%m-%d')}</span></div>
+                </div>        
+                <div class="row">
+                %if program_enrollment['completion_rate'] > 0:
+                    <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:${ceil(ceil(program_enrollment['completion_rate'])/10)*10}%" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
+                %elif program_enrollment['completion_rate'] == 100:
+                    <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:#F8005B;color:white;" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                %else:
+                    <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:white;color:#F8005B;;" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
+                %endif
+                </div>
+                <div class="row">
+                    % for course_overview in program_enrollment['courses_overview']:
+                        <%include file='program_card.html' args='course_overview=course_overview.course' />
+                    % endfor
+                </div>
             % endfor
+
         % else:
             <div class="row" style="margin-bottom:180px;">
                 <div style="margin:0 auto;z-index:2"><p class="text-white">${_("You have no ongoing programs yet")}</p></div>

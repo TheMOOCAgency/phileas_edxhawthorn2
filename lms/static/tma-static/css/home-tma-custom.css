@@ -111,6 +111,7 @@ a {
     background-color: #D8D8D8;
     opacity: 0.5;
 }
+
 @media (max-width: 400px) {
     .title-36-black {
         margin-bottom: 30px !important;

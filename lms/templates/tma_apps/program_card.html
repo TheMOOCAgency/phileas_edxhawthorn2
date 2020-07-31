@@ -1,3 +1,4 @@
+<%page args="course_overview"/>
 <%def name="online_help_token()"><% return "learnerdashboard" %></%def>
 <%namespace name='static' file='../static_content.html'/>
 
@@ -27,43 +28,22 @@ from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from math import ceil
 
 %>
-<%
-completion_rate= 50
-progress_bar_size = ceil(ceil(completion_rate)/10)*10
-%>
 
 <link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
 
 <div class="col-lg-3 col-md-6">
   <div class="training-card">
     <div class="container-fluid">
-        <div class="row">
-        </div>
-        <div class="row">
-            <div class="col progress">
-              %if completion_rate > 0:
-                <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
-              %else:
-                <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
-              %endif
-            </div>
-        </div>
       <div class="row">
         <div class="col m-3 pl-1 pr-0">
-        <p class="title-course">Titre</p>
+        <p class="title-course">${course_overview.display_name_with_default}</p>
         </div>
       </div>
-      <div class="row mb-3">
-         <div class="col dates-box m-3 pl-1">
-            <p>${_("Start date")}: <span>17-12-2020</span></p>
-            <p>${_("End date")}: <span>25-12-2020</span></p>
-        </div>
-      </div>
-      <div class="row">
+      <!-- <div class="row">
         <div class="col text-center">
               <a href="" class="continue-btn">${_("Completed")}</a>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
