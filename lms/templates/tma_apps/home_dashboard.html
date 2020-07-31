@@ -25,6 +25,7 @@ from openedx.features.course_experience import course_home_url_name
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
 from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from lms.djangoapps.tma_apps.certificates.certificate import certificate
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramCourse
 %>
 
 <%
@@ -39,25 +40,29 @@ is_favorite = False
 
 # Iterate on all course enrollments for ongoing mandatory and done
 for enrollment in course_enrollments:
-    tmacourseoverview = TmaCourseOverview.get_tma_course_overview_by_course_id(enrollment.course_overview.id)
-    liked_total[enrollment.course_id] = tmacourseoverview.liked_total
-    is_liked[enrollment.course_id] = False
-    tmacourseenrollment = None
-    if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
-        tmacourseenrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
-        is_liked[enrollment.course_id] = tmacourseenrollment.is_liked
-    if enrollment.course_id in show_courseware_links_for:
-                #If course is open
-                if tmacourseenrollment.has_validated_course:
-                    done_course_enrollments.append(enrollment)
-                else:
-                    ongoing_course_enrollments.append(enrollment)
-                    if TmaCourseOverview.objects.filter(course_overview_edx_id=enrollment.course_overview.id).exists():
-                        if TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id).is_mandatory:
-                            mandatory_course_enrollments.append(enrollment)
-    else:
-    #If course is not open
-        done_course_enrollments.append(enrollment)
+    try:
+        TmaProgramCourse.objects.get(course=enrollment.course_overview)
+    except:
+        if "duplicated" not in str(enrollment.course_overview.id):
+            tmacourseoverview = TmaCourseOverview.get_tma_course_overview_by_course_id(enrollment.course_overview.id)
+            liked_total[enrollment.course_id] = tmacourseoverview.liked_total
+            is_liked[enrollment.course_id] = False
+            tmacourseenrollment = None
+            if TmaCourseEnrollment.objects.filter(course_enrollment_edx__id=enrollment.id).exists():
+                tmacourseenrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id)
+                is_liked[enrollment.course_id] = tmacourseenrollment.is_liked
+            if enrollment.course_id in show_courseware_links_for:
+                        #If course is open
+                        if tmacourseenrollment.has_validated_course:
+                            done_course_enrollments.append(enrollment)
+                        else:
+                            ongoing_course_enrollments.append(enrollment)
+                            if TmaCourseOverview.objects.filter(course_overview_edx_id=enrollment.course_overview.id).exists():
+                                if TmaCourseOverview.objects.get(course_overview_edx_id=enrollment.course_overview.id).is_mandatory:
+                                    mandatory_course_enrollments.append(enrollment)
+            else:
+            #If course is not open
+                done_course_enrollments.append(enrollment)
 
 
 #Favorites / Likes have a different logic - no need for enrollment to be active

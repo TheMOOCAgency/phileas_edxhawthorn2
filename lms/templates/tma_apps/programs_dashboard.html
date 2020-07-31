@@ -55,6 +55,17 @@ log = logging.getLogger(__name__)
     font-weight: 500;
 }
 
+.mandatory-program-tag {
+    height: 25px;
+    background-color:#F8005B;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 </style>
 <div id="cards-box" class="container-fluid bg-white" style="min-height:100vh;">
     <div class="row">
@@ -87,7 +98,13 @@ log = logging.getLogger(__name__)
         <div class="container-fluid padding-70 pt-4 pb-4 ongoing-box ">
         % if programs_enrollments:
             % for program_enrollment in programs_enrollments.values():
-                <div class="bg-blue-box" style="left:0;"></div>
+                <div class="bg-blue-box" style="left:0;">
+                    % if program_enrollment['program_overview']['is_mandatory']:
+                        <div class="col mandatory-program-tag">
+                            <p class="text-center" style="margin:0;">${_("Mandatory Program")}</p>
+                        </div>
+                    % endif
+                </div>
                 <div class="row pt-4">
                     <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">${program_enrollment['program_overview']['program_name']}</h1>
                 </div>
