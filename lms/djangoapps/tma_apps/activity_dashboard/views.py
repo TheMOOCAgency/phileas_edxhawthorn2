@@ -5,6 +5,7 @@ from student.views.dashboard import _student_dashboard, get_org_black_and_whitel
 from student.models import CourseEnrollment
 from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramOverview, TmaProgramCourse
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
+from lms.djangoapps.tma_apps.completion.completion import Completion
 import logging
 
 log = logging.getLogger(__name__)
@@ -34,13 +35,15 @@ def programs_dashboard_view(request):
                     total_rates = 0
                     for program_course in program_courses:
                         course_enrollment_edx = CourseEnrollment.objects.get(user=request.user, course=program_course.course)
-                        total_rates += int(TmaCourseEnrollment.objects.get(course_enrollment_edx=course_enrollment_edx).completion_rate)
-                    completion_rate = total_rates / len(list(program_courses)) * 100
+                        log.info(type(CourseEnrollment.objects.get(user=request.user, course=program_course.course)))
+                        total_rates += int(TmaCourseEnrollment.objects.get(course_enrollment_edx=course_enrollment_edx).completion_rate * 100)
+                    completion_rate = total_rates / len(list(program_courses))
                     
                     program_enrollments[program.id] = {}
                     program_enrollments[program.id]['program_overview'] = program.__dict__
                     program_enrollments[program.id]['courses_overview'] = list(program_courses)
                     program_enrollments[program.id]['completion_rate'] = completion_rate
+
 
     context['programs_enrollments'] = program_enrollments
 

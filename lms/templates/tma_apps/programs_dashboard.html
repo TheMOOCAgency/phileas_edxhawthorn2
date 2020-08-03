@@ -32,6 +32,17 @@ log = logging.getLogger(__name__)
 %>
 
 <%block name="pagetitle">${_("Dashboard")}</%block>
+<% 
+mandatory_programs_enrollments = []
+optional_programs_enrollments = []
+for program_enrollment in programs_enrollments.values():
+    if program_enrollment['program_overview']['is_mandatory']:
+        mandatory_programs_enrollments.append(program_enrollment)
+    else:
+        optional_programs_enrollments.append(program_enrollment)
+%>
+
+
 
 <!-- TMA enable BOOTSTRAP-->
 <link rel="stylesheet" type="text/css" href="${static.url('css/bootstrap/lms-main.css')}">
@@ -97,37 +108,62 @@ log = logging.getLogger(__name__)
     <div class="row position-relative">
         <div class="container-fluid padding-70 pt-4 pb-4 ongoing-box ">
         % if programs_enrollments:
-            % for program_enrollment in programs_enrollments.values():
-                <div class="bg-blue-box" style="left:0;">
-                    % if program_enrollment['program_overview']['is_mandatory']:
+            % if mandatory_programs_enrollments:
+                % for program_enrollment in mandatory_programs_enrollments:
+                    <div class="bg-blue-box" style="left:0;">
                         <div class="col mandatory-program-tag">
                             <p class="text-center" style="margin:0;">${_("Mandatory Program")}</p>
                         </div>
-                    % endif
-                </div>
-                <div class="row pt-4">
-                    <h1 class="title-28 text-white"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">${program_enrollment['program_overview']['program_name']}</h1>
-                </div>
-                <div class="col program-dates-box m-3 pl-1">
-                    <div>${_("Start date")}: <span>${program_enrollment['program_overview']['program_start_date'].strftime('%Y-%m-%d')}</span></div>
-                    <div>${_("End date")}: <span>${program_enrollment['program_overview']['program_due_date'].strftime('%Y-%m-%d')}</span></div>
-                </div>        
-                <div class="row">
-                %if program_enrollment['completion_rate'] > 0:
-                    <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:${ceil(ceil(program_enrollment['completion_rate'])/10)*10}%" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
-                %elif program_enrollment['completion_rate'] == 100:
-                    <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:#F8005B;color:white;" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
-                %else:
-                    <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:white;color:#F8005B;;" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
-                %endif
-                </div>
-                <div class="row">
-                    % for course_overview in program_enrollment['courses_overview']:
-                        <%include file='program_card.html' args='course_overview=course_overview.course' />
-                    % endfor
-                </div>
-            % endfor
-
+                    </div>
+                    <div class="row pt-4">
+                        <h1 class="title-28 text-white" style="margin-bottom:0;margin-top:15px;"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">${program_enrollment['program_overview']['program_name']}</h1>
+                    </div>
+                    <div class="col program-dates-box m-3 pl-1">
+                        <div>${_("Start date")}: <span>${program_enrollment['program_overview']['program_start_date'].strftime('%Y-%m-%d')}</span></div>
+                        <div>${_("End date")}: <span>${program_enrollment['program_overview']['program_due_date'].strftime('%Y-%m-%d')}</span></div>
+                    </div>        
+                    <div class="row">
+                    %if program_enrollment['completion_rate'] > 0:
+                        <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:${ceil(ceil(program_enrollment['completion_rate'])/10)*10}%" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
+                        <div class="progress-bar" style="z-index:2;margin:5px 0 35px 0;background-color:white;width:${100-(ceil(ceil(program_enrollment['completion_rate'])/10)*10)}%"></div>
+                        %elif program_enrollment['completion_rate'] == 100:
+                        <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:#F8005B;color:white;" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                        <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:white;color:#F8005B;;" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
+                    %endif
+                    </div>
+                    <div class="row">
+                        % for course_overview in program_enrollment['courses_overview']:
+                            <%include file='program_card.html' args='course_overview=course_overview.course, user=user' />
+                        % endfor
+                    </div>
+                % endfor
+            % endif
+            % if optional_programs_enrollments:
+                % for program_enrollment in optional_programs_enrollments:
+                    <div class="bg-blue-box" style="left:0;"></div>
+                    <div class="row pt-4">
+                        <h1 class="title-28 text-white" style="margin-bottom:0;margin-top:15px;"><img class="picto" src="${static.url('tma-static/images/drapeau.svg')}">${program_enrollment['program_overview']['program_name']}</h1>
+                    </div>
+                    <div class="col program-dates-box m-3 pl-1">
+                        <div>${_("Start date")}: <span>${program_enrollment['program_overview']['program_start_date'].strftime('%Y-%m-%d')}</span></div>
+                        <div>${_("End date")}: <span>${program_enrollment['program_overview']['program_due_date'].strftime('%Y-%m-%d')}</span></div>
+                    </div>        
+                    <div class="row">
+                    %if program_enrollment['completion_rate'] > 0:
+                        <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:${ceil(ceil(program_enrollment['completion_rate'])/10)*10}%" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
+                    %elif program_enrollment['completion_rate'] == 100:
+                        <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:#F8005B;color:white;" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                    %else:
+                        <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:white;color:#F8005B;;" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
+                    %endif
+                    </div>
+                    <div class="row">
+                        % for course_overview in program_enrollment['courses_overview']:
+                            <%include file='program_card.html' args='course_overview=course_overview.course, user=user' />
+                        % endfor
+                    </div>
+                % endfor
+            % endif
         % else:
             <div class="row" style="margin-bottom:180px;">
                 <div style="margin:0 auto;z-index:2"><p class="text-white">${_("You have no ongoing programs yet")}</p></div>

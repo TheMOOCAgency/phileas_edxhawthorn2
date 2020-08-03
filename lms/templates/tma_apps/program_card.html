@@ -1,4 +1,4 @@
-<%page args="course_overview"/>
+<%page args="course_overview, user"/>
 <%def name="online_help_token()"><% return "learnerdashboard" %></%def>
 <%namespace name='static' file='../static_content.html'/>
 
@@ -24,19 +24,55 @@ from student.helpers import (
 )
 from util.course import get_link_for_about_page, get_encoded_course_sharing_utm_params
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
+from student.models import CourseEnrollment
+from django.contrib.auth.models import User
 from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
 from math import ceil
 
 %>
 
-<link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
+<%
+course_enrollment = CourseEnrollment.objects.get(user=user, course=course_overview)
+has_validated_course = TmaCourseEnrollment.objects.get(course_enrollment_edx=course_enrollment).has_validated_course
+course_title = course_overview.display_name_with_default
+enrollment_is_active = course_enrollment.is_active
+course_target = "/courses/"+str(course_overview.id)+"/courseware/"
+%>
 
+<link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
+<style>
+  .program-training-card {
+    margin-bottom: 80px;
+    height: 200px;
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 1px 5px 12px 0px rgba(0,0,0,0.09);
+    overflow: hidden;
+}
+.program-training-card p {
+    margin-bottom: 0px;
+}
+</style>
 <div class="col-lg-3 col-md-6">
-  <div class="training-card">
+  <div class="program-training-card">
     <div class="container-fluid">
       <div class="row">
         <div class="col m-3 pl-1 pr-0">
-        <p class="title-course">${course_overview.display_name_with_default}</p>
+        <p class="title-course">${course_title}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-center">
+          %if enrollment_is_active:
+            % if has_validated_course:
+              <a href="${course_target}" class="continue-btn">${_("Completed")}</a>
+            % else:
+              <a href="${course_target}" class="continue-btn">${_("Continue")}</a>
+            % endif
+          %else :
+            <a href="${'/courses/'+str(course_overview.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
+          %endif
         </div>
       </div>
       <!-- <div class="row">
