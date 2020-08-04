@@ -11,3 +11,4 @@ class ProgramSerializer(serializers.Serializer):
     program_start_date = serializers.DateTimeField()
     program_due_date = serializers.DateTimeField()
     program_name = serializers.CharField(max_length=50)
+    email_url = serializers.CharField(max_length=100)

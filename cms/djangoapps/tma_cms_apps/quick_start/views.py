@@ -50,10 +50,10 @@ def quick_start(request):
         "end_date":datetime.today() + relativedelta(months=+6)
     }
 
-    context["programBasis"] = {
+    context["programBasis"].update({
         "start_date":datetime.now(),
         "end_date":datetime.today() + relativedelta(months=+6)
-    }
+    })
 
     #COURSES
     courses_iter, in_process_course_actions = get_courses_accessible_to_user(request, org=None)
@@ -73,13 +73,23 @@ def quick_start(request):
     programs_list = []
     programs_courses = {}
     
-    for program in TmaProgramOverview.objects.values():
-        program_serializer = ProgramSerializer(program)
-        programs_list.append(program_serializer.data)
+    # for program in TmaProgramOverview.objects.values():
+    #     program_serializer = ProgramSerializer(program)
+    #     programs_list.append(program_serializer.data)
+    #     log.info(program_serializer.data)
 
     for program in TmaProgramOverview.objects.all():
-        log.info(program.__dict__['id'])
-        programs_courses[program.__dict__['id']] = list(TmaProgramCourse.objects.filter(program=program))
+
+        course_overview = TmaProgramCourse.objects.get(program=program, order=0).course
+        tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_overview.id)
+        email_url = TmaCourseInfo(tmaOverview=tma_course_overview).get_course_links()['email_url']
+        program_dict = program.__dict__
+        program_dict['email_url'] = email_url
+        program_serializer = ProgramSerializer(program_dict)
+        log.info(program_serializer.data)
+        programs_list.append(program_serializer.data)
+
+        
     
     context['programs'] = programs_list
     # context['programs_courses'] = programs_courses

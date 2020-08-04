@@ -12,8 +12,8 @@ class TmaProgramOverview(models.Model):
     is_linear = models.BooleanField(default=False)
     invitation_only = models.BooleanField(default=False)
     is_new = models.BooleanField(default=True)
-    program_start_date = models.DateTimeField(db_index=True, auto_now_add=True, null=True)
-    program_due_date = models.DateTimeField(db_index=True, auto_now_add=True, null=True)
+    program_start_date = models.DateTimeField(db_index=True, null=True)
+    program_due_date = models.DateTimeField(db_index=True, null=True)
     program_name = models.CharField(default='program name',max_length=50)
 
 class TmaProgramEnrollment(models.Model):
