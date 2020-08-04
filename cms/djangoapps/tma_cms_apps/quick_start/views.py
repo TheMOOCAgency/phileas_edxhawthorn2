@@ -45,15 +45,15 @@ def quick_start(request):
     config = json.load(open("/edx/app/edxapp/edx-platform/cms/djangoapps/tma_cms_apps/quick_start/quick_start_config.json"))
     context.update(config)
 
-    context["courseBasis"].update({
+    context["courseBasis"] = {
         "start_date":datetime.now(),
         "end_date":datetime.today() + relativedelta(months=+6)
-    })
+    }
 
-    context["programBasis"].update({
+    context["programBasis"] = {
         "start_date":datetime.now(),
         "end_date":datetime.today() + relativedelta(months=+6)
-    })
+    }
 
     #COURSES
     courses_iter, in_process_course_actions = get_courses_accessible_to_user(request, org=None)
@@ -82,7 +82,7 @@ def quick_start(request):
         programs_courses[program.__dict__['id']] = list(TmaProgramCourse.objects.filter(program=program))
     
     context['programs'] = programs_list
-    context['programs_courses'] = programs_courses
+    # context['programs_courses'] = programs_courses
 
     #LANGUAGES AND ZONE
     language_options = [language.code for language in released_languages()]
