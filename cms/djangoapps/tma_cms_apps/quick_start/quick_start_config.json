@@ -9,7 +9,8 @@
         "courseCreationUrl": "/tma_apps/quickstart/create-course/",
         "courseidChecking": "/tma_apps/quickstart/checkid/",
         "programCreationUrl": "/tma_apps/programs/create-program/"
-    },"programBasis": {},
+    },
+    "programBasis": {},
     "courseBasis": {
         "course_grade": 50,
         "course_pacing": "instructor_paced",
@@ -76,6 +77,16 @@
             "name": "org",
             "required": true,
             "type": "select",
+            "options": [
+                "asia",
+                "americas",
+                "europe"
+            ]
+        },
+        {
+            "required": true,
+            "type": "select",
+            "name": "program_org",
             "options": [
                 "asia",
                 "americas",
@@ -259,7 +270,8 @@
     ],
     "createProgramSteps": [
         [
-            "program_name"
+            "program_name",
+            "program_org"
         ],
         [
             "courses_list"

@@ -75,7 +75,9 @@
       "program_effort_title": "Program Effort",
       "program_dates_title": "Program dates",
       "program_dates_helper": "",
-      "program_pacing_title": "Course Pacing"
+      "program_pacing_title": "Course Pacing",
+      "program_org_title": "Program Organisation",
+      "program_org_helper": "The name of the organization sponsoring the program."
     },
     "next": "Next",
     "back": "Back",
