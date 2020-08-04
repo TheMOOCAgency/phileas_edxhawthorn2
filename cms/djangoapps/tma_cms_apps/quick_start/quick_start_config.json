@@ -9,7 +9,7 @@
         "courseCreationUrl": "/tma_apps/quickstart/create-course/",
         "courseidChecking": "/tma_apps/quickstart/checkid/",
         "programCreationUrl": "/tma_apps/programs/create-program/"
-    },
+    },"programBasis": {},
     "courseBasis": {
         "course_grade": 50,
         "course_pacing": "instructor_paced",

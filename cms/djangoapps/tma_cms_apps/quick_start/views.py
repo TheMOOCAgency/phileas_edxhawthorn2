@@ -10,7 +10,7 @@ from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
 from datetime import datetime
 from django.views.decorators.http import require_http_methods
 from tma_cms_apps.quick_start.serializer import CourseSerializer
-from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramOverview
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramOverview, TmaProgramCourse
 from cms.djangoapps.tma_cms_apps.programs.serializer import ProgramSerializer  
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -44,7 +44,13 @@ def quick_start(request):
     #CONFIG
     config = json.load(open("/edx/app/edxapp/edx-platform/cms/djangoapps/tma_cms_apps/quick_start/quick_start_config.json"))
     context.update(config)
+
     context["courseBasis"].update({
+        "start_date":datetime.now(),
+        "end_date":datetime.today() + relativedelta(months=+6)
+    })
+
+    context["programBasis"].update({
         "start_date":datetime.now(),
         "end_date":datetime.today() + relativedelta(months=+6)
     })
@@ -65,12 +71,18 @@ def quick_start(request):
     
     #PROGRAMS
     programs_list = []
+    programs_courses = {}
+    
     for program in TmaProgramOverview.objects.values():
         program_serializer = ProgramSerializer(program)
         programs_list.append(program_serializer.data)
+
+    for program in TmaProgramOverview.objects.all():
+        log.info(program.__dict__['id'])
+        programs_courses[program.__dict__['id']] = list(TmaProgramCourse.objects.filter(program=program))
     
     context['programs'] = programs_list
-    log.info(context['programs'])
+    context['programs_courses'] = programs_courses
 
     #LANGUAGES AND ZONE
     language_options = [language.code for language in released_languages()]

@@ -27,6 +27,8 @@ from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
 from student.models import CourseEnrollment
 from django.contrib.auth.models import User
 from lms.djangoapps.tma_apps.vodeclic.vodeclic import get_vodeclic_href
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramCourse
+from student.models import CourseEnrollment
 from math import ceil
 
 %>
@@ -37,6 +39,18 @@ has_validated_course = TmaCourseEnrollment.objects.get(course_enrollment_edx=cou
 course_title = course_overview.display_name_with_default
 enrollment_is_active = course_enrollment.is_active
 course_target = "/courses/"+str(course_overview.id)+"/courseware/"
+
+program_course = TmaProgramCourse.objects.get(course=course_overview)
+program = program_course.program
+program_is_linear = program.is_linear
+has_validated_previous_course = True
+
+if program_is_linear:
+  course_order = program_course.order
+  if course_order > 0:
+    previous_course = TmaProgramCourse.objects.get(program=program, order=(course_order - 1))
+    previous_course_enrollment = CourseEnrollment.objects.get(user=user, course=previous_course.course)
+    has_validated_previous_course = TmaCourseEnrollment.objects.get(course_enrollment_edx=previous_course_enrollment).has_validated_course
 %>
 
 <link rel="stylesheet" href="${static.url('tma-static/css/likes-and-favorite.css')}">
@@ -53,6 +67,12 @@ course_target = "/courses/"+str(course_overview.id)+"/courseware/"
 .program-training-card p {
     margin-bottom: 0px;
 }
+
+.disabled-anchor{
+    cursor: default;
+    pointer-events: none;        
+    opacity: 0.5;
+}
 </style>
 <div class="col-lg-3 col-md-6">
   <div class="program-training-card">
@@ -67,19 +87,16 @@ course_target = "/courses/"+str(course_overview.id)+"/courseware/"
           %if enrollment_is_active:
             % if has_validated_course:
               <a href="${course_target}" class="continue-btn">${_("Completed")}</a>
+            % elif not has_validated_previous_course:
+              <a href="${course_target}" class="continue-btn disabled-anchor">${_("Continuer")}</a>
             % else:
-              <a href="${course_target}" class="continue-btn">${_("Continue")}</a>
+            <a href="${course_target}" class="continue-btn">${_("Continue")}</a>
             % endif
           %else :
             <a href="${'/courses/'+str(course_overview.id)+'/about'}" class="enroll-btn">${_("Join")}</a>
           %endif
         </div>
       </div>
-      <!-- <div class="row">
-        <div class="col text-center">
-              <a href="" class="continue-btn">${_("Completed")}</a>
-        </div>
-      </div> -->
     </div>
   </div>
 </div>
