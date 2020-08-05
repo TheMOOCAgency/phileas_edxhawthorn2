@@ -126,8 +126,10 @@ for program_enrollment in programs_enrollments.values():
                     %if program_enrollment['completion_rate'] > 0:
                         <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:${ceil(ceil(program_enrollment['completion_rate'])/10)*10}%" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
                         <div class="progress-bar" style="z-index:2;margin:5px 0 35px 0;background-color:white;width:${100-(ceil(ceil(program_enrollment['completion_rate'])/10)*10)}%"></div>
-                        %elif program_enrollment['completion_rate'] == 100:
+                    %elif program_enrollment['completion_rate'] == 100:
                         <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:#F8005B;color:white;" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                        <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:white;color:#F8005B;;" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
+                    %else:
                         <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:white;color:#F8005B;;" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
                     %endif
                     </div>
@@ -151,8 +153,10 @@ for program_enrollment in programs_enrollments.values():
                     <div class="row">
                     %if program_enrollment['completion_rate'] > 0:
                         <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:${ceil(ceil(program_enrollment['completion_rate'])/10)*10}%" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
+                        <div class="progress-bar" style="z-index:2;margin:5px 0 35px 0;background-color:white;width:${100-(ceil(ceil(program_enrollment['completion_rate'])/10)*10)}%"></div>
                     %elif program_enrollment['completion_rate'] == 100:
                         <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:#F8005B;color:white;" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+                        <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:white;color:#F8005B;;" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
                     %else:
                         <div class="progress-bar" style="z-index:2!important;margin:5px 0 35px 0;width:100%;background-color:white;color:#F8005B;;" role="progressbar" aria-valuenow="${program_enrollment['completion_rate']}" aria-valuemin="0" aria-valuemax="100">${program_enrollment['completion_rate']}%</div>
                     %endif

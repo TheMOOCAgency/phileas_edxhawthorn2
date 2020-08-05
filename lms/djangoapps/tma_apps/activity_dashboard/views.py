@@ -5,7 +5,6 @@ from student.views.dashboard import _student_dashboard, get_org_black_and_whitel
 from student.models import CourseEnrollment, CourseOverview
 from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramOverview, TmaProgramCourse
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
-from lms.djangoapps.tma_apps.completion.completion import Completion
 from django.conf import settings
 import logging
 import urllib
