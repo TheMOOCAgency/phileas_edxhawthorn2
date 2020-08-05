@@ -81,6 +81,7 @@ def quick_start(request):
 
         program_dict = program.__dict__
         program_dict['email_url'] = email_url
+        program_dict['invite_students_url'] = email_url
 
         program_courses = []
         for program_course in TmaProgramCourse.objects.filter(program=program):
@@ -89,8 +90,8 @@ def quick_start(request):
             program_courses.append({'course_name':course_name, 'course_id':str(course_id)})
 
         program_dict['program_courses'] = json.dumps(program_courses)
+        
         program_serializer = ProgramSerializer(program_dict)
-
         programs_list.append(program_serializer.data)
     
     context['programs'] = programs_list
