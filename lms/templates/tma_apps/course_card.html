@@ -46,132 +46,143 @@ course_target = "/courses/"+str(enrollment.course_id)+"/courseware/"
 <div class="col-lg-3 col-md-6">
   <div class="training-card">
     <div class="container-fluid">
-        <div class="row">
+      <div class="row">
         %if enrollment in mandatory_course_enrollments:
-          <div class="col mandatory-tag">
-              <p class="text-center">${_("Mandatory Course")}</p>
-          </div>
-        %endif
+        <div class="col mandatory-tag">
+          <p class="text-center">${_("Mandatory Course")}</p>
         </div>
-        <div class="row">
-          % if is_vodeclic or is_apoc:
-            <div class="col no-progress ${additional_not_mandatory_class}"></div>
+        %endif
+      </div>
+      <div class="row">
+        % if is_vodeclic or is_apoc:
+        <div class="col no-progress ${additional_not_mandatory_class}"></div>
+        % else:
+        <div class="col progress ${additional_not_mandatory_class}">
+          %if completion_rate > 0 and not (is_vodeclic or is_apoc):
+          <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar"
+            aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
+          %else:
+          <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar"
+            aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
+          %endif
+        </div>
+        % endif
+      </div>
+      %if not enrollment in mandatory_course_enrollments:
+      <img src="${static.url('tma-static/images/Fermer.svg')}" class="unenroll" alt='${_("Unenroll")}' data-js="open"
+        data-popup-id="${enrollment.id}">
+      <div class="popup popup-${enrollment.id}">
+        <div class="wrapper" data-course-id="${enrollment.course_id}">
+          % if is_favorite:
+          <p class="font-weight-bold">${_("What do you want to do?")}</p>
+          <a href="" class="continue-btn tma_unfav">
+            ${_("Remove from favorites")}
+          </a>
+          <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
+            ${_("Unenroll")}
+          </a>
+          % elif is_vodeclic or is_apoc:
+          <p class="font-weight-bold">${_("What do you want to do?")}</p>
+          <a href="" class="continue-btn tma_markasdone">
+            ${_("Mark as complete")}
+          </a>
+          <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
+            ${_("Unenroll")}
+          </a>
           % else:
-            <div class="col progress ${additional_not_mandatory_class}">
-              %if completion_rate > 0 and not (is_vodeclic or is_apoc):
-                <div class="progress-bar" style="width:${progress_bar_size}%" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
-              %else:
-                <div class="progress-bar" style="width:100%;background-color:transparent;" role="progressbar" aria-valuenow="${completion_rate}" aria-valuemin="0" aria-valuemax="100">${completion_rate}%</div>
-              %endif
-            </div>
+          <p>${_("Do you really want to unenroll?")}</p>
+          <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
+            ${_("Unenroll")}
+          </a>
           % endif
+          <img class="close-box" width="20px" src="/static/tma-static/images/Fermer.svg">
         </div>
-        %if not enrollment in mandatory_course_enrollments:
-        <img src="${static.url('tma-static/images/Fermer.svg')}" class="unenroll" alt='${_("Unenroll")}' data-js="open" data-popup-id="${enrollment.id}">
-        <div class="popup popup-${enrollment.id}">
-          <div class="wrapper" data-course-id="${enrollment.course_id}">
-            % if is_favorite:
-              <p class="font-weight-bold">${_("What do you want to do?")}</p>
-              <a href="" class="continue-btn tma_unfav">
-                ${_("Remove from favorites")}
-              </a>
-              <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
-                ${_("Unenroll")}
-              </a>
-            % elif is_vodeclic or is_apoc:
-              <p class="font-weight-bold">${_("What do you want to do?")}</p>
-              <a href="" class="continue-btn tma_markasdone">
-                ${_("Mark as complete")}
-              </a>
-              <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
-                ${_("Unenroll")}
-              </a>
-            % else:
-              <p>${_("Do you really want to unenroll?")}</p>
-              <a href="" class="continue-btn tma_unenroll_student" data-course-to-uneroll="${enrollment.course_id}">
-                ${_("Unenroll")}
-              </a>
-            % endif
-            <img class="close-box" width="20px" src="/static/tma-static/images/Fermer.svg">
-          </div>
-        </div>
-        %endif
+      </div>
+      %endif
       <div class="row">
         <div class="col m-3 pl-1 pr-0">
-        <p class="title-course">${enrollment.course_overview.display_name_with_default}</p>
+          <p class="title-course">${enrollment.course_overview.display_name_with_default}</p>
         </div>
       </div>
       <div class="row mb-3">
-      <div class="col dates-box m-3 pl-1">
-        %if not (is_vodeclic or is_apoc):
-          <p>${_("Start date")}: <span>${enrollment.course_overview.dashboard_start_display.strftime('%Y-%m-%d')}</span></p>
+        <div class="col dates-box m-3 pl-1">
+          %if not (is_vodeclic or is_apoc):
+          <p>${_("Start date")}: <span>${enrollment.course_overview.dashboard_start_display.strftime('%Y-%m-%d')}</span>
+          </p>
           %if enrollment.course_overview.end:
-            <p>${_("End date")}: <span>${enrollment.course_overview.end.strftime('%Y-%m-%d')}</span></p>
+          <p>${_("End date")}: <span>${enrollment.course_overview.end.strftime('%Y-%m-%d')}</span></p>
           %else:
-            <p>${_("End date")}: <span>${_("Permanent")}</span></p>
+          <p>${_("End date")}: <span>${_("Permanent")}</span></p>
           %endif
-        % else:
+          % else:
           <p>${_("Start date")}: <span>${_("Permanent")}</span></p>
           <p>${_("End date")}: <span>${_("Permanent")}</span></p>
-        %endif
+          %endif
         </div>
       </div>
       <div class="row pin-row mb-3">
         <div class="col-4">
-          <p data-course-id="${str(enrollment.course_id)}" class="${str(enrollment.course_id).replace(':','').replace('+','')}">
-          %if is_liked :
+          <p data-course-id="${str(enrollment.course_id)}"
+            class="${str(enrollment.course_id).replace(':','').replace('+','')}">
+            %if is_liked :
             <span class="pin like like-on"></span>
-          %else :
+            %else :
             <span class="pin like like-off"></span>
-          %endif
-          <span class="like_count" data-min='0' data-max='${liked_total}' data-delay='1' data-increment='${int(liked_total/3)}'>
-            ${liked_total}
-          </span>
+            %endif
+            <span class="like_count" data-min='0' data-max='${liked_total}' data-delay='1'
+              data-increment='${int(liked_total/3)}'>
+              ${liked_total}
+            </span>
           </p>
         </div>
         <div class="col-8 pl-4">
-<%
+          <%
 base_url = "https://"+ static.get_value('site_domain', settings.SITE_NAME)
 course_url = u"{base_url}{path}".format(base_url=base_url,path="/courses/"+str(enrollment.course_id)+"/about")
 %>
-          <a href='mailto:?subject=${enrollment.course_overview.display_name_with_default}${_("on Phileas")}&body=${_("Hi, %0D%0A%0D%0A I found this course: {course_url} and I thought you might like it.").format(course_url=course_url)}%0D%0A%0D%0A${_("Best!")}' class="w-100 text-right">
-          <p><img src="${static.url('tma-static/images/recommend.svg')}"/>${_("Recommend")}</p>
+          <a href='mailto:?subject=${enrollment.course_overview.display_name_with_default}${_("on Phileas")}&body=${_("Hi, %0D%0A%0D%0A I found this course: {course_url} and I thought you might like it.").format(course_url=course_url)}%0D%0A%0D%0A${_("Best!")}'
+            class="w-100 text-right">
+            <p><img src="${static.url('tma-static/images/recommend.svg')}" />${_("Recommend")}</p>
           </a>
         </div>
       </div>
       <div class="row">
         <div class="col text-center">
-        %if is_vodeclic:
+          %if is_vodeclic:
           %if enrollment.is_active:
-            <a href="${get_vodeclic_href(request.user,enrollment._course_id)}" target="_blank" class="continue-btn">${_("Continue")}</a>
-          %else :
-            <a href="${'/courses/'+str(enrollment._course_id)+'/about'}" class="enroll-btn">${_("Join")}</a>
-          %endif
-        %elif is_apoc:
-                  <form name="apocform" target="_blank" action="https://apoc.themoocagency.com/autologreg" style="display:none" method="POST">
-                    <input type='text' name='PID' value='${user.profile.rpid}' />
-                    <input type='text' name='firstname' value='${user.first_name}' />
-                    <input type='text' name='lastname' value='${user.last_name}' />
-                    <input type='text' name='email' value='${user.email}' />
-                    <input type='text' name='entity_id' value='amundi' />
-                    <button>Submit</button>
-                  </form>
-          %if enrollment.is_active:
-                  <a target="_blank" class="continue-btn" onclick="document.querySelector('form[name=&quot;apocform&quot;]').submit();">${_("Continue")}</a>
-          %else :
-                  <a href="${'/courses/'+str(enrollment._course_id)+'/about'}" class="enroll-btn nocourseabout_register" data-nocourseaboutcourse-id="${str(enrollment._course_id)}">${_("Join")}</a>
-          %endif
-        %else :
-          %if enrollment.is_active :
-            % if TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).has_validated_course:
-              <a href="${course_target}" class="continue-btn">${_("Completed")}</a>
-            % else:
-              <a href="${course_target}" class="continue-btn">${_("Continue")}</a>
-            % endif
+          <a href="${get_vodeclic_href(request.user,enrollment._course_id)}" target="_blank"
+            class="continue-btn">${_("Continue")}</a>
           %else :
           <a href="${'/courses/'+str(enrollment._course_id)+'/about'}" class="enroll-btn">${_("Join")}</a>
           %endif
-        %endif
+          %elif is_apoc:
+          <form name="apocform" target="_blank" action="https://apoc.themoocagency.com/autologreg" style="display:none"
+            method="POST">
+            <input type='text' name='PID' value='${user.profile.rpid}' />
+            <input type='text' name='firstname' value='${user.first_name}' />
+            <input type='text' name='lastname' value='${user.last_name}' />
+            <input type='text' name='email' value='${user.email}' />
+            <input type='text' name='entity_id' value='amundi' />
+            <button>Submit</button>
+          </form>
+          %if enrollment.is_active:
+          <a target="_blank" class="continue-btn"
+            onclick="document.querySelector('form[name=&quot;apocform&quot;]').submit();">${_("Continue")}</a>
+          %else :
+          <a href="${'/courses/'+str(enrollment._course_id)+'/about'}" class="enroll-btn nocourseabout_register"
+            data-nocourseaboutcourse-id="${str(enrollment._course_id)}">${_("Join")}</a>
+          %endif
+          %else :
+          %if enrollment.is_active :
+          % if TmaCourseEnrollment.objects.get(course_enrollment_edx__id=enrollment.id).has_validated_course:
+          <a href="${course_target}" class="continue-btn">${_("Completed")}</a>
+          % else:
+          <a href="${course_target}" class="continue-btn">${_("Continue")}</a>
+          % endif
+          %else :
+          <a href="${'/courses/'+str(enrollment._course_id)+'/about'}" class="enroll-btn">${_("Join")}</a>
+          %endif
+          %endif
         </div>
       </div>
     </div>

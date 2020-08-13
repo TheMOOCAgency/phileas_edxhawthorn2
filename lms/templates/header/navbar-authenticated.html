@@ -13,6 +13,9 @@ from openedx.core.djangoapps.lang_pref.api import header_language_selector_is_en
 from student.models import CourseEnrollment
 from student.roles import CourseStaffRole, CourseInstructorRole
 from opaque_keys.edx.keys import CourseKey
+from student.views.dashboard import get_org_black_and_whitelist_for_site, get_course_enrollments
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramOverview, TmaProgramCourse
+from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
 %>
 
 <%
@@ -44,64 +47,113 @@ from opaque_keys.edx.keys import CourseKey
             break
 %>
 
+
+<%
+new_program = False
+
+site_org_whitelist, site_org_blacklist = get_org_black_and_whitelist_for_site()
+course_enrollments = list(get_course_enrollments(request.user, site_org_whitelist, site_org_blacklist))
+
+if course_enrollments:
+    for program in TmaProgramOverview.objects.all():
+        # Check if user is enrolled to the first course of each program, to get program enrollment status
+        first_program_course_overview = TmaProgramCourse.objects.get(program=program, order=0).course
+        course_id = first_program_course_overview.id
+        for enrollment in course_enrollments:
+            if enrollment._course_id == course_id: 
+                program_courses = TmaProgramCourse.objects.filter(program=program)
+
+                # calculate average program completion rate based on individual courses rates
+                total_rates = 0
+                for program_course in program_courses:
+                    course_enrollment_edx = CourseEnrollment.objects.get(user=request.user, course=program_course.course)
+                    total_rates += int(TmaCourseEnrollment.objects.get(course_enrollment_edx=course_enrollment_edx).completion_rate * 100)
+                if total_rates == 0:
+                    new_program = True
+                    break
+%>
 <style>
     .dropdown-nav {
         position: relative;
         cursor: pointer;
     }
-    .dropdown-nav > a::after{
+
+    .dropdown-nav>a::after {
         font-family: FontAwesome;
         content: "\f078";
         padding-left: 5px;
     }
-    #activity-dropdown{
+
+    #activity-dropdown {
         background-color: white;
         position: absolute;
-        bottom:-50px;
+        bottom: -50px;
         left: 10%;
-        width:80%;
+        width: 80%;
         z-index: 1000;
-        -webkit-box-shadow: 0px 23px 39px -3px rgba(179,179,179,0.76);
-        -moz-box-shadow: 0px 23px 39px -3px rgba(179,179,179,0.76);
-        box-shadow: 0px 23px 39px -3px rgba(179,179,179,0.76);
+        -webkit-box-shadow: 0px 23px 39px -3px rgba(179, 179, 179, 0.76);
+        -moz-box-shadow: 0px 23px 39px -3px rgba(179, 179, 179, 0.76);
+        box-shadow: 0px 23px 39px -3px rgba(179, 179, 179, 0.76);
     }
-    .dropdown-item{
+
+    .dropdown-item {
+        position: relative;
         margin: 5px auto;
         text-align: center !important;
         font-size: 12px;
+    }
 
+    .new_program_alert {
+        position: absolute;
+        top: 35%;
+        left: 18%;
+        height: 8px;
+        width: 8px;
+        border-radius: 50%;
+        background-color: #F8005B;
     }
 </style>
 <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
     <ul class="navbar-nav">
         % if is_course_staff:
-            <li class="nav-item">
-                <a class="nav-link btn-admin" href="//${settings.CMS_BASE}/tma_apps/quickstart/">${_("Admin")}</a>
-            </li>
+        <li class="nav-item">
+            <a class="nav-link btn-admin" href="//${settings.CMS_BASE}/tma_apps/quickstart/">${_("Admin")}</a>
+        </li>
         % endif
-      <li class="nav-item dropdown-nav">
-        <a class="nav-link" id="activity-nav" >${_("My activity")}</a>
-          <ul id="activity-dropdown">
-              <li class="dropdown-item">
-                  <a class="dropdown-link" href="${reverse('home_dashboard_courses')}">${_("Courses")}</a>
-              </li>
-              <li class="dropdown-item">
-                  <a class="dropdown-link" href="${reverse('programs_dashboard_view')}">${_("Programs")}</a>
-              </li>
-          </ul>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="${reverse('courses')}">${_("Explore")}</a>
-      </li>
-      % if header_language_selector_is_enabled():
-      <% languages = released_languages() %>
-      % if len(languages) > 1:
+        <li class="nav-item dropdown-nav">
+            <a class="nav-link" id="activity-nav">
+                % if new_program:
+                    <div class="new_program_alert"></div>
+                %endif
+                ${_("My activity")}
+            </a>
+            <ul id="activity-dropdown">
+                <li class="dropdown-item">
+                    <a class="dropdown-link" href="${reverse('home_dashboard_courses')}">${_("Courses")}</a>
+                </li>
+                <li class="dropdown-item">
+                    <a class="dropdown-link" href="${reverse('programs_dashboard_view')}">${_("Programs")}</a>
+                    % if new_program:
+                        <div class="new_program_alert"></div>
+                    % endif     
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="${reverse('courses')}">${_("Explore")}</a>
+        </li>
+        % if header_language_selector_is_enabled():
+        <% languages = released_languages() %>
+        % if len(languages) > 1:
         <form action="/i18n/setlang/" method="post" class="settings-language-form" id="language-settings-form">
             <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="${csrf_token}">
             % if user.is_authenticated:
-                <input title="preference api" type="hidden" class="url-endpoint" value="${reverse('preferences_api', kwargs={'username': user.username})}" data-user-is-authenticated="true">
+            <input title="preference api" type="hidden" class="url-endpoint"
+                value="${reverse('preferences_api', kwargs={'username': user.username})}"
+                data-user-is-authenticated="true">
             % else:
-                <input title="session update url" type="hidden" class="url-endpoint" value="${reverse('session_language')}" data-user-is-authenticated="false">
+            <input title="session update url" type="hidden" class="url-endpoint" value="${reverse('session_language')}"
+                data-user-is-authenticated="false">
             % endif
             <!--BUTTON SWITCH-->
             <a class="nav-link align-middle language">
@@ -113,19 +165,19 @@ from opaque_keys.edx.keys import CourseKey
             </a>
             <select class="input select language-selector" id="settings-language-value" name="language">
                 % for language in languages:
-                    % if language[0] == LANGUAGE_CODE:
-                        <option value="${language[0]}" selected="selected">${language[1]}</option>
-                    % else:
-                        <option value="${language[0]}" >${language[1]}</option>
-                    % endif
+                % if language[0] == LANGUAGE_CODE:
+                <option value="${language[0]}" selected="selected">${language[1]}</option>
+                % else:
+                <option value="${language[0]}">${language[1]}</option>
+                % endif
                 % endfor
             </select>
             </label>
         </form>
-      % endif
-    % endif
+        % endif
+        % endif
     </ul>
-  </div>
+</div>
 </div>
 <!-- TMA MODAL RECONNECT -->
 <div id="language-popup" class="modal" tabindex="-1" role="dialog">
@@ -133,14 +185,16 @@ from opaque_keys.edx.keys import CourseKey
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-cookies">
                 <div class="modal-body">
-                    <p class="text-center message">Having trouble selecting your language ?<br>Vous avez des difficultés pour changer de langue ?</p>
+                    <p class="text-center message">Having trouble selecting your language ?<br>Vous avez des difficultés
+                        pour changer de langue ?</p>
                     <p class="text-center message">Click to reconnect<br>Cliquez pour vous reconnecter</p>
-                    <p class="text-center message">You will leave the current page.<br>Vous allez quitter la page actuelle.</p>
+                    <p class="text-center message">You will leave the current page.<br>Vous allez quitter la page
+                        actuelle.</p>
                 </div>
                 <div class="modal-footer">
                     <button onclick="deleteCookies()" type="button">Reconnect</button>
@@ -154,34 +208,34 @@ from opaque_keys.edx.keys import CourseKey
     const dropdown = $('#activity-dropdown')
     const nav = $('#activity-nav')
     const toggleNav = () => {
-        if(dropdown.is(":hidden")){
+        if (dropdown.is(":hidden")) {
             dropdown.show()
         } else {
             dropdown.hide()
         }
     }
-    nav.click(()=> toggleNav())
-    const deleteCookies = function() {
+    nav.click(() => toggleNav())
+    const deleteCookies = function () {
         window.localStorage.setItem('switch-count', 0);
         $.ajax({
             url: '/tma_apps/delete_cookies',
             type: 'POST',
             dataType: 'json',
-            success : function(data){
+            success: function (data) {
                 console.log('success')
                 window.location.reload();
             }
         });
     }
-    const checkCount = function(){
-      if (count >= 3) {
-          $('#language-popup').modal('show');
-          window.localStorage.setItem('switch-count', 0);
-      } else {
-          window.localStorage.setItem('switch-count', count)
-      }
+    const checkCount = function () {
+        if (count >= 3) {
+            $('#language-popup').modal('show');
+            window.localStorage.setItem('switch-count', 0);
+        } else {
+            window.localStorage.setItem('switch-count', count)
+        }
     }
-    $(document).ready(function(){
+    $(document).ready(function () {
         dropdown.hide()
         var count;
         // Mandatory closing by clicking so that counter is reset to zero
@@ -192,35 +246,35 @@ from opaque_keys.edx.keys import CourseKey
         });
         */
         if (window.localStorage.getItem('switch-count')) {
-          count = window.localStorage.getItem('switch-count');
+            count = window.localStorage.getItem('switch-count');
         }
         else {
-          count =0
-          window.localStorage.setItem('switch-count', count);
+            count = 0
+            window.localStorage.setItem('switch-count', count);
         }
-        if(count>=3){
-          $('#language-popup').modal('show');
-          window.localStorage.setItem('switch-count', 0);
-          count=0;
+        if (count >= 3) {
+            $('#language-popup').modal('show');
+            window.localStorage.setItem('switch-count', 0);
+            count = 0;
         }
         if ($('#settings-language-value > option[value="en"]').attr('selected')) {
             $('.switch').toggleClass('en')
         }
-        $('.switch').on('click', function(){
+        $('.switch').on('click', function () {
             count = parseInt(count) + 1;
             window.localStorage.setItem('switch-count', count);
             $(this).toggleClass('en fr');
             if ($(this).hasClass('en')) {
-                $('#settings-language-value > option[value="en"]').attr('selected','selected');
+                $('#settings-language-value > option[value="en"]').attr('selected', 'selected');
                 $('#settings-language-value > option[value="fr"]').removeAttr('selected').trigger("change");
             } else {
                 if ($(this).hasClass('fr')) {
-                    $('#settings-language-value > option[value="fr"]').attr('selected','selected');
+                    $('#settings-language-value > option[value="fr"]').attr('selected', 'selected');
                     $('#settings-language-value > option[value="en"]').removeAttr('selected').trigger("change");
                 }
             }
         });
-        $('#language-popup .modal-header > .close').on('click', function(){
+        $('#language-popup .modal-header > .close').on('click', function () {
             window.localStorage.setItem('switch-count', 0)
         });
     });

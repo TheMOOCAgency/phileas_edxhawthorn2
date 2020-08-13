@@ -460,8 +460,7 @@ def get_email_params(course, auto_enroll, secure=True, course_key=None, display_
     if TmaCourseOverview.objects.get(course_overview_edx__id=course.id).is_mandatory:
         if CourseOverview.objects.get(id=course.id).end is not None:
             course_overview = CourseOverview.objects.get(id=course.id)
-            course_org = course_overview.display_org_with_default()
-            log.info(course_org)
+            course_org = course_overview.display_org_with_default
             if course_org is "americas":
                 tma_params["content"]["mandatory_text"] = _("This training is mandatory and must be completed before {end_date}.").format(
                     end_date=course_overview.end.strftime("%m-%d-%Y"))
