@@ -144,30 +144,43 @@ def enroll_email(course_id, student_email, auto_enroll=False, email_students=Fal
     """
     previous_state = EmailEnrollmentState(course_id, student_email)
     enrollment_obj = None
-
-
-    program_courses = []
     program = None
 
     try:
+        """
+        This update aims to detect if course
+        is part of a program, in order to modify
+        emailing text.
+        """
+
+        # GET PROGRAM DETAILS
         course_overview = CourseOverview.objects.get(id=course_id)
         program_course = TmaProgramCourse.objects.get(course=course_overview)
         program_courses = list(TmaProgramCourse.objects.filter(program=program_course.program).order_by('order'))
         program = program_courses[0].program
-        if program.is_mandatory:
+
+        new_params = {
+           'program_courses': program_courses,
+           'display_name': program.program_name,
+        }
+
+        new_content = {
+            "effort_text": "",
+            "name_text": _("You are invited to follow the program "),
+            "link_text": _("You can access the program by clicking on the following link : "),
+            "courses_list_text": _("This program contains the following courses : "),
+        }
+
+        if program.is_mandatory:            
             if program.program_due_date:
                 email_params["content"]["mandatory_text"] = _("This program is mandatory and must be completed before {end_date}.").format(
                     end_date=program.program_due_date.strftime("%m-%d-%Y"))
             else:
                 email_params["content"]["mandatory_text"] = _("This program is mandatory.")
-        email_params['program_courses'] = program_courses
-        email_params['display_name'] = program.program_name
-        log.info(email_params["content"])
-        email_params["content"]["effort_text"] = ""
-        email_params["content"]["name_text"] = _("You are invited to follow the program ")
-        email_params["content"]["link_text"] = _("You can access the program by clicking on the following link : ")
-        email_params["content"]["courses_list_text"] = _("This program contains the following courses : ")
-        log.info(email_params["content"])
+                    
+        email_params.update(new_params)
+        email_params["content"].update(new_content)
+
     except:
         pass
 
