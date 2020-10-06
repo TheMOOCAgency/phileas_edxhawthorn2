@@ -78,10 +78,11 @@ def quick_start(request):
         course_overview = TmaProgramCourse.objects.get(program=program, order=0).course
         tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_overview.id)
         email_url = TmaCourseInfo(tmaOverview=tma_course_overview).get_course_links()['email_url']
+        statistics_url = TmaCourseInfo(tmaOverview=tma_course_overview).get_course_links()['statistics_url']
 
         program_dict = program.__dict__
         program_dict['email_url'] = email_url
-        program_dict['invite_students_url'] = email_url
+        program_dict['statistics_url'] = statistics_url
 
         program_courses = []
         for program_course in TmaProgramCourse.objects.filter(program=program):
