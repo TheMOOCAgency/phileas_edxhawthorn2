@@ -77,7 +77,9 @@
       "program_dates_helper": "",
       "program_pacing_title": "Course Pacing",
       "program_org_title": "Program Organisation",
-      "program_org_helper": "The name of the organization sponsoring the program."
+      "program_org_helper": "The name of the organization sponsoring the program.",
+      "courses_list_title": "Courses",
+      "courses_list_helper":"Copy your courses Ids in the search bar and build your program."
     },
     "next": "Next",
     "back": "Back",
