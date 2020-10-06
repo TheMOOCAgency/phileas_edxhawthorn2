@@ -45,10 +45,10 @@ def quick_start(request):
     config = json.load(open("/edx/app/edxapp/edx-platform/cms/djangoapps/tma_cms_apps/quick_start/quick_start_config.json"))
     context.update(config)
 
-    context["courseBasis"] = {
+    context["courseBasis"].update({
         "start_date":datetime.now(),
         "end_date":datetime.today() + relativedelta(months=+6)
-    }
+    })
 
     context["programBasis"].update({
         "start_date":datetime.now(),
