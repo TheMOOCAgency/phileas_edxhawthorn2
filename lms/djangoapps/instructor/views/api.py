@@ -606,10 +606,10 @@ def create_and_enroll_user(email, username, name, country, password, course_id, 
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
 @require_level('staff')
 @require_post_params(action="enroll or unenroll", identifiers="stringified list of emails and/or usernames")
-def students_update_enrollment(request, course_id, recursive=True, send_email=True):
-    return _students_update_enrollment(request, course_id, recursive, send_email)
+def students_update_enrollment(request, course_id, recursive=True):
+    return _students_update_enrollment(request, course_id, recursive)
 
-def _students_update_enrollment(request, course_id, recursive=True, send_email=True):
+def _students_update_enrollment(request, course_id, recursive=True):
     """
     Enroll or unenroll students by email.
     Requires staff access.
@@ -655,15 +655,17 @@ def _students_update_enrollment(request, course_id, recursive=True, send_email=T
     if recursive:
         try:
             program_course = TmaProgramCourse.objects.get(course=course_overview)
-            program_courses = TmaProgramCourse.objects.filter(program=program_course.program)
+            program_courses = TmaProgramCourse.objects.filter(program=program_course.program).order_by('order')
             log.info('This course is part of a program, all program courses will be enrolled')
 
-            for course_overview in program_courses:
-                course_key = course_overview.course.id
+            for program_course in program_courses:
+                course_key = program_course.course.id
+                course_key_string = str(course_key)
+
                 if course_key != course_id:
-                    course_key_string = str(course_key)
-                    _students_update_enrollment(request, course_key_string, False, False)
-                    log.info('Enrolled')
+                    _students_update_enrollment(request, course_key_string, False)
+                
+                log.info('Enrolled course with Id: {}'.format(course_key_string))
 
         except TmaProgramCourse.DoesNotExist:
             log.info('Not a program course')
@@ -696,7 +698,7 @@ def _students_update_enrollment(request, course_id, recursive=True, send_email=T
         email_params = get_email_params(course, auto_enroll, secure=request.is_secure())
 
     results = []
-    if send_email:
+    if recursive:
         for identifier in identifiers:
             # First try to get a user object from the identifer
             user = None

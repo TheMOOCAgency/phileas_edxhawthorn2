@@ -33,8 +33,7 @@ def view_enrollments(request):
 
 
         # CREATE USER ENROLLMENTS AND PROFILE DETAILS DICT
-        course_enrollments = CourseEnrollment.objects.filter(
-            course=course_overview)
+        course_enrollments = CourseEnrollment.objects.filter(course=course_overview)
         for course_enrollment in course_enrollments:
             user_id = course_enrollment.user_id
             course_id = course_enrollment.course_id

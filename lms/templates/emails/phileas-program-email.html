@@ -1,0 +1,274 @@
+{% load i18n %}
+<!DOCTYPE html
+    PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html>
+<head>
+    <meta property='og:title' content='Update from {course_title}' />
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <title>Update from {course_title}</title>
+</head>
+
+<body leftmargin='0' marginwidth='0' topmargin='0' marginheight='0' offset='0'
+    style='margin: 0;padding: 0;background-color: #ffffff;'>
+    <center>
+        <table align='center' border='0' cellpadding='0' cellspacing='0' height='100%' width='100%' id='bodyTable'
+            style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 0;background-color: #ffffff;height: 100% !important;width: 100% !important;'>
+            <tr>
+                <td align='center' valign='top' id='bodyCell'
+                    style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 0;border-top: 0;height: 100% !important;width: 100% !important;'>
+                    <!-- BEGIN TEMPLATE // -->
+                    <table border='0' cellpadding='0' cellspacing='0' width='100%'
+                        style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                        <td align='center' valign='top'
+                            style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                            <!-- BEGIN PREHEADER // -->
+                            <table border='0' cellpadding='0' cellspacing='0' width='100%' id='templatePreheader'
+                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #ffffff;border-top: 0;border-bottom: 0;'>
+                                <tr>
+                                    <td align='center' valign='top'
+                                        style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                        <table border='0' cellpadding='0' cellspacing='0' width='600'
+                                            class='templateContainer'
+                                            style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                            <tr>
+                                                <td valign='top' class='preheaderContainer'
+                                                    style='padding-top: 9px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                    <table border='0' cellpadding='0' cellspacing='0' width='100%'
+                                                        class='mcnTextBlock'
+                                                        style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                        <tbody class='mcnTextBlockOuter'>
+                                                            <tr>
+                                                                <td valign='top' class='mcnTextBlockInner'
+                                                                    style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                                    <table align='left' border='0' cellpadding='0'
+                                                                        cellspacing='0' width='366'
+                                                                        class='mcnTextContentContainer'
+                                                                        style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td valign='top' class='mcnTextContent'
+                                                                                    style='padding-top: 9px;padding-left: 18px;padding-bottom: 9px;padding-right: 0;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #606060;font-family: Helvetica;font-size: 11px;line-height: 125%;text-align: left;'>
+                                                                                    <br> </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table> <!-- // END PREHEADER -->
+                        </td>
+            </tr>
+            <tr>
+                <td align='center' valign='top'
+                    style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                    <!-- BEGIN HEADER // -->
+                    <table border='0' cellpadding='0' cellspacing='0' width='100%' id='templateHeader'
+                        style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #ffffff;border-top: 0;border-bottom: 0;'>
+                        <tr>
+                            <td align='center' valign='top'
+                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                <table border='0' cellpadding='0' cellspacing='0' width='600' class='templateContainer'
+                                    style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                    <tr>
+                                        <td valign='top' class='headerContainer'
+                                            style='padding-top: 10px;padding-right: 18px;padding-bottom: 10px;padding-left: 18px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                            <table border='0' cellpadding='0' cellspacing='0' width='100%'
+                                                class='mcnImageBlock'
+                                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                <tbody class='mcnImageBlockOuter'>
+                                                    <tr>
+                                                        <td valign='top'
+                                                            style='padding: 9px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'
+                                                            class='mcnImageBlockInner'>
+                                                            {% get_current_language as LANGUAGE_CODE %}
+                                                            {% if "fr" in LANGUAGE_CODE %}
+                                                                <img align="left" alt="edX"
+                                                                    src="{{ site_url }}/static/tma-static/images/header-email-fr.png"
+                                                                    width="564.0000152587891"
+                                                                    style="max-width: 600px;padding-bottom: 0;display: inline !important;vertical-align: bottom;border: 0;line-height: 100%;outline: none;text-decoration: none;height: auto !important;"
+                                                                    class="mcnImage">
+                                                            {% else %}
+                                                                <img align="left" alt="edX"
+                                                                    src="{{ site_url }}/static/tma-static/images/header-email.png"
+                                                                    width="564.0000152587891"
+                                                                    style="max-width: 600px;padding-bottom: 0;display: inline !important;vertical-align: bottom;border: 0;line-height: 100%;outline: none;text-decoration: none;height: auto !important;"
+                                                                    class="mcnImage">
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <table border='0' cellpadding='0' cellspacing='0' width='100%'
+                                                class='mcnTextBlock'
+                                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                <tbody class='mcnTextBlockOuter'>
+                                                    <tr>
+                                                        <td valign='top' class='mcnTextBlockInner'
+                                                            style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                            <table align='left' border='0' cellpadding='0'
+                                                                cellspacing='0' width='599'
+                                                                class='mcnTextContentContainer'
+                                                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                                <tbody>
+                                                                    <tr> </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- // END HEADER -->
+                </td>
+            </tr>
+            <tr>
+                <td align='center' valign='top'
+                    style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                    <!-- BEGIN BODY // -->
+                    <table border='0' cellpadding='0' cellspacing='0' width='100%' id='templateBody'
+                        style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #ffffff;border-top: 0;border-bottom: 0;'>
+                        <tr>
+                            <td align='center' valign='top'
+                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                <table border='0' cellpadding='0' cellspacing='0' width='600' class='templateContainer'
+                                    style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                    <tr>
+                                        <td valign='top' class='bodyContainer'
+                                            style='padding-top: 10px;padding-right: 18px;padding-bottom: 10px;padding-left: 18px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                            <table border='0' cellpadding='0' cellspacing='0' width='100%'
+                                                class='mcnCaptionBlock'
+                                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                <tbody class='mcnCaptionBlockOuter'>
+                                                    <tr>
+                                                        <td class='mcnCaptionBlockInner' valign='top'
+                                                            style='padding: 9px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;    padding-bottom: 0;'>
+                                                            <table border='0' cellpadding='0' cellspacing='0'
+                                                                class='mcnCaptionLeftContentOuter' width='100%'
+                                                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td valign='top'
+                                                                            class='mcnCaptionLeftContentInner'
+                                                                            style='padding: 0 9px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+
+                                                                            <table
+                                                                                class='mcnCaptionLeftTextContentContainer'
+                                                                                align='left' border='0' cellpadding='0'
+                                                                                cellspacing='0' width='100%'
+                                                                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td valign='top'
+                                                                                            class='mcnTextContent'
+                                                                                            style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #00a1e9;font-family: Helvetica;font-size: 14px;line-height: 100%;text-align: left;padding-bottom: 20px;'>
+                                                                                            <h3 class='null'
+                                                                                                style='display: block;font-family: Helvetica;font-size: 18px;font-style: normal;font-weight: bold;letter-spacing: -.5px;margin: 0;text-align: left;color: #00a1e9 !important;padding-bottom: 5px;line-height:100%'><strong
+                                                                                                    style='font-size: 22px;color:#39b3b4'><br>{{ display_name }}</strong><br>
+                                                                                            </h3><br>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <table border='0' cellpadding='0' cellspacing='0' width='100%'
+                                                class='mcnTextBlock'
+                                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                <tbody class='mcnTextBlockOuter'>
+                                                    <tr>
+                                                        <td valign='top' class='mcnTextBlockInner'
+                                                            style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                            <table align='left' border='0' cellpadding='0'
+                                                                cellspacing='0' width='600'
+                                                                class='mcnTextContentContainer'
+                                                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td valign='top' class='mcnTextContent'
+                                                                            style='padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #606060;font-family: Helvetica;font-size: 14px;line-height: 125%;text-align: left;'>
+                                                                            {% trans "Hello" %},<br/><br/>
+
+                                                                            {{ content.name_text }} <strong>{{ display_name }}.</strong><br/><br/>
+
+                                                                            {% if content.mandatory_text%}
+                                                                                {{ content.mandatory_text }}<br/><br/>
+                                                                            {% endif %}
+
+                                                                            {{content.courses_list_text }}<br/><br/>
+                                                                            
+                                                                            {% for course in program_courses %}
+                                                                                - {{course.course.display_name}}<br/>
+                                                                            {% endfor %}
+                                                                            <br/>
+
+                                                                            {{ content.link_text }}<a href="{{ course_about_url }}"> {{ display_name }}</a><br/><br/>
+
+                                                                            {{ content.last_text }}<br/>
+                                                                            {{ content.signature }}<br/>
+                                                                            -<br/>
+                                                                            {% trans "This email was automatically sent. Please do not respond." %}
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <table border='0' cellpadding='0' cellspacing='0' width='100%'
+                                                class='mcnTextBlock'
+                                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                <tbody class='mcnTextBlockOuter'>
+                                                    <tr>
+                                                        <td valign='top' class='mcnTextBlockInner'
+                                                            style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                            <table align='left' border='0' cellpadding='0'
+                                                                cellspacing='0' width='600'
+                                                                class='mcnTextContentContainer'
+                                                                style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'>
+                                                                <tbody>
+                                                                    <tr> </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table> <!-- // END BODY -->
+                </td>
+            </tr>
+            <tr>
+                <td align='center' valign='top'
+                    style='border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;'> </td>
+            </tr>
+        </table> <!-- // END TEMPLATE -->
+        </td>
+        </tr>
+        </table>
+    </center>
+</body>
+</body>
+
+</html>

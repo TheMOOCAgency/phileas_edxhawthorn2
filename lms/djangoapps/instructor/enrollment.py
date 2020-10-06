@@ -14,7 +14,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.urls import reverse
-from django.utils.translation import override as override_language
+from django.utils.translation import ugettext as _, override as override_language
 from six import text_type
 
 from course_modes.models import CourseMode
@@ -47,10 +47,10 @@ from xmodule.modulestore.exceptions import ItemNotFoundError
 
 # TMA IMPORTS #
 from django.template import loader
-from django.utils.translation import ugettext as _
 from lms.djangoapps.tma_apps.models import TmaCourseOverview
 from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 from lms.djangoapps.tma_apps.zones.helper import ZoneManager
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramCourse
 import urllib
 
 log = logging.getLogger(__name__)
@@ -126,6 +126,8 @@ def get_user_email_language(user):
 
 
 def enroll_email(course_id, student_email, auto_enroll=False, email_students=False, email_params=None, language=None):
+    # TO RESOLVE, MAIN IMPORT DOESN'T WORK
+    from django.utils.translation import ugettext as _    
     """
     Enroll a student by email.
 
@@ -142,6 +144,33 @@ def enroll_email(course_id, student_email, auto_enroll=False, email_students=Fal
     """
     previous_state = EmailEnrollmentState(course_id, student_email)
     enrollment_obj = None
+
+
+    program_courses = []
+    program = None
+
+    try:
+        course_overview = CourseOverview.objects.get(id=course_id)
+        program_course = TmaProgramCourse.objects.get(course=course_overview)
+        program_courses = list(TmaProgramCourse.objects.filter(program=program_course.program).order_by('order'))
+        program = program_courses[0].program
+        if program.is_mandatory:
+            if program.program_due_date:
+                email_params["content"]["mandatory_text"] = _("This program is mandatory and must be completed before {end_date}.").format(
+                    end_date=program.program_due_date.strftime("%m-%d-%Y"))
+            else:
+                email_params["content"]["mandatory_text"] = _("This program is mandatory.")
+        email_params['program_courses'] = program_courses
+        email_params['display_name'] = program.program_name
+        log.info(email_params["content"])
+        email_params["content"]["effort_text"] = ""
+        email_params["content"]["name_text"] = _("You are invited to follow the program ")
+        email_params["content"]["link_text"] = _("You can access the program by clicking on the following link : ")
+        email_params["content"]["courses_list_text"] = _("This program contains the following courses : ")
+        log.info(email_params["content"])
+    except:
+        pass
+
     if previous_state.user:
         # if the student is currently unenrolled, don't enroll them in their
         # previous mode
@@ -164,6 +193,10 @@ def enroll_email(course_id, student_email, auto_enroll=False, email_students=Fal
             email_params['message'] = 'enrolled_enroll'
             email_params['email_address'] = student_email
             email_params['full_name'] = previous_state.full_name
+
+            if program:
+                email_params['message'] = 'enrolled_program_enroll'
+
             send_mail_to_student(
                 student_email, email_params, language=language)
     elif not is_email_retired(student_email):
@@ -174,6 +207,10 @@ def enroll_email(course_id, student_email, auto_enroll=False, email_students=Fal
         if email_students:
             email_params['message'] = 'allowed_enroll'
             email_params['email_address'] = student_email
+
+            if program:
+                email_params['message'] = 'allowed_program_enroll'
+                
             send_mail_to_student(
                 student_email, email_params, language=language)
 
@@ -549,6 +586,14 @@ def send_mail_to_student(student, param_dict, language=None):
             'emails/enroll_email_enrolledsubject.txt',
             'emails/account_creation_and_enroll_emailMessage.txt'
         ),
+        'allowed_program_enroll': (
+            'emails/program_enroll_email_allowedsubject.txt',
+            'emails/program_enroll_email_allowedmessage.txt'
+        ),
+        'enrolled_program_enroll': (
+            'emails/program_enroll_email_enrolledsubject.txt',
+            'emails/program_enroll_email_enrolledmessage.txt'
+        ),
     }
 
     ### TMA HTML TEMPLATE ###
@@ -558,11 +603,17 @@ def send_mail_to_student(student, param_dict, language=None):
         ),
         'enrolled_enroll': (
             'emails/phileas-email.html'
+        ),
+        'allowed_program_enroll': (
+            'emails/phileas-program-email.html'
+        ),
+        'enrolled_program_enroll': (
+            'emails/phileas-program-email.html'
         )
     }
 
     html_message = None
-    if "allowed_enroll" or "enrolled_enroll" in message_type:
+    if "allowed_enroll" or "enrolled_enroll" or "allowed_program_enroll" or "enrolled_program_enroll" in message_type:
         html_message = loader.render_to_string(
             tma_email_template_dict.get(message_type, None),
             param_dict
