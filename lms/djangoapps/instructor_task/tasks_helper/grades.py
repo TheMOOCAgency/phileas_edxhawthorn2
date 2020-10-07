@@ -42,6 +42,8 @@ from .utils import upload_csv_to_report_store, upload_xls_to_report_store
 import json
 from student.models import User, UserProfile
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramCourse
+from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 
 TASK_LOG = logging.getLogger('edx.celery.task')
 
@@ -480,9 +482,22 @@ class ProblemGradeReport(object):
         course = get_course_by_id(course_id)
         graded_scorable_blocks = cls._graded_scorable_blocks_to_header(course)
 
+        TASK_LOG.info('logsssssss')
+
+        try:
+            course_overview = CourseOverview.objects.get(id=course_id)
+            program_course = TmaProgramCourse.objects.get(course=course_overview)
+            program_courses = list(TmaProgramCourse.objects.filter(program=program_course.program).order_by('order'))
+            for program in program_courses:
+                TASK_LOG.info(program)
+        except Exception as e:
+            TASK_LOG.info(e)
+
         ### TMA profile rows ###
         # Course header row 
-        course_header_row = []
+        course_header_row = ['Export done : ' + start_date.strftime('%d-%m-%Y')]
+        course_header_row += [''] * 10
+
         course_date = []
         course_header_row.append(course.display_name)
         if course.self_paced:
@@ -493,9 +508,9 @@ class ProblemGradeReport(object):
                 end_date = course.end.strftime('%d-%m-%Y')
             else:
                 end_date = 'no end date'
-            course_date.extend(['start : ' + course.start.strftime('%d-%m-%Y'), 'end : ' + end_date])
+            course_date.extend(['', 'start : ' + course.start.strftime('%d-%m-%Y'), '', 'end : ' + end_date, ''])
         course_header_row.extend(course_date)
-        course_header_row.append('Export done : ' + start_date.strftime('%d-%m-%Y'))
+        
 
         # Deconstruct header for specific col order
         header_profile_row_1 = OrderedDict([('rpid', 'RPID'), ('iug', 'IUG')])

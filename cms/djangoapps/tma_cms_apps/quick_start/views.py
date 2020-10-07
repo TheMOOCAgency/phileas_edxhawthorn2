@@ -86,7 +86,7 @@ def quick_start(request):
 
         program_courses = []
         for program_course in TmaProgramCourse.objects.filter(program=program):
-            course_name = str(program_course.course.display_name_with_default)
+            course_name = u"{}".format(program_course.course.display_name_with_default)
             course_id = program_course.course.id
             program_courses.append({'course_name':course_name, 'course_id':str(course_id)})
 
