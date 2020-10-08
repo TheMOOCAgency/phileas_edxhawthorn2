@@ -29,7 +29,7 @@ class TmaProgramCourse(models.Model):
             course_overview = CourseOverview.objects.get(id=course_id)
             program_course = TmaProgramCourse.objects.get(course=course_overview)
             return True
-        except:
+        except cls.DoesNotExist:
             return False
 
     @classmethod
@@ -49,5 +49,14 @@ class TmaProgramCourse(models.Model):
             courses_list.append(get_course_by_id(course_id))
 
         return courses_list
+
+    @classmethod
+    def get_program_details(cls, course_id):
+        course_overview = CourseOverview.objects.get(id=course_id)
+        program_course_overview = TmaProgramCourse.objects.get(course=course_overview)
+        program = program_course_overview.program
+        
+        return program
+
 
 

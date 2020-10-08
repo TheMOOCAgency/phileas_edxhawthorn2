@@ -20,6 +20,7 @@ from openedx.core.lib.mail_utils import wrap_message
 from student.roles import CourseInstructorRole, CourseStaffRole
 from util.keyword_substitution import substitute_keywords_with_data
 from util.query import use_read_replica_if_available
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramCourse
 
 log = logging.getLogger(__name__)
 
@@ -367,7 +368,15 @@ class CourseEmailTemplate(models.Model):
         """
 
         # Substitute all %%-encoded keywords in the message body
+        
         if 'user_id' in context and 'course_id' in context:
+            # Customization for program case
+            try:
+                program = TmaProgramCourse.get_program_details(context['course_id'])
+                context['course_title'] = u"{}".format(program.program_name)
+            except TmaProgramCourse.DoesNotExist:
+                pass
+
             message_body = substitute_keywords_with_data(message_body, context)
 
         result = format_string.format(**context)
