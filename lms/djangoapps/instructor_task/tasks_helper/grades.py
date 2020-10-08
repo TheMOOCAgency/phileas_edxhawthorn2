@@ -549,7 +549,6 @@ class ProblemGradeReport(object):
                 student_profile_fields_2 = [getattr(profile, field_name) for field_name in header_profile_row_2]
 
             row.extend(student_profile_fields_1 + student_user_fields + student_fields + custom_fields + student_profile_fields_2)
-            error_row.extend([student_fields])
 
             # TmaCourseEnrollment info
             for course in courses_list:
@@ -576,7 +575,7 @@ class ProblemGradeReport(object):
                     # There was an error grading this student.
                     if not err_msg:
                         err_msg = u'Unknown error'
-                    error_row.extend([err_msg])
+                    error_rows.append(student_fields + [err_msg])
                     task_progress.failed += 1
                     continue
                 enrollment_status = _user_enrollment_status(student, course.id)
@@ -594,9 +593,8 @@ class ProblemGradeReport(object):
                         else:
                             earned_possible_values.append([u'Not Attempted'])
                 row.extend([enrollment_status, course_grade.percent, best_grade, completion_rate, registration_date, has_passed] + _flatten(earned_possible_values))
-
+                
             rows.append(row)
-            error_rows.append(error_row)
             task_progress.succeeded += 1
             if task_progress.attempted % status_interval == 0:
                 task_progress.update_task_state(extra_meta=current_step)
