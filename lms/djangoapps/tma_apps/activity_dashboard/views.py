@@ -35,7 +35,7 @@ def programs_dashboard_view(request):
 
                     # calculate average program completion rate based on individual courses rates
                     total_rates = 0
-                    for program_course in program_courses:
+                    for program_course in program_courses: 
                         course_enrollment_edx = CourseEnrollment.objects.get(user=request.user, course=program_course.course)
                         total_rates += int(TmaCourseEnrollment.objects.get(course_enrollment_edx=course_enrollment_edx).completion_rate * 100)
                     completion_rate = total_rates / len(list(program_courses))
