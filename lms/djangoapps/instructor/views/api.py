@@ -658,14 +658,9 @@ def _students_update_enrollment(request, course_id, recursive):
             program_courses = TmaProgramCourse.objects.filter(program=program_course.program).order_by('order')
             log.info('This course is part of a program, all program courses will be enrolled')
 
-            log.info(len(program_courses))
-
             for program_course in program_courses:
                 course_key = program_course.course.id
                 course_key_string = str(course_key)
-
-                log.info(course_key)
-                log.info(course_id)
 
                 if course_key != course_id:
                     _students_update_enrollment(request, course_key_string, False)
@@ -3388,79 +3383,4 @@ def invalidate_certificate(request, generated_certificate, certificate_invalidat
         'user': certificate_invalidation.generated_certificate.user.username,
         'invalidated_by': certificate_invalidation.invalidated_by.username,
         'created': certificate_invalidation.created.strftime("%B %d, %Y"),
-        'notes': certificate_invalidation.notes,
-    }
-
-
-@common_exceptions_400
-def re_validate_certificate(request, course_key, generated_certificate):
-    """
-    Remove certificate invalidation from db and start certificate generation task for this student.
-    Raises ValueError if certificate invalidation is present.
-
-    :param request: HttpRequest object
-    :param course_key: CourseKey object identifying the current course.
-    :param generated_certificate: GeneratedCertificate object of the student for the given course
-    """
-    try:
-        # Fetch CertificateInvalidation object
-        certificate_invalidation = CertificateInvalidation.objects.get(generated_certificate=generated_certificate)
-    except ObjectDoesNotExist:
-        raise ValueError(_("Certificate Invalidation does not exist, Please refresh the page and try again."))
-    else:
-        # Deactivate certificate invalidation if it was fetched successfully.
-        certificate_invalidation.deactivate()
-
-    # We need to generate certificate only for a single student here
-    student = certificate_invalidation.generated_certificate.user
-
-    lms.djangoapps.instructor_task.api.generate_certificates_for_students(
-        request, course_key, student_set="specific_student", specific_student_id=student.id
-    )
-
-
-def validate_request_data_and_get_certificate(certificate_invalidation, course_key):
-    """
-    Fetch and return GeneratedCertificate of the student passed in request data for the given course.
-
-    Raises ValueError in case of missing student username/email or
-    if student does not have certificate for the given course.
-
-    :param certificate_invalidation: dict containing certificate invalidation data
-    :param course_key: CourseKey object identifying the current course.
-    :return: GeneratedCertificate object of the student for the given course
-    """
-    user = certificate_invalidation.get("user")
-
-    if not user:
-        raise ValueError(
-            _('Student username/email field is required and can not be empty. '
-              'Kindly fill in username/email and then press "Invalidate Certificate" button.')
-        )
-
-    student = get_student(user, course_key)
-
-    certificate = GeneratedCertificate.certificate_for_student(student, course_key)
-    if not certificate:
-        raise ValueError(_(
-            "The student {student} does not have certificate for the course {course}. Kindly verify student "
-            "username/email and the selected course are correct and try again."
-        ).format(student=student.username, course=course_key.course))
-    return certificate
-
-
-def _get_boolean_param(request, param_name):
-    """
-    Returns the value of the boolean parameter with the given
-    name in the POST request. Handles translation from string
-    values to boolean values.
-    """
-    return request.POST.get(param_name, False) in ['true', 'True', True]
-
-
-def _create_error_response(request, msg):
-    """
-    Creates the appropriate error response for the current request,
-    in JSON form.
-    """
-    return JsonResponse({"error": _(msg)}, 400)
+        'notes': certificate_invalidation.not
