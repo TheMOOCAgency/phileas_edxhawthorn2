@@ -14,6 +14,7 @@ from openedx.core.djangolib.js_utils import js_escaped_string
 from openedx.core.djangolib.markup import HTML
 from openedx.features.course_experience import course_home_page_title, COURSE_OUTLINE_PAGE_FLAG
 from lms.djangoapps.tma_apps.models import TmaCourseOverview
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramCourse
 
 %>
 
@@ -24,6 +25,10 @@ from lms.djangoapps.tma_apps.models import TmaCourseOverview
    (course.enable_proctored_exams or course.enable_timed_exams)
    )
 %>
+<%
+  is_program_course = TmaProgramCourse.is_program_course(course.id)
+%>
+
 <%def name="course_name()">
  <% return _("{course_number} Courseware").format(course_number=course.display_number_with_default) %>
 </%def>
@@ -307,14 +312,14 @@ ${HTML(fragment.foot_html())}
                     )}
                 </p>
                 <script type="text/javascript">
-                $(document).ajaxSuccess(function(event, xhr, settings) {
+                  $(document).ajaxSuccess(function (event, xhr, settings) {
                     if (settings.url.indexOf("xmodule_handler/problem_check") > -1) {
-                        var data = JSON.parse(xhr.responseText);
-                        if (data.entrance_exam_passed){
-                            location.reload();
-                        }
+                      var data = JSON.parse(xhr.responseText);
+                      if (data.entrance_exam_passed) {
+                        location.reload();
+                      }
                     }
-                });
+                  });
                 </script>
                 % else:
                   <p class="sequential-status-message">
@@ -399,6 +404,12 @@ ${HTML(fragment.foot_html())}
 </div>
 
 <!--TMA SCRIPT COURSEWARE -->
+<script>
+  $(document).ready(function () {
+    let isProgramCourse = ("${is_program_course | n, js_escaped_string}" === "True" ? true : false)
+    $('button.mark-as-done').val(isProgramCourse)
+  });
+</script>
 <script>
   let language = "${request.LANGUAGE_CODE | n, js_escaped_string}"
   let global_courseid = "${course.id | n, js_escaped_string}";

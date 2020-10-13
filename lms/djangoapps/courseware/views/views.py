@@ -122,6 +122,8 @@ from student.views.dashboard import get_tma_course_info, get_tma_course_json, ge
 from shoppingcart.models import CourseRegistrationCode
 from pprint import pformat
 
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramCourse
+
 log = logging.getLogger("edx.courseware")
 
 
@@ -273,17 +275,34 @@ def courses(request):
         if drop_filter == "likes":
             likes_ordered_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).order_by('-liked_total')
             for course in likes_ordered_courses :
-                courses_to_display.append(course.course_overview_edx)
+                course_id = course.__dict__['course_overview_edx_id']
+                is_program_course = TmaProgramCourse.is_program_course(course_id)
+                log.info(is_program_course)
+                if not is_program_course:
+                    courses_to_display.append(course)
 
         elif drop_filter  == "enrollments":
             enrollments_ordered_courses = TmaCourseOverview.objects.filter(course_overview_edx__org=current_organisation).order_by('-active_enrollments_total')
             for course in enrollments_ordered_courses :
-                courses_to_display.append(course.course_overview_edx)
+                course_id = course.__dict__['course_overview_edx_id']
+                is_program_course = TmaProgramCourse.is_program_course(course_id)
+                log.info(is_program_course)
+                if not is_program_course:
+                    courses_to_display.append(course)
 
     if frontpage_courses:
-        courses_to_display = CourseOverview.objects.filter(org=current_organisation, id__in=frontpage_courses)
+        courses = CourseOverview.objects.filter(org=current_organisation, id__in=frontpage_courses)
+        for course in courses:
+            is_program_course = TmaProgramCourse.is_program_course(course.id)
+            if not is_program_course:
+                courses_to_display.append(course)
     else :
-        courses_to_display = CourseOverview.objects.filter(org=current_organisation)
+        courses = CourseOverview.objects.filter(org=current_organisation)
+        for course in courses:
+            is_program_course = TmaProgramCourse.is_program_course(course.id)
+            if not is_program_course:
+                courses_to_display.append(course)
+        
 
     # Add TMA course info
     final_course_list = []
