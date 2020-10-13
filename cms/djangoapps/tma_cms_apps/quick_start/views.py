@@ -45,10 +45,10 @@ def quick_start(request):
     config = json.load(open("/edx/app/edxapp/edx-platform/cms/djangoapps/tma_cms_apps/quick_start/quick_start_config.json"))
     context.update(config)
 
-    context["courseBasis"] = {
+    context["courseBasis"].update({
         "start_date":datetime.now(),
         "end_date":datetime.today() + relativedelta(months=+6)
-    }
+    })
 
     context["programBasis"].update({
         "start_date":datetime.now(),
@@ -78,14 +78,15 @@ def quick_start(request):
         course_overview = TmaProgramCourse.objects.get(program=program, order=0).course
         tma_course_overview = TmaCourseOverview.get_tma_course_overview_by_course_id(course_overview.id)
         email_url = TmaCourseInfo(tmaOverview=tma_course_overview).get_course_links()['email_url']
+        statistics_url = TmaCourseInfo(tmaOverview=tma_course_overview).get_course_links()['statistics_url']
 
         program_dict = program.__dict__
         program_dict['email_url'] = email_url
-        program_dict['invite_students_url'] = email_url
+        program_dict['statistics_url'] = statistics_url
 
         program_courses = []
         for program_course in TmaProgramCourse.objects.filter(program=program):
-            course_name = str(program_course.course.display_name_with_default)
+            course_name = u"{}".format(program_course.course.display_name_with_default)
             course_id = program_course.course.id
             program_courses.append({'course_name':course_name, 'course_id':str(course_id)})
 

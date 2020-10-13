@@ -20,7 +20,7 @@ from ratelimitbackend import admin
 from cms.djangoapps.tma_cms_apps.tma_advanced_settings.views import amundi_settings_handler
 import cms.djangoapps.tma_cms_apps
 from cms.djangoapps.tma_cms_apps.quick_start.views import quick_start, quick_start_create, quick_start_checkid_exists, quick_start_get_course_info
-from cms.djangoapps.tma_cms_apps.programs.views import create_program, enroll_program
+from cms.djangoapps.tma_cms_apps.programs.views import create_program
 
 django_autodiscover()
 admin.site.site_header = _('Studio Administration')
@@ -190,7 +190,6 @@ urlpatterns += [
 # Programs
 urlpatterns += [
     url(r'^tma_apps/programs/create-program/$',create_program , name='create_program'),
-    url(r'^tma_apps/programs/enroll/{}$'.format(PROGRAM_KEY_PATTERN), enroll_program , name='enroll_program'),
 ]
 
 # Microsite Manager API

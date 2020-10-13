@@ -11,6 +11,7 @@ from .legal import views as legal_views
 from .tma_reports import views as tma_reports_views
 from .average_score import views as average_views
 from .faq import views as faq_views
+from .new_dashboard import views as new_dashboard_views
 
 urlpatterns = [
     #Certificates
@@ -61,4 +62,8 @@ urlpatterns = [
 
     #TMA faq
     url(r'^faq$', faq_views.faq_view),
+
+    # New Dashboard
+    url(r'^view_enrollments$', new_dashboard_views.view_enrollments),
+    url(r'^new_tma_dashboard$', new_dashboard_views.new_tma_dashboard_view),
 ]

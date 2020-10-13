@@ -606,10 +606,10 @@ def create_and_enroll_user(email, username, name, country, password, course_id, 
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
 @require_level('staff')
 @require_post_params(action="enroll or unenroll", identifiers="stringified list of emails and/or usernames")
-def students_update_enrollment(request, course_id, recursive=True, send_email=True):
-    return _students_update_enrollment(request, course_id, recursive, send_email)
+def students_update_enrollment(request, course_id, recursive=True):
+    return _students_update_enrollment(request, course_id, recursive)
 
-def _students_update_enrollment(request, course_id, recursive=True, send_email=True):
+def _students_update_enrollment(request, course_id, recursive):
     """
     Enroll or unenroll students by email.
     Requires staff access.
@@ -655,15 +655,16 @@ def _students_update_enrollment(request, course_id, recursive=True, send_email=T
     if recursive:
         try:
             program_course = TmaProgramCourse.objects.get(course=course_overview)
-            program_courses = TmaProgramCourse.objects.filter(program=program_course.program)
+            program_courses = TmaProgramCourse.objects.filter(program=program_course.program).order_by('order')
             log.info('This course is part of a program, all program courses will be enrolled')
 
-            for course_overview in program_courses:
-                course_key = course_overview.course.id
+            for program_course in program_courses:
+                course_key = program_course.course.id
+                course_key_string = str(course_key)
+
                 if course_key != course_id:
-                    course_key_string = str(course_key)
-                    _students_update_enrollment(request, course_key_string, False, False)
-                    log.info('Enrolled')
+                    _students_update_enrollment(request, course_key_string, False)
+                    log.info('Enrolled course with Id: {}'.format(course_key_string))
 
         except TmaProgramCourse.DoesNotExist:
             log.info('Not a program course')
@@ -696,97 +697,88 @@ def _students_update_enrollment(request, course_id, recursive=True, send_email=T
         email_params = get_email_params(course, auto_enroll, secure=request.is_secure())
 
     results = []
-    if send_email:
-        for identifier in identifiers:
-            # First try to get a user object from the identifer
-            user = None
-            email = None
-            language = None
-            try:
-                user = get_student_from_identifier(identifier)
-            except User.DoesNotExist:
-                email = identifier
-            else:
-                email = user.email
-                language = get_user_email_language(user)
-
-            try:
-                # Use django.core.validators.validate_email to check email address
-                # validity (obviously, cannot check if email actually /exists/,
-                # simply that it is plausibly valid)
-                validate_email(email)  # Raises ValidationError if invalid
-                if action == 'enroll':
-                    before, after, enrollment_obj = enroll_email(
-                        course_id, email, auto_enroll, email_students, email_params, language=language
-                    )
-                    before_enrollment = before.to_dict()['enrollment']
-                    before_user_registered = before.to_dict()['user']
-                    before_allowed = before.to_dict()['allowed']
-                    after_enrollment = after.to_dict()['enrollment']
-                    after_allowed = after.to_dict()['allowed']
-
-                    if before_user_registered:
-                        if after_enrollment:
-                            if before_enrollment:
-                                state_transition = ENROLLED_TO_ENROLLED
-                            else:
-                                if before_allowed:
-                                    state_transition = ALLOWEDTOENROLL_TO_ENROLLED
-                                else:
-                                    state_transition = UNENROLLED_TO_ENROLLED
-                    else:
-                        if after_allowed:
-                            state_transition = UNENROLLED_TO_ALLOWEDTOENROLL
-
-                elif action == 'unenroll':
-                    before, after = unenroll_email(
-                        course_id, email, email_students, email_params, language=language
-                    )
-                    before_enrollment = before.to_dict()['enrollment']
-                    before_allowed = before.to_dict()['allowed']
-                    enrollment_obj = CourseEnrollment.get_enrollment(user, course_id) if user else None
-
-                    if before_enrollment:
-                        state_transition = ENROLLED_TO_UNENROLLED
-                    else:
-                        if before_allowed:
-                            state_transition = ALLOWEDTOENROLL_TO_UNENROLLED
-                        else:
-                            state_transition = UNENROLLED_TO_UNENROLLED
-
-                else:
-                    return HttpResponseBadRequest(strip_tags(
-                        "Unrecognized action '{}'".format(action)
-                    ))
-
-            except ValidationError:
-                # Flag this email as an error if invalid, but continue checking
-                # the remaining in the list
-                results.append({
-                    'identifier': identifier,
-                    'invalidIdentifier': True,
-                })
-
-            except Exception as exc:  # pylint: disable=broad-except
-                # catch and log any exceptions
-                # so that one error doesn't cause a 500.
-                log.exception(u"Error while #{}ing student")
-                log.exception(exc)
-                results.append({
-                    'identifier': identifier,
-                    'error': True,
-                })
-
-            else:
-                ManualEnrollmentAudit.create_manual_enrollment_audit(
-                    request.user, email, state_transition, reason, enrollment_obj, role
+    for identifier in identifiers:
+        # First try to get a user object from the identifer
+        user = None
+        email = None
+        language = None
+        try:
+            user = get_student_from_identifier(identifier)
+        except User.DoesNotExist:
+            email = identifier
+        else:
+            email = user.email
+            language = get_user_email_language(user)
+        try:
+            # Use django.core.validators.validate_email to check email address
+            # validity (obviously, cannot check if email actually /exists/,
+            # simply that it is plausibly valid)
+            validate_email(email)  # Raises ValidationError if invalid
+            if action == 'enroll':
+                before, after, enrollment_obj = enroll_email(
+                    course_id, email, auto_enroll, email_students, email_params, language=language
                 )
-                results.append({
-                    'identifier': identifier,
-                    'before': before.to_dict(),
-                    'after': after.to_dict(),
-                })
+                before_enrollment = before.to_dict()['enrollment']
+                before_user_registered = before.to_dict()['user']
+                before_allowed = before.to_dict()['allowed']
+                after_enrollment = after.to_dict()['enrollment']
+                after_allowed = after.to_dict()['allowed']
+                if before_user_registered:
+                    if after_enrollment:
+                        if before_enrollment:
+                            state_transition = ENROLLED_TO_ENROLLED
+                        else:
+                            if before_allowed:
+                                state_transition = ALLOWEDTOENROLL_TO_ENROLLED
+                            else:
+                                state_transition = UNENROLLED_TO_ENROLLED
+                else:
+                    if after_allowed:
+                        state_transition = UNENROLLED_TO_ALLOWEDTOENROLL
+            elif action == 'unenroll':
+                before, after = unenroll_email(
+                    course_id, email, email_students, email_params, language=language
+                )
+                before_enrollment = before.to_dict()['enrollment']
+                before_allowed = before.to_dict()['allowed']
+                enrollment_obj = CourseEnrollment.get_enrollment(user, course_id) if user else None
+                if before_enrollment:
+                    state_transition = ENROLLED_TO_UNENROLLED
+                else:
+                    if before_allowed:
+                        state_transition = ALLOWEDTOENROLL_TO_UNENROLLED
+                    else:
+                        state_transition = UNENROLLED_TO_UNENROLLED
+            else:
+                return HttpResponseBadRequest(strip_tags(
+                    "Unrecognized action '{}'".format(action)
+                ))
 
+        except ValidationError:
+            # Flag this email as an error if invalid, but continue checking
+            # the remaining in the list
+            results.append({
+                'identifier': identifier,
+                'invalidIdentifier': True,
+            })
+        except Exception as exc:  # pylint: disable=broad-except
+            # catch and log any exceptions
+            # so that one error doesn't cause a 500.
+            log.exception(u"Error while #{}ing student")
+            log.exception(exc)
+            results.append({
+                'identifier': identifier,
+                'error': True,
+            })
+        else:
+            ManualEnrollmentAudit.create_manual_enrollment_audit(
+                request.user, email, state_transition, reason, enrollment_obj, role
+            )
+            results.append({
+                'identifier': identifier,
+                'before': before.to_dict(),
+                'after': after.to_dict(),
+            })
     response_payload = {
         'action': action,
         'results': results,

@@ -28,7 +28,6 @@ class TmaProgramManager():
         self.invitation_only = True if self.program_data['invitation_only'] == 'true' else False
         self.program_overview = self._create_program_overview()
 
-
     def _create_program_overview(self):
         self.program_data['end_date'] = '' if self.program_data['end_date'] == 'null' else self.program_data['end_date']
         

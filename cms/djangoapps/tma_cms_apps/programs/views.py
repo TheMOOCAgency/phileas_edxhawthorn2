@@ -18,14 +18,3 @@ def create_program(request):
     status = 400 if new_program['status'] == 'error' else 200
 
     return JsonResponse(new_program, status=status)
-
-@login_required
-@require_http_methods(["POST"])
-def enroll_program(request):
-    enrollment_data = request.POST.copy()
-    tma_program_enrollment = TmaProgramEnrollmentManager(request, enrollment_data)
-    new_enrollment = tma_program_enrollment.create_new_program_enrollment()
-
-    status = 400 if new_enrollment['status'] == 'error' else 200
-
-    return JsonResponse(new_enrollment, status=status)

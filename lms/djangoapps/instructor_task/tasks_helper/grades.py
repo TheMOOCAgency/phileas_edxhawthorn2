@@ -42,6 +42,8 @@ from .utils import upload_csv_to_report_store, upload_xls_to_report_store
 import json
 from student.models import User, UserProfile
 from lms.djangoapps.tma_apps.models import TmaCourseEnrollment, TmaCourseOverview
+from cms.djangoapps.tma_cms_apps.programs.models import TmaProgramCourse
+from openedx.core.djangoapps.content.course_overviews.models import CourseOverview
 
 TASK_LOG = logging.getLogger('edx.celery.task')
 
@@ -480,22 +482,29 @@ class ProblemGradeReport(object):
         course = get_course_by_id(course_id)
         graded_scorable_blocks = cls._graded_scorable_blocks_to_header(course)
 
+        # Due to programs customization, get all courses from program, in case course is part of, otherwise return a list with the course only
+        courses_list = TmaProgramCourse.get_all_courses_from_program(course_id)
+
         ### TMA profile rows ###
         # Course header row 
-        course_header_row = []
-        course_date = []
-        course_header_row.append(course.display_name)
-        if course.self_paced:
-            course_date.append('self-paced')
-        else:
-            end_date = ''
-            if course.end:
-                end_date = course.end.strftime('%d-%m-%Y')
+        course_header_row = ['Export done : ' + start_date.strftime('%d-%m-%Y')]
+        course_header_row += [''] * 10
+
+        for course in courses_list:
+            course_date = []
+            course_header_row.extend([course.display_name, ''])
+            if course.self_paced:
+                course_date.append('self-paced')
+                course_date += [''] * 3
             else:
-                end_date = 'no end date'
-            course_date.extend(['start : ' + course.start.strftime('%d-%m-%Y'), 'end : ' + end_date])
-        course_header_row.extend(course_date)
-        course_header_row.append('Export done : ' + start_date.strftime('%d-%m-%Y'))
+                end_date = ''
+                if course.end:
+                    end_date = course.end.strftime('%d-%m-%Y')
+                else:
+                    end_date = 'no end date'
+                course_date.extend(['start :' + course.start.strftime('%d-%m-%Y'), '', 'end : ' + end_date, ''])
+            course_header_row.extend(course_date)
+        
 
         # Deconstruct header for specific col order
         header_profile_row_1 = OrderedDict([('rpid', 'RPID'), ('iug', 'IUG')])
@@ -507,29 +516,26 @@ class ProblemGradeReport(object):
 
         # Just generate the static fields for now.
         rows = [course_header_row]
-        rows.append(list(header_profile_row_1.values()) + list(header_user_row.values()) + list(header_row.values()) + list(header_customfield_row.values()) + list(header_profile_row_2.values()) + ['Enrollment Status', 'Grade', 'Best Grade', 'Completion Rate', 'Registration Date', 'Passed'] + _flatten(graded_scorable_blocks.values()))
+        rows.append(list(header_profile_row_1.values()) + list(header_user_row.values()) + list(header_row.values()) + list(header_customfield_row.values()) + list(header_profile_row_2.values()) + ['Enrollment Status', 'Grade', 'Best Grade', 'Completion Rate', 'Registration Date', 'Passed'] * len(courses_list) + _flatten(graded_scorable_blocks.values()))
         error_rows = [list(header_row.values()) + ['error_msg']]
         current_step = {'step': 'Calculating Grades'}
 
         # Bulk fetch and cache enrollment states so we can efficiently determine
         # whether each user is currently enrolled in the course.
-        CourseEnrollment.bulk_fetch_enrollment_states(enrolled_students, course_id)
-
-        for student, course_grade, error in CourseGradeFactory().iter(enrolled_students, course):            
+        for student, course_grade, error in CourseGradeFactory().iter(enrolled_students, course):
+            row = []
+            error_row = []
             ### TMA change order and add fields ###
             # UserProfile info 1 : RPID - IUG
             student_profile_fields_1 = []
             for profile in UserProfile.objects.filter(user_id=student.id):
                 student_profile_fields_1 = [getattr(profile, field_name) if getattr(profile, field_name) else "n/a" for field_name in header_profile_row_1]          
-
             # User info : FIRST NAME + LAST NAME
             student_user_fields = []
             for user in User.objects.filter(id=student.id):
                 student_user_fields = [getattr(user, field_name) if getattr(user, field_name) else "n/a" for field_name in header_user_row]
-
             # Header row : EMAIl
             student_fields = [getattr(student, field_name) for field_name in header_row]
-
             # Header CUSTOM FIELDS
             user_profile_customfields = {}
             try:
@@ -537,64 +543,62 @@ class ProblemGradeReport(object):
             except:
                 pass
             custom_fields = [user_profile_customfields[field_name] if field_name in user_profile_customfields.keys() else "n/a" for field_name in header_customfield_row]
-
             # UserProfile info 2 : IS MANAGER
             student_profile_fields_2 = []
             for profile in UserProfile.objects.filter(user_id=student.id):
                 student_profile_fields_2 = [getattr(profile, field_name) for field_name in header_profile_row_2]
 
+            row.extend(student_profile_fields_1 + student_user_fields + student_fields + custom_fields + student_profile_fields_2)
+
             # TmaCourseEnrollment info
-            completion_rate = 0
-            best_grade = 0
-            try:
-                tma_course_enrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__user_id=student.id, course_enrollment_edx__course_id=course_id)
-                best_grade = tma_course_enrollment.best_student_grade
-                completion_rate = float(round(tma_course_enrollment.completion_rate*100))/100
-            except:
-                pass
-
-            registration_date = CourseEnrollment.objects.get(user_id=student.id, course_id=course_id).created.strftime('%d-%m-%Y')
-
-            has_passed = 'n/a'
-            try:
-                has_passed = TmaCourseEnrollment.objects.get(course_enrollment_edx__user_id=student.id, course_enrollment_edx__course_id=course_id).has_validated_course
-            except:
-                pass
-
-            ### END ###
-
-            task_progress.attempted += 1
-
-            if not course_grade:
-                err_msg = text_type(error)
-                # There was an error grading this student.
-                if not err_msg:
-                    err_msg = u'Unknown error'
-                error_rows.append(student_fields + [err_msg])
-                task_progress.failed += 1
-                continue
-
-            enrollment_status = _user_enrollment_status(student, course_id)
-
-            earned_possible_values = []
-            for block_location in graded_scorable_blocks:
+            for course in courses_list:
+                completion_rate = 0
+                best_grade = 0
                 try:
-                    problem_score = course_grade.problem_scores[block_location]
-                except KeyError:
-                    earned_possible_values.append([u'Not Available'])
-                else:
-                    # TMA change score for exam : calculating ratio instead of writing Earned/Possible
-                    if problem_score.first_attempted:
-                        value = round(float(problem_score.earned)/problem_score.possible, 2)
-                        earned_possible_values.append([value])
+                    tma_course_enrollment = TmaCourseEnrollment.objects.get(course_enrollment_edx__user_id=student.id, course_enrollment_edx__course_id=course.id)
+                    best_grade = tma_course_enrollment.best_student_grade
+                    completion_rate = float(round(tma_course_enrollment.completion_rate*100))/100
+                except:
+                    pass
+                registration_date = CourseEnrollment.objects.get(user_id=student.id, course_id=course.id).created.strftime('%d-%m-%Y')
+                has_passed = 'n/a'
+                try:
+                    has_passed = TmaCourseEnrollment.objects.get(course_enrollment_edx__user_id=student.id, course_enrollment_edx__course_id=course.id).has_validated_course
+                except:
+                    pass
+                ### END ###
+                task_progress.attempted += 1
+
+                course_grade = CourseGradeFactory().read(student, course)
+                if not course_grade:
+                    err_msg = text_type(error)
+                    # There was an error grading this student.
+                    if not err_msg:
+                        err_msg = u'Unknown error'
+                    error_rows.append(student_fields + [err_msg])
+                    task_progress.failed += 1
+                    continue
+                enrollment_status = _user_enrollment_status(student, course.id)
+                earned_possible_values = []
+                for block_location in graded_scorable_blocks:
+                    try:
+                        problem_score = course_grade.problem_scores[block_location]
+                    except KeyError:
+                        earned_possible_values.append([u'Not Available'])
                     else:
-                        earned_possible_values.append([u'Not Attempted'])
-
-            rows.append(student_profile_fields_1 + student_user_fields + student_fields + custom_fields + student_profile_fields_2 + [enrollment_status, course_grade.percent, best_grade, completion_rate, registration_date, has_passed,] + _flatten(earned_possible_values))
-
+                        # TMA change score for exam : calculating ratio instead of writing Earned/Possible
+                        if problem_score.first_attempted:
+                            value = round(float(problem_score.earned)/problem_score.possible, 2)
+                            earned_possible_values.append([value])
+                        else:
+                            earned_possible_values.append([u'Not Attempted'])
+                row.extend([enrollment_status, course_grade.percent, best_grade, completion_rate, registration_date, has_passed] + _flatten(earned_possible_values))
+                
+            rows.append(row)
             task_progress.succeeded += 1
             if task_progress.attempted % status_interval == 0:
                 task_progress.update_task_state(extra_meta=current_step)
+
 
         # Perform the upload if any students have been successfully graded
         if len(rows) > 1:

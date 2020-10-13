@@ -10,7 +10,9 @@
         "courseidChecking": "/tma_apps/quickstart/checkid/",
         "programCreationUrl": "/tma_apps/programs/create-program/"
     },
-    "programBasis": {},
+    "programBasis": {
+        "program_type": []
+    },
     "courseBasis": {
         "course_grade": 50,
         "course_pacing": "instructor_paced",
@@ -32,21 +34,9 @@
         "actual_course_downloads": [],
         "course_goals": "",
         "course_map": [
-            {
-                "title": "section 1",
-                "subsections": [
-                    "subsection 1.1",
-                    "subsection 1.2"
-                ]
-            },
-            {
-                "title": "section 2",
-                "subsections": [
-                    "subsection 2.1",
-                    "subsection 2.2"
-                ]
-            }
-        ]
+            { "subsections": ["subsection 1.1", "subsection 1.2"], "title": "section 1" },
+            { "subsections": ["subsection 2.1", "subsection 2.2"], "title": "section 2" }
+          ]
     },
     "fields": [
         {

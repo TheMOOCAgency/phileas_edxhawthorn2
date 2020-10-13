@@ -25581,3 +25581,23 @@ msgstr "Veuillez vous assurer d'avoir vu tous les contenus et répondu à toutes
 msgid "A blue border appears on uncompleted blocks."
 msgstr "Un cadre bleu désigne les contenus qui n'ont pas été terminés."
 
+#: lms/templates/emails/phileas-program-email.html
+msgid "You can access the program by clicking on the following link : "
+msgstr "Vous pouvez accéder au programme en cliquant sur le lien suivant : "
+
+#: lms/templates/emails/phileas-program-email.html
+msgid "This program contains the following courses : "
+msgstr "Ce programme contient les cours suivants : "
+
+#: lms/templates/emails/phileas-program-email.html
+msgid "You are invited to follow the program "
+msgstr "Vous êtes invité à suivre le programme "
+
+#: lms/templates/emails/phileas-program-email.html
+msgid "This program is mandatory."
+msgstr "Ce programme est obligatoire."
+
+#: lms/templates/emails/phileas-program-email.html
+msgid "This program is mandatory and must be completed before {end_date}."
+msgstr "Ce programme est obligatoire et doit être réalisé avant le {end_date}."
+
