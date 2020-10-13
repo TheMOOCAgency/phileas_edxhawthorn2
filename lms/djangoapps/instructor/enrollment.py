@@ -145,6 +145,7 @@ def enroll_email(course_id, student_email, auto_enroll=False, email_students=Fal
     previous_state = EmailEnrollmentState(course_id, student_email)
     enrollment_obj = None
     program = None
+    program_course = None
 
     try:
         """
@@ -210,8 +211,10 @@ def enroll_email(course_id, student_email, auto_enroll=False, email_students=Fal
             if program:
                 email_params['message'] = 'enrolled_program_enroll'
 
-            send_mail_to_student(
-                student_email, email_params, language=language)
+            
+            if not program_course or program_course and program_course.order == 0:
+                send_mail_to_student(
+                    student_email, email_params, language=language)
     elif not is_email_retired(student_email):
         cea, _ = CourseEnrollmentAllowed.objects.get_or_create(
             course_id=course_id, email=student_email)
@@ -223,9 +226,9 @@ def enroll_email(course_id, student_email, auto_enroll=False, email_students=Fal
 
             if program:
                 email_params['message'] = 'allowed_program_enroll'
-                
-            send_mail_to_student(
-                student_email, email_params, language=language)
+            if not program_course or program_course and program_course.order == 0:    
+                send_mail_to_student(
+                    student_email, email_params, language=language)
 
     after_state = EmailEnrollmentState(course_id, student_email)
 
