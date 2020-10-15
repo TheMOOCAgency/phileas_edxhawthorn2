@@ -12,6 +12,8 @@ from .tma_reports import views as tma_reports_views
 from .average_score import views as average_views
 from .faq import views as faq_views
 from .new_dashboard import views as new_dashboard_views
+from django.views.generic.base import RedirectView
+
 
 urlpatterns = [
     #Certificates
@@ -35,6 +37,9 @@ urlpatterns = [
 
     # Programs dashboard
     url(r'^dashboard/home/programs$', activity_dashboard_views.programs_dashboard_view, name='programs_dashboard_view'),
+
+    # Former courses dashboard, broken since we created program dashboard
+    url(r'^dashboard/home$', RedirectView.as_view(url='home/courses')),
 
     #Student Grade Tracking
     url(r'^{}/grade_tracking/get_user_grade$'.format(settings.COURSE_ID_PATTERN), grade_views.get_user_grade),

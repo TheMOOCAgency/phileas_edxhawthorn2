@@ -43,8 +43,8 @@ $(document).ajaxSuccess(function (e, xhr, settings) {
 
 $('button.mark-as-done').on('click', function (e) {
   e.preventDefault();
-  var value = $(this).val();
-  mark_as_done(value);
+  var isProgramCourse = $(this).data('program');
+  mark_as_done(isProgramCourse);
   $('#tma_course_end_popup').modal('hide');
 });
 
@@ -77,7 +77,7 @@ function mark_popup_as_displayed(status) {
   });
 }
 
-function mark_as_done(value) {
+function mark_as_done(isProgramCourse) {
   url = '/tma_apps/' + global_courseid + '/grade_tracking/mark_as_done'
   $.ajax({
     type: 'POST',
@@ -86,7 +86,7 @@ function mark_as_done(value) {
       'marked_as_done': 'True'
     },
     success: function () {
-      if (!value) {
+      if (!isProgramCourse) {
         window.location.assign("/tma_apps/dashboard/home/courses#finished-section");
       } else {
         window.location.assign("/tma_apps/dashboard/home/programs");

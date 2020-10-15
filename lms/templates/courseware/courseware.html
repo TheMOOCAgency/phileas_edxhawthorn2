@@ -407,8 +407,9 @@ ${HTML(fragment.foot_html())}
 <script>
   $(document).ready(function () {
     let isProgramCourse = ("${is_program_course | n, js_escaped_string}" === "True" ? true : false)
-    $('button.mark-as-done').val(isProgramCourse)
+    $('button.mark-as-done').data("program", isProgramCourse)
   });
+
 </script>
 <script>
   let language = "${request.LANGUAGE_CODE | n, js_escaped_string}"
