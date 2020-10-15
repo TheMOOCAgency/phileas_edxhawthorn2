@@ -264,7 +264,6 @@ def courses(request):
     current_organisation = "phileas"
     if org_whitelist:
          current_organisation = org_whitelist[0]
-    log.info(current_organisation)
     
     frontpage_courses = configuration_helpers.get_value('frontpage_courses','')
 
@@ -277,7 +276,6 @@ def courses(request):
             for course in likes_ordered_courses :
                 course_id = course.__dict__['course_overview_edx_id']
                 is_program_course = TmaProgramCourse.is_program_course(course_id)
-                log.info(is_program_course)
                 if not is_program_course:
                     courses_to_display.append(course)
 
@@ -286,7 +284,6 @@ def courses(request):
             for course in enrollments_ordered_courses :
                 course_id = course.__dict__['course_overview_edx_id']
                 is_program_course = TmaProgramCourse.is_program_course(course_id)
-                log.info(is_program_course)
                 if not is_program_course:
                     courses_to_display.append(course)
 

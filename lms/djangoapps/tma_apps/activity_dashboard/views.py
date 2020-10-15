@@ -45,14 +45,6 @@ def programs_dashboard_view(request):
                     program_enrollments[program.id]['courses_overview'] = list(program_courses)
                     program_enrollments[program.id]['completion_rate'] = completion_rate
 
-                    # org = CourseOverview.objects.get(id=course_id).org
-                    # lms_base = str("https://" + org + "." + settings.LMS_BASE)
-                    # email_url = lms_base + "/login?next="  + urllib.quote("/courses/" + course_id + "/instructor",'')
-
-                    # program_enrollments[program.id]['email_url'] = email_url
-                    # log.info(email_url)
-
-
     context['programs_enrollments'] = program_enrollments
 
     return render_to_response('tma_apps/programs_dashboard.html', context)

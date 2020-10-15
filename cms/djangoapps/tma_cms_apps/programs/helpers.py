@@ -14,9 +14,7 @@ from xmodule.course_module import CourseFields
 from xmodule.modulestore.django import modulestore
 from xmodule.fields import Date
 from random import randint
-import logging
 
-log = logging.getLogger()
 
 class TmaProgramManager():
     def __init__(self, request, program_data):
@@ -93,7 +91,6 @@ class TmaProgramManager():
             course = course_overview,
             order = index
         )
-        log.info('program course created')
         return new_program_course
     
     def _get_course_from_module_store(self, course_key):

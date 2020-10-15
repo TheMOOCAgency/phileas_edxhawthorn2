@@ -668,6 +668,7 @@ def _students_update_enrollment(request, course_id, recursive):
 
         except TmaProgramCourse.DoesNotExist:
             log.info('Not a program course')
+            pass
 
                 
     action = request.POST.get('action')

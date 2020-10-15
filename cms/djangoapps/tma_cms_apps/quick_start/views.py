@@ -1,5 +1,4 @@
-import logging
-log = logging.getLogger()
+
 
 import json
 from django.views.decorators.csrf import ensure_csrf_cookie

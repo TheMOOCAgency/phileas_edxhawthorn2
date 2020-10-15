@@ -3,7 +3,7 @@
 (function(globals) {
 
   var django = globals.django || (globals.django = {});
-  
+
   
   django.pluralidx = function(n) {
     var v=(n > 1);
@@ -1375,12 +1375,8 @@
     ], 
     "{start_strong}{total}{end_strong} words submitted in total.": "{start_strong}{total}{end_strong} mots soumis au total.", 
     "{unread_comments_count} new": "{unread_comments_count} nouveaux", 
-    "\u2026": "\u2026",
-    "You cannot access the next unit because the current unit is not completed.": "Vous ne pouvez pas acc\u00e9der \u00e0 l'unit\u00e9 suivante car l'unit\u00e9 actuelle n'a pas \u00e9t\u00e9 termin\u00e9e.",
-    "Please ensure that you viewed all contents and answered all questions.": "Veuillez vous assurer d'avoir vu tous les contenus et r\u00e9pondu \u00e0 toutes les questions.",
-    "A blue border appears on uncompleted blocks.": "Un cadre bleu d\u00e9signe les contenus qui n'ont pas \u00e9t\u00e9 termin\u00e9s."
+    "\u2026": "\u2026"
   };
-
   for (var key in newcatalog) {
     django.catalog[key] = newcatalog[key];
   }
