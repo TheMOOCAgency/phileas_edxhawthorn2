@@ -498,11 +498,20 @@ class ProblemGradeReport(object):
                 course_date += [''] * 3
             else:
                 end_date = ''
+                start_date = ''
+
+                if course.start:
+                    start_date = course.start.strftime('%d-%m-%Y')
+                else:
+                    start_date = 'no start date'
+
                 if course.end:
                     end_date = course.end.strftime('%d-%m-%Y')
                 else:
                     end_date = 'no end date'
-                course_date.extend(['start :' + course.start.strftime('%d-%m-%Y'), '', 'end : ' + end_date, ''])
+
+                course_date.extend(['start :' + start_date, '', 'end : ' + end_date, ''])
+                
             course_header_row.extend(course_date)
         
 
