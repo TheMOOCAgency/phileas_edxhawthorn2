@@ -470,7 +470,7 @@ class ProblemGradeReport(object):
         `course_id`.
         """
         start_time = time()
-        start_date = datetime.now(UTC)
+        report_date = datetime.now(UTC)
         status_interval = 100
         enrolled_students = CourseEnrollment.objects.users_enrolled_in(course_id, include_inactive=True)
         task_progress = TaskProgress(action_name, enrolled_students.count(), start_time)
@@ -487,7 +487,7 @@ class ProblemGradeReport(object):
 
         ### TMA profile rows ###
         # Course header row 
-        course_header_row = ['Export done : ' + start_date.strftime('%d-%m-%Y')]
+        course_header_row = ['Export done : ' + report_date.strftime('%d-%m-%Y')]
         course_header_row += [''] * 10
 
         for course in courses_list:
@@ -611,10 +611,10 @@ class ProblemGradeReport(object):
 
         # Perform the upload if any students have been successfully graded
         if len(rows) > 1:
-            upload_xls_to_report_store(rows, 'problem_grade_report', course_id, start_date)
+            upload_xls_to_report_store(rows, 'problem_grade_report', course_id, report_date)
         # If there are any error rows, write them out as well
         if len(error_rows) > 1:
-            upload_xls_to_report_store(error_rows, 'problem_grade_report_err', course_id, start_date)
+            upload_xls_to_report_store(error_rows, 'problem_grade_report_err', course_id, report_date)
 
         return task_progress.update_task_state(extra_meta={'step': 'Uploading CSV'})
 
@@ -760,7 +760,7 @@ class ProblemResponses(object):
         all student answers to a given problem, and store using a `ReportStore`.
         """
         start_time = time()
-        start_date = datetime.now(UTC)
+        report_date = datetime.now(UTC)
         num_reports = 1
         task_progress = TaskProgress(action_name, num_reports, start_time)
         current_step = {'step': 'Calculating students answers to problem'}
@@ -791,7 +791,7 @@ class ProblemResponses(object):
         # Perform the upload
         problem_location = re.sub(r'[:/]', '_', problem_location)
         csv_name = 'student_state_from_{}'.format(problem_location)
-        report_name = upload_csv_to_report_store(rows, csv_name, course_id, start_date)
+        report_name = upload_csv_to_report_store(rows, csv_name, course_id, report_date)
         current_step = {'step': 'CSV uploaded', 'report_name': report_name}
 
         return task_progress.update_task_state(extra_meta=current_step)
