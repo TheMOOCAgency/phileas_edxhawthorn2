@@ -49,28 +49,30 @@ from lms.djangoapps.tma_apps.models import TmaCourseEnrollment
 
 
 <%
-new_program = False
+new_program_subscription = False
+is_program_enrolled = False
 
 site_org_whitelist, site_org_blacklist = get_org_black_and_whitelist_for_site()
 course_enrollments = list(get_course_enrollments(request.user, site_org_whitelist, site_org_blacklist))
 
 if course_enrollments:
-    for program in TmaProgramOverview.objects.all():
-        # Check if user is enrolled to the first course of each program, to get program enrollment status
-        first_program_course_overview = TmaProgramCourse.objects.get(program=program, order=0).course
-        course_id = first_program_course_overview.id
-        for enrollment in course_enrollments:
-            if enrollment._course_id == course_id: 
-                program_courses = TmaProgramCourse.objects.filter(program=program)
+    for enrollment in course_enrollments:
+        try:
+            program_course = TmaProgramCourse.objects.get(course=enrollment.course, order=0)
+            is_program_enrolled = True
+            program = program_course.program
+            program_courses = TmaProgramCourse.objects.filter(program=program)
+            # calculate average program completion rate based on individual courses rates
+            total_rates = 0
+            for program_course in program_courses:
+                course_enrollment_edx = CourseEnrollment.objects.get(user=request.user, course=program_course.course)
+                total_rates += int(TmaCourseEnrollment.objects.get(course_enrollment_edx=course_enrollment_edx).completion_rate * 100)
+            if total_rates == 0:
+                new_program_subscription = True
+                break
+        except:
+            pass
 
-                # calculate average program completion rate based on individual courses rates
-                total_rates = 0
-                for program_course in program_courses:
-                    course_enrollment_edx = CourseEnrollment.objects.get(user=request.user, course=program_course.course)
-                    total_rates += int(TmaCourseEnrollment.objects.get(course_enrollment_edx=course_enrollment_edx).completion_rate * 100)
-                if total_rates == 0:
-                    new_program = True
-                    break
 %>
 <style>
     .dropdown-nav {
@@ -120,25 +122,31 @@ if course_enrollments:
             <a class="nav-link btn-admin" href="//${settings.CMS_BASE}/tma_apps/quickstart/">${_("Admin")}</a>
         </li>
         % endif
-        <li class="nav-item dropdown-nav">
-            <a class="nav-link" id="activity-nav">
-                % if new_program:
-                    <div class="new_program_alert"></div>
-                %endif
+        % if not is_program_enrolled:
+            <a class="nav-link" id="activity-nav" href="${reverse('home_dashboard_courses')}">
                 ${_("My activity")}
             </a>
-            <ul id="activity-dropdown">
-                <li class="dropdown-item">
-                    <a class="dropdown-link" href="${reverse('home_dashboard_courses')}">${_("Courses")}</a>
-                </li>
-                <li class="dropdown-item">
-                    <a class="dropdown-link" href="${reverse('programs_dashboard_view')}">${_("Programs")}</a>
-                    % if new_program:
+        % else:
+            <li class="nav-item dropdown-nav">
+                <a class="nav-link" id="activity-nav">
+                    % if new_program_subscription:
                         <div class="new_program_alert"></div>
-                    % endif     
-                </li>
-            </ul>
-        </li>
+                    %endif
+                    ${_("My activity")}
+                </a>
+                <ul id="activity-dropdown">
+                    <li class="dropdown-item">
+                        <a class="dropdown-link" href="${reverse('home_dashboard_courses')}">${_("Courses")}</a>
+                    </li>
+                    <li class="dropdown-item">
+                        <a class="dropdown-link" href="${reverse('programs_dashboard_view')}">${_("Programs")}</a>
+                        % if new_program_subscription:
+                            <div class="new_program_alert"></div>
+                        % endif     
+                    </li>
+                </ul>
+            </li>
+        % endif
         <li class="nav-item">
             <a class="nav-link" href="${reverse('courses')}">${_("Explore")}</a>
         </li>
