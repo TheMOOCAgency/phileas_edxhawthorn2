@@ -25601,3 +25601,6 @@ msgstr "Ce programme est obligatoire."
 msgid "This program is mandatory and must be completed before {end_date}."
 msgstr "Ce programme est obligatoire et doit être réalisé avant le {end_date}."
 
+#: lms/templates/emails/program_enroll_email_enrolledsubject.txt
+msgid "You have been registered to the program {program_name}"
+msgstr "Vous avez été inscrit au programme {program_name}"
