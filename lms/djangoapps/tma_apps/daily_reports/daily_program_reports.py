@@ -25,13 +25,15 @@ from lms.djangoapps.instructor_task.tasks_helper.grades import ProblemGradeRepor
 
 def get_courses_ids_list():
     """
-    Get courses ids for courses with
-    more than 100 enrollments and 
-    program courses, as we want to 
-    generate reports for them only.
+    Get org courses ids for courses
+    with more than 100 enrollments
+    and program courses, as we want
+    to generate reports for them
+    only.
     """
-
-    courses = CourseOverview.objects.all()
+    
+    org = sys.argv[1]
+    courses = CourseOverview.objects.filter(org=org)
     selected_course_ids = []
 
     for course in courses:
@@ -39,15 +41,13 @@ def get_courses_ids_list():
         is_program_course = TmaProgramCourse.is_program_course(course_id)
 
         if is_program_course:
-            index = TmaProgramCourse(course=course).order
+            index = TmaProgramCourse.objects.get(course=course).order
             if index == 0:
                 selected_course_ids.append(course_id)
         else:
             total_enrollments = len(CourseEnrollment.objects.filter(course=course))
-            log.info(total_enrollments)
             if total_enrollments >= 100:
                 selected_course_ids.append(course_id)
-                log.info("Test")
 
     return selected_course_ids
 
