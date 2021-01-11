@@ -36,11 +36,12 @@ data = {}
 org = sys.argv[1]
 emails = sys.argv[2].split(';')
 today = timezone.now()
-likes_counter = 0
+# likes_counter = 0
 users_counter = 0
-visitors_counter = 0
-top_courses_enrollments_list = []
-countries_counter = {}
+last_month_visitors_counter = 0
+courses_ranking_list = []
+users_per_country = {}
+visitors_per_country_last_month = {}
 
 # GET MICROSITE USERS AND CURRENT MONTH VISITORS COUNT
 users = User.objects.all()
@@ -50,30 +51,40 @@ for user in users:
   custom_field = user_profile.custom_field
   
   try:
+    # GET USERS COUNT PER COUNTRY
     user_org = json.loads(custom_field).get('microsite', None)
     if user_org == org:
       user_country = user_profile.country.name
 
-      if user_country and user_country in countries_counter.keys():
-        countries_counter[user_country] += 1
+      if user_country and user_country in users_per_country.keys():
+        users_per_country[user_country] += 1
       elif user_country:
-        countries_counter[user_country] = 1
+        users_per_country[user_country] = 1
+        visitors_per_country_last_month[user_country] = 0
+
+      users_counter +=1
 
       last_login_year = user.last_login.year
       last_login_month = user.last_login.month
-      users_counter +=1
 
-      if last_login_year == today.year and last_login_month == today.month:
-        visitors_counter += 1
+      # HANDLE NEW YEAR CASE
+      last_month = today.month - 1 if today.month > 1 else 12
+      last_month_year = today.year if last_month != 12 else today.year - 1
+
+      # GET LAST MONTH UNIQUE VISITORS PER COUNTRY
+      if last_login_year == last_month_year and last_login_month == last_month:
+        if user_country and user_country in visitors_per_country_last_month.keys():
+          visitors_per_country_last_month[user_country] += 1
+        last_month_visitors_counter += 1
   except:
     pass
 
-sorted_countries = sorted(countries_counter.items(), key=operator.itemgetter(1),reverse=True)
-sorted_countries = sorted_countries[0:5]
+sorted_countries = sorted(users_per_country.items(), key=operator.itemgetter(1),reverse=True)
 
 data['users_count'] = users_counter
-data['unique_visitors_count'] = visitors_counter
-data['top_countries'] = sorted_countries
+data['unique_visitors_count'] = last_month_visitors_counter
+data['users_per_country'] = sorted_countries
+data['visitors_per_country_last_month'] = visitors_per_country_last_month
 
 # COUNT ONGOING PROGRAMS COUNT BY GETTING FIRST COURSE COUNT
 data['programs_count'] = TmaProgramCourse.objects.filter(course__org=org, course__start__lte=today, course__end__gte=today, order=0).count()
@@ -82,40 +93,38 @@ data['programs_count'] = TmaProgramCourse.objects.filter(course__org=org, course
 courses = TmaCourseOverview.objects.filter(course_overview_edx__org=org, course_overview_edx__start__lte=today, course_overview_edx__end__gte=today).exclude(course_overview_edx__id__icontains='duplicated')
 data['courses_count'] = courses.count()
 
-# GET TOP 5 COURSES OF THE MONTH, IN TERMS OF ENROLLMENTS
+# GET TOP COURSES OF THE MONTH, IN TERMS OF ENROLLMENTS
 for course in courses:
   # BELOW MUTED VARIABLE IS FOR TEST CASES
-  #current_month_enrollments = TmaCourseEnrollment.objects.filter(course_enrollment_edx__course=course.course_overview_edx)
-  current_month_enrollments = TmaCourseEnrollment.objects.filter(course_enrollment_edx__course=course.course_overview_edx, course_enrollment_edx__created__year=today.year, course_enrollment_edx__created__month=today.month)
+  current_month_enrollments = TmaCourseEnrollment.objects.filter(course_enrollment_edx__course=course.course_overview_edx)
+  #current_month_enrollments = TmaCourseEnrollment.objects.filter(course_enrollment_edx__course=course.course_overview_edx, course_enrollment_edx__created__year=today.year, course_enrollment_edx__created__month=today.month)
   enrollments_count = current_month_enrollments.count()
 
   # ORDER COURSES LIST BY COURSE ENROLLMENTS COUNT
-  if not top_courses_enrollments_list:
-    top_courses_enrollments_list.append(current_month_enrollments)
+  if not courses_ranking_list:
+    courses_ranking_list.append(current_month_enrollments)
   else:
-    if enrollments_count >= top_courses_enrollments_list[0].count():
-      top_courses_enrollments_list.insert(0, current_month_enrollments)
-    elif enrollments_count <= top_courses_enrollments_list[len(top_courses_enrollments_list) -1].count():
-      top_courses_enrollments_list.append(current_month_enrollments)
+    if enrollments_count >= courses_ranking_list[0].count():
+      courses_ranking_list.insert(0, current_month_enrollments)
+    elif enrollments_count <= courses_ranking_list[len(courses_ranking_list) -1].count():
+      courses_ranking_list.append(current_month_enrollments)
     else:
-      for index, course_enrollments in enumerate(top_courses_enrollments_list):
+      for index, course_enrollments in enumerate(courses_ranking_list):
         if enrollments_count > course_enrollments.count():
-          top_courses_enrollments_list.insert(index, current_month_enrollments)
+          courses_ranking_list.insert(index, current_month_enrollments)
           break
 
-top_courses_enrollments_list = top_courses_enrollments_list[0:5]
-
 # GET MICROSITE LIKES COUNT
-all_org_courses = courses = TmaCourseOverview.objects.filter(course_overview_edx__org=org).exclude(course_overview_edx__id__icontains='duplicated')
+# all_org_courses = courses = TmaCourseOverview.objects.filter(course_overview_edx__org=org).exclude(course_overview_edx__id__icontains='duplicated')
 
-for course in all_org_courses:
-  likes_counter += course.liked_total
+# for course in all_org_courses:
+#   likes_counter += course.liked_total
 
-data['likes_count'] = int(likes_counter)
-data['top_courses'] = {}
+# data['likes_count'] = int(likes_counter)
+data['courses_data'] = {}
 
 # GET DATA FROM TOP 5 COURSES
-for enrollments_list in top_courses_enrollments_list:
+for enrollments_list in courses_ranking_list:
   if enrollments_list:
     course_overview = enrollments_list[0].course_enrollment_edx.course
     course_id = course_overview.id
@@ -132,72 +141,86 @@ for enrollments_list in top_courses_enrollments_list:
     course_completion_rate = int(float(validated_courses_counter) / course_enrollments_count * 100)
     invited_users_count = CourseEnrollmentAllowed.objects.filter(course_id=course_id).count()
 
-    data['top_courses'][str(course_id)] =  {
+    # DETERMINE IF COURSE IS OPEN OR CLOSED
+    course_status = "open"
+    if course_overview.enrollment_start and today < course_overview.enrollment_start:
+      course_status = "closed"
+    if course_overview.enrollment_end and today > course_overview.enrollment_end:
+      course_status = "closed"\
+
+    liked_total = TmaCourseOverview.objects.get(course_overview_edx=course_overview).liked_total
+
+    data['courses_data'][str(course_id)] =  {
       'course_completion_rate': course_completion_rate,
       'course_enrollments_count': course_enrollments_count,
       'invited_users_count': invited_users_count,
+      'likes_total': liked_total,
+      'course_status': course_status
     }
   else:
-    data['top_courses']['No enrollments yet'] =  {
+    data['courses_data']['No enrollments yet'] =  {
       'course_completion_rate': 0,
       'course_enrollments_count': 0,
       'invited_users_count': 0,
+      'likes_total': 0,
+      'course_status': None
     }
 
 
 # GENERATE XLS FILE
 wb = Workbook(encoding='utf-8')
-title = 'Rapport de donnees - Phileas - {} - {}'.format(org, today.strftime("%d/%m/%y"))
-filename = 'phileas-{}-{}.xls'.format(org, today.strftime("%d/%m/%y"))
+title = 'Data report - Phileas - {} - {}'.format(org, today.strftime("%m/%y"))
+filename = 'Phileas_data-{}-{}.xls'.format(org, today.strftime("%m/%y"))
 
 sheet = wb.add_sheet(org)
 row = 0
 col = 0
 sheet.write(row,col, title)
 row += 1
-sheet.write(row, 0, 'Users')
-sheet.write(row + 1, 0, data['users_count'])
-col += 1
-sheet.write(row, col, 'Unique visitors')
-sheet.write(row + 1, col, data['unique_visitors_count'])
-col += 1
-sheet.write(row, col, 'Likes')
-sheet.write(row + 1, col, data['likes_count'])
-col += 1
-sheet.write(row, col, 'Open courses')
-sheet.write(row + 1, col, data['courses_count'])
-col += 1
-sheet.write(row, col, 'Open programs')
-sheet.write(row + 1, col, data['programs_count'])
-col += 1
 
-# TOP 5 COUNTRIES
-rank = 1
-for country in data['top_countries']:
-  sheet.write(row, col, 'Country {}'.format(rank))
-  sheet.write(row + 1, col, country[0])
-  col += 1
-  sheet.write(row, col, 'Country users')
-  sheet.write(row + 1, col, country[1])
-  col += 1
-  rank += 1
+# RENDER HEADER
+sheet.write(row, 1, 'Total number of users')
+sheet.write(row, 2, 'Unique visitors this month')
+sheet.write(row, 4, 'Open courses')
+sheet.write(row, 5, 'Open programs')
+sheet.write(row, 8, 'Open/Closed')
+sheet.write(row, 9, 'Invitations (this month)')
+sheet.write(row, 10, 'Enrollments (this month)')
+sheet.write(row, 11, 'Completion rate (All times)')
+sheet.write(row, 12, 'Likes (All times)')
+row += 1
 
-# TOP 5 COURSES
-rank = 1
-for key, value in data['top_courses'].items():
-  sheet.write(row, col, 'Course {}'.format(rank))
-  sheet.write(row + 1, col, key)
-  col += 1
-  sheet.write(row, col, 'Invitations')
-  sheet.write(row + 1, col, data['top_courses'][key]['invited_users_count'])
-  col += 1
-  sheet.write(row, col, 'Enrollments')
-  sheet.write(row + 1, col, data['top_courses'][key]['course_enrollments_count'])
-  col += 1
-  sheet.write(row, col, 'Completion rate')
-  sheet.write(row + 1, col, str(data['top_courses'][key]['course_completion_rate']) + "%")
-  col += 1
-  rank += 1
+sheet.write(row, 0, 'Total')
+sheet.write(row, 1, data['users_count'])
+sheet.write(row, 2, data['unique_visitors_count'])
+sheet.write(row, 4, data['courses_count'])
+sheet.write(row, 5, data['programs_count'])
+sheet.write(row, 7, 'Total')
+
+row += 1
+
+# RENDER COUNTRIES DATA
+for country in data['users_per_country']:
+  sheet.write(row, 0, country[0])
+  sheet.write(row, 1, country[1])
+  sheet.write(row, 2, data['visitors_per_country_last_month'][country[0]])
+  row += 1
+
+row = 3
+
+# RENDER COURSES DATA
+
+for key, value in data['courses_data'].items():
+  sheet.write(row, 7, key)
+  sheet.write(row , 8, data['courses_data'][key]['course_status'])
+  sheet.write(row , 9, data['courses_data'][key]['invited_users_count'])
+  sheet.write(row, 10, data['courses_data'][key]['course_enrollments_count'])
+  sheet.write(row, 11, str(data['courses_data'][key]['course_completion_rate']) + "%")
+  sheet.write(row, 12, data['courses_data'][key]['likes_total'])
+  row += 1
+
+# sheet.write(row, col, 'Likes')
+# sheet.write(row + 1, col, data['likes_count'])
 
 output = BytesIO()
 wb.save(output)
