@@ -36,7 +36,9 @@ data = {}
 org = sys.argv[1]
 emails = sys.argv[2].split(';')
 today = timezone.now()
-# likes_counter = 0
+likes_counter = 0
+invitations_count = 0
+enrollments_count = 0
 users_counter = 0
 last_month_visitors_counter = 0
 courses_ranking_list = []
@@ -45,6 +47,10 @@ visitors_per_country_last_month = {}
 
 # GET MICROSITE USERS AND CURRENT MONTH VISITORS COUNT
 users = User.objects.all()
+
+# HANDLE NEW YEAR CASE
+last_month = today.month - 1 if today.month > 1 else 12
+last_month_year = today.year if last_month != 12 else today.year - 1
 
 for user in users:
   user_profile, created = UserProfile.objects.get_or_create(user=user)
@@ -66,10 +72,6 @@ for user in users:
 
       last_login_year = user.last_login.year
       last_login_month = user.last_login.month
-
-      # HANDLE NEW YEAR CASE
-      last_month = today.month - 1 if today.month > 1 else 12
-      last_month_year = today.year if last_month != 12 else today.year - 1
 
       # GET LAST MONTH UNIQUE VISITORS PER COUNTRY
       if last_login_year == last_month_year and last_login_month == last_month:
@@ -96,8 +98,8 @@ data['courses_count'] = courses.count()
 # GET TOP COURSES OF THE MONTH, IN TERMS OF ENROLLMENTS
 for course in courses:
   # BELOW MUTED VARIABLE IS FOR TEST CASES
-  current_month_enrollments = TmaCourseEnrollment.objects.filter(course_enrollment_edx__course=course.course_overview_edx)
-  #current_month_enrollments = TmaCourseEnrollment.objects.filter(course_enrollment_edx__course=course.course_overview_edx, course_enrollment_edx__created__year=today.year, course_enrollment_edx__created__month=today.month)
+  #current_month_enrollments = TmaCourseEnrollment.objects.filter(course_enrollment_edx__course=course.course_overview_edx)
+  current_month_enrollments = TmaCourseEnrollment.objects.filter(course_enrollment_edx__course=course.course_overview_edx, course_enrollment_edx__created__year=last_month_year, course_enrollment_edx__created__month=last_month)
   enrollments_count = current_month_enrollments.count()
 
   # ORDER COURSES LIST BY COURSE ENROLLMENTS COUNT
@@ -114,16 +116,11 @@ for course in courses:
           courses_ranking_list.insert(index, current_month_enrollments)
           break
 
-# GET MICROSITE LIKES COUNT
-# all_org_courses = courses = TmaCourseOverview.objects.filter(course_overview_edx__org=org).exclude(course_overview_edx__id__icontains='duplicated')
 
-# for course in all_org_courses:
-#   likes_counter += course.liked_total
 
-# data['likes_count'] = int(likes_counter)
+# GET COURSES DATA
 data['courses_data'] = {}
 
-# GET DATA FROM TOP 5 COURSES
 for enrollments_list in courses_ranking_list:
   if enrollments_list:
     course_overview = enrollments_list[0].course_enrollment_edx.course
@@ -196,7 +193,6 @@ sheet.write(row, 2, data['unique_visitors_count'])
 sheet.write(row, 4, data['courses_count'])
 sheet.write(row, 5, data['programs_count'])
 sheet.write(row, 7, 'Total')
-
 row += 1
 
 # RENDER COUNTRIES DATA
@@ -206,10 +202,8 @@ for country in data['users_per_country']:
   sheet.write(row, 2, data['visitors_per_country_last_month'][country[0]])
   row += 1
 
-row = 3
-
 # RENDER COURSES DATA
-
+row = 3
 for key, value in data['courses_data'].items():
   sheet.write(row, 7, key)
   sheet.write(row , 8, data['courses_data'][key]['course_status'])
@@ -217,10 +211,18 @@ for key, value in data['courses_data'].items():
   sheet.write(row, 10, data['courses_data'][key]['course_enrollments_count'])
   sheet.write(row, 11, str(data['courses_data'][key]['course_completion_rate']) + "%")
   sheet.write(row, 12, data['courses_data'][key]['likes_total'])
+
+  likes_counter += data['courses_data'][key]['likes_total']
+  invitations_count += data['courses_data'][key]['invited_users_count']
+  enrollments_count += data['courses_data'][key]['course_enrollments_count']
   row += 1
 
-# sheet.write(row, col, 'Likes')
-# sheet.write(row + 1, col, data['likes_count'])
+# ADD COURSES DATA TOTALS
+row = 2
+sheet.write(row , 9, invitations_count)
+sheet.write(row, 10, enrollments_count)
+sheet.write(row, 12, likes_counter)
+
 
 output = BytesIO()
 wb.save(output)
