@@ -1,4 +1,5 @@
-
+import logging
+log = logging.getLogger()
 
 import json
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -55,10 +56,12 @@ def quick_start(request):
     })
 
     #COURSES
+    log.info("[WUL] Gathering course infos: get_courses_accessible_to_user")
     courses_iter, in_process_course_actions = get_courses_accessible_to_user(request, org=None)
+    log.info("[WUL] Gathering course infos: _process_courses_list")
     active_courses, archived_courses = _process_courses_list(courses_iter, in_process_course_actions, split_archived=False)
     
-
+    log.info("[WUL] Gathering course infos: getting TMA Course Overview")
     coursesList = []
     for course in active_courses:
         tmaOverview = TmaCourseOverview.get_tma_course_overview_by_course_id(SlashSeparatedCourseKey.from_deprecated_string(course['course_key']))
@@ -71,7 +74,7 @@ def quick_start(request):
     #PROGRAMS
     programs_list = []
     
-
+    log.info("[WUL] Gathering program infos")
     for program in TmaProgramOverview.objects.all():
         
         course_overview = TmaProgramCourse.objects.get(program=program, order=0).course
@@ -96,6 +99,7 @@ def quick_start(request):
     
     context['programs'] = programs_list
 
+    log.info("[WUL] Languages and zone")
     #LANGUAGES AND ZONE
     language_options = [language.code for language in released_languages()]
     context['fields'].append({
@@ -114,7 +118,7 @@ def quick_start(request):
     elif ZoneManager(request.user).get_user_zone() :
         checkedOrg=ZoneManager(request.user).get_user_zone()
     
-
+    log.info("[WUL] Sending out context")
     context["homeFiltersDetail"].append({
         "name":"org",
         "options":organizations_options,
