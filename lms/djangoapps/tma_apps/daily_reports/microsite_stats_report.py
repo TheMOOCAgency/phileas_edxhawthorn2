@@ -125,6 +125,7 @@ for enrollments_list in courses_ranking_list:
   if enrollments_list:
     course_overview = enrollments_list[0].course_enrollment_edx.course
     course_id = course_overview.id
+    course_name = course_overview.display_name_with_default
     all_course_enrollments = TmaCourseEnrollment.objects.filter(course_enrollment_edx__course=course_overview)
     course_enrollments_count = all_course_enrollments.count()
     validated_courses_counter = 0
@@ -152,7 +153,8 @@ for enrollments_list in courses_ranking_list:
       'course_enrollments_count': course_enrollments_count,
       'invited_users_count': invited_users_count,
       'likes_total': liked_total,
-      'course_status': course_status
+      'course_status': course_status,
+      'course_name': course_name,
     }
   else:
     data['courses_data']['No enrollments yet'] =  {
@@ -180,11 +182,12 @@ sheet.write(row, 1, 'Total number of users')
 sheet.write(row, 2, 'Unique visitors this month')
 sheet.write(row, 4, 'Open courses')
 sheet.write(row, 5, 'Open programs')
-sheet.write(row, 8, 'Open/Closed')
-sheet.write(row, 9, 'Invitations (this month)')
-sheet.write(row, 10, 'Enrollments (this month)')
-sheet.write(row, 11, 'Completion rate (All times)')
-sheet.write(row, 12, 'Likes (All times)')
+sheet.write(row, 8, 'Course name')
+sheet.write(row, 9, 'Open/Closed')
+sheet.write(row, 10, 'Invitations (this month)')
+sheet.write(row, 11, 'Enrollments (this month)')
+sheet.write(row, 12, 'Completion rate (All times)')
+sheet.write(row, 13, 'Likes (All times)')
 row += 1
 
 sheet.write(row, 0, 'Total')
@@ -206,11 +209,12 @@ for country in data['users_per_country']:
 row = 3
 for key, value in data['courses_data'].items():
   sheet.write(row, 7, key)
-  sheet.write(row , 8, data['courses_data'][key]['course_status'])
-  sheet.write(row , 9, data['courses_data'][key]['invited_users_count'])
-  sheet.write(row, 10, data['courses_data'][key]['course_enrollments_count'])
-  sheet.write(row, 11, str(data['courses_data'][key]['course_completion_rate']) + "%")
-  sheet.write(row, 12, data['courses_data'][key]['likes_total'])
+  sheet.write(row , 8, data['courses_data'][key]['course_name'])
+  sheet.write(row , 9, data['courses_data'][key]['course_status'])
+  sheet.write(row , 10, data['courses_data'][key]['invited_users_count'])
+  sheet.write(row, 11, data['courses_data'][key]['course_enrollments_count'])
+  sheet.write(row, 12, str(data['courses_data'][key]['course_completion_rate']) + "%")
+  sheet.write(row, 13, data['courses_data'][key]['likes_total'])
 
   likes_counter += data['courses_data'][key]['likes_total']
   invitations_count += data['courses_data'][key]['invited_users_count']
